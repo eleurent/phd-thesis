@@ -1,0 +1,297 @@
+% --- French package
+%\usepackage[french]{babel}
+
+% --- Front page Font
+\newenvironment{frontfont}{\fontfamily{phv}\selectfont}{\par}
+\DeclareTextFontCommand{\textFF}{\frontfont}
+
+% --- Space between paragraphs/enums/items...
+\setlength{\parskip}{0.5em}
+\raggedbottom
+\usepackage{etaremune}
+\usepackage{enumitem}
+\setlist[enumerate,itemize,description]{topsep=0em}
+
+% --- Algorithms packages
+\usepackage[algochapter,linesnumbered,commentsnumbered,inoutnumbered]{algorithm2e}
+
+% --- Maths packages
+\usepackage{amsmath}
+% https://tex.stackexchange.com/a/12561/97964
+\allowdisplaybreaks
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+
+\usepackage{enumitem}
+\usepackage{stmaryrd}
+
+\usepackage{setspace}
+\usepackage{stmaryrd}
+\usepackage{cases}
+
+% --- Figures and Captions
+\usepackage{epstopdf}
+\usepackage[small,bf,labelsep=endash,tableposition=bottom]{caption}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.eps,.png}
+% \usepackage{graphics}
+
+% \usepackage{rotating}
+% \usepackage{wrapfig}
+\usepackage{float}
+%\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage[lofdepth,lotdepth]{subfig}
+% \usepackage{subfigure}
+% \usepackage{subcaption}
+\newcommand{\subcaption}[1]{\caption{#1}}
+
+% --- Figures Tikz
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.symbols}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{chains}
+\usepackage{tikzsymbols}  % http://texdoc.net/texmf-dist/doc/latex/comprehensive/symbols-a4.pdf for the \Coffeecup{} command!
+
+% --- Color definition
+\usepackage{xcolor}
+\definecolor{Bleu}{RGB}{0,0,204}           % Define a new color rgb(0,0,204)
+\definecolor{darkblue}{RGB}{0,0,126}       % Define a new color rgb(0,0,126)
+\definecolor{Violet}{RGB}{102,0,204}       % Define a new color rgb(102,0,204)
+\definecolor{deeppurple}{RGB}{102,0,204}   % Define a new color rgb(102,0,204)
+\definecolor{darkgreen}{RGB}{0,100,0}      % Define a new color rgb(0,100,0)
+\definecolor{lightgreen}{RGB}{185,220,87}      % Define a new color rgb(185,220,87)
+\definecolor{gold}{RGB}{255,184,0}         % Define a new color rgb(255,184,0)
+\definecolor{deepgold}{RGB}{205,105,0}     % Define a new color rgb(205,105,0)
+\definecolor{Rouge}{RGB}{204,0,0}          % Define a new color rgb(204,0,0)
+\definecolor{darkred}{RGB}{174,0,0}        % Define a new color rgb(174,0,0)
+\definecolor{Highlight}{RGB}{251,0,0}      % Define a new color rgb(251,0,0)
+\definecolor{gold}{RGB}{255,184,0}         % Define a new color rgb(255,184,0)
+
+% --- Tables
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{array}
+\usepackage{multirow}  % https://en.wikibooks.org/wiki/LaTeX/Tables#Columns_spanning_multiple_rows
+\usepackage{arydshln}
+\usepackage{hhline}
+\usepackage{makecell}
+
+% --- SI Units
+\usepackage[binary-units,detect-all]{siunitx}
+
+% --- Nomenclature
+\usepackage{nomencl}
+\makenomenclature
+
+% --- Line Spacing
+%\doublespacing
+%\onehalfspacing
+%\singlespacing
+
+% --- Footnotes
+%\usepackage[perpage]{footmisc}
+
+% --- Bibliography
+% Add `custombib' in the document class option to use this section
+\ifuseCustomBib
+	% \usepackage[square,sort,numbers,authoryear]{natbib}
+	\usepackage[sort,numbers]{natbib}
+	%\usepackage[backend=bibtex,style=alphabetic,natbib=true]{biblatex}
+	%\renewbibmacro{in:}{}
+	%\DefineBibliographyExtras{french}{\restorecommand\mkbibnamelast}
+	%\bibliography{all-phd-thesis}
+\fi
+
+% changes the default name `Bibliography` -> `References'
+\renewcommand{\bibname}{List of References}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\nomname}{Abbreviations and Notations}
+
+% --- User Defined
+% \renewcommand{\partname}{Partie}
+% \renewcommand{\chaptername}{Chapitre}
+% \renewcommand{\listfigurename}{Liste des Figures}
+% \renewcommand{\listtablename}{Liste des Tableaux}
+% \renewcommand{\listlistingname}{Liste des Exemples de Programmes}
+% \renewcommand{\appendixtocname}{Liste des Annexes}
+% \renewcommand{\appendixname}{Annexe}
+
+\newcommand*{\everymodeprime}{\ensuremath{\prime}}
+
+% --- Table of Content
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
+% TODO FIXME change tocdepth to 1 for final version of the manuscript
+\usepackage{minitoc}
+\setcounter{minitocdepth}{1}
+
+% --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+\usepackage[chapter,draft=false,final=true]{minted}
+
+% https://tex.stackexchange.com/a/64845/97964
+\renewcommand{\listingscaption}{Code Example}% Listing -> Code Example
+\renewcommand{\listoflistingscaption}{List of Code Examples}% List of Listings -> List of Code Examples
+
+% % https://tex.stackexchange.com/a/64845/97964
+% \renewcommand{\lstlistingname}{Code example}% Listing -> Algorithm
+% \renewcommand{\lstlistlistingname}{List of \lstlistingname s}% List of Listings -> List of Algorithms
+
+% --- To Do notes
+\ifsetDraft
+	\usepackage[colorinlistoftodos]{todonotes}
+	\newcommand{\TODO}[1]{\todo[inline]{TODO: #1}}
+	\newcommand{\TODOE}[1]{\todo[inline,color=green!40]{Emilie: #1}}
+	\newcommand{\TODOL}[1]{\todo[inline,color=blue!40]{Lilian: #1}}
+	\newcommand{\TODOC}[1]{\todo[inline,color=purple!40]{Christophe: #1}}
+	\newcommand{\FIXME}[1]{\todo[inline]{FIXME: #1}}
+\else
+	\newcommand{\mynote}[1]{}
+	\newcommand{\listoftodos}{}
+	\newcommand{\TODO}[1]{}
+	\newcommand{\TODOE}[1]{}
+	\newcommand{\TODOL}[1]{}
+	\newcommand{\TODOC}[1]{}
+	\newcommand{\FIXME}[1]{}
+\fi
+
+%% Theorem English
+%\newtheorem{theorem}{Théorème}[chapter]
+%\newtheorem{lemma}{Lemme}[chapter]
+% \newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{defn}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+%\addto\captionsfrench{\def\figurename{{Figure}}}
+%\addto\captionsfrench{\def\tablename{{Tableau}}}
+%\addto\captionsfrench{\def\ALG@mname{{Tableau}}}
+% \makeatletter
+%\renewcommand{\ALG@name}{Algorithme}
+% \makeatother
+% \makeatletter
+\newcommand{\clearevenpage}{%
+	\clearpage%
+	\if@twoside%
+		\ifodd\c@page%
+			\hbox{}\newpage%
+			\if@twocolumn%
+				\hbox{}\newpage%
+			\fi%
+		\fi%
+	\fi%
+}
+\makeatother
+
+\makeatletter
+% https://tex.stackexchange.com/a/365249/97964
+\def\cleardoublepage{%
+	\clearpage%
+	\if@twoside%
+		\ifodd\c@page%
+		\else%
+			\hbox{}\thispagestyle{empty}\newpage%
+			\if@twocolumn%
+				\hbox{}\newpage%
+			\fi%
+		\fi%
+	\fi%
+}
+% https://tex.stackexchange.com/a/365249/97964
+\newcommand*{\cleartoleftpage}{%
+	\clearpage%
+	\if@twoside%
+		\ifodd\c@page%
+			\hbox{}\thispagestyle{empty}\newpage%
+			\if@twocolumn%
+				\hbox{}\newpage%
+			\fi%
+		\fi%
+	\fi%
+}
+\makeatother
+
+% https://tex.stackexchange.com/questions/25137/how-to-change-the-background-color-only-for-the-current-page
+% \usepackage{afterpage}% for "\afterpage"
+% \usepackage{pagecolor}% With option pagecolor={somecolor or none}
+% \newcommand{\colorthispage}[1]{
+% 	\newpagecolor{#1}%
+% 	\afterpage{\restorepagecolor}%
+% }
+% \newcommand{\emptycolorpage}[1]{
+% 	\newpagecolor{#1}%
+% 	\newpage%
+% 	\afterpage{\restorepagecolor}%
+% }
+% FIXME comment or uncomment if you need to compress the document
+\newcommand{\emptycolorpage}[1]{
+	% \null
+	% \if@print
+		% \clearpage%
+		\cleardoublepage%
+		% \cleartoleftpage%
+		% \newpage%
+		\thispagestyle{plain}%
+		\null%
+		% \pagecolor{#1}%  FIXME bring back color if I need
+		\pagecolor{white}%
+		% \null%
+		\newpage%
+		% \null%
+		\pagecolor{white}%
+	% \fi
+}
+% \newcommand{\emptycolorpage}[1]{\pagecolor{white}}
+
+% Macros from Émilie Kaufmann's articles
+\usepackage{0-Misc/macrosText}
+
+% FIXME can I use the font I like?
+% https://tex.stackexchange.com/questions/84770/using-palatino-and-euler-math#comment182397_84770
+\usepackage{tgpagella}
+% \usepackage{eulervm}
+
+
+% pagecolorWhen  setting  the  background  color  with\pagecolor(a  commandfromcolor.sty), the first\pagecolormustprecede\usepackage{pdfpages}.\usepackage{color}\pagecolor{white}\usepackage{pdfpages}The color is nonrelevant, it can be changed afterwards by using\pagecoloragain.   Just  the  order  (first\pagecolorbefore\usepackage{pdfpages})  isimportant.
+\pagecolor{white}
+\usepackage{pdfpages}
+
+
+% \usepackage{ifxetex,ifluatex}
+% \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0% if pdftex
+% 	\usepackage[T1]{fontenc}
+% 	\usepackage[utf8]{inputenc}
+% \else% if luatex or xelatex
+% 	\ifxetex
+% 		\usepackage{mathspec}
+% 	\else
+% 		\usepackage{fontspec}
+% 	\fi
+% 	\defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+% \fi
+% % use upquote if available, for straight quotes in verbatim environments
+% \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% % use microtype if available
+% \IfFileExists{microtype.sty}{%
+% \usepackage{microtype}
+% \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+% }{}

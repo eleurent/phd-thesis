@@ -1,0 +1,400 @@
+% Useful text commands
+\def\linethickness{0.4pt}
+\newcommand{\hr}{\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}}
+
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\newcommand{\abstractStartChapter}{%
+    % \paragraph{Abstract.}%
+    % \paragraph{}%
+    \indent%
+}
+\newcommand{\minitocStartChapter}{%
+    \vfill{}% WARNING vfill before minitoc?
+    \minitoc%
+    \vfill{}% WARNING vfill before minitoc?
+    \newpage%
+}
+\newcommand{\minitocStartChapterNoNewPage}{%
+    \vfill{}% WARNING vfill before minitoc?
+    \minitoc%
+    \vfill{}% WARNING vfill before minitoc?
+    % \newpage%
+}
+
+% ----------------------------------------------------------------------
+
+% Abbreviations, to ensure they have dots and are not written ie, eg, cf, iid
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\cf}{\emph{cf}}
+\newcommand{\iid}{\emph{i.i.d.}}
+% ----------------------------------------------------------------------
+
+% Generic maths
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+% \DeclareMathOperator{\Tr}{Tr}
+\newcommand{\limInf}{\underline{\lim}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\log}{\ensuremath{\ln}}
+% ----------------------------------------------------------------------
+
+% Maths operators
+\newcommand{\bigO}[1]{\ensuremath{\mathop{}\mathopen{}\mathcal{O}\mathopen{}\left(#1\right)}}
+\newcommand{\smallO}[1]{\ensuremath{\mathop{}\mathopen{}o\mathopen{}\left(#1\right)}}
+% ----------------------------------------------------------------------
+
+% Probability Shorthands
+\def\ind{\mathds{1}}
+\newcommand{\normal}[2]{\mathcal{N}\left(#1,#2\right)}
+\newcommand{\BetaD}[2]{\text{Beta}\left(#1,#2 \right)}
+\newcommand{\muhat}{\hat{\mu}}
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\indic}{\mathbbm{1}}
+% ----------------------------------------------------------------------
+
+% Kullback-Leibler
+\newcommand{\kl}{\ensuremath{\mathrm{kl}}}
+\newcommand{\KL}{\ensuremath{\mathrm{KL}}}
+% ----------------------------------------------------------------------
+
+% Integration
+\newcommand{\dt}{\;\mathrm{d}t}
+\newcommand{\du}{\;\mathrm{d}u}
+\newcommand{\dv}{\;\mathrm{d}v}
+\newcommand{\dx}{\;\mathrm{d}x}
+\newcommand{\Ei}{\ensuremath{\mathrm{Ei}}}
+% ----------------------------------------------------------------------
+
+% Calligraphic Shorthands
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+% ----------------------------------------------------------------------
+
+% Blackboard Bold Shorthands
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+% ----------------------------------------------------------------------
+
+% Bandit specific shorthands
+\newcommand{\bmu}{\boldsymbol{\mu}}
+% \newcommand{\reg}{\text{R}}
+% \newcommand{\regfull}{\reg_{\bm{\theta}}(T,\cA)}
+\newcommand{\br}{\text{BR}}
+\newcommand{\Kinf}{\cK_{\text{inf}}\,}
+% \newcommand{\muA}{\hat{\mu}_a(t)} %moyenne empirique dans l'algorithme
+% \newcommand{\muS}{\hat{\mu}_{a,s}}
+% \newcommand{\thetaU}{\underline{\theta}}
+% ----------------------------------------------------------------------
+
+\newcommand{\eqdef}{\overset{.}{=}}
+% \newcommand{\eqdef}{:=}
+% % \newcommand{\eqdef}{=}
+\newcommand{\reqdef}{\overset{.}{=}}
+% \newcommand{\reqdef}{=:}
+% % \newcommand{\reqdef}{=}
+
+% Statistical Shorthands
+\newcommand{\K}{\mathrm{K}}
+\newcommand{\Kb}{\mathrm{K}}
+% ----------------------------------------------------------------------
+
+% Misc Math Operations Shorthands
+% \newcommand{\argmin}[1]{\underset{#1}{\text{argmin }}}
+% \newcommand{\argmax}[1]{\underset{#1}{\text{argmax }}}
+\newcommand{\ngoesto}{\underset{n\rightarrow \infty}{\rightarrow}}
+\newcommand{\Tgoesto}{\underset{T\rightarrow \infty}{\longrightarrow}}
+\newcommand{\isequT}{\underset{T\rightarrow \infty}{\sim}}
+% ----------------------------------------------------------------------
+
+% % ----------------------------------------------------------------------
+% % https://github.com/Wookai/paper-tips-and-tricks#back-references
+% \renewcommand*{\backref}[1]{}
+% \renewcommand*{\backrefalt}[4]{{\footnotesize [%
+%     \ifcase #1 Not cited.%
+%     \or Cited on page~#2%
+%     \else Cited on pages #2%
+%     \fi%
+% ]}}
+% % ----------------------------------------------------------------------
+
+% https://tex.stackexchange.com/a/7045/97964
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw,inner sep=2pt] (char) {#1};}%
+}
+% https://tex.stackexchange.com/a/204897/97964
+\newcommand*\boldcircled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw,line width=0.75mm,inner sep=2pt] (char) {#1};}%
+}
+
+% ----------------------------------------------------------------------
+% A better leftbar env with colors! Default is black http://tex.stackexchange.com/a/22530/97964
+\definecolor{darkgray}{rgb}{0.15,0.15,0.15}   % Define a new color rgb(38, 38, 38)
+\definecolor{lightgray}{rgb}{0.95,0.95,0.95}  % Define a new color rgb(239, 239, 239)
+\definecolor{lightlightgray}{rgb}{0.97,0.97,0.97}  % Define a new color rgb(247, 247, 247)
+% use it inside a theorem/lemma/... with thereombar/lemmabar/... color
+
+% FIXME mettre la barre à gauche pour les pages paires et à droites pour les pages impaires ?
+\renewenvironment{leftbar}[1][black]{%
+    \def\FrameCommand{%
+        {\color{#1}\vrule width 0.75pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep\colorbox{lightgray}%
+    }%
+    \vspace*{-2pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \MakeFramed{\hsize\hsize\advance\hsize-\width\FrameRestore}%
+    % \vspace*{-3pt}%  % XXX Experimental ! It works fine like this, I like it!
+}{%
+    % \vspace*{-30}%  % XXX Experimental ! It works fine like this, I like it!
+    \endMakeFramed%
+    % \vspace*{-20pt}%  % XXX Experimental ! It works fine like this, I like it!
+}
+\newenvironment{leftbarnospace}[1][black]{%
+    \def\FrameCommand{%
+        {\color{#1}\vrule width 0.75pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep\colorbox{lightgray}%
+    }%
+    \vspace*{-2pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \MakeFramed{\hsize\hsize\advance\hsize-\width\FrameRestore}%
+    % \vspace*{-3pt}%  % XXX Experimental ! It works fine like this, I like it!
+}{%
+    % \vspace*{-30}%  % XXX Experimental ! It works fine like this, I like it!
+    \endMakeFramed%
+    % \vspace*{-20pt}%  % XXX Experimental ! It works fine like this, I like it!
+}
+\newenvironment{lightleftbar}[1][black]{%
+    \def\FrameCommand{%
+        {\color{#1}\vrule width 0.75pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep\colorbox{lightlightgray}%
+    }%
+    \vspace*{-2pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \MakeFramed{\hsize\hsize\advance\hsize-\width\FrameRestore}%
+    % \vspace*{-3pt}%  % XXX Experimental ! It works fine like this, I like it!
+}{%
+    \vspace*{-30pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \endMakeFramed%
+    % \vspace*{-20pt}%  % XXX Experimental ! It works fine like this, I like it!
+}
+\newenvironment{whiteleftbar}[1][black]{%
+    \def\FrameCommand{%
+        {\color{#1}\vrule width 0.75pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep\colorbox{white}%
+    }%
+    \vspace*{-2pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \MakeFramed{\hsize\hsize\advance\hsize-\width\FrameRestore}%
+    % \vspace*{-3pt}%  % XXX Experimental ! It works fine like this, I like it!
+}{%
+    \vspace*{-30pt}%  % XXX Experimental ! It works fine like this, I like it!
+    \endMakeFramed%
+    % \vspace*{-20pt}%  % XXX Experimental ! It works fine like this, I like it!
+}
+
+% Define colors for the theorem/defb/prop/.. left bar
+\definecolor{theorembar}{rgb}{0,242,0}          % Define a new color rgb(0,242,0)
+\definecolor{defnbar}{rgb}{0,0,242}             % Define a new color rgb(0,0,242)
+\definecolor{propositionbar}{rgb}{147,0,255}    % Define a new color rgb(147,0,255)
+\definecolor{corollarybar}{rgb}{0,242,242}      % Define a new color rgb(0,242,242)
+\definecolor{lemmabar}{rgb}{255,0,198}          % Define a new color rgb(255,0,198)
+\definecolor{warningbar}{rgb}{229,0,0}          % Define a new color rgb(229,0,0)
+\definecolor{propertybar}{rgb}{255,255,0}       % Define a new color rgb(255,255,0)
+\definecolor{assumptionbar}{rgb}{235,200,0}     % Define a new color rgb(235,200,0)
+\definecolor{examplebar}{rgb}{0,0,0}            % Define a new color rgb(0,0,0)
+\definecolor{proofbar}{rgb}{0,70,0}             % Define a new color rgb(0,70,0)
+\definecolor{remarkbar}{rgb}{255,135,0}         % Define a new color rgb(255,135,0)
+\definecolor{tablebar}{rgb}{147,0,255}          % Define a new color rgb(147,0,255)
+% ----------------------------------------------------------------------
+
+% FIXME just remove the small...small if I want normalsize proofs
+\newenvironment{smallproof}{%
+    % \begin{small}%
+    \begin{proof}%
+    % \leftskip=0.25cm\rightskip=0.25cm%  Cf. https://tex.stackexchange.com/a/62056/97964
+}{%
+    \end{proof}%
+    % \end{small}%
+}
+
+% ----------------------------------------------------------------------
+% Chapter 2 on MAB algorithms
+\newcommand{\SAO}{\ensuremath{\mathrm{SAO}}}
+\newcommand{\BayesUCB}{\ensuremath{\mathrm{BayesUCB}}}
+\newcommand{\UCB}{\ensuremath{\mathrm{UCB}}}
+\newcommand{\UCBone}{\ensuremath{\mathrm{UCB}1}}
+\newcommand{\UCBR}{\ensuremath{\mathrm{UCB}\text{-}\mathrm{R}}}
+\newcommand{\OCUCB}{\ensuremath{\mathrm{OCUCB}}}
+\newcommand{\UCBH}{\ensuremath{\mathrm{UCB}\text{-}\mathrm{H}}}
+\newcommand{\MOSS}{\ensuremath{\mathrm{MOSS}}}
+\newcommand{\MOSSH}{\ensuremath{\mathrm{MOSS}\text{-}\mathrm{H}}}
+\newcommand{\MOSSAnytime}{\ensuremath{\mathrm{MOSS}\text{-}\mathrm{anytime}}}
+\newcommand{\KLUCB}{\ensuremath{\mathrm{KL}\text{-}\mathrm{UCB}}}
+\newcommand{\klUCB}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}}}
+\newcommand{\KLUCBpp}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}^{++}}}
+\newcommand{\KLUCBH}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}\text{-}\mathrm{H}}}
+\newcommand{\KLUCBswitch}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}\text{-}\mathrm{switch}}}
+\newcommand{\AFHG}{\ensuremath{\mathrm{AFHG}}}
+\newcommand{\AFGH}{\ensuremath{\mathrm{AFHG}}}
+\newcommand{\DMED}{\ensuremath{\mathrm{DMED}}}
+\newcommand{\DMEDp}{\ensuremath{\mathrm{DMED}+}}
+\newcommand{\ExpThree}{\ensuremath{\mathrm{Exp}3}}
+\newcommand{\ExpFour}{\ensuremath{\mathrm{Exp}4}}
+\newcommand{\ExpThreeS}{\ensuremath{\mathrm{Exp}3.\mathrm{S}}}
+\newcommand{\ExpFourS}{\ensuremath{\mathrm{Exp}4.\mathrm{S}}}
+\newcommand{\ExpThreeR}{\ensuremath{\mathrm{Exp}3.\mathrm{R}}}
+\newcommand{\RExpThree}{\ensuremath{\mathrm{RExp}3}}
+\newcommand{\Exppp}{\ensuremath{\mathrm{Exp}}\ensuremath{3^{++}}}
+% ----------------------------------------------------------------------
+
+
+% ----------------------------------------------------------------------
+% Chapter 3 on SMPyBandits
+\newcommand{\SMPyBandits}[0]{\href{https://github.com/SMPyBandits/SMPyBandits/}{SMPyBandits}}
+
+% ----------------------------------------------------------------------
+% Chapter 25 on aggregation of MAB algorithms
+\newcommand{\Aggr}[0]{\ensuremath{\mathrm{Aggregator}}}
+\newcommand{\ExpQ}[0]{\ensuremath{\mathrm{Exp4}}}
+\newcommand{\CORRAL}[0]{\ensuremath{\mathrm{CORRAL}}}
+\newcommand{\LearnExp}[0]{\ensuremath{\mathrm{LearnExp}}}
+\newcommand{\Alg}[0]{\mathcal{A}}
+% ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+% Chapter 5 on RandTopM
+\newcommand{\Ack}{\emph{Ack}}
+\newcommand{\rhoRand}{\ensuremath{\mathrm{Rho}\mathrm{Rand}}}
+\newcommand{\RhoRand}{\ensuremath{\mathrm{Rho}\mathrm{Rand}}}
+\newcommand{\rhoFixedRank}{\ensuremath{\mathrm{Rho}\mathrm{FixedRank}}}
+\newcommand{\rhoRandRot}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{Rot}}}
+\newcommand{\rhoRandSticky}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{Sticky}}}
+\newcommand{\rhoRandALOHA}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{ALOHA}}}
+\newcommand{\rhoLearn}{\ensuremath{\mathrm{Rho}\mathrm{Learn}}}
+\newcommand{\rhoRandEst}{\ensuremath{\mathrm{Rho}\mathrm{Est}}}
+%
+\newcommand{\rhoRandUCB}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\text{-}\mathrm{UCB}_1}}
+\newcommand{\rhoRandklUCB}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\text{-}\mathrm{KLUCB}}}
+%
+\newcommand{\Selfish}{\ensuremath{\mathrm{Selfish}}}
+\newcommand{\RandTopM}{\ensuremath{\mathrm{RandTopM}}}
+\newcommand{\MCTopM}{\ensuremath{\mathrm{MCTopM}}}
+
+\newcommand{\TDFS}{\ensuremath{\mathrm{TDFS}}}
+\newcommand{\MEGA}{\ensuremath{\mathrm{MEGA}}}
+\newcommand{\MusicalChair}{\ensuremath{\mathrm{Musical}\,\mathrm{Chair}}}
+
+% Abbreviations
+\newcommand{\Mbest}{\ensuremath{M\text{-}\mathrm{best}}}
+\newcommand{\Mworst}{\ensuremath{M\text{-}\mathrm{worst}}}
+\newcommand{\TopM}{\widehat{M^j}}
+
+% Four models
+\newcommand{\modelun}{(I)}
+\newcommand{\modeldeux}{(II)}
+\newcommand{\modeltrois}{(III)}
+\newcommand{\modelquatre}{(IV)}
+
+% ----------------------------------------------------------------------
+\makeatletter
+% Thanks to https://tex.stackexchange.com/a/110981/
+\providecommand*{\cupdot}{%
+    \mathbin{%
+        \mathpalette\@cupdot{}%
+    }%
+}
+\newcommand*{\@cupdot}[2]{%
+    \ooalign{%
+        $\m@th#1\cup$\cr
+        \hidewidth$\m@th#1\cdot$\hidewidth
+    }%
+}
+\makeatother
+% ----------------------------------------------------------------------
+
+% ----------------------------------------------------------------------
+\makeatletter
+% Thanks to https://tex.stackexchange.com/a/53691/
+\newcommand{\mytag}[2]{%
+    \text{#1}%
+    \@bsphack
+    \begingroup
+        \@onelevel@sanitize\@currentlabelname
+        \edef\@currentlabelname{%
+        \expandafter\strip@period\@currentlabelname\relax.\relax\@@@%
+        }%
+        \protected@write\@auxout{}{%
+        \string\newlabel{#2}{%
+            {#1}%
+            {\thepage}%
+            {\@currentlabelname}%
+            {\@currentHref}{}%
+        }%
+        }%
+    \endgroup
+    \@esphack
+}
+\makeatother
+% ----------------------------------------------------------------------
+
+
+% ----------------------------------------------------------------------
+% Chapter 6 on GLR klUCB
+\newcommand{\CUSUM}{\ensuremath{\mathrm{CUSUM}}}
+\newcommand{\PHT}{\ensuremath{\mathrm{PHT}}}
+\newcommand{\GLR}{\ensuremath{\mathrm{GLR}}}
+\newcommand{\GLRklUCB}{\ensuremath{\mathrm{GLR}\text{-}\mathrm{kl}\mathrm{UCB}}}
+\newcommand{\MklUCB}{\ensuremath{\mathrm{M}\text{-}\mathrm{kl}\mathrm{UCB}}}
+\newcommand{\MUCB}{\ensuremath{\mathrm{M}\text{-}\mathrm{UCB}}}
+\newcommand{\CUSUMklUCB}{\ensuremath{\mathrm{CUSUM}\text{-}\mathrm{kl}\mathrm{UCB}}}
+\newcommand{\CUSUMUCB}{\ensuremath{\mathrm{CUSUM}\text{-}\mathrm{UCB}}}
+\newcommand{\GaussianGLR}{\ensuremath{\mathrm{GLR}^{\mathcal{N}_1}}}
+\newcommand{\SubGaussianGLR}{\ensuremath{\mathrm{GLR}^{\text{sub-}\sigma}}}
+\newcommand{\BernoulliGLR}{\ensuremath{\mathrm{GLR}^{\mathcal{B}}}}
+\def\NCi{\text{NC}_i}
+\def\NCk{\text{NC}_k}
+\def\GLRd{\mathrm{GLR}_d(t)}
+\def\EffChange{\mathrm{C}_T}
+% ----------------------------------------------------------------------
+
+
+% ----------------------------------------------------------------------
+% Appendix on Doubling Trick
+\newcommand{\DT}{\ensuremath{\mathcal{DT}}}
+% \newcommand{\DTr}{\ensuremath{\mathcal{DT}_{\text{restart}}}}
+\newcommand{\DTr}{\ensuremath{\mathcal{DT}}}
+\newcommand{\DTnr}{\ensuremath{\mathcal{DT}_{\text{no-restart}}}}
+% ----------------------------------------------------------------------

@@ -1,0 +1,119 @@
+% *******************************************************************************
+% ***               Edouard Leurent's "PhD Thesis" main file                    ***
+% ***     Source code on: https://github.com/eleurent/phd-thesis/               ***
+% ***     Original template: https://github.com/eleurent/phd-thesis-template     ***
+% *******************************************************************************
+
+% Class (remove "print" for digital version, remove "draft" for final version)
+% \documentclass[a4paper,12pt,twoside,index,PageStyleII,draft]{0-Misc/PhDThesisPSnPDF}
+% \documentclass[a4paper,12pt,twoside,index,PageStyleII]{0-Misc/PhDThesisPSnPDF}
+\documentclass[a4paper,12pt,twoside,index,PageStyleII,print]{0-Misc/PhDThesisPSnPDF}
+
+\title{Safe Reinforcement Learning for Autonomous Driving}
+\subtitle{PhD thesis of Edouard Leurent}
+\author{Edouard Leurent}
+\subject{This document is the PhD thesis of Edouard Leurent.}
+\degreedate{October 2020}
+\degreetitle{Thèse de Doctorat en Informatique}
+\dept{Dept}
+\college{College}
+\university{University}
+\supervisor{Odalric-Ambrym Maillard \& Denis Efimov \& Yann Blanco}
+\keywords{%
+	}
+
+% FIXME compile with pdfx to have a PDF/A file
+% \usepackage[a-1b]{pdfx}  % https://www.ctan.org/pkg/pdfx, PDF/A1-b for archiving
+
+% --- Draft Mode
+\SetDraftVersion{TODO-relire}
+
+% Packages (add your own packages here)
+\input{0-Misc/packages}
+
+\begin{document}
+
+	% ******************************** Preamble *********************************
+	\frontmatter
+	\input{1-Preamble/preambles}
+
+	% *************************** TOC & Nomenclature ****************************
+	% \begin{small}   % XXX
+		\begin{spacing}{1}
+			\dominitoc
+			\tableofcontents
+		\end{spacing}
+	% \end{small}   % XXX
+
+	% *************** Chapters ****************
+	\mainmatter
+
+	\input{2-Chapters/chapters}
+
+	% % *************** Appendices ****************
+	\input{3-Appendices/appendices}
+
+	\newpage
+
+	\begin{small}   % XXX
+
+	% *************************** Nomenclature ****************************
+	% \emptycolorpage{yellow!40}
+	\begin{spacing}{0.93}
+		\input{5-Nomenclature/Nomenclature}
+		\printnomenclature[8em]
+		\label{chapter:nomenclature}
+	\end{spacing}
+
+	% \input{4-Listofpublications/Listofpublications}
+	% **************** Listes *****************
+	\begin{spacing}{1.00}%
+	{% group, to change the \cleardoublepage
+		% FIXME force to not have a blank (even numbered) page between lists
+		% https://tex.stackexchange.com/questions/69184/remove-blank-page-between-list-of-figures-and-list-of-tables#69218
+		\let\cleardoublepage\clearpage%
+		\listoffigures
+		\let\cleardoublepage\clearpage%
+		\listofalgorithms
+		\addcontentsline{toc}{chapter}{List of Algorithms}
+		\let\cleardoublepage\clearpage%
+		\begin{spacing}{1.50}%
+			\listoflistings
+			\addcontentsline{toc}{chapter}{List of Code Examples}
+		\end{spacing}
+		\let\cleardoublepage\clearpage%
+		\listoftables
+	}
+	\end{spacing}
+
+	% *************** Bibliography ****************
+	\begin{spacing}{0.93}
+		\bibliographystyle{alpha}
+		\cleardoublepage
+		% \nocite{*}
+		\bibliography{all-phd-thesis}
+
+		\vfill{}
+		\hr{}
+
+		\begin{small}
+			\begin{quote}
+				\emph{-- Quote.}\\
+				Author, \emph{Book}.
+			\end{quote}
+			\end{small}
+	\end{spacing}
+
+	\end{small}
+
+	% \printthesisindex
+
+	\backmatter
+	% \cleardoublepage
+	% \clearevenpage
+	\cleartoleftpage
+	% \clearpage
+
+	% \newpage
+	\include{6-Back/back-page}
+\end{document}

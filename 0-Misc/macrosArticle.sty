@@ -1,0 +1,127 @@
+%% Template article http://chercheurs.lille.inria.fr/ekaufman/
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+%% Language
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{dsfont}
+
+%  amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+%% Other useful packages
+% \usepackage[linesnumbered,commentsnumbered,inoutnumbered]{algorithm2e}
+% FIXME change to algorithm2e
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+
+% \usepackage[x11names, svgnames, rgb]{xcolor}
+% \usepackage{subfigure}
+\usepackage{subcaption}
+\usepackage{verbatim}
+\usepackage{times}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.eps,.png}
+
+\usepackage{amscd}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+% \usepackage{amsmath}
+\usepackage{amsthm}  % XXX If using, comment the last lines in jmlr2e.sty
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{bbm}  % bold maths symbols
+\usepackage{bm}   % bold maths symbols
+\usepackage{amsfonts}
+% \usepackage{MnSymbol}
+
+\usepackage{todonotes}
+% \usepackage{pdfpages}
+\usepackage{framed}
+
+%% Margins
+% \oddsidemargin=0pt
+% \textwidth=455pt
+% \textheight=620pt
+% \voffset=-20pt
+% \marginparwidth=0pt
+% \marginparpush=0pt
+% \marginparsep=0pt
+% \evensidemargin=0pt
+
+
+%% Color definition
+\usepackage{xcolor}
+\definecolor{Bleu}{RGB}{0,0,204}  % rgb(0,0,204)
+\definecolor{darkblue}{rgb}{0.00,0.00,0.65}       % rgb(0,0,126)
+\definecolor{Violet}{RGB}{102,0,204}  % rgb(102,0,204)
+\definecolor{darkgreen}{RGB}{0,100,0}  % rgb(0,100,0)
+\definecolor{gold}{RGB}{255,184,0}  % rgb(255,184,0)
+\definecolor{Rouge}{RGB}{204,0,0}  % rgb(204,0,0)
+\definecolor{darkred}{RGB}{174,0,0}        % rgb(174,0,0)
+\definecolor{Highlight}{RGB}{251,0,0}  % rgb(251,0,0)
+
+%% Bibliography and references
+% \bibliographystyle{ieeetr}
+% \bibliographystyle{alpha}
+% \bibliographystyle{apalike}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=Bleu,
+  linkcolor=Rouge,
+  urlcolor=Violet}
+
+\usepackage{breakcites}  % repare pb de mise à la ligne des references
+
+
+%% TikZ
+\usepackage{tikz}
+\usetikzlibrary{snakes,arrows,shapes}
+% https://tex.stackexchange.com/a/226974/
+\tikzset{
+  font={\fontsize{10pt}{10}\selectfont}
+}
+
+\def \qed {\begin{flushright} $\qquad \Box $
+  \end{flushright}}
+
+
+% Coloring and working together
+\def \red{\color{red}}
+\def \black{\color{black}}
+
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+% Thanks to https://tex.stackexchange.com/a/53691/
+\makeatletter
+\newcommand{\mytag}[2]{%
+  \text{#1}%
+  \@bsphack
+  \begingroup
+    \@onelevel@sanitize\@currentlabelname
+    \edef\@currentlabelname{%
+      \expandafter\strip@period\@currentlabelname\relax.\relax\@@@%
+    }%
+    \protected@write\@auxout{}{%
+      \string\newlabel{#2}{%
+        {#1}%
+        {\thepage}%
+        {\@currentlabelname}%
+        {\@currentHref}{}%
+      }%
+    }%
+  \endgroup
+  \@esphack
+}
+\makeatother
