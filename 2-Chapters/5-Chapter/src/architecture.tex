@@ -1,0 +1,80 @@
+
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, inner sep=1pt, node distance=\layersep]
+        \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+        \tikzstyle{neuron}=[circle,fill=black!25,minimum size=10pt,inner sep=0pt]
+        \tikzstyle{input neuron}=[neuron];
+        \tikzstyle{input beta}=[neuron];
+        \tikzstyle{qc}=[neuron];
+        \tikzstyle{qr}=[neuron];
+        \tikzstyle{hidden neuron}=[neuron];
+        \tikzstyle{autoencoder neuron}=[neuron];
+        \tikzstyle{annot} = [text width=4em, text centered]
+        \tikzstyle{annot2} = [text width=10em, text centered]
+        \def\layersep{2cm}
+        % Draw the input layer nodes
+        \foreach \name / \y in {0,...,1}
+            \pgfmathtruncatemacro{\y}{0 + \y}
+            \node[input neuron, pin=left:$s^\y$] (I-\name) at (0,-\y) {};
+
+         % first layer
+        \foreach \name / \y in {0,...,4}
+        \pgfmathtruncatemacro{\y}{0 + \y}
+            \path node[hidden neuron] (H1-\name) at (1*\layersep,-\y cm) {};
+
+        \foreach \source in {0,...,1}
+            \foreach \dest in {0,...,4}
+                \path (I-\source) edge (H1-\dest);
+
+        % BETA
+        \node[input beta, pin=left:$\beta_a$] (BETA) at (0,-3.5) {};
+
+        % beta auto encoder
+        \foreach \name / \y in {0,...,1}
+            \pgfmathtruncatemacro{\ybis}{3+ \y}
+            \path node[autoencoder neuron] (AE-\name) at (\layersep/3.5,-\ybis cm) {};
+
+
+
+        \foreach \name / \y in {0,...,3}
+        \pgfmathtruncatemacro{\y}{0 + \y}
+            \path[yshift=-0.5cm]
+            node[hidden neuron] (H2-\name) at (1.6*\layersep,-\y cm) {};
+
+
+        % actions
+        \foreach \name / \y in {0,...,1}
+        \pgfmathtruncatemacro{\y}{0 + \y}
+            \path[yshift=-0.5cm] node[qr,pin=right:$Q_r(a^\y)$] (Qr-\name) at (2.2*\layersep,-\y cm) {};
+
+        \foreach \name / \y in {0,...,1}
+        \pgfmathtruncatemacro{\yy}{2 + \y}
+            \path[yshift=-0.5cm] node[qc,pin=right:$Q_c(a^\y)$] (Qc-\name) at (2.2*\layersep,-\yy cm) {};
+
+        \foreach \source in {0,...,1}
+            \foreach \dest in {0,...,4}
+                \path (AE-\source) edge (H1-\dest);
+
+
+
+        \foreach \dest in {0,...,1}
+            \path (BETA) edge (AE-\dest);
+
+         \foreach \source in {0,...,4}
+            \foreach \dest in {0,...,3}
+                \path (H1-\source) edge (H2-\dest);
+
+        \foreach \source in {0,...,3}
+            \foreach \dest in {0,...,1}
+                \path (H2-\source) edge (Qr-\dest);
+
+         \foreach \source in {0,...,3}
+            \foreach \dest in {0,...,1}
+                \path (H2-\source) edge (Qc-\dest);
+        % Annotate the layers
+       \node[annot] (input) at (0,1) {$(s,\beta_a)$};
+       \node[annot2] (input) at (\layersep/3.5,-4.6) {Encoder};
+       \node[annot](h1) at (\layersep,1) {Hidden Layer 1};
+       \node[annot](h2) at(1.6* \layersep,1) {Hidden Layer 2};
+       \node[annot](output) at(2.2* \layersep,1) {$Q$};
+        %\node[annot,right of=hl] {Output layer};
+    \end{tikzpicture}

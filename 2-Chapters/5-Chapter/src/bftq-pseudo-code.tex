@@ -1,0 +1,28 @@
+\begin{algorithm}[tp]
+\DontPrintSemicolon
+\KwData{$\mathcal{D}$, $\tilde{\mathcal{B}}$ a finite subset of $\mathcal{B}$, $\gamma$, a model $Q\in (\Real^2)^{S \ocA}$, a regression algorithm \texttt{fit}, a set of CPU workers $W$}
+\KwResult{$Q^*$}
+$Q \leftarrow 0$\;
+$X \leftarrow \{s_i,a_i,\beta_{a_i}\}_{i\in[0, |\cD|]}$\;
+$S' \leftarrow \{s_i'\}_{i\in[0, |\cD|]}$\;
+\Repeat{convergence}{
+   Evaluate $Q(S', \cA, \tilde{\cB})$ in a single forward pass\;
+   Split $\mathcal{D}$ among workers: $\mathcal{D} = \cup_{w\in W} \mathcal{D}_w$\;
+   \For(\tcp*[f]{Run in parallel}){$w\in W$}{
+       \For{$(\boldsymbol{\cdot},\boldsymbol{\cdot},\beta_{a_i},{R_r}_i,{R_c}_i,s'_i) \in \mathcal{D}$} {
+           $\cP \leftarrow \{(Q_c(s_i',\cA,\tilde{\cB}), Q_r(s_i',\cA,\tilde{\cB}))\}$\;
+           $\cP.\texttt{prune}()$ \tcp*[f]{Remove all dominated points}\;
+           $\cH \leftarrow \texttt{convex\_hull}(\cP).\text{vertices}()$\tcp*[f]{in cw order}\;
+           $k \leftarrow \min\{k: \beta_i \geq q_c$ with $\left(q_c,q_r\right) = \cH[k]\}$\;
+           $q_c^2,q_r^2,q_c^1,q_r^1 \leftarrow \cH[k],\cH[k-1]$\;
+           $p \leftarrow (\beta_{a_i} - q_a^1) / (q_c^2 - q_c^1)$\;
+           $Y_c^{w,i} \leftarrow {R_c}_i + \gamma ((1-p) q_c^1+ p q_c^2)$\;
+           $Y_r^{w,i} \leftarrow {R_r}_i + \gamma ((1-p) q_r^1+ p q_r^2)$\;
+       }
+   }
+   Join the results: $Y \leftarrow \cup_{w\in W} (Y_c^w, Y_r^w)$\;
+   $Q \leftarrow \texttt{fit}(X, Y)$\;
+}
+\caption{Scalable BFTQ}
+\label{algo:bftq_full}
+\end{algorithm}
