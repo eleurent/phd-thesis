@@ -1,6 +1,5 @@
 *.gz
 *.synctex*
-*.pdf
 *~
 *.log
 *.aux
@@ -24,6 +23,8 @@
 *.nlo
 *.nls
 *.pyg
+
+PhD_thesis__Edouard_Leurent.pdf
 
 # Folders
 #*.git/
