@@ -5,6 +5,10 @@
 \chapter{Acting under Adjustable Constraints}
 \label{chapter:5}
 
+\abstractStartChapter{}%
+This chapter\dots
+\minitocStartChapter{}
+
 \section{Budgeted dynamic programming}
 \label{sec:bdp}
 We work in the space of budgeted policies, where a policy $\pi$ both depends on the current budget $\beta$ and also outputs a next budget $\beta_a$. Hence, the budget $\beta$ is neither fixed nor constant as in the CMDP setting but instead evolves as part of the dynamics.
@@ -212,9 +216,9 @@ In order to run \autoref{algo:bftq}, we must first gather a batch of samples $\m
 \input{2-Chapters/5-Chapter/src/risk-sensitive-explo-pseudo-code.tex}
 
 
-\section{A scalable implementation}
-\label{sec:scalable-bftq}
-In this section, we introduce an implementation of the \BFTQ algorithm designed to operate efficiently and handle large batches of experiences $\mathcal{D}$.
+%\section{A scalable implementation}
+%\label{sec:scalable-bftq}
+In the following, we introduce an implementation of the \BFTQ algorithm designed to operate efficiently and handle large batches of experiences $\mathcal{D}$.
 
 \subsection{How to compute the greedy policy?}
 \label{subsec:compute-greedy-policy}
@@ -345,7 +349,7 @@ To our knowledge, there were only two ways of solving a BMDP. The first one is t
 
 The only other existing BMDP algorithm, and closest work to ours, is the Dynamic Programming algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the model ($P$, $R_r$, $R_c$), and do not address the question of learning from interaction data.
 
-\section{Conclusion}
+\section*{Conclusion}
 \label{sec:conclusion}
 The BMDP framework is a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, BMDPs could so far only be solved in finite state spaces which limits their interest in many use-cases. We extend their definition to continuous states by introducing of a novel Dynamic Programming operator, that we build upon to propose a Reinforcement Learning algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed Reinforcement Learning. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\beta$ instead of the tedious tuning of the penalty $\lambda$.
 
