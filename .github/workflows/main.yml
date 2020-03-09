@@ -16,4 +16,5 @@ jobs:
         uses: xu-cheng/latex-action@master
         with:
           root_file: PhD_thesis__Edouard_Leurent.tex
+          args: -pdf -file-line-error -interaction=nonstopmode -shell-escape
           extra_system_packages: "py-pygments"
