@@ -808,7 +808,7 @@ Fitted-Q (FTQ)~\citep{Ernst2005,Riedmiller2005} can be easily adapted for contin
 
 \subsection{Examples of different exploration strategies}
 \label{subsec:exploration-examples}
-We compare two approaches for constructing a batch of samples. The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{this https URL} display the trajectories collected in each intermediate sub-batch. The first row corresponds to a classical  risk neutral epsilon-greedy exploration policy while the second row showcases a risk-sensitive exploration strategy introduced in the paper. Each animation corresponds to a different seed.
+We compare two approaches for constructing a batch of samples. The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/} display the trajectories collected in each intermediate sub-batch. The first row corresponds to a classical  risk neutral epsilon-greedy exploration policy while the second row showcases a risk-sensitive exploration strategy introduced in the paper. Each animation corresponds to a different seed.
 
 \subsection{Examples of BFTQ policies executions}
 \label{sec:bftq-executions}
@@ -817,7 +817,7 @@ We display the evolution in the budgeted policy behaviour with respect to the bu
 
 \paragraph{Highway-Env}
 
-On the \texttt{highway-env} , the budgeted agents display a wide variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{this https URL}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
+On the \texttt{highway-env} , the budgeted agents display a wide variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
 
 \paragraph{Slot-filling}
 
@@ -829,7 +829,7 @@ In \autoref{table:dialogues}, we display two dialogues done with the same BFTQ p
 
 \paragraph{Corridors}
 
-Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{this https URL} for the \texttt{corridors} environment. When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
+Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/} for the \texttt{corridors} environment. When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
 
 \subsection{Reproducibility}
 \label{subsec:reproducibility-supp}
