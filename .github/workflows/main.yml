@@ -7,11 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build_latex:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: make
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: PhD_thesis__Edouard_Leurent.tex
+          extra_system_packages: "py-pygments"
