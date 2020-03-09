@@ -138,11 +138,13 @@
 \setcounter{minitocdepth}{1}
 
 % --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
-\usepackage[chapter,draft=false,final=true]{minted}
+
+\usepackage{framed}
+%\usepackage[chapter,draft=false,final=true]{minted}
 
 % https://tex.stackexchange.com/a/64845/97964
-\renewcommand{\listingscaption}{Code Example}% Listing -> Code Example
-\renewcommand{\listoflistingscaption}{List of Code Examples}% List of Listings -> List of Code Examples
+%\renewcommand{\listingscaption}{Code Example}% Listing -> Code Example
+%\renewcommand{\listoflistingscaption}{List of Code Examples}% List of Listings -> List of Code Examples
 
 % % https://tex.stackexchange.com/a/64845/97964
 % \renewcommand{\lstlistingname}{Code example}% Listing -> Algorithm
@@ -152,15 +154,13 @@
 \ifsetDraft
 	\usepackage[colorinlistoftodos]{todonotes}
 	\newcommand{\TODO}[1]{\todo[inline]{TODO: #1}}
-	\newcommand{\TODOL}[1]{\todo[inline,color=blue!40]{Edouard: #1}}
+	\newcommand{\TODOE}[1]{\todo[inline,color=blue!40]{Edouard: #1}}
 	\newcommand{\FIXME}[1]{\todo[inline]{FIXME: #1}}
 \else
 	\newcommand{\mynote}[1]{}
 	\newcommand{\listoftodos}{}
 	\newcommand{\TODO}[1]{}
 	\newcommand{\TODOE}[1]{}
-	\newcommand{\TODOL}[1]{}
-	\newcommand{\TODOC}[1]{}
 	\newcommand{\FIXME}[1]{}
 \fi
 

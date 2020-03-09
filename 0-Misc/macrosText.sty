@@ -35,7 +35,6 @@
 \newcommand\norm[1]{\left\lVert#1\right\rVert}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
-% \DeclareMathOperator{\Tr}{Tr}
 \newcommand{\limInf}{\underline{\lim}}
 \newcommand{\e}{\mathrm{e}}
 \newcommand{\eps}{\varepsilon}
@@ -56,19 +55,7 @@
 \newcommand{\E}{\mathbb{E}}
 \renewcommand{\Pr}{\mathbb{P}}
 \newcommand{\indic}{\mathbbm{1}}
-% ----------------------------------------------------------------------
 
-% Kullback-Leibler
-\newcommand{\kl}{\ensuremath{\mathrm{kl}}}
-\newcommand{\KL}{\ensuremath{\mathrm{KL}}}
-% ----------------------------------------------------------------------
-
-% Integration
-\newcommand{\dt}{\;\mathrm{d}t}
-\newcommand{\du}{\;\mathrm{d}u}
-\newcommand{\dv}{\;\mathrm{d}v}
-\newcommand{\dx}{\;\mathrm{d}x}
-\newcommand{\Ei}{\ensuremath{\mathrm{Ei}}}
 % ----------------------------------------------------------------------
 
 % Calligraphic Shorthands
@@ -109,28 +96,6 @@
 \newcommand{\Z}{\mathbb{Z}}
 % ----------------------------------------------------------------------
 
-% Bandit specific shorthands
-\newcommand{\bmu}{\boldsymbol{\mu}}
-% \newcommand{\reg}{\text{R}}
-% \newcommand{\regfull}{\reg_{\bm{\theta}}(T,\cA)}
-\newcommand{\br}{\text{BR}}
-\newcommand{\Kinf}{\cK_{\text{inf}}\,}
-% \newcommand{\muA}{\hat{\mu}_a(t)} %moyenne empirique dans l'algorithme
-% \newcommand{\muS}{\hat{\mu}_{a,s}}
-% \newcommand{\thetaU}{\underline{\theta}}
-% ----------------------------------------------------------------------
-
-\newcommand{\eqdef}{\overset{.}{=}}
-% \newcommand{\eqdef}{:=}
-% % \newcommand{\eqdef}{=}
-\newcommand{\reqdef}{\overset{.}{=}}
-% \newcommand{\reqdef}{=:}
-% % \newcommand{\reqdef}{=}
-
-% Statistical Shorthands
-\newcommand{\K}{\mathrm{K}}
-\newcommand{\Kb}{\mathrm{K}}
-% ----------------------------------------------------------------------
 
 % Misc Math Operations Shorthands
 % \newcommand{\argmin}[1]{\underset{#1}{\text{argmin }}}
@@ -139,17 +104,6 @@
 \newcommand{\Tgoesto}{\underset{T\rightarrow \infty}{\longrightarrow}}
 \newcommand{\isequT}{\underset{T\rightarrow \infty}{\sim}}
 % ----------------------------------------------------------------------
-
-% % ----------------------------------------------------------------------
-% % https://github.com/Wookai/paper-tips-and-tricks#back-references
-% \renewcommand*{\backref}[1]{}
-% \renewcommand*{\backrefalt}[4]{{\footnotesize [%
-%     \ifcase #1 Not cited.%
-%     \or Cited on page~#2%
-%     \else Cited on pages #2%
-%     \fi%
-% ]}}
-% % ----------------------------------------------------------------------
 
 % https://tex.stackexchange.com/a/7045/97964
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
@@ -250,100 +204,7 @@
     % \end{small}%
 }
 
-% ----------------------------------------------------------------------
-% Chapter 2 on MAB algorithms
-\newcommand{\SAO}{\ensuremath{\mathrm{SAO}}}
-\newcommand{\BayesUCB}{\ensuremath{\mathrm{BayesUCB}}}
-\newcommand{\UCB}{\ensuremath{\mathrm{UCB}}}
-\newcommand{\UCBone}{\ensuremath{\mathrm{UCB}1}}
-\newcommand{\UCBR}{\ensuremath{\mathrm{UCB}\text{-}\mathrm{R}}}
-\newcommand{\OCUCB}{\ensuremath{\mathrm{OCUCB}}}
-\newcommand{\UCBH}{\ensuremath{\mathrm{UCB}\text{-}\mathrm{H}}}
-\newcommand{\MOSS}{\ensuremath{\mathrm{MOSS}}}
-\newcommand{\MOSSH}{\ensuremath{\mathrm{MOSS}\text{-}\mathrm{H}}}
-\newcommand{\MOSSAnytime}{\ensuremath{\mathrm{MOSS}\text{-}\mathrm{anytime}}}
-\newcommand{\KLUCB}{\ensuremath{\mathrm{KL}\text{-}\mathrm{UCB}}}
-\newcommand{\klUCB}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}}}
-\newcommand{\KLUCBpp}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}^{++}}}
-\newcommand{\KLUCBH}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}\text{-}\mathrm{H}}}
-\newcommand{\KLUCBswitch}{\ensuremath{\mathrm{kl}\text{-}\mathrm{UCB}\text{-}\mathrm{switch}}}
-\newcommand{\AFHG}{\ensuremath{\mathrm{AFHG}}}
-\newcommand{\AFGH}{\ensuremath{\mathrm{AFHG}}}
-\newcommand{\DMED}{\ensuremath{\mathrm{DMED}}}
-\newcommand{\DMEDp}{\ensuremath{\mathrm{DMED}+}}
-\newcommand{\ExpThree}{\ensuremath{\mathrm{Exp}3}}
-\newcommand{\ExpFour}{\ensuremath{\mathrm{Exp}4}}
-\newcommand{\ExpThreeS}{\ensuremath{\mathrm{Exp}3.\mathrm{S}}}
-\newcommand{\ExpFourS}{\ensuremath{\mathrm{Exp}4.\mathrm{S}}}
-\newcommand{\ExpThreeR}{\ensuremath{\mathrm{Exp}3.\mathrm{R}}}
-\newcommand{\RExpThree}{\ensuremath{\mathrm{RExp}3}}
-\newcommand{\Exppp}{\ensuremath{\mathrm{Exp}}\ensuremath{3^{++}}}
-% ----------------------------------------------------------------------
 
-
-% ----------------------------------------------------------------------
-% Chapter 3 on SMPyBandits
-\newcommand{\SMPyBandits}[0]{\href{https://github.com/SMPyBandits/SMPyBandits/}{SMPyBandits}}
-
-% ----------------------------------------------------------------------
-% Chapter 25 on aggregation of MAB algorithms
-\newcommand{\Aggr}[0]{\ensuremath{\mathrm{Aggregator}}}
-\newcommand{\ExpQ}[0]{\ensuremath{\mathrm{Exp4}}}
-\newcommand{\CORRAL}[0]{\ensuremath{\mathrm{CORRAL}}}
-\newcommand{\LearnExp}[0]{\ensuremath{\mathrm{LearnExp}}}
-\newcommand{\Alg}[0]{\mathcal{A}}
-% ----------------------------------------------------------------------
-
-% ----------------------------------------------------------------------
-% Chapter 5 on RandTopM
-\newcommand{\Ack}{\emph{Ack}}
-\newcommand{\rhoRand}{\ensuremath{\mathrm{Rho}\mathrm{Rand}}}
-\newcommand{\RhoRand}{\ensuremath{\mathrm{Rho}\mathrm{Rand}}}
-\newcommand{\rhoFixedRank}{\ensuremath{\mathrm{Rho}\mathrm{FixedRank}}}
-\newcommand{\rhoRandRot}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{Rot}}}
-\newcommand{\rhoRandSticky}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{Sticky}}}
-\newcommand{\rhoRandALOHA}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\mathrm{ALOHA}}}
-\newcommand{\rhoLearn}{\ensuremath{\mathrm{Rho}\mathrm{Learn}}}
-\newcommand{\rhoRandEst}{\ensuremath{\mathrm{Rho}\mathrm{Est}}}
-%
-\newcommand{\rhoRandUCB}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\text{-}\mathrm{UCB}_1}}
-\newcommand{\rhoRandklUCB}{\ensuremath{\mathrm{Rho}\mathrm{Rand}\text{-}\mathrm{KLUCB}}}
-%
-\newcommand{\Selfish}{\ensuremath{\mathrm{Selfish}}}
-\newcommand{\RandTopM}{\ensuremath{\mathrm{RandTopM}}}
-\newcommand{\MCTopM}{\ensuremath{\mathrm{MCTopM}}}
-
-\newcommand{\TDFS}{\ensuremath{\mathrm{TDFS}}}
-\newcommand{\MEGA}{\ensuremath{\mathrm{MEGA}}}
-\newcommand{\MusicalChair}{\ensuremath{\mathrm{Musical}\,\mathrm{Chair}}}
-
-% Abbreviations
-\newcommand{\Mbest}{\ensuremath{M\text{-}\mathrm{best}}}
-\newcommand{\Mworst}{\ensuremath{M\text{-}\mathrm{worst}}}
-\newcommand{\TopM}{\widehat{M^j}}
-
-% Four models
-\newcommand{\modelun}{(I)}
-\newcommand{\modeldeux}{(II)}
-\newcommand{\modeltrois}{(III)}
-\newcommand{\modelquatre}{(IV)}
-
-% ----------------------------------------------------------------------
-\makeatletter
-% Thanks to https://tex.stackexchange.com/a/110981/
-\providecommand*{\cupdot}{%
-    \mathbin{%
-        \mathpalette\@cupdot{}%
-    }%
-}
-\newcommand*{\@cupdot}[2]{%
-    \ooalign{%
-        $\m@th#1\cup$\cr
-        \hidewidth$\m@th#1\cdot$\hidewidth
-    }%
-}
-\makeatother
-% ----------------------------------------------------------------------
 
 % ----------------------------------------------------------------------
 \makeatletter
@@ -368,33 +229,4 @@
     \@esphack
 }
 \makeatother
-% ----------------------------------------------------------------------
-
-
-% ----------------------------------------------------------------------
-% Chapter 6 on GLR klUCB
-\newcommand{\CUSUM}{\ensuremath{\mathrm{CUSUM}}}
-\newcommand{\PHT}{\ensuremath{\mathrm{PHT}}}
-\newcommand{\GLR}{\ensuremath{\mathrm{GLR}}}
-\newcommand{\GLRklUCB}{\ensuremath{\mathrm{GLR}\text{-}\mathrm{kl}\mathrm{UCB}}}
-\newcommand{\MklUCB}{\ensuremath{\mathrm{M}\text{-}\mathrm{kl}\mathrm{UCB}}}
-\newcommand{\MUCB}{\ensuremath{\mathrm{M}\text{-}\mathrm{UCB}}}
-\newcommand{\CUSUMklUCB}{\ensuremath{\mathrm{CUSUM}\text{-}\mathrm{kl}\mathrm{UCB}}}
-\newcommand{\CUSUMUCB}{\ensuremath{\mathrm{CUSUM}\text{-}\mathrm{UCB}}}
-\newcommand{\GaussianGLR}{\ensuremath{\mathrm{GLR}^{\mathcal{N}_1}}}
-\newcommand{\SubGaussianGLR}{\ensuremath{\mathrm{GLR}^{\text{sub-}\sigma}}}
-\newcommand{\BernoulliGLR}{\ensuremath{\mathrm{GLR}^{\mathcal{B}}}}
-\def\NCi{\text{NC}_i}
-\def\NCk{\text{NC}_k}
-\def\GLRd{\mathrm{GLR}_d(t)}
-\def\EffChange{\mathrm{C}_T}
-% ----------------------------------------------------------------------
-
-
-% ----------------------------------------------------------------------
-% Appendix on Doubling Trick
-\newcommand{\DT}{\ensuremath{\mathcal{DT}}}
-% \newcommand{\DTr}{\ensuremath{\mathcal{DT}_{\text{restart}}}}
-\newcommand{\DTr}{\ensuremath{\mathcal{DT}}}
-\newcommand{\DTnr}{\ensuremath{\mathcal{DT}_{\text{no-restart}}}}
 % ----------------------------------------------------------------------
