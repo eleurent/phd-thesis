@@ -286,8 +286,20 @@ There are two hypotheses we want to validate.
 
 \paragraph{Exploration strategies}\label{par:ex-explo} We claimed in \autoref{sec:exploration} that a risk-sensitive exploration was required in the setting of BMDPs. We test this hypotheses by confronting our strategy to a classical risk-neutral strategy. The latter is chosen to be a $\epsilon$-greedy policy slowly transitioning from a random to a greedy policy\footnote{We train this greedy policy using \FTQ.} that aims to maximise $\expectedvalue_{\pi} G_r^\pi$ regardless of $\expectedvalue_{\pi} G_c^\pi$. The quality of the resulting batches $\cD$ is assessed by training a \BFTQ policy and comparing the resulting performance.
 
-\paragraph{Budgeted algorithms}\label{par:ex-brl} We compare our  scalable \BFTQ algorithm described in \autoref{sec:scalable-bftq} to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\pi} \expectedvalue_{\pi}[G_r^\pi - \lambda G_c^\pi]$. The resulting MDP can be solved by any RL algorithm, and we chose \FTQ for being closest to \BFTQ.
-In our experiments, a single training of \BFTQ corresponds to 10 trainings of \FTQl policies. Each run was repeated $N_{\text{seeds}}$ times. Parameters of the algorithms can be found in \autoref{sec:algorithms-parameters}
+\paragraph{Budgeted algorithms}\label{par:ex-brl} We compare our  scalable \BFTQ algorithm described in \autoref{sec:scalable-bftq} to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\pi} \expectedvalue_{\pi}[G_r^\pi - \lambda G_c^\pi]$.
+As shown in \autoref{fig:Lagrangian}, the optimal deterministic policy can be obtained by a line-search on the Lagrange multiplier values $\lambda$.
+Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies: the safest deterministic policy that violates the constraint $\pi_{\lambda-}$ and the riskier of the feasible ones $\pi_{\lambda+}$.
+The resulting MDPs can be solved by any RL algorithm, and we chose \FTQ for being closest to \BFTQ.
+In our experiments, a single training of \BFTQ corresponds to 10 trainings of \FTQl policies. Each run was repeated $N_{\text{seeds}}$ times. Given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our purpose is to avoid this calibration phase.
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics[width=0.5\textwidth]{img/CalibrationExample}
+	\caption{Calibration of a penalty multiplier according to the budget $\beta$. The optimal multiplier $\lambda^*_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
+	% TODO: penalization -> penalty
+	\label{fig:Lagrangian}
+\end{figure}
+
 
 \subsection{Environments}
 \label{subsec:environments}
@@ -309,7 +321,12 @@ The task consists in driving as fast as possible, which is modelled by a reward 
 In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(G_r^\pi,G_c^\pi)$ over $N_\text{trajs}$ trajectories. That way, we display the variation related to learning (and batches) rather than the variation in the execution of the policies.
 
 We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment: \autoref{fig:exploration} shows the set of trajectories collected by each exploration strategy.
-and the resulting performance of a budgeted policy trained on each batch. The trajectories (orange) in the risk-neutral batch are concentrated along the risky corridor (right) and ignore the safe corridor (left), which results in bad performances in the low-risk regime. Conversely, trajectories in the risk-sensitive batch (blue) are well distributed among both corridors and the corresponding budgeted policy achieves good performance across the whole spectrum of risk budgets.
+and the resulting performance of a budgeted policy trained on each batch. The trajectories (orange) in the risk-neutral batch are concentrated along the risky corridor (right) and ignore the safe corridor (left), which results in bad performances in the low-risk regime. Conversely, trajectories in the risk-sensitive batch (blue) are well distributed among both corridors and the corresponding budgeted policy achieves good performance across the whole spectrum of risk budgets. 
+% TODO: redaction
+The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/} display the trajectories collected in each intermediate sub-batch.
+Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/}: When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
+
+
 
 \begin{figure}[tp]
 	\centering
@@ -330,11 +347,14 @@ and the resulting performance of a budgeted policy trained on each batch. The tr
 	\end{center}
 \end{figure}
 
-In a second experiment displayed in \autoref{fig:results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[G_c|\beta=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\cT}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $Q_\theta$ instead of $Q$. 
+In a second experiment displayed in \autoref{fig:results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
+Qualitatively, the budgeted agents display a variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
+For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[G_c|\beta=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\cT}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $Q_\theta$ instead of $Q$. 
+
+
 % This is probably due to \text{highway-env} being actually infeasible for $\beta=0$, since we noticed that about $8\%$ of bad initialisations occur with the front vehicle driving slower than the minimum velocity of the controlled vehicle, leading to either a front collision or a forced change to the opposite lane, both yielding costs.
 Still, \BFTQ provides a better control on the expected cost of the policy, than \FTQl. In addition, \BFTQ behaves more consistently than \FTQl overall, as shown by its lower extra-seed variance.
 
-Additional material such as videos of policy executions is provided in \autoref{sec:exp-supp}.
 
 \section{Discussion}
 \label{subsec:discussions}
@@ -792,220 +812,5 @@ The BMDP framework is a principled framework for safe decision making under unce
 %We recall the Risk-Sensitive Exploration in %\autoref{algo:risk-sensitive-exploration}:
 %\input{source/risk-sensitive-explo-pseudo-code.tex}
 
-\section{Experimental details}
-\label{sec:exp-supp}
-
-\subsection{The Lagrangian Relaxation Baseline}
-\label{sec:lagragian}
-As explained on \autoref{fig:Lagrangian}, the optimal deterministic policy can be obtained by a line-search on the Lagrange multiplier values $\lambda$.
-
-Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies: the safest deterministic policy that violates the constraint $\pi_{\lambda-}$ and the riskier of the feasible ones $\pi_{\lambda+}$.
-
-Fitted-Q (FTQ)~\citep{Ernst2005,Riedmiller2005} can be easily adapted for continuous states CMDP and BMDP through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our purpose is to avoid this calibration phase.
-
-\begin{figure}[tp]
-	\centering
-	\includegraphics[width=0.5\textwidth]{img/CalibrationExample}
-	\caption{Calibration of a penalty multiplier according to the budget $\beta$. The optimal multiplier $\lambda^*_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
-	\label{fig:Lagrangian}
-\end{figure}
-
-\subsection{Examples of different exploration strategies}
-\label{subsec:exploration-examples}
-We compare two approaches for constructing a batch of samples. The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/} display the trajectories collected in each intermediate sub-batch. The first row corresponds to a classical  risk neutral epsilon-greedy exploration policy while the second row showcases a risk-sensitive exploration strategy introduced in the paper. Each animation corresponds to a different seed.
-
-\subsection{Examples of BFTQ policies executions}
-\label{sec:bftq-executions}
-
-We display the evolution in the budgeted policy behaviour with respect to the budget on different environments. The policies have been learnt with a risk-sensitive exploration.
-
-\paragraph{Highway-Env}
-
-On the \texttt{highway-env} , the budgeted agents display a wide variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
-
-\paragraph{Slot-filling}
-
-\paragraph{Remark on the \texttt{slot-filling} environment} When receiving an utterance, the system can either understand it $(\mu=\mu_u)$ or misunderstand it $(\mu=\mu_m)$ with a fixed probability called the sentence error rate $ser$. Then, the speech recognition score is simulated \citep{Khouzaimi2015}: $srs = (1+\exp(-x))^{-1}$ with $x\sim N(\mu, \sigma)$. It's the confidence score of the natural language understanding module about the last utterance. Note that here are no recognition errors ($ser=0$ and $srs=1$) when the user provides information using the numeric pad.
-
-In \autoref{table:dialogues}, we display two dialogues done with the same BFTQ policy on \texttt{slot-filling}. The policy is given two budgets to respect in expectation, $\beta=0$ and $\beta=0.5$. For $\beta=0$, one can see that the system never uses the \texttt{ask\_num\_pad} action. Instead, it uses \texttt{ask\_oral} , an action subject to recognition errors. The system keeps asking for the same slot 2, because it has the lowest speech recognition score. It eventually summarises the form to the user, but then reaches the maximum dialogue length and thus faces a dialogue failure. For $\beta=0.5$, the system first asks in a safe way, with \texttt{ask\_oral}. It may want to \texttt{ask\_num\_pad} if one of the speech recognition score is low. Then, the system proceeds to a confirmation of the slot values. If it is incorrect, the system continues the dialogue using unsafe the \texttt{ask\_num\_pad} action to be certain of the slot values.
-
-\input{2-Chapters/5-Chapter/src/dialogues.tex}
-
-\paragraph{Corridors}
-
-Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/} for the \texttt{corridors} environment. When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
-
-\subsection{Reproducibility}
-\label{subsec:reproducibility-supp}
-
-The following section displays environments and algorithms parameters and instructions to reproduce the exact same results displayed in \autoref{sec:experiments}.
-
-
-\subsubsection{Algorithm parameters}
-\label{sec:algorithms-parameters}
-
-All algorithm parameters are displayed in \autoref{tab:param-algo-corridors},\autoref{tab:param-algo-slot-filling} and \autoref{tab:param-algo-highway-env}.
-
-\paragraph{A note on the parameters search}
-
-We performed a shallow grid-search for the classic Neural-Network parameters. Most of the parameters don't have a strong influence on the results, however in the \texttt{slot-filling} environment, the choice of the regulation weight is decisive.
-
-\begin{table}[tp]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameters & BFTQ(risk-sensitive) & BFTQ(risk-neutral)\tabularnewline
-		\midrule
-		architecture & 256x128x64 & 256x128x64\tabularnewline
-		regularisation & 0.001 & 0.001\tabularnewline
-		activation & relu & relu\tabularnewline
-		size beta encoder & 3 & 3\tabularnewline
-		initialisation & xavier & xavier\tabularnewline
-		loss function & L2 & L2\tabularnewline
-		optimizer & adam & adam\tabularnewline
-		learning rate & 0.001 & 0.001\tabularnewline
-		epoch (NN) & 1000 & 5000\tabularnewline
-		normalize reward & true & true\tabularnewline
-		epoch (FTQ) & 12 & 12\tabularnewline
-		$\tilde{\cB}$ & 0:0.01:1 & -\tabularnewline
-		$\gamma$ & 1 & 1\tabularnewline
-		$N=|\cD|$ & 5000 & 5000\tabularnewline
-		$N_\text{minibatch}$ & 10 & 10\tabularnewline
-		$N_\text{seeds}$ & 4 & 4\tabularnewline
-		$N_\text{test}$ & 1000 & 1000\tabularnewline
-		decay epsilon scheduling & 0.001 & 0.001\tabularnewline
-		\bottomrule
-	\end{tabular}
-	\caption{Algorithms parameters for \texttt{Corridors}}
-	\label{tab:param-algo-corridors}
-\end{table}
-
-\begin{table}[tp]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameters & BFTQ & FTQ\tabularnewline
-		\midrule
-		architecture & 256x128x64 & 128x64x32\tabularnewline
-		regularisation & 0.0005 & 0.0005\tabularnewline
-		activation & relu & relu\tabularnewline
-		size beta encoder & 50 & -\tabularnewline
-		initialisation & xavier & xavier\tabularnewline
-		loss function & L2 & L2\tabularnewline
-		optimizer & adam & adam\tabularnewline
-		learning rate & 0.001 & 0.001\tabularnewline
-		epoch (NN) & 5000 & 5000\tabularnewline
-		normalize reward & true & true\tabularnewline
-		epoch (FTQ) & 11 & 11\tabularnewline
-		$\tilde{\cB}$ & 0:0.01:1 & -\tabularnewline
-		$\gamma$ & 1 & 1\tabularnewline
-		$N=|\cD|$ & 5000 & 5000\tabularnewline
-		$N_\text{minibatch}$ & 10 & 10\tabularnewline
-		$N_\text{seeds}$ & 6 & 6\tabularnewline
-		$N_\text{test}$ & 1000 & 1000\tabularnewline
-		decay epsilon scheduling & 0.001 & 0.001\tabularnewline
-		\bottomrule
-	\end{tabular}
-	\caption{Algorithms parameters for \texttt{Slot-Filling}}
-	\label{tab:param-algo-slot-filling}
-\end{table}
-\begin{table}[tp]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameters & BFTQ & FTQ\tabularnewline
-		\midrule
-		architecture & 256x128x64 & 128x64x32\tabularnewline
-		regularisation & 0.0005 & 0\tabularnewline
-		activation & relu & relu\tabularnewline
-		size beta encoder & 50 & -\tabularnewline
-		initialisation & xavier & xavier\tabularnewline
-		loss function & L2 & L2\tabularnewline
-		optimizer & adam & adam\tabularnewline
-		learning rate & 0.001 & 0.01\tabularnewline
-		epoch (NN) & 5000 & 400\tabularnewline
-		normalize reward & true & true\tabularnewline
-		epoch (FTQ) & 15 & 15\tabularnewline
-		$\tilde{\cB}$ & 0:0.01:1 & -\tabularnewline
-		$\gamma$ & 0.9 & 0.9\tabularnewline
-		$N=|\cD|$ & 10000 & 10000\tabularnewline
-		$N_\text{minibatch}$ & 10 & 10\tabularnewline
-		$N_\text{seeds}$ & 10 & 10\tabularnewline
-		$N_\text{test}$ & 150 & 150\tabularnewline
-		decay epsilon scheduling & 0.0003 & 0.0003\tabularnewline
-		\bottomrule
-	\end{tabular}
-	\caption{Algorithms parameters for \texttt{Highway-Env}}
-	\label{tab:param-algo-highway-env}
-\end{table}
-
-\subsubsection{Environments Parameters}
-\label{sec:env-parameters}
-
-All environments parameters are displayed in \autoref{tab:param-corridors}, \autoref{tab:param-slot-filling} and \autoref{tab:param-highway-env}.
-
-
-\paragraph{State-Space}
-
-The states $s$ (from $\os=(s,\beta)$) of the agent are described in the following:
-
-\begin{itemize}
-	\item \texttt{Corridors}: $s = (x,y)$ where $x$ and $y$ are the 2D coordinates of the agent.
-	\item \texttt{Slot-Filling}: $s = (\text{srs},\text{min},a_u,a_s,t)$ where $\text{srs}$ is a vector of the speech recognition score for each slot, $\text{min}$ is a one hot vector describing the minimum of the $\text{srs}$ vector, $a_u$ is a one hot vector of the last user dialogue act and $a_s$ is the one hot vector of the last system dialogue act. Finally $t\in[0,1]$ is the fraction of the current turn with the maximum number of turns authorised.
-	\item \texttt{Highway-Env}: the positions $(x, y)$ and velocities $(\dot{x}, \dot{y})$ of every vehicle on the road.
-\end{itemize}
-
-
-\begin{table}[ht!]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameter & Description & Value\tabularnewline
-		\midrule
-		- & Size of the environment & 7 x 6\tabularnewline
-		- & \makecell[l]{Standard deviation of the Gaussian \\noise applied to actions} & (0.25,0.25)\tabularnewline
-		H & Episode duration & 9\tabularnewline
-		\bottomrule
-	\end{tabular}
-	\caption{Parameters of \texttt{Corridors}}
-	\label{tab:param-corridors}
-\end{table}
-
-\begin{table}[ht!]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameter & Description & Value\tabularnewline
-		\midrule
-		ser & Sentence Error Rate & 0.6\tabularnewline
-		$\mu_m$& Gaussian mean for misunderstanding & -0.25\tabularnewline
-		$\mu_u$& Gaussian mean for understanding & 0.25\tabularnewline
-		$\sigma$& Gaussian standard deviation & 0.6\tabularnewline
-		$p$& Probability of hang-up & 0.25\tabularnewline
-		H & Episode duration & 10\tabularnewline
-		- & Number of slots & 3\tabularnewline
-		\bottomrule
-	\end{tabular}
-	\caption{Parameters of \texttt{Slot-Filling}}
-	\label{tab:param-slot-filling}
-\end{table}
-
-
-\begin{table}[ht!]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		Parameter & Description & Value\tabularnewline
-		\midrule
-		$N_v$& Number of vehicles & 2 - 6\tabularnewline
-		$\sigma_p$& Standard deviation of vehicles initial positions & 100 m\tabularnewline
-		$\sigma_v$& Standard deviation of vehicles initial velocities & 3 m/s\tabularnewline
-		H & Episode duration & 15 s\tabularnewline
-		\bottomrule
-	\end{tabular}
-	
-	\caption{Parameters of \texttt{highway-env}}
-	\label{tab:param-highway-env}
-\end{table}
 
 \end{subappendices}
