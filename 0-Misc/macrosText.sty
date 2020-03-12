@@ -1,27 +1,10 @@
-% Useful text commands
-\def\linethickness{0.4pt}
-\newcommand{\hr}{\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}}
-
-\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-\newcommand{\abstractStartChapter}{%
-    % \paragraph{Abstract.}%
-    % \paragraph{}%
-    \indent%
-}
-\newcommand{\minitocStartChapter}{%
-    \vfill{}% WARNING vfill before minitoc?
-    \minitoc%
-    \vfill{}% WARNING vfill before minitoc?
-    \newpage%
-}
-\newcommand{\minitocStartChapterNoNewPage}{%
-    \vfill{}% WARNING vfill before minitoc?
-    \minitoc%
-    \vfill{}% WARNING vfill before minitoc?
-    % \newpage%
-}
-
+% ----------------------------------------------------------------------
+% Thesis-specific
+% ----------------------------------------------------------------------
+% Chapter 4
+\newcommand{\MLPL}{\texttt{FCN/List}\xspace}
+\newcommand{\CNNG}{\texttt{CNN/Grid}\xspace}
+\newcommand{\EgoAtt}{\texttt{Ego-Attention}\xspace}
 
 % Chapter 5
 \newcommand{\FTQ}{\texttt{FTQ}\xspace}
@@ -36,6 +19,30 @@
 \newcommand{\ocS}{\ov{\cS}}
 \newcommand{\ocA}{\ov{\cA}}
 
+% ----------------------------------------------------------------------
+% Useful text commands
+\def\linethickness{0.4pt}
+\newcommand{\hr}{\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}}
+
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\newcommand{\abstractStartChapter}{%
+	% \paragraph{Abstract.}%
+	% \paragraph{}%
+	\indent%
+}
+\newcommand{\minitocStartChapter}{%
+	\vfill{}% WARNING vfill before minitoc?
+	\minitoc%
+	\vfill{}% WARNING vfill before minitoc?
+	\newpage%
+}
+\newcommand{\minitocStartChapterNoNewPage}{%
+	\vfill{}% WARNING vfill before minitoc?
+	\minitoc%
+	\vfill{}% WARNING vfill before minitoc?
+	% \newpage%
+}
 % ----------------------------------------------------------------------
 
 % Abbreviations, to ensure they have dots and are not written ie, eg, cf, iid
