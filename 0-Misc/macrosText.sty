@@ -34,6 +34,9 @@
 \newcommand{\OurAlgorithm}{\texttt{Robust-EPC}}
 \newcommand{\ux}{\underline{x}}
 \newcommand{\bom}{\bm{\omega}}
+\providecommand{\examplename}{Example}
+\theoremstyle{definition}
+\newtheorem*{example*}{\protect\examplename}
 
 % ----------------------------------------------------------------------
 % Useful text commands
@@ -89,7 +92,10 @@
 \newcommand*{\MyDef}{\mathrm{\tiny def}}
 \newcommand*{\eqdefU}{\ensuremath{\mathop{\overset{\MyDef}{=}}}}% Unscaled version
 \newcommand*{\eqdef}{\mathop{\overset{\MyDef}{\resizebox{\widthof{\eqdefU}}{\heightof{=}}{=}}}}
+
+% TODO: pick one
 \newcommand{\transp}{\mathsf{\scriptscriptstyle T}}
+\global\long\def\tr{^{\top}}
 % ----------------------------------------------------------------------
 
 % Probability Shorthands
