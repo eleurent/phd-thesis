@@ -159,11 +159,12 @@ However, this property is only true if the upper-bound defined in \eqref{eq:u_mu
 
 \begin{lemma}(Monotony of $U_a(m)$ along a sequence)
 	\label{lemma:seq_values}
-	
+	\begin{leftbar}[lemmabar]
 	\begin{itemize}
 		\item If it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in A^*$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
 		\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in A^*$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
 	\end{itemize}
+	\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -218,7 +219,9 @@ Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log
 
 \begin{remark}[Upper bounds sharpening]
 	\label{rmk:sharpen}
+	\begin{leftbar}[remarkbar]
 	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By Lemma \ref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of Algorithm \ref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in A^L$.
+	\end{leftbar}
 \end{remark}
 
 \subsection{Sample complexity}
@@ -235,6 +238,7 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as:
 
 \begin{theorem}[Sample complexity]
 	\label{thm:regret}
+	\begin{leftbar}[theorembar]
 	We show that \KLOLOP enjoys the same asymptotic regret bounds as \OLOP. More precisely, for any $\kappa' > \kappa_2$, \KLOLOP satisfies:
 	
 	
@@ -244,6 +248,7 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as:
 	\tilde{0}\left(n^{-\frac{1}{2}}\right), & \text{if}\ \gamma\sqrt{\kappa'} \leq 1
 	\end{cases}
 	\end{equation*}
+	\end{leftbar}
 \end{theorem}
 
 \subsection{Time and memory complexity}
@@ -293,11 +298,14 @@ We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which 
 
 \begin{theorem}[Consistency]
 	\label{thm:consistency}
+	\begin{leftbar}[theorembar]
 	The set of sequences returned by Algorithm \ref{algo:lazy-kl-olop} is the same as the one returned by Algorithm \ref{algo:kl-olop}.
 	In particular, Algorithm \ref{algo:lazy-kl-olop} enjoys the same regret bounds as in Theorem \ref{thm:regret}.
+	\end{leftbar}
 \end{theorem}
 
 \begin{proposition}[Time and memory complexity]
+	\begin{leftbar}[propositionbar]
 	Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of:
 	\begin{equation*}
 	C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
@@ -308,6 +316,7 @@ We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which 
 	\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
 	\end{equation*}
 	which highlights that only a subtree corresponding to the sample budget $n$ is processed instead of the search whole tree $\Tau$.
+	\end{leftbar}
 \end{proposition}
 \begin{proof}
 	At episode $m = 1, \cdots, M$, we compute and store in memory the reward upper-bounds and U-values of all nodes in the subtree $\Tau_m^+$. Moreover, the tree $\Tau_m^+$ is constructed iteratively by adding K nodes at most L times at each episode from 0 to $m$. Hence, $|\Tau_m^+| = O(mKL)$.
@@ -346,10 +355,12 @@ and the random variable:
 
 \begin{lemma}[Regret and sub-optimal pulls]
 	\label{lemma:expected-regret}
+	\begin{leftbar}[lemmabar]
 	The following holds true:
 	\begin{equation*}
 	r_n \leq \frac{2K \gamma^{H+1}}{1-\gamma} +\frac{3K}{M}\sum_{h=1}^H\sum_{a\in\mathcal{J}_h}\frac{\gamma^h}{1-\gamma}T_a(M)
 	\end{equation*}
+	\end{leftbar}
 \end{lemma}
 
 
@@ -357,6 +368,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 
 \begin{lemma}[Conditions for sub-optimal pull]
 	\label{lemma:sub-optimal-pull}
+	\begin{leftbar}[lemmabar]
 	Assume that at step $m+1$ we select a sub-optimal sequence $a^{m+1}$: there exist $0 \leq h \leq L,  a\in \mathcal{J}_h$ such that $a^{m+1} \in aA^*$. Then, it implies that one of the following propositions is true:
 	\begin{equation}
 	\label{eq:cond-ukl}
@@ -375,6 +387,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\label{eq:cond-dkl}
 	\sum_{t=1}^h \gamma^t\diff{\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right)} > \frac{\gamma^{h+1}}{1-\gamma}
 	\end{equation}
+	\end{leftbar}
 \end{lemma}
 \begin{proof}
 	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in A^L}  U_a(m)$ and $a^*\in A^L$, so $U_{a^{m+1}}(m) \geq U_{a^*}(m)$ and finally $U_a(m) \geq U_{a^*}(m)$.
@@ -400,10 +413,12 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 
 \begin{lemma}[Boundary crossing probability]
 	\label{lemma:boundary-crossing-prob}
+	\begin{leftbar}[lemmabar]
 	The following holds true, for any $1 \leq h \leq L$ and $m \leq M$,
 	\begin{equation*}
 	\probability{\text{\eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} is true}} = \diff{O((L+h)\delta_m)}
 	\end{equation*}
+	\end{leftbar}
 \end{lemma}
 \begin{proof}
 	Since $V \leq \sum_{t=1}^h \gamma^t \mu(a^*_{1:t}) + \frac{\gamma^{h+1}}{1-\gamma}$, we have,
@@ -461,6 +476,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 
 \begin{lemma}[Confidence interval length and number of plays]
 	\label{lemma:ci-length}
+	\begin{leftbar}[lemmabar]
 	Let $1 \leq h \leq L$, $a\in \mathcal{J}_h$ and $0 \leq h' < h$. Then  \eqref{eq:cond-dkl} is not satisfied if the following propositions are true:
 	\begin{equation}
 	\label{eq:sampled-enough-h}
@@ -471,6 +487,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\label{eq:sampled-enough}
 	T_{a}(m) \geq \diff{2f(m)}(h+1)^2\gamma^{2(h'-h-1)}
 	\end{equation}
+	\end{leftbar}
 \end{lemma}
 \begin{proof}
 	We start by providing an explicit upper-bound for the length of the confidence interval $U^{\mu}_{a_{1:t}} - L^{\mu}_{a_{1:t}}$. \diff{By Pinsker's inequality:}
@@ -499,6 +516,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 
 \begin{lemma}
 	\label{lemma:size_Ph}
+	\begin{leftbar}[lemmabar]
 	Let $1 \leq h \leq L,  a\in \mathcal{J}_h$ and $0\leq h'<h$. Then $\tau^a_{h,h'}=1$ implies that either equation \eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} is satisfied or the following proposition is true:
 	
 	
@@ -506,23 +524,28 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\label{eq:P-min-size}
 	\exists 1\leq t \leq h': |\mathcal{P}_{h,h'}^{a_{1:t}}(m)| < \gamma^{2(t-h')}
 	\end{equation}
+	\end{leftbar}
 \end{lemma}
 
 \begin{lemma}
 	\label{lemma:expected-P-size}
+    \begin{leftbar}[lemmabar]
 	Let $1\leq h\leq L$ and $0 \leq h' < h$. Then the following holds true,
 	
 	\begin{equation*}
 	\expectedvalue |\mathcal{P}^\emptyset_{h,h'}(M)| = \tilde{O}\left(\gamma^{-2h'}\mathbbm{1}_{h'>0}\sum_{t=0}^{h'}(\gamma^2 \kappa')^t + (\kappa')^h\diff{\Delta_M} \right).
 	\end{equation*}
+	\end{leftbar}
 \end{lemma}
 
 \begin{lemma}
 	\label{lemma:expected-plays-count}
+	\begin{leftbar}[lemmabar]
 	Let $1\leq h\leq L$. The following holds true,
 	\begin{equation*}
 	\expectedvalue \sum_{a\in \mathcal{J}_h} T_a(M) = \tilde{O}\left(\gamma^{-2h} + \diff{(\kappa')^h(1+M\Delta_M+\Delta_M) + (\kappa'\gamma^{-2})^h\Delta_M}\right)
 	\end{equation*}
+	\end{leftbar}
 \end{lemma}
 
 Thus by combining Lemma \ref{lemma:expected-regret} and \ref{lemma:expected-plays-count} we obtain:
