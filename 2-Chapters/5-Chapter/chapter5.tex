@@ -59,7 +59,9 @@ We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\beta)\in\ocS: 
 \end{proposition}
 
 \begin{remark}
+	\begin{leftbar}[remarkbar]
 	Because of the budget dynamics $\beta' = \beta_a$ in \eqref{eq:dynamics}, we can see in \eqref{eq:bellman_expectation} that for all $\os=(s, \beta)$ and $\oa=(a, \beta_a)$, $Q^\pi(\os, \oa)$ only depends on $s, a, \beta_a$ and not on $\beta$. We will slightly abuse notations and sometimes denote in the following $Q^\pi(s, a, \beta_a) \eqdef Q^\pi(\os, \oa)$.
+	\end{leftbar}
 \end{remark}
 
 We now come to the definition of budgeted optimality. We want an optimal budgeted policy to: (i)~respect the cost budget $\beta$, (ii)~maximise the $\gamma$-discounted return of rewards $G_r$, (iii)~in case of tie, minimise the $\gamma$-discounted return of costs $G_c$.
@@ -111,8 +113,10 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \end{theorem}
 
 \begin{remark}[Appearance of the greedy policy]
+	\begin{leftbar}[remarkbar]
 	\label{rmk:greedy}
 	In classical Reinforcement Learning, the greedy policy takes a simple form $\pi_\text{greedy}(s; Q^*) = \argmax_{a\in\cA} Q^*(s, a)$, and the term $\pi_\text{greedy}(a'|s';Q^*) Q^{*}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} Q^*(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
+	\end{leftbar}
 \end{remark}
 
 \begin{proposition}[Optimality of the greedy policy]
@@ -519,7 +523,9 @@ The BMDP framework is a principled framework for safe decision making under unce
 \label{proof:contraction-with-smooth}
 
 \begin{remark}
+	\begin{leftbar}[remarkbar]
 	This proof makes use of insights detailed in the proof of \autoref{prop:bftq_pi_hull} (\autoref{sec:proof_pi_hull}), which we recommend the reader to consult first.
+	\end{leftbar}
 \end{remark}
 
 \begin{proof}
@@ -684,6 +690,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 \subsection{\autoref{prop:bftq_pi_hull}}
 \label{sec:proof_pi_hull}
 \begin{definition}
+	\begin{leftbar}[defnbar]
 	Let $A$ be a set, and $f$ a function defined on $A$. We define:
 	
 	\begin{itemize}
@@ -692,6 +699,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 		\item Dirac distributions of $A$: $\delta(A) = \{\delta(a-a_0): a_0\in A\}$ 
 		\item Image of $A$ by $f$: $f(A) = \{f(a): a\in A\}$
 	\end{itemize}
+\end{leftbar}
 \end{definition}
 
 \begin{proof}
