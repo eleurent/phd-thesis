@@ -144,6 +144,7 @@ Robust optimisation with generic costs has also been studied in the context of f
 To derive a confidence region \eqref{eq:confidence} for the dynamical parameters $\theta$, the functional relationship $A(\theta)$ must be specified.
 \begin{assumption}[Structure]
 	\label{assumpt:structure}
+	\begin{leftbar}[assumptionbar]
 	There exists a known feature tensor $\phi\in \Real^{d \times p \times p}$ such that for all $\theta\in\Theta$,
 	\begin{equation}
 	A(\theta) = A + %\theta^\transp \phi \eqdef A + 
@@ -152,6 +153,7 @@ To derive a confidence region \eqref{eq:confidence} for the dynamical parameters
 	where $A,\phi_1,\dots,\phi_d\in\Real^{p\times p}$ are known. For all $n$, we denote $\Phi_n = [\phi_1 x_n \dots \phi_d x_n]\in\Real^{p\times d}$.
 	
 	We also assume to know a bound $S$ such that $\theta\in[-S,S]^d$.
+	\end{leftbar}
 \end{assumption}
 
 We abuse notations and define a virtual measurement signal, still denoted $y(t)$, that includes additional known terms
@@ -175,6 +177,7 @@ The solution can be obtained as:
 
 \begin{proposition}[Regularised solution]
 	\label{prop:regularized_solution}
+	\begin{leftbar}[propositionbar]
 	The solution to \eqref{eq:regression_min} is
 	\begin{align}
 	\label{eq:vector_rls}
@@ -182,6 +185,7 @@ The solution can be obtained as:
 	\label{eq:g_n_lambda}
 	\text{where }\quad G_{N, \lambda} &= \sum_{n=1}^N \Phi_{n}^\transp\Sigma_p^{-1}\Phi_{n}  + \lambda I_d \in \Real^{d\times d}.
 	\end{align}
+	\end{leftbar}
 \end{proposition}
 
 Substituting $y_n$ into \eqref{eq:vector_rls} yields the regression error:
@@ -197,7 +201,9 @@ Depending on the assumption we have over the noise $\eta_n$, we can bound this e
 
 \begin{assumption}[Bounded noise]
 	\label{assumpt:bounded-noise}
+	\begin{leftbar}[assumptionbar]
 	The noise $\eta(t)$ is bounded in $\|\cdot\|_\infty$.
+	\end{leftbar}
 \end{assumption}
 
 In particular, we denote the coefficient-wise bounds over perturbations as $\underline{\omega}(t) \leq \omega(t) \leq \overline{\omega}(t)$. This is a deterministic assumption, then by Hölder inequality a confidence region $\cC_{[N],0}$ can be derived based on a $L_1$-ball estimate of $\theta$ at time $N$, i.e. a polytope with $2d$ vertices:
@@ -212,15 +218,18 @@ There may be cases where \autoref{assumpt:bounded-noise} does not hold. For inst
 
 \begin{assumption}[Sub-Gaussian Noise]
 	\label{assumpt:gaussian-noise}
+	\begin{leftbar}[assumptionbar]
 	At each time $t\geq0$ the noise $\eta(t)$ is an independent sub-Gaussian noise with covariance proxy $\Sigma_p \in \Real^{p\times p}$:
 	\begin{equation*}
 	\forall u\in\Real^p,\, \expectedvalue \left[ \exp{\left( u^\transp \eta(t)\right)}\right] \leq \exp{\left( \frac{1}{2} u^\transp \Sigma_p u\right)}.
 	\end{equation*}
+	\end{leftbar}
 \end{assumption}
 For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with covariance matrices $\Sigma_r$ and $\Sigma_s$, with $\Sigma_p \eqdef C\Sigma_r C^\transp + D\Sigma_s D^\transp$. Note that \autoref{assumpt:bounded-noise} implies that $\eta$ is sub-Gaussian with covariance proxy $\Sigma_p=\|\eta\|_\infty I_p$.
 
 \begin{theorem}[Confidence ellipsoid, a matricial version of \citealt{Abbasi2011}]
 	\label{thm:confidence_ellipsoid}
+	\begin{leftbar}[theorembar]
 	Under \autoref{assumpt:gaussian-noise}, it holds with probability at least $1-\delta$ that
 	\begin{align}
 	\label{eq:confidence-ellipsoid}
@@ -232,6 +241,7 @@ For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with co
 	\beta_N(\delta)\eqdef \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\delta\det(\lambda I_d)^{1/2}}\right)}
 	+ (\lambda d)^{1/2}S.
 	\end{equation}
+	\end{leftbar}
 \end{theorem}
 
 We can enclose this confidence ellipsoid $\eqref{eq:confidence-ellipsoid}$ into a polytope $C_{[N],\delta}$. For simplicity, we present here a simple but coarse strategy: bound the ellipsoid by its enclosing sphere, and then the sphere by its enclosing hypercube. We obtain
@@ -241,8 +251,11 @@ We can enclose this confidence ellipsoid $\eqref{eq:confidence-ellipsoid}$ into 
 \end{align}
 where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{\frac{\beta_N(\delta)}{\lambda_{\max}(G_{N,\lambda})}}, h_i\in\{-1,1\}^d$. Another strategy presented in the Supplementary Material produces a much tighter polytope, at the price of an increased computational cost required by the diagonalisation of $G_{N,\lambda}$.
 
-\paragraph{Remark} The robust objective \eqref{eq:robust-control} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \autoref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\delta_n$. By choosing $\delta_n = \frac{\delta}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\delta$.
-
+\begin{remark}
+	\begin{leftbar}[remarkbar]
+	The robust objective \eqref{eq:robust-control} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \autoref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\delta_n$. By choosing $\delta_n = \frac{\delta}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\delta$.
+	\end{leftbar}
+\end{remark}
 
 \section{State interval prediction}
 
@@ -312,6 +325,7 @@ In practice, this assumption is often verified. It is for instance the case when
 In order to evaluate the robust objective $V^r$ \eqref{eq:robust-control}, we approximate it thanks to the interval prediction $[\underline{x}(t), \overline{x}(t)]$ of \autoref{sec:prediction}.
 
 \begin{definition}[Surrogate objective]
+	\begin{leftbar}[defnbar]
 	Let
 	\begin{align}
 	\label{eq:surrogate_objective} 
@@ -319,16 +333,19 @@ In order to evaluate the robust objective $V^r$ \eqref{eq:robust-control}, we ap
 	\text{where}\quad\underline{R}_n(\bu) &\eqdef \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) \label{eq:pessimistic-rewards}
 	\end{align}
 	and $\underline{x}_n(\bu), \overline{x}_n(\bu)$ follow the dynamics defined in \eqref{eq:interval-predictor}.
+	\end{leftbar}
 \end{definition}
 
 This amounts to changing the reward function, except that the worst case is assessed over the whole past trajectory, which makes this pessimistic reward $\underline{R_n}$ \emph{not markovian}.
 
 \begin{proposition}[Lower bound]
 	\label{prop:lower-bound}
+	\begin{leftbar}[propositionbar]
 	The surrogate objective  \eqref{eq:surrogate_objective} is a lower bound of the true objective  \eqref{eq:robust-control-disc}: 
 	\begin{equation*}
 	\hat{V}^r(\bu) \leq V^r(\bu)
 	\end{equation*}
+	\end{leftbar}
 \end{proposition}
 A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \textit{``bad event''} (e.g. a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system. 
 
@@ -341,8 +358,10 @@ At each planning iteration $k\in[K]$, \texttt{OPD} progressively builds a tree $
 a_k = \argmax_{a\in\cL_k} B_a(k), \quad B_a(k) = \sum_{n=0}^{h(a)-1} \underline{R}_n(a) + \frac{\gamma^{h(a)}}{1-\gamma}
 \end{equation}
 where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the sequence $a$, and $\underline{R}_n(a)$ the pessimistic reward \eqref{eq:pessimistic-rewards} obtained at time $n$ by following the controls $u_n = \pi_{a_n}(x_n)$.
+
 \begin{theorem}[Planning performance of \citealt{Hren2008}]
 	\label{theorem:opd-regret}
+	\begin{leftbar}[theorembar]
 	The simple regret of the \texttt{OPD} algorithm \eqref{eq:opd} applied to the surrogate objective \eqref{eq:surrogate_objective} after $K$ planning iterations is:
 	\begin{align*}
 	\text{if } \kappa>1,\quad& 
@@ -354,11 +373,14 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 	\[
 	\kappa = \limsup_{h\rightarrow\infty} \left|\left\{a\in A^h: \hat{V}^r(a)\geq \hat{V}^r(a^{\star}) - \frac{\gamma^{h+1}}{1-\gamma}\right\}\right|^{1/h}.
 	\]
+	\end{leftbar}
 \end{theorem}
 
 Hence, by using enough computational budget $K$ for planning we can get as close as we want to the optimal surrogate value $\hat{V}^r(a^{\star})$, at a polynomial rate. Unfortunately, there exists a gap between $\hat{V}^r$ and the true robust objective $V^r$, which stems from three approximations: (i) the true reachable set was approximated by an enclosing interval in \eqref{eq:inclusion-property}; (ii) the time-invariance of the dynamics uncertainty $A(\theta)\in\cC_{[N],\delta}$ was handled by the interval predictor \eqref{eq:interval-predictor} as if it were a time-varying uncertainty $A(\theta(t))\in\cC_{[N],\delta},\forall t$ ; and (iii) the lower-bound $\sum\min\leq \min\sum$ used to define the surrogate objective \eqref{eq:surrogate_objective} is not tight. However, this gap can be bounded with additional assumptions.
+
 \begin{theorem}[Regret bound]
 	\label{thm:control-error}
+	\begin{leftbar}[theorembar]
 	Under three conditions:
 	\begin{enumerate}
 		\item a Lipschitz regularity assumption for the reward $R$;
@@ -377,6 +399,7 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	\hat{V}^r(\bu) \leq {V}^r(\bu) \leq V(\bu) \leq \hat{V}^r(\bu) + \Delta_\omega + \cO\left({\log N / N}\right)
 	\end{equation*}
 	with probability at least $1-\delta$, where $\Delta_\omega$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
+	\end{leftbar}
 \end{theorem}
 
 
@@ -397,10 +420,12 @@ We temporarily ignore the parametric uncertainty on $\theta$ to simply consider 
 
 \begin{assumption}[Multi-model ambiguity]
 	\label{assumpt:multi-model-ambiguity}
+	\begin{leftbar}[assumptionbar]
 	The true dynamics $f$ lies within a finite set of candidate models $f^1, \dots, f^M$.
 	\begin{equation*}
 	\exists m\in[M]: \dot{x}(t) = f^m(x(t), u(t)), \forall t\geq 0
 	\end{equation*}
+	\end{leftbar}
 \end{assumption}
 We want to adapt our planning algorithm in order to balance these concurrent hypotheses in a robust fashion, i.e. maximise a robust objective with discrete ambiguity:
 \begin{equation}
@@ -410,11 +435,14 @@ V^r = \sup_{a\in\cA^\Natural}\min_{m\in[M]} \sum_{n=N+1}^\infty \gamma^n R_n^m
 where $R_n^m$ is the reward obtain by following the action sequence $a$ up to step $n$ under the dynamics $f^m$.
 This objective could be optimised in the same way as in \autoref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \autoref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \texttt{OPD} algorithm in the following way:
 
-\begin{definition}[Robust sequence upper bounds] We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by:
+\begin{definition}[Robust sequence upper bounds]
+	\begin{leftbar}[defnbar]
+	We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by:
 	\begin{equation}
 	\label{eq:robust-b-values}
 	B_a^r(k)  \eqdef \min_{m\in[M]} \sum_{n=0}^{h-1} \gamma^n R_n^m  + \frac{\gamma^h}{1-\gamma}
 	\end{equation}
+	\end{leftbar}
 \end{definition}
 An illustration of the computation of the robust upper-bounds is presented in Figure \ref{fig:drop}. Note that it is not equivalent to solving each control problem independently and following the action with highest worst-case value, as we show in the Supplementary Material. We analyse the sample complexity of the corresponding robust planning algorithm.
 
@@ -427,7 +455,9 @@ An illustration of the computation of the robust upper-bounds is presented in Fi
 
 \begin{theorem}[Robust planning performance]
 	\label{theorem:drop-regret}
+	\begin{leftbar}[theorembar]
 	The robust version of \texttt{OPD} \eqref{eq:robust-b-values} enjoys the same regret bound as \texttt{OPD} in \autoref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
+	\end{leftbar}
 \end{theorem}
 
 The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \autoref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $A(\theta)\in\cC_{[N],\delta}$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \autoref{thm:control-error}. Finally, the two approaches of Sections \ref{sec:control} and \ref{sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
