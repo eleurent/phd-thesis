@@ -369,12 +369,18 @@ A matrix $A\in\Real^{n\times n}$ is called Hurwitz if all its eigenvalues have n
 y(t)=Cx(t)+D\omega(t),\nonumber 
 \end{gather}
 with $x(t)\in\Real^{n}$, $y(t)\in\Real^{p}$ and a Metzler matrix $A\in\Real^{n\times n}$, is elementwise nonnegative for all $t\ge0$ provided that $x(0)\ge0$, $\omega:\Real_{+}\to\Real_{+}^{q}$ and $B\in\Real_{+}^{n\times q}$ \cite{FarinaRinaldi2000,Smith95}. The output solution $y(t)$ is nonnegative if $C\in\Real_{+}^{p\times n}$ and $D\in\Real_{+}^{p\times q}$. Such dynamical systems are called cooperative (monotone) or nonnegative if only initial conditions in $\Real_{+}^{n}$ are considered \cite{FarinaRinaldi2000,Smith95}.
-\begin{lemma}
-	\label{lem:l2}\textup{\cite{REZ11}} Given the matrices $A\in\Real^{n\times n}$, $Y\in\Real^{n\times n}$ and \textup{$C\in\Real^{p\times n}$. }If there is a matrix \textup{$L\in\Real^{n\times p}$} such that the matrices $A-LC$ and $Y$ have the same eigenvalues, then there is a matrix $S\in\Real^{n\times n}$ such that $Y=S(A-LC)S^{-1}$ provided that the pairs $(A-LC,\chi_{1})$ and $(Y,\chi_{2})$ are observable for some $\chi_{1}\in\Real^{1\times n}$, $\chi_{2}\in\Real^{1\times n}$.\textup{ }
+\begin{lemma}[\citealt{REZ11}]
+	\label{lem:l2}
+	\begin{leftbar}[lemmabar]
+	Given the matrices $A\in\Real^{n\times n}$, $Y\in\Real^{n\times n}$ and \textup{$C\in\Real^{p\times n}$. }If there is a matrix \textup{$L\in\Real^{n\times p}$} such that the matrices $A-LC$ and $Y$ have the same eigenvalues, then there is a matrix $S\in\Real^{n\times n}$ such that $Y=S(A-LC)S^{-1}$ provided that the pairs $(A-LC,\chi_{1})$ and $(Y,\chi_{2})$ are observable for some $\chi_{1}\in\Real^{1\times n}$, $\chi_{2}\in\Real^{1\times n}$.
+	\end{leftbar}
 \end{lemma}
 This result allows to represent the system \eqref{eq:LTI_syst} in its nonnegative form via a similarity transformation of coordinates.
-\begin{lemma}
-	\label{lem:l3}\textup{\cite{Efimov_a2013}} Let $D\in\Xi\subset\Real^{n\times n}$ be a matrix variable satisfying the interval constraints $\Xi=\{D\in\Real^{n\times n}:\,D_{a}-\Delta\le D\le D_{a}+\Delta\}$ for some $D_{a}^{\text{T}}=D_{a}\in\Real^{n\times n}$ and $\Delta\in\Real_{+}^{n\times n}$. If for some constant $\mu\in\Real_{+}$ and a diagonal matrix $\Upsilon\in\Real^{n\times n}$ the Metzler matrix $Y=\mu E_{n\times n}-\Upsilon$ has the same eigenvalues as the matrix $D_{a}$, then there is an orthogonal matrix $S\in\Real^{n\times n}$ such that the matrices $S^{\text{T}}DS$ are Metzler for all $D\in\Xi$ provided that $\mu>n||\Delta||_{max}$.\textup{ }
+\begin{lemma}[\citealt{Efimov_a2013}]
+	\label{lem:l3}
+	\begin{leftbar}[lemmabar]
+	Let $D\in\Xi\subset\Real^{n\times n}$ be a matrix variable satisfying the interval constraints $\Xi=\{D\in\Real^{n\times n}:\,D_{a}-\Delta\le D\le D_{a}+\Delta\}$ for some $D_{a}^{\text{T}}=D_{a}\in\Real^{n\times n}$ and $\Delta\in\Real_{+}^{n\times n}$. If for some constant $\mu\in\Real_{+}$ and a diagonal matrix $\Upsilon\in\Real^{n\times n}$ the Metzler matrix $Y=\mu E_{n\times n}-\Upsilon$ has the same eigenvalues as the matrix $D_{a}$, then there is an orthogonal matrix $S\in\Real^{n\times n}$ such that the matrices $S^{\text{T}}DS$ are Metzler for all $D\in\Xi$ provided that $\mu>n||\Delta||_{max}$.\textup{ }
+	\end{leftbar}
 \end{lemma}
 In the last lemma, the existence of similarity transformation is proven for an interval of matrices, \emph{e.g}. in the case of LPV dynamics.
 
@@ -384,15 +390,21 @@ Consider an LPV system:
 \begin{equation}
 \dot{x}(t)=A(\theta(t))x(t)+Bd(t),\;t\geq0,\label{eq:LPV_syst}
 \end{equation}
-where $x(t)\in\Real^{n}$ is the state, $\theta(t)\in\Pi\subset\Real^{r}$ is the vector of scheduling parameters with a known set of admissible values $\Pi$, $\theta\in\L_{\infty}^{r}$; the signal $d:\Real_{+}\to\Real^{m}$ is the external input. The values of the scheduling vector $\theta(t)$ are not available for measurements, and only the set of admissible values $\Pi$ is known. The matrix $B\in\Real^{n\times m}$ is known, the matrix function $A:\Pi\to\Real^{n\times n}$ is locally bounded (continuous) and also known.
+where $x(t)\in\Real^{n}$ is the state, $\theta(t)\in\Pi\subset\Real^{r}$ is the vector of scheduling parameters with a known set of admissible values $\Pi$, $\theta\in\cL_{\infty}^{r}$; the signal $d:\Real_{+}\to\Real^{m}$ is the external input. The values of the scheduling vector $\theta(t)$ are not available for measurements, and only the set of admissible values $\Pi$ is known. The matrix $B\in\Real^{n\times m}$ is known, the matrix function $A:\Pi\to\Real^{n\times n}$ is locally bounded (continuous) and also known.
 
 The following assumptions will be used in this work.
 \begin{assumption}
-	\label{ass:a1} In the system \eqref{eq:LPV_syst}, $x\in\L_{\infty}^{n}$. In addition, $x(0)\in[\underline{x}_{0},\overline{x}_{0}]$ for some known $\underline{x}_{0},\overline{x}_{0}\in\Real^{n}$.
+	\label{ass:a1}
+	\begin{leftbar}[assumptionbar]
+		In the system \eqref{eq:LPV_syst}, $x\in\cL_{\infty}^{n}$. In addition, $x(0)\in[\underline{x}_{0},\overline{x}_{0}]$ for some known $\underline{x}_{0},\overline{x}_{0}\in\Real^{n}$.
+	\end{leftbar}
 \end{assumption}
 
 \begin{assumption}
-	\label{ass:a2} There exists known signals $\underline{d},\overline{d}\in\L_{\infty}^{n}$ such that $\underline{d}(t)\leq d(t)\leq\overline{d}(t)$ for all $t\geq0$.
+	\label{ass:a2}
+	\begin{leftbar}[assumptionbar]
+		There exists known signals $\underline{d},\overline{d}\in\cL_{\infty}^{n}$ such that $\underline{d}(t)\leq d(t)\leq\overline{d}(t)$ for all $t\geq0$.
+	\end{leftbar}
 \end{assumption}
 Assumption \ref{ass:a1} means that the system \eqref{eq:LPV_syst} generates stable trajectories with a bounded state $x$ for the applied class of inputs $d$, and the initial conditions $x(0)$ are constrained to belong to a given interval $[\underline{x}_{0},\overline{x}_{0}]$. In Assumption \ref{ass:a2}, it is supposed that the input $d(t)$ belongs to a known bounded interval $[\underline{d}(t),\overline{d}(t)]$ for all $t\in\Real_{+}$, which is the standard hypothesis for the interval estimation \cite{Efimov2016,Raiessi2018}.
 
@@ -443,11 +455,14 @@ then it is obvious to verify that the relations \eqref{eq:Interval_Goal} are sat
 Note that, in related papers \cite{AitRami2008,RVZ10,Bolajraf2011,Efimov_a2013,Efimov_tac2013,Chebotarev2015}, various interval observers for LPV systems have been proposed, but in those works the cooperativity and stability of the estimation error dynamics are ensured by a proper selection of observer gains and/or by design of control algorithms, which can be dependent on $\underline{x}$, $\overline{x}$ and guarantee the observer robust stability. For interval predictor there is no such a freedom, then a careful selection of hypotheses has to be made in order to provide a desired solution.
 We will additionally assume the following:
 \begin{assumption}
-	\label{ass:a3} There exist a Metzler matrix $A_{0}\in\Real^{n\times n}$ and matrices $\Delta A_{i}\in\Real^{n\times n}$, $i=\overline{1,N}$ for some $N\in\Natural_{+}$ such that the following relations are satisfied for all $\theta\in\Pi$:
+	\label{ass:a3}
+	\begin{leftbar}[assumptionbar]
+	There exist a Metzler matrix $A_{0}\in\Real^{n\times n}$ and matrices $\Delta A_{i}\in\Real^{n\times n}$, $i=\overline{1,N}$ for some $N\in\Natural_{+}$ such that the following relations are satisfied for all $\theta\in\Pi$:
 	\begin{gather*}
 	A(\theta)=A_{0}+\sum_{i=1}^{N}\lambda_{i}(\theta)\Delta A_{i},\\
 	\sum_{i=1}^{N}\lambda_{i}(\theta)=1;\;\lambda_{i}(\theta)\in[0,1],\;i=\overline{1,N}.
 	\end{gather*}
+	\end{leftbar}
 \end{assumption}
 Therefore, it is assumed that the matrix $A(\theta)$ for any $\theta\in\Pi$ can be embedded in a polytope defined by $N$ known vertices $\Delta A_{i}$ with the given center $A_{0}$, which admits already useful properties. According to the results of lemmas \ref{lem:l2} and \ref{lem:l3}, the fulfillment of Assumption \ref{ass:a3} can be imposed by applying a properly designed similarity transformation, which maps a matrix (interval of matrices) to a Metzler one. Design of such a transformation is not considered in this work, and we will just suppose in Assumption \ref{ass:a3} that the system \eqref{eq:LPV_syst} has been already put in the right form:
 \[
@@ -459,7 +474,9 @@ Denote
 \]
 then the following interval predictor can be designed:
 \begin{theorem}
-	\label{thm:main} Let assumptions \ref{ass:a1}\textendash \ref{ass:a3} be satisfied for the system \eqref{eq:LPV_syst}, then an interval predictor
+	\label{thm:main}
+	\begin{leftbar}[theorembar]
+	Let assumptions \ref{ass:a1}\textendash \ref{ass:a3} be satisfied for the system \eqref{eq:LPV_syst}, then an interval predictor
 	\begin{eqnarray}
 	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)\nonumber \\
 	&  & +B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:IP_main}\\
@@ -495,6 +512,7 @@ then the following interval predictor can be designed:
 		\end{array}\right],
 		\end{gather*}
 	}then the predictor \eqref{eq:IP_main} is input-to-state stable with respect to the inputs $\underline{d}$, $\overline{d}$.
+\end{leftbar}
 \end{theorem}
 Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \cite{FarinaRinaldi2000}.
 \begin{proof}
@@ -588,6 +606,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:IP_main} is input-to-state stable \cite{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
 \end{proof}
 \begin{remark}
+	\begin{leftbar}[remarkbar]
 	The LMIs of the above theorem are not conservative, since the restriction on positive definiteness of involved matrix variables is not imposed on all of them separately, but on their combinations:
 	\begin{gather*}
 	P+\min\{Z_{+},Z_{-}\}>0,\;\Gamma>0,\\
@@ -597,9 +616,11 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	$
 	\Upsilon\preceq0.
 	$
+	\end{leftbar}
 \end{remark}
 
 \begin{remark}
+	\begin{leftbar}[remarkbar]
 	Assume that $-\underline{d}=\overline{d}=const\ne0$ and the conditions of Theorem \ref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:IP_main} takes the form for sufficiently high values of $t\geq0$:
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & (A_{0}-\Delta A_{+})\underline{x}(t)-\Delta A_{-}\overline{x}(t)\\
@@ -623,6 +644,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\end{array}\right],
 	\end{eqnarray}
 	where as before $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$.
+	\end{leftbar}
 \end{remark}
 \begin{example*}
 	[motivating, continue] Let us apply the predictor \eqref{eq:IP_main}
@@ -662,7 +684,9 @@ guaranteeing the desired interval relations:
 \]
 This solution uses only information about amplitude of the external input $\omega$, and its precision can be largely improved if we assume that there is also information about admissible frequency spectrum in $\omega$:
 \begin{lemma}
-	\label{lem:IntFreq} Let there exist $s_{1},s_{2}\in\Natural_{+}$ and $T,W>0$
+	\label{lem:IntFreq}
+	\begin{leftbar}[lemmabar]
+	Let there exist $s_{1},s_{2}\in\Natural_{+}$ and $T,W>0$
 	such that
 	\[
 	\omega(t)=a_{0}+\sum_{s=s_{1}}^{s_{2}}a_{s}\sin\left(\frac{2\pi s}{T}t+\phi_{s}\right),
@@ -672,6 +696,7 @@ This solution uses only information about amplitude of the external input $\omeg
 	|x_{i}(t)|\leq\sup_{w\in[\frac{2\pi}{T}s_{1},\frac{2\pi}{T}s_{2}]}|e_{i}(jwI_{n}-A)^{-1}BE_{q}|W+\epsilon\quad\forall t\geq\tau,
 	\]
 	where $j$ corresponds to the imaginary unit, provided that the matrix $A$ is Hurwitz.
+	\end{leftbar}
 \end{lemma}
 \begin{proof}
 	The solution of the system \eqref{eq:LTI_syst} can be written as follows:
@@ -872,7 +897,11 @@ The prediction problem for uncertain LPV systems is solved by designing an inter
 
 
 
-\section{Robust control and constraint satisfaction}
+\section{Robust stabilization and constraint satisfaction}
+
+%TODO
+
+\section{Minimax control with generic costs}
 
 
 \label{sec:control}
@@ -1163,6 +1192,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	\begin{proposition}[Matrix version of Theorem 1 of \citealt{Abbasi2011}]
 		\label{prop:concentration}
+		\begin{leftbar}[propositionbar]
 		Let $\{F_n\}_{n=0}$ be a filtration.
 		Let $\{\eta_n\}_{n=1}^\infty$ be a $\Real^p$-valued stochastic process such that $\eta_n$ is $F_n$-measurable and $\expectedvalue\left[\eta_n\condbar F_{n-1}\right]$ is $\Sigma_p$-sub-Gaussian.
 		
@@ -1174,6 +1204,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\begin{align*}
 		\| S_n \|_{\overline{G}_n^{-1}} \leq \sqrt{2\ln \left(\frac{\det\left(\overline{G}_n\right)^{1/2}}{\delta\det(G)^{1/2}}\right)}.
 		\end{align*}
+		\end{leftbar}
 	\end{proposition}
 	\begin{proof}
 		Let 
@@ -1217,12 +1248,14 @@ We present a framework for the robust estimation, prediction and control of a pa
 		
 		This results allows to apply a result from \citep{pena2008self}:
 		\begin{lemma}[Theorem 14.7 of \citep{pena2008self}]
+			\begin{leftbar}[lemmabar]
 			If $Z$ is a random vector and $B$ is a symmetric positive definite matrix such that
 			\[\forall \gamma\in\Real^d, \ln \expectedvalue \exp \left(\gamma^\transp Z -\frac{1}{2} \gamma^\transp B \gamma \right)\leq 0,\]
 			then for any positive definite non-random matrix C, it holds
 			\[\expectedvalue\left[ \sqrt{\frac{\det(C)}{\det(B+C)} } \exp\left( \frac{1}{2}\|Z\|^2_{(B+C)^{-1}}\right)\right]\leq 1. \] 
 			In particular, by Markov inequality, for all $\delta\in(0,1)$, 
 			\[\probability{\|Z\|_{(B+C)^{-1}} \geq \sqrt{2\ln \left(\frac{\det \left((B+C)^{1/2}\right)}{\delta\det(C)^{1/2}}\right)}}\leq \delta.\]
+			\end{leftbar}
 		\end{lemma}
 		
 		Here, by using $Z = \sum_{s=1}^t\Phi_s\Sigma_p^{-1}\eta_s$, $B=G_t$, $C=G$,
@@ -1284,6 +1317,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	We first bound the model estimation error.
 	\begin{lemma}
+		\begin{leftbar}[lemmabar]
 		If the features $\Phi_n$ are persistently exciting:
 		\begin{align}
 		\label{eq:excitation}
@@ -1291,6 +1325,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{align}
 		then,
 		\[\|A(\theta) - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
+	\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		By \eqref{eq:g_n_lambda} and \eqref{eq:excitation}, we have $$\lambda_{\min}(G_{[N],\lambda,i,j}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
@@ -1322,6 +1357,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	Then, we propagate this estimation error through the state prediction.
 	
 	\begin{lemma}
+		\begin{leftbar}[lemmabar]
 		If there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
 		\begin{align*}
 		\begin{bmatrix}
@@ -1330,8 +1366,9 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{bmatrix}< 0,
 		\end{align*}
 		then for all $t> t_N$,
-		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\log N}{N}} \right)\right)C_\omega(t) \]
-		where $C_\omega(t) = \sup_{\tau\in[t_N,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2^2$ and $C_0 = \sqrt{{2\rho\lambda_{\max}(P)}/({\lambda_{\min}(P)\lambda_{\min}(Q_0)})}$.
+		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\log N}{N}} \right)\right)C_\omega(t), \]
+		where $$C_0 = \sqrt{\frac{2\rho\lambda_{\max}(P)}{\lambda_{\min}(P)\lambda_{\min}(Q_0)}},$$ and $$C_\omega(t) = \sup_{\tau\in[t_N,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2^2.$$
+		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		Let $e = \ox - \ux$. \eqref{eq:interval-predictor} gives the dynamics:
@@ -1440,6 +1477,8 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	
 	\begin{lemma}[Robust values ordering]
+		\label{lemma:uvb}
+		\begin{leftbar}[lemmabar]
 		In addition to the robust B-value defined in \eqref{eq:robust-b-values}, that we extend to inner nodes	
 		\begin{equation}
 		\label{eq:br}
@@ -1469,7 +1508,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\begin{equation}
 		U^r_a(k) \leq U^r_a(K) \leq V^r_a \leq B^r_a(K) \leq B^r_a(k)
 		\end{equation}
-		\label{lemma:uvb}
+		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		By definition, when starting with sequence $a$, the value $U_a^m(k)$ represents the minimum admissible reward, while $B_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^*$, $U_a^m(k)$ and $U_a^r(k)$ are non-decreasing functions of $k$ and $B_a^m(k)$ and $B_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
@@ -1551,8 +1590,10 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	\section{A tighter conversion from ellipsoid to polytope}
 	\label{sec:tight-polytope}
+	
 	\begin{lemma}[Confidence polytope]
 		\label{lem:tight_polytope}
+		\begin{leftbar}[lemmabar]
 		We can enclose the confidence ellipsoid obtained in $\eqref{eq:confidence-ellipsoid}$ within a polytope $C_\delta$:
 		\begin{equation}
 		\cC_\delta = \left\{ A_{1}+\sum_{i=1}^{2^d}\lambda_{i}\Delta A_{i}: \lambda\in[0, 1]^{2^d},  \sum_{i=1}^{2^d}\lambda_{i}=1\right\}.
@@ -1564,6 +1605,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		&A_0 = A + \theta_{N,\lambda}^\transp\Phi, \quad \Delta A_k = \Delta\theta_k^\transp\Phi.
 		\end{align*}
 		This conversion is illustrated in \autoref{fig:ellipsoid_to_polytope}.
+		\end{leftbar}
 	\end{lemma}
 	
 	\begin{proof}
