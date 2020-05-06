@@ -4,25 +4,22 @@ FILE = PhD_thesis__Edouard_Leurent
 IN   = $(FILE).tex
 OUT  = $(FILE).pdf
 
-all:	clean pdf evince clean
-quick:	pdf
+all:	clean pdf sumatra clean
+quick:	pdf sumatra
 bib:	allbib
 pdf:	$(OUT)
 
 .PHONY:	quick all pdf evince compress clean send_zamok latexstats lint proselint bib allbib cleanbib bib2html bib2txt
 
-.SUFFIXES:
-.SUFFIXES: .tex .pdf
-
-# Construction rules
-.tex.pdf:
-	latexmk -pdflatex="pdflatex --shell-escape %O %S" -pdf $<
-	-pdfinfo $@ | grep -v ':[ \t]\+no' | grep --color=always "^[A-Za-z ]\+:"
-	-evince $@ >/dev/null 2>/dev/null &
+pdf:
+	latexmk -pdf -silent -synctex=1 $(FILE)
 
 # Utility for the PDF
 evince:
 	-evince $(OUT) &
+
+sumatra:
+	-SumatraPDF $(OUT) &
 
 compress:
 	PDFCompress $(OUT)
