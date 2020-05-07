@@ -21,8 +21,8 @@
 
 \paragraph{How should a self-driving car act?}
 
-In the first few weeks of my PhD, I made the following observation: when confronted to this question, say at the occasion of a social dinner, layman interlocutors have a general tendency to conjure up situations of imminent accidents with unavoidable casualties. 
-These disaster scenarios are likely to stem from the Trolley Problem \citep{Foot1967}, a famous thought experiment in Moral Philosophy, depicted in \Cref{fig:trolley}, in which a runaway trolley is headed straight toward five people tied up on the main track and unable to move. A lever, when pulled, switches the trolley to a side track occupied by one person. What should you do? The field of normative ethics focuses on answering the question of what we \emph{ought} to do, and this dilemma illustrates a clash between two schools of thought: utilitarianism and deontological ethics. 
+In the first few weeks of my PhD, I made the following observation: when confronted to this question, say at the occasion of a social dinner, layman interlocutors have a general tendency to conjure up disaster scenarios involving imminent accidents with unavoidable casualties. 
+This reflex is likely to stem from the popularisation of the Trolley Problem \citep{Foot1967}, a famous thought experiment in Moral Philosophy, depicted in \Cref{fig:trolley}, in which a runaway trolley is headed straight toward five people tied up on the main track and unable to move. A lever, when pulled, switches the trolley to a side track occupied by one person. What should you do? The field of normative ethics focuses on answering the question of what we \emph{ought} to do, and this dilemma illustrates a clash between two schools of thought: utilitarianism and deontological ethics. 
 It has been transposed in the context of Autonomous Driving, for instance in the \emph{Moral Machine} platform \citep{Awad2018}.
 
 \begin{figure}[tp]
@@ -33,14 +33,14 @@ It has been transposed in the context of Autonomous Driving, for instance in the
 \end{figure}
 
 % Ethics is a branch of philosophy studying what is the right (or wrong) action to take in any situation. 
-Yet, when we drive we seldom find ourselves in such extreme situations, and our thoughts typically focus on less tragic questions than who to sacrifice.
+Yet when we drive, we seldom find ourselves in such extreme situations, and our thoughts typically focus on less tragic questions than who to sacrifice.
 Likewise, this thesis is not so much about solving moral dilemma than addressing the non-dilemma of how to avoid accidents altogether.%, which ultimately implies also avoiding such states of unavoidable collision.
 
+\paragraph{Architecture of self-driving software}
 
-% To the layman: how to make decisions in automonous driving? Moral philosophy: what is a good action? how should I act?
-% Ontology: you must act by this rule.
-% Not implement solutions to moral dilemmas, but consider the non-dilemma of avoiding accidents
-%
+The robotics pipeline typically involves three modules: Perception, Decision, and Control.
+Great research efforts have been made to resolve the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning, and Control schemes have been developed for ground vehicles to precisely follow a predefined trajectory. Nowadays, ADAS systems support features such as LKA, ACC. However, we claim that Decision has been a neglected area: hitherto, most applications and challenges focused on simple highway settings with little 
+
 % What problems do we have to face?
 % Decision making in the presence of uncertainty.
 % Perception is hard, known to be long tail.
