@@ -7,7 +7,7 @@
 	author = {Philippa Foot}
 }
 
-@Article{Awad2018,
+@article{Awad2018,
 author={Awad, Edmond
 and Dsouza, Sohan
 and Kim, Richard
@@ -36,4 +36,113 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	year = 2009,
 	howpublished={\url{http://subcortex.com/}},
 	urldate = {2010-09-30}
+}
+
+@article{Gonzalez2016,
+	author={D. {González} and J. {Pérez} and V. {Milanés} and F. {Nashashibi}},
+	journal={IEEE Transactions on Intelligent Transportation Systems}, 
+	title={A Review of Motion Planning Techniques for Automated Vehicles}, 
+	year={2016},
+	volume={17},
+	number={4},
+	pages={1135-1145},
+}
+
+@article{Paden2016,
+	author    = {Brian Paden and
+	Michal C{\'{a}}p and
+	Sze Zheng Yong and
+	Dmitry S. Yershov and
+	Emilio Frazzoli},
+	title     = {A Survey of Motion Planning and Control Techniques for Self-driving
+	Urban Vehicles},
+	journal   = {CoRR},
+	volume    = {abs/1604.07446},
+	year      = {2016},
+	url       = {http://arxiv.org/abs/1604.07446},
+	archivePrefix = {arXiv},
+	eprint    = {1604.07446},
+	timestamp = {Mon, 13 Aug 2018 16:49:15 +0200},
+	biburl    = {https://dblp.org/rec/journals/corr/PadenCYYF16.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{Dijkstra1959,
+	author = {Dijkstra, E. W.},
+	doi = {10.1007/BF01386390},
+	issn = {0029599X},
+	journal = {Numerische Mathematik},
+	title = {{A note on two problems in connexion with graphs}},
+	year = {1959}
+}
+
+@article{Hart1968,
+	abstract = {Although the problem of determining the minimum cost path through a graph arises naturally in a number of interesting applications, there has been no underlying theory to guide the development of efficient search procedures. Moreover, there is no adequate conceptual framework within which the various ad hoc search strategies proposed to date can be compared. This paper describes how heuristic information from the problem domain can be incorporated into a formal mathematical theory of graph searching and demonstrates an optimality property of a class of search strategies. Copyright {\textcopyright} 1968 by The Institute of Electrical and Electronics Engineers, Inc.},
+	author = {Hart, Peter E. and Nilsson, Nils J. and Raphael, Bertram},
+	doi = {10.1109/TSSC.1968.300136},
+	issn = {21682887},
+	journal = {IEEE Transactions on Systems Science and Cybernetics},
+	title = {{A Formal Basis for the Heuristic Determination of Minimum Cost Paths}},
+	year = {1968}
+}
+
+@inproceedings{Stentz1994,
+	abstract = {The task of planning trajectories for a mobile robot has received considerable attention in the research literature. Most of the work assumes the robot has a complete and accurate model of its environment before it begins to move; less attention has been paid to the problem of partially known environments. This situation occurs for an exploratory robot or one that must move to a goal location without the benefit of a floorplan or terrain map. Existing approaches plan an initial path based on known information and then modify the plan locally or replan the entire path as the robot discovers obstacles with its sensors, sacrificing optimality or computational efficiency respectively. This paper introduces a new algorithm, D, capable of planning paths in unknown, partially known, and changing environments in an efficient, optimal, and complete manner.},
+	author = {Stentz, Anthony},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/robot.1994.351061},
+	isbn = {0818653329},
+	issn = {10504729},
+	title = {{Optimal and efficient path planning for partially-known environments}},
+	year = {1994}
+}
+
+@article{Bohren2008,
+	abstract = {This paper describes "Little Ben," an autonomous ground vehicle constructed by the Ben Franklin Racing Team for the 2007 DARPA Urban Challenge in under a year and for less than {\$}250,000. The sensing, planning, navigation, and actuation systems for Little Ben were carefully designed to meet the performance demands required of an autonomous vehicle traveling in an uncertain urban environment. We incorporated an array of a global positioning system (GPS)/inertial navigation system, LIDARs, and stereo cameras to provide timely information about the surrounding environment at the appropriate ranges. This sensor information was integrated into a dynamic map that could robustly handle GPS dropouts and errors. Our planning algorithms consisted of a high-level mission planner that used information from the provided route network definition and mission data files to select routes, whereas the lower level planner used the latest dynamic map information to optimize a feasible trajectory to the next waypoint. The vehicle was actuated by a cost-based controller that efficiently handled steering, throttle, and braking maneuvers in both forward and reverse directions. Our software modules were integrated within a hierarchical architecture that allowed rapid development and testing of the system performance. The resulting vehicle was one of six to successfully finish the Urban Challenge. {\textcopyright} 2008 Wiley Periodicals, Inc.},
+	author = {Bohren, Jonathan and Foote, Tully and Keller, Jim and Kushleyev, Alex and Lee, Daniel and Stewart, Alex and Vernaza, Paul and Derenick, Jason and Spletzer, John and Satterfield, Brian},
+	doi = {10.1002/rob.20260},
+	issn = {15564959},
+	journal = {Journal of Field Robotics},
+	title = {{Little Ben: The Ben Franklin Racing Team's entry in the 2007 DARPA Urban Challenge}},
+	year = {2008}
+}
+
+@article{Bacha2008,
+	abstract = {The DARPA Urban Challenge required robotic vehicles to travel more than 90 km through an urban environment without human intervention and included situations such as stop intersections, traffic merges, parking, and roadblocks. Team VictorTango separated the problem into three parts: base vehicle, perception, and planning. A Ford Escape outfitted with a custom drive-by-wire system and computers formed the basis for Odin. Perception used laser scanners, global positioning system, and a priori knowledge to identify obstacles, cars, and roads. Planning relied on a hybrid deliberative/reactive architecture toanalyze the situation, select the appropriate behavior, and plan a safe path. All vehicle modules communicated using the JAUS (Joint Architecture for Unmanned Systems) standard. The performance of these components in the Urban Challenge is discussed and successes noted. The result of VictorTango's work was successful completion of the Urban Challenge and a third-place finish. {\textcopyright} 2008 Wiley Periodicals, Inc.},
+	author = {Bacha, Andrew and Bauman, Cheryl and Faruque, Ruel and Fleming, Michael and Terwelp, Chris and Reinholtz, Charles and Hong, Dennis and Wicks, Al and Alberi, Thomas and Anderson, David and Cacciola, Stephen and Currier, Patrick and Dalton, Aaron and Farmer, Jesse and Hurdus, Jesse and Kimmel, Shawn and King, Peter and Taylor, Andrew and van Covern, David and Webster, Mike},
+	doi = {10.1002/rob.20248},
+	issn = {15564959},
+	journal = {Journal of Field Robotics},
+	title = {{Odin: Team VictorTango's entry in the DARPA Urban Challenge}},
+	year = {2008}
+}
+
+@article{Montemerlo2008,
+	abstract = {This article presents the architecture of Junior, a robotic vehicle capable of navigating urban environments autonomously. In doing so, the vehicle is able to select its own routes, perceive and interact with other traffic, and execute various urban driving skills including lane changes, U-turns, parking, and merging into moving traffic. The vehicle successfully finished and won second place in the DARPA Urban Challenge, a robot competition organized by the U.S. Government. {\textcopyright} 2008 Wiley Periodicals, Inc.},
+	author = {Montemerlo, Michael and Becker, Jan and Shat, Suhrid and Dahlkamp, Hendrik and Dolgov, Dmitri and Ettinger, Scott and Haehnel, Dirk and Hilden, Tim and Hoffmann, Gabe and Huhnke, Burkhard and Johnston, Doug and Klumpp, Stefan and Langer, Dirk and Levandowski, Anthony and Levinson, Jesse and Marcil, Julien and Orenstein, David and Paefgen, Johannes and Penny, Isaac and Petrovskaya, Anna and Pflueger, Mike and Stanek, Ganymed and Stavens, David and Vogt, Antone and Thrun, Sebastian},
+	doi = {10.1002/rob.20258},
+	issn = {15564959},
+	journal = {Journal of Field Robotics},
+	title = {{Junior: The Stanford entry in the urban challenge}},
+	year = {2008}
+}
+
+@article{Kammel2008,
+	abstract = {This paper reports on AnnieWAY, an autonomous vehicle that is capable of driving through urban scenarios and that successfully entered the finals of the 2007 DARPA Urban Challenge competition. After describing the main challenges imposed and the major hardware components, we outline the underlying software structure and focus on selected algorithms. Environmental perception mainly relies on a recent laser scanner that delivers both range and reflectivity measurements. Whereas range measurements are used to provide three-dimensional scene geometry, measuring reflectivity allows for robust lane marker detection. Mission and maneuver planning is conducted using a hierarchical state machine that generates behavior in accordance with California traffic laws. We conclude with a report of the results achieved during the competition. {\textcopyright} 2008 Wiley Periodicals, Inc.},
+	author = {Kammel, S{\"{o}}ren and Ziegler, Julius and Pitzer, Benjamin and Werling, Moritz and Gindele, Tobias and Jagzent, Daniel and Schr{\"{o}}der, Joachim and Thuy, Michael and Goebl, Matthias and von Hundelshausen, Felix and Pink, Oliver and Frese, Christian and Stiller, Christoph},
+	doi = {10.1002/rob.20252},
+	issn = {15564959},
+	journal = {Journal of Field Robotics},
+	title = {{Team AnnieWAY's autonomous system for the 2007 DARPA Urban Challenge}},
+	year = {2008}
+}
+
+@article{Urmson2008,
+	abstract = {Boss is an autonomous vehicle that uses on-board sensors (global positioning system, lasers, radars, and cameras) to track other vehicles, detect static obstacles, and localize itself relative to a road model. A three-layer planning system combines mission, behavioral, and motion planning to drive in urban environments. The mission planning layer considers which street to take to achieve a mission goal. The behavioral layer determines when to change lanes and precedence at intersections and performs error recovery maneuvers. The motion planning layer selects actions to avoid obstacles while making progress toward local goals. The system was developed from the ground up to address the requirements of the DARPA Urban Challenge using a spiral system development process with a heavy emphasis on regular, regressive system testing. During the National Qualification Event and the 85-km Urban Challenge Final Event, Boss demonstrated some of its capabilities, qualifying first and winning the challenge. {\textcopyright} 2008 Wiley Periodicals, Inc.},
+	author = {Urmson, Chris and Anhalt, Joshua and Bagnell, Drew and Baker, Christopher and Bittner, Robert and Clark, M. N. and Dolan, John and Duggins, Dave and Galatali, Tugrul and Geyer, Chris and Gittleman, Michele and Harbaugh, Sam and Hebert, Martial and Howard, Thomas M. and Kolski, Sascha and Kelly, Alonzo and Likhachev, Maxim and McNaughton, Matt and Miller, Nick and Peterson, Kevin and Pilnick, Brian and Rajkumar, Raj and Rybski, Paul and Salesky, Bryan and Seo, Young Woo and Singh, Sanjiv and Snider, Jarrod and Stentz, Anthony and Whittaker, William and Wolkowicki, Ziv and Ziglar, Jason and Bae, Hong and Brown, Thomas and Demitrish, Daniel and Litkouhi, Bakhtiar and Nickolaou, Jim and Sadekar, Varsha and Zhang, Wende and Struble, Joshua and Taylor, Michael and Darms, Michael and Ferguson, Dave},
+	doi = {10.1002/rob.20255},
+	issn = {15564959},
+	journal = {Journal of Field Robotics},
+	title = {{Autonomous driving in urban environments: Boss and the urban challenge}},
+	year = {2008}
 }
