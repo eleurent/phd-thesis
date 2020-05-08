@@ -56,13 +56,22 @@ TODO: ref needed: dean pomerleau: ALVIN
 
 TODO: Compounding errors: \emph{"Supervised learning will not produce a policy with good long-horizon
 performance, since a small mistake on the part of the policy will place the system
-into states that are outside the distribution in the training data"} [Sergey Levine et al. “End-to-End Training of Deep Visuomotor Policies”. In: (2015).]
+into states that are outside the distribution in the training data"} \citep{Levine2016}
+TODO: ref needed: Dagger.
 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/cp4}
 	\caption{TODO: Compounding errors}
 \end{figure}
+
+To mitigate this issue, \citep{Bojarski2016} proposed to simulate deviations from the expert trajectories using side cameras. The corresponding expert action labels were obtained by adding a constant steering wheel angle to adjust.
+
+\citep{Eraqi2017,Xu2017} proposed to consider temporal dependencies by using recurrent neural networks.
+
+\citep{Kuefler2017,Bhattacharyya2018} used Generative Adversarial Networks to...
+
+But simply imitating is not enough, we need to control the agent / condition the policy with a goal. \citep{Codevilla2018}
 
 \subsection{Reinforcement Learning}
 \section{States and partial observability}
