@@ -107,6 +107,16 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	year = {1994}
 }
 
+@inproceedings{Ziegler2009,
+	abstract = {We present a method for motion planning in the presence of moving obstacles that is aimed at dynamic on-road driving scenarios. Planning is performed within a geometric graph that is established by sampling deterministically from a manifold that is obtained by combining configuration space and time. We show that these graphs are acyclic and shortest path algorithms with linear runtime can be employed. By reparametrising the configuration space to match the course of the road, it can be sampled very economically with few vertices, and this reduces absolute runtime further. The trajectories generated are quintic splines. They are second order continuous, obey nonholonomic constraints and are optimised for minimum square of jerk. Planning time remains below 20 ms on general purpose hardware. {\textcopyright} 2009 IEEE.},
+	author = {Ziegler, Julius and Stiller, Christoph},
+	booktitle = {2009 IEEE/RSJ International Conference on Intelligent Robots and Systems, IROS 2009},
+	doi = {10.1109/IROS.2009.5354448},
+	isbn = {9781424438044},
+	title = {{Spatiotemporal state lattices for fast trajectory planning in dynamic on-road driving scenarios}},
+	year = {2009}
+}
+
 @article{Bohren2008,
 	abstract = {This paper describes "Little Ben," an autonomous ground vehicle constructed by the Ben Franklin Racing Team for the 2007 DARPA Urban Challenge in under a year and for less than {\$}250,000. The sensing, planning, navigation, and actuation systems for Little Ben were carefully designed to meet the performance demands required of an autonomous vehicle traveling in an uncertain urban environment. We incorporated an array of a global positioning system (GPS)/inertial navigation system, LIDARs, and stereo cameras to provide timely information about the surrounding environment at the appropriate ranges. This sensor information was integrated into a dynamic map that could robustly handle GPS dropouts and errors. Our planning algorithms consisted of a high-level mission planner that used information from the provided route network definition and mission data files to select routes, whereas the lower level planner used the latest dynamic map information to optimize a feasible trajectory to the next waypoint. The vehicle was actuated by a cost-based controller that efficiently handled steering, throttle, and braking maneuvers in both forward and reverse directions. Our software modules were integrated within a hierarchical architecture that allowed rapid development and testing of the system performance. The resulting vehicle was one of six to successfully finish the Urban Challenge. {\textcopyright} 2008 Wiley Periodicals, Inc.},
 	author = {Bohren, Jonathan and Foote, Tully and Keller, Jim and Kushleyev, Alex and Lee, Daniel and Stewart, Alex and Vernaza, Paul and Derenick, Jason and Spletzer, John and Satterfield, Brian},
@@ -196,6 +206,56 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	year = {2006}
 }
 
+@article{Reeds1990,
+	abstract = {The path taken by a car with a given minimum turning radius has a lower bound on its radius of curvature at each point, but the path has cusps if the car shifts into or out of reverse gear. What is the shortest such path a car can travel between two points if its starting and ending directions are specified? One need consider only paths with at most 2 cusps or reversals. We give a set of paths which is sufficient in the sense that it always contains a shortest path and small in the sense that there are at most 68, but usually many fewer paths in the set for any pair of endpoints and directions. We give these paths by explicit formula. Calculating the length of each of these paths and selecting the (not necessarily unique) path with smallest length yields a simple algorithm for a shortest path in each case. These optimal paths or geodesies may be described as follows: If C is an arc of a circle of the minimal turning radius and S is a line segment, then it is sufficient to consider only certain paths of the form CCSCC where arcs and segments fit smoothly, one or more of the arcs or segments may vanish, and where reversals, or equivalently cusps, between arcs or segments are allowed. This contrasts with the case when cusps are not allowed, where Dubins (1957) has shown that paths of the form CCC and CSC suffice. {\textcopyright} 1990 by Pacific Journal of Mathematics.},
+	author = {Reeds, J. A. and Shepp, L. A.},
+	doi = {10.2140/pjm.1990.145.367},
+	issn = {00308730},
+	journal = {Pacific Journal of Mathematics},
+	title = {{Optimal paths for a car that goes both forwards and backwards}},
+	year = {1990}
+}
+
+@inproceedings{Xu2012,
+	abstract = {In this paper, an efficient real-time autonomous driving motion planner with trajectory optimization is proposed. The planner first discretizes the plan space and searches for the best trajectory based on a set of cost functions. Then an iterative optimization is applied to both the path and speed of the resultant trajectory. The post-optimization is of low computational complexity and is able to converge to a higher-quality solution within a few iterations. Compared with the planner without optimization, this framework can reduce the planning time by 52{\%} and improve the trajectory quality. The proposed motion planner is implemented and tested both in simulation and on a real autonomous vehicle in three different scenarios. Experiments show that the planner outputs high-quality trajectories and performs intelligent driving behaviors. {\textcopyright} 2012 IEEE.},
+	author = {Xu, Wenda and Wei, Junqing and Dolan, John M. and Zhao, Huijing and Zha, Hongbin},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2012.6225063},
+	isbn = {9781467314039},
+	issn = {10504729},
+	title = {{A real-time motion planner with trajectory optimization for autonomous vehicles}},
+	year = {2012}
+}
+
+@inproceedings{Gonzalez2014,
+	abstract = {This paper presents a continuous curvature planning algorithm with obstacle avoidance capabilities. The automated system generates a collision free path that considers vehicle's constraints, the road and different obstacles inside the horizon of view. The developed planning module was integrated in the RITS (former IMARA) autonomous vehicle architecture. The goal of this module is to obtain an accurate, continuous and safe path generation, by implementing parametric curves. To this end, a continuous curvature profile when calculating vehicle trajectory is introduced. It also permits to generate different speed profiles, improving the comfort by reducing lateral accelerations in the driving process. These algorithms have been implemented in simulated -ProSiVIC- and real platforms -Cybercars- showing good results in both cases. This approach is currently being implemented in the framework of the EU CityMobil2 project.},
+	author = {Gonz{\'{a}}lez, David and P{\'{e}}rez, Joshue and Lattarulo, Ray and Milan{\'{e}}s, Vicente and Nashashibi, Fawzi},
+	booktitle = {2014 17th IEEE International Conference on Intelligent Transportation Systems, ITSC 2014},
+	doi = {10.1109/ITSC.2014.6957887},
+	isbn = {9781479960781},
+	title = {{Continuous curvature planning with obstacle avoidance capabilities in urban scenarios}},
+	year = {2014}
+}
+
+@inproceedings{Funke2012,
+	abstract = {This paper presents a novel approach to autonomous driving at the vehicle's handling limits. Such a system requires a high speed, consistent control signal as well as numerous safety features capable of monitoring and stopping the vehicle. When operating, the system's high level controller utilizes a highly accurate differential GPS and known friction values to drive a precomputed path at the friction limits of the vehicle. The system was tested in a variety of road conditions, including the challenging Pikes Peak Hill climb. Results from this work can be extended to improve driving safety and accident avoidance in vehicles. {\textcopyright} 2012 IEEE.},
+	author = {Funke, Joseph and Theodosis, Paul and Hindiyeh, Rami and Stanek, Ganymed and Kritatakirana, Krisada and Gerdes, Chris and Langer, Dirk and Hernandez, Marcial and M{\"{u}}ller-Bessler, Bernhard and Huhnke, Burkhard},
+	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	doi = {10.1109/IVS.2012.6232212},
+	isbn = {9781467321198},
+	title = {{Up to the limits: Autonomous Audi TTS}},
+	year = {2012}
+}
+
+@article{Pivtoraiko2005,
+	abstract = {We propose a novel approach to constrained path planning that is based on a special search space which efficiently encodes feasible paths. The paths are encoded implicitly as connections between states, but only feasible and local connections are included. Once this search space is developed, we systematically generate a near-minimal set of spatially distinct path primitives. This set expresses the local connectivity of constrained motions and also eliminates redundancies. The set of primitives is used to define heuristic search, and thereby create a very efficient path planner at the chosen resolution. We also discuss a wide variety of space and terrestrial robotics applications where this motion planner can be especially useful.},
+	author = {Pivtoraiko, Mihail and Kelly, Alonzo},
+	issn = {03796566},
+	journal = {European Space Agency, (Special Publication) ESA SP},
+	keywords = {Control set,Differential constraints,Lattice,Nonholonomic,Path planning,Path/motion primitives},
+	title = {{Efficient constrained path planning via search in state lattices}},
+	year = {2005}
+}
 
 @incollection{Pomerleau89,
 	title = {ALVINN: An Autonomous Land Vehicle in a Neural Network},
