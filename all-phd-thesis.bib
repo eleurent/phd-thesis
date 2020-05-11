@@ -38,6 +38,16 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	urldate = {2010-09-30}
 }
 
+@book{Buehler2009,
+	author = {Buehler, Martin and Iagnemma, Karl and Singh, Sanjiv},
+	title = {The DARPA Urban Challenge: Autonomous Vehicles in City Traffic},
+	year = {2009},
+	isbn = {3642039901},
+	publisher = {Springer Publishing Company, Incorporated},
+	edition = {1st}
+}
+
+
 @article{Gonzalez2016,
 	author={D. {González} and J. {Pérez} and V. {Milanés} and F. {Nashashibi}},
 	journal={IEEE Transactions on Intelligent Transportation Systems}, 
@@ -147,6 +157,57 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	year = {2008}
 }
 
+@techreport{Lavalle98,
+	author = {Steven M. Lavalle},
+	title = {Rapidly-Exploring Random Trees: A New Tool for Path Planning},
+	institution = {Computer Science Department, Iowa State University},
+	year = {1998}
+}
+
+@inproceedings{Karaman2011,
+	abstract = {During the last decade, sampling-based path planning algorithms, such as probabilistic roadmaps (PRM) and rapidly exploring random trees (RRT), have been shown to work well in practice and possess theoretical guarantees such as probabilistic completeness. However, little effort has been devoted to the formal analysis of the quality of the solution returned by such algorithms, e.g. as a function of the number of samples. The purpose of this paper is to fill this gap, by rigorously analyzing the asymptotic behavior of the cost of the solution returned by stochastic sampling-based algorithms as the number of samples increases. A number of negative results are provided, characterizing existing algorithms, e.g. showing that, under mild technical conditions, the cost of the solution returned by broadly used sampling-based algorithms converges almost surely to a non-optimal value. The main contribution of the paper is the introduction of new algorithms, namely, PRM* and RRT*, which are provably asymptotically optimal, i.e. such that the cost of the returned solution converges almost surely to the optimum. Moreover, it is shown that the computational complexity of the new algorithms is within a constant factor of that of their probabilistically complete (but not asymptotically optimal) counterparts. The analysis in this paper hinges on novel connections between stochastic sampling-based path planning algorithms and the theory of random geometric graphs. {\textcopyright} The Author(s) 2011.},
+	author = {Karaman, Sertac and Frazzoli, Emilio},
+	booktitle = {International Journal of Robotics Research},
+	doi = {10.1177/0278364911406761},
+	issn = {02783649},
+	keywords = {Motion planning,Optimal path planning,Random geometric graphs,Sampling-based algorithms},
+	title = {{Sampling-based algorithms for optimal motion planning}},
+	year = {2011}
+}
+
+@article{Kavraki1996,
+	abstract = {A new motion planning method for robots in static workspaces is presented. This method proceeds in two phases: a learning phase and a query phase. In the learning phase, a probabilistic roadmap is constructed and stored as a graph whose nodes correspond to collision-free configurations and whose edges correspond to feasible paths between these configurations. These paths are computed using a simple and fast local planner. In the query phase, any given start and goal configurations of the robot are connected to two nodes of the roadmap; the roadmap is then searched for a path joining these two nodes. The method is general and easy to implement. It can be applied to virtually any type of holonomic robot. It requires selecting certain parameters (e.g., the duration of the learning phase) whose values depend on the scene, that is the robot and its workspace. But these values turn out to be relatively easy to choose. Increased efficiency can also be achieved by tailoring some components of the method (e.g., the local planner) to the considered robots. In this paper the method is applied to planar articulated robots with many degrees of freedom. Experimental results show that path planning can be done in a fraction of a second on a contemporary workstation (≈ 150 MIPS), after learning for relatively short periods of time (a few dozen seconds). {\textcopyright} 1996 IEEE.},
+	author = {Kavraki, Lydia E. and {\v{S}}vestka, Petr and Latombe, Jean Claude and Overmars, Mark H.},
+	doi = {10.1109/70.508439},
+	issn = {1042296X},
+	journal = {IEEE Transactions on Robotics and Automation},
+	title = {{Probabilistic roadmaps for path planning in high-dimensional configuration spaces}},
+	year = {1996}
+}
+
+@inproceedings{Kocsis2006,
+	abstract = {For large state-space Markovian Decision Problems Monte-Carlo planning is one of the few viable approaches to find near-optimal solutions. In this paper we introduce a new algorithm, UCT, that applies bandit ideas to guide Monte-Carlo planning. In finite-horizon or discounted MDPs the algorithm is shown to be consistent and finite sample bounds are derived on the estimation error due to sampling. Experimental results show that in several domains, UCT is significantly more efficient than its alternatives. {\textcopyright} Springer-Verlag Berlin Heidelberg 2006.},
+	author = {Kocsis, Levente and Szepesv{\'{a}}ri, Csaba},
+	booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+	doi = {10.1007/11871842_29},
+	isbn = {354045375X},
+	issn = {16113349},
+	title = {{Bandit based Monte-Carlo planning}},
+	year = {2006}
+}
+
+
+@incollection{Pomerleau89,
+	title = {ALVINN: An Autonomous Land Vehicle in a Neural Network},
+	author = {Pomerleau, Dean A.},
+	booktitle = {Advances in Neural Information Processing Systems 1},
+	editor = {D. S. Touretzky},
+	pages = {305--313},
+	year = {1989},
+	publisher = {Morgan-Kaufmann},
+	url = {http://papers.nips.cc/paper/95-alvinn-an-autonomous-land-vehicle-in-a-neural-network.pdf}
+}
+
 @misc{Levine2016,
 	abstract = {Policy search methods can allow robots to learn control policies for a wide range of tasks, but practical applications of policy search often require hand-engineered components for perception, state estimation, and low-level control. In this paper, we aim to answer the following question: does training the perception and control systems jointly end-to-end provide better performance than training each component separately? To this end, we develop a method that can be used to learn policies that map raw image observations directly to torques at the robot's motors. The policies are represented by deep convolutional neural networks (CNNs) with 92,000 parameters, and are trained using a guided policy search method, which transforms policy search into supervised learning, with supervision provided by a simple trajectory-centric reinforcement learning method. We evaluate our method on a range of real-world manipulation tasks that require close coordination between vision and control, such as screwing a cap onto a bottle, and present simulated comparisons to a range of prior policy search methods.},
 	author = {Levine, Sergey and Finn, Chelsea and Darrell, Trevor and Abbeel, Pieter},
@@ -230,6 +291,20 @@ url={https://doi.org/10.1038/s41586-018-0637-6}
 	timestamp = {Mon, 13 Aug 2018 16:46:17 +0200},
 	biburl    = {https://dblp.org/rec/journals/corr/abs-1803-01044.bib},
 	bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{Codevilla2018,
+	abstract = {Deep networks trained on demonstrations of human driving have learned to follow roads and avoid obstacles. However, driving policies trained via imitation learning cannot be controlled at test time. A vehicle trained end-to-end to imitate an expert cannot be guided to take a specific turn at an upcoming intersection. This limits the utility of such systems. We propose to condition imitation learning on high-level command input. At test time, the learned driving policy functions as a chauffeur that handles sensorimotor coordination but continues to respond to navigational commands. We evaluate different architectures for conditional imitation learning in vision-based driving. We conduct experiments in realistic three-dimensional simulations of urban driving and on a 1/5 scale robotic truck that is trained to drive in a residential area. Both systems drive based on visual input yet remain responsive to high-level navigational commands.},
+	archivePrefix = {arXiv},
+	arxivId = {1710.02410},
+	author = {Codevilla, Felipe and Miiller, Matthias and Lopez, Antonio and Koltun, Vladlen and Dosovitskiy, Alexey},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2018.8460487},
+	eprint = {1710.02410},
+	isbn = {9781538630815},
+	issn = {10504729},
+	title = {{End-to-End Driving Via Conditional Imitation Learning}},
+	year = {2018}
 }
 
 

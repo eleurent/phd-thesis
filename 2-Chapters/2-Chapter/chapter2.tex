@@ -16,8 +16,9 @@
 \end{flushright}
 
 \section{Sequential decision-making}
+\label{sec:sequential-decision-making}
 
-TODO: take a series of driving decisions. The system is in a state $s\in\cS$, can take actions $a\in\cA$, leading to another state $s'\in S$. Actions are picked according to a policy $\pi(a|s)$, potentially stochastic. How to design this policy ?
+TODO: introduce notations and stakes. Take a series of driving decisions. The system is in a state $s\in\cS$, can take actions $a\in\cA$, leading to another state $s'\in S$. Actions are picked according to a policy $\pi(a|s)$, potentially stochastic. How to design this policy ?
 
 \subsection{Motion Planning}
 
@@ -35,7 +36,8 @@ This method involves forming a regular discrete partition of the reachable vehic
 
 \paragraph{Sampling-based algorithms}
 
-The limitation of search-based algorithms lies in the difficulty of formulating a regular lattice structure which feasible transitions between configurations, and in the real-time constraint that may not be met by graph-search algorithms. To address them, sampling-based motion planners iteratively grow a set of reachable configurations by randomly sampling valid transitions. The most popular ones are Probabilistic Roadmap (PRM), Rapidly-exploring Random Trees (RRT) and Monte-Carlo Tree Search algorithms.
+The limitation of search-based algorithms lies in the difficulty of formulating a regular lattice structure which feasible transitions between configurations, and in the real-time constraint that may not be met by graph-search algorithms. To address them, sampling-based motion planners iteratively grow a set of reachable configurations by randomly sampling valid transitions. The most popular ones are Probabilistic Roadmap (PRM) \citep{Kavraki1996}, Rapidly-exploring Random Trees (RRT) \citep{Lavalle98,Karaman2011} and Monte-Carlo Tree Search algorithms \citep[e.g.][]{Kocsis2006}.
+TODO: these methods are used in the context of AD in...
 
 \paragraph{Optimisation-based algorithms}
 
@@ -45,13 +47,19 @@ Motion planning techniques thus rely on deterministic models of the kinematics o
 
 \subsection{Imitation Learning}
 
-It may be the case that the vehicle position is not directly observed and only raw high-dimensional measurements such as camera images are available. As an effect, motion planning approaches that rely on models of the state dynamics are not applicable in these conditions. An orthogonal strategy is to learn a reactive mapping $\pi(a|s)$ under supervision of an expert $\pi_E$ that produces demonstration trajectories.
+An orthogonal strategy to motion planning techniques is to learn a reactive policy $\pi(a|s)$ under supervision of an expert $\pi_E$ that produces a dataset $\cD$ of demonstration trajectories. To that end, a parametrized policy $\pi_\theta$ is optimised to minimise a regression loss $\cL$, for instance the $KL$ divergence to the expert actions distribution:
+\begin{equation*}
+\min_\theta \expectedvalue_{s\sim \cD} \left[\cL\left(\pi_{\theta}(a|s), \pi_E(a|s)\right)\right]
+\end{equation*}
 
-TODO: ref needed: dean pomerleau: ALVIN
+This approach is particularly suited when only low-level high-dimensional inputs are available, such as camera images, which prevents access to the dynamics model required by motion planning approaches. 
+The first application of imitation learning to autonomous driving is the ALVINN (Autonomous Land Vehicle In a Neural Network) project \citep{Pomerleau89}, where a 3-layer neural network was trained for the task of road following, as shown in \Cref{fig:alvinn}.
+
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.4\linewidth]{img/alvinn}
-	\caption{TODO: ALVIN}
+	\caption{The 3-layer architecture used in ALVINN \citep{Pomerleau89}.}
+	\label{fig:alvinn}
 \end{figure}
 
 TODO: Compounding errors: \emph{"Supervised learning will not produce a policy with good long-horizon
@@ -74,6 +82,8 @@ To mitigate this issue, \citep{Bojarski2016} proposed to simulate deviations fro
 But simply imitating is not enough, we need to control the agent / condition the policy with a goal. \citep{Codevilla2018}
 
 \subsection{Reinforcement Learning}
+
+Markov Decision Process.
 \section{States and partial observability}
 \section{Actions and temporal abstraction}
 \section{Rewards and inverse reinforcement learning}

@@ -36,8 +36,17 @@ Likewise, this thesis is not so much about solving moral dilemma than addressing
 
 \paragraph{Nuts and bolts of self-driving software}
 
-The robotics pipeline typically involves three modules: Perception, Decision, and Control.
-Great research efforts have been made to resolve the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning, and Control schemes have been developed for ground vehicles to precisely follow a predefined trajectory. Nowadays, ADAS systems support features such as LKA, ACC. However, we claim that Decision has been a neglected area: hitherto, most applications and challenges focused on simple highway settings with little 
+The typical robotics pipeline, shown in \Cref{fig:robotics-pipeline}, involves three main modules: Perception, Decision, and Control (also named Navigation, Guidance and Control in aerospace engineering).
+TODO: In the Decision module, ...
+Great research efforts have been made to resolve the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning. Control schemes have been developed for ground vehicles to precisely follow a predefined trajectory.
+In the Decision task, Route Planning involves graph-search on road network, and Motion Planning is well developed, as will be presented in \Cref{sec:sequential-decision-making}. Behavioural planning has been a neglected area: hitherto, most applications and challenges focused on simple settings with little complexity. In the DARPA Urban Challenge, all challengers reportedly used finite state machines for behavioural planning \citep{Buehler2009}. In the industry, ADAS features such as LKA, ACC focus on highway driving with limited interaction. 
+\begin{figure}[tp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/architecture-blocks}
+	\includegraphics[width=0.7\linewidth]{img/architecture-square}
+	\caption{TODO: architecture}
+	\label{fig:robotics-pipeline}
+\end{figure}
 
 \paragraph{Decision-making under uncertainty}
 
