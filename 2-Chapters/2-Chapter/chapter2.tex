@@ -110,25 +110,50 @@ The MDP framework is based on the hypothesis that the agent has access to its ow
 \end{figure}
 
 
-Proposed model: POMDP.
-Belief state propagation: Kalman filtering for linear system and gaussian noise.
+The POMDP framework allows to optimally balances information gathering
+and task completion.
+1 Provide a sensor model
+2 Perform bayesian filtering to update a belief state
+3 Plan in the belief space
+
+Belief state propagation: .
+e.g. LQG systems with linear dynamics and gaussian noise: belief update = Kalman filtering [LQG-MP: Optimized Path Planning for Robots with Motion Uncertainty and Imperfect State Information]
 Algo: PBVI, POMCP
 
-- Planning at an intersection with a moving occluded obstacle (8D system): [Solving Continuous POMDPs:  Value Iteration with Incremental Learning of an Efficient Space Representation]
+- Planning at an intersection with a moving occluded obstacle (8D system): learn a policy that brakes when reaching an intersection [Solving Continuous POMDPs:  Value Iteration with Incremental Learning of an Efficient Space Representation]
 - ?? : [Probabilistic decision-making under uncertainty for autonomous driving using continuous POMDPs]
+
+Also Uncertainty in the intentions of other agents
+
 - The other drivers locations are observed but not their intentions [Intention-Aware Motion Planning]. MOMDP framework.
 - [ Probabilistic Decision-Making at Road Intersections: Formulation and Quantitative Evaluation ]
 - Kalman + POMCP for intersection [https://arxiv.org/abs/1704.04322]
 - Sunberg: evaluate the POMDP vs MDP approximation with an assumed internal state.
- 
+
+- Rapidly-exploring Random Belief Trees for Motion Planning Under Uncertainty
+- Motion Planning under Uncertainty for On-Road Autonomous Driving
+- Planning for Autonomous Cars that Leverage Effects on Human Actions
+- Motion Planning under Uncertainty using Differential Dynamic Programming in Belief Space
+- Probabilistic MDP-behavior planning for cars”.
 
 \section{Actions and temporal abstraction}
 
 Driving involves reasoning at several time scales: which route to take in the next minutes? how to coordinate with other agents in the next dozen of seconds? what throttle and steering controls to apply in the next second?
 Temporal abstraction: the notion of low-level actions and high-level temporally extended skills called \emph{options}. Hierarchical reinforcement learning.
+
+The semi-Markov framework
+Plan with options: temporally-extended sequences of actions
+Hierarchical structure: learn skills that can be reused as actions
+
+When humans lean to drive, control of the steering wheel and throttle/brake pedals is acquired in a few hours. 
+Instructor: Deciding when to change lane, overtake, give or take way, proceed at an intersection, etc.
+Semantic action space
+
 In autonomous driving, this hierarchy is typically imposed by the robotics pipeline presented in \Cref{chapter:1}. 
-Can also be learned: [Safe, Multi-Agent, Reinforcement Learning for Autonomous Driving]
+Can also be learned: Option graph on the double merge scenario: [Safe, Multi-Agent, Reinforcement Learning for Autonomous Driving]
 Learned locomotion skills (follow, overtake) used as meta-actions: [Combining Neural Networks and Tree Search for Task and Motion Planning in Challenging Environments, ]
+
+Shorter action duration means smaller signal-to-noise ratio, which leads to slow learning [“On a Formal Model of Safe and Scalable Self-driving Cars]
 
 \section{Rewards and inverse reinforcement learning}
 \section{Dynamics and transfer}
