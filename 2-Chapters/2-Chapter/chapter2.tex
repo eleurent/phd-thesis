@@ -31,7 +31,7 @@ This method is based on a regular discrete partition of the state space $\cS$ ca
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/lattice2}
-	\caption{TODO: lattice}
+	\caption{A lattice structure connects a discrete set of states by feasible trajectories}
 \end{figure}
 
 \paragraph{Sampling-based algorithms}
@@ -53,10 +53,8 @@ An orthogonal strategy to motion planning techniques is to learn a reactive poli
 \begin{equation*}
 \min_\theta \expectedvalue_{s\sim \cD} \left[\cL\left(\pi_{\theta}(a|s), \pi_E(a|s)\right)\right]
 \end{equation*}
-
-This approach is particularly suited when only low-level high-dimensional inputs are available, such as camera images, which prevents access to the dynamics model required by motion planning approaches. 
+This approach is also referred to as behavioural cloning, and is particularly suited when only low-level high-dimensional inputs are available, such as camera images, which prevents access to the dynamics model required by motion planning approaches. 
 The first application of imitation learning to autonomous driving is the ALVINN (Autonomous Land Vehicle In a Neural Network) project \citep{Pomerleau89}, where a 3-layer neural network was trained for the task of road following, as shown in \Cref{fig:alvinn}.
-
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.4\linewidth]{img/alvinn}
@@ -64,47 +62,58 @@ The first application of imitation learning to autonomous driving is the ALVINN 
 	\label{fig:alvinn}
 \end{figure}
 
-\TODO{Compounding errors: \emph{"Supervised learning will not produce a policy with good long-horizon
-performance, since a small mistake on the part of the policy will place the system
-into states that are outside the distribution in the training data"} \citep{Levine2016}}
-\TODO{ref needed: Dagger.}
-
+\paragraph{Compounding errors} Unfortunately, the behavioural cloning paradigm is known to suffer from \emph{compounding errors}: since the future states depend on previous predictions (actions), the \iid assumption made in statistical learning does not hold. Therefore, small mistakes will place the system into states that are outside the training data distribution, as illustrated in \Cref{fig:compounding}, and resulting policies struggle to maintain high performances on long time horizons. This effect was identified and tackled in \citep{Ross2011}, who proposed to iteratively request expert labels (actions) from the states encountered by the current trained policy, rather than from the initial expert distribution. However, this can only be accomplished at the cost of a significant labelling effort. 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/cp4}
-	\caption{TODO: Compounding errors}
+	\caption{As the agent deviates from the expert trajectories, the errors compound and push the agent further and further from the training distribution.}
+	\label{fig:compounding}
 \end{figure}
+In the context of a Lane Keeping application, \citep{Bojarski2016} proposed instead to mitigate this issue during the data collection step by simulating deviations from the expert trajectories by means of two side cameras facing at the edge of the road. The corresponding synthetic expert controls were obtained by adding a constant adjustment term steer the vehicle back on track. The effect of compounding errors can also be delayed by further increasing the prediction performance, \eg by considering temporal dependencies as in \citep{Eraqi2017,Xu2017}. Other techniques than maximum likelihood estimation can be used to train the models, such as Generative Adversarial Imitation Learning \citep{Ho2016}, used for highway driving from range measurements in \citep{Kuefler2017,Bhattacharyya2018}.
 
-To mitigate this issue, \citep{Bojarski2016} proposed to simulate deviations from the expert trajectories using side cameras. The corresponding expert action labels were obtained by adding a constant steering wheel angle to adjust.
-
-\citep{Eraqi2017,Xu2017} proposed to consider temporal dependencies by using recurrent neural networks.
-
-\citep{Kuefler2017,Bhattacharyya2018} used Generative Adversarial Networks to...
-
-But simply imitating is not enough, we need to control the agent / condition the policy with a goal. \citep{Codevilla2018}
+\paragraph{Policy conditioning} A limitation of imitation learning for autonomous driving is fact that simply imitating human drivers by sampling likely trajectories is not sufficient: the sampling must also be conditioned on the current short-term destination specified by the Route planner. \citep{Codevilla2018} propose to achieve this by considering several policy heads for three possible behaviours when reaching an intersection: go straight, turn left or turn right. At test time, the appropriate policy is used at each intersection depending on the planned route. \citep{Rhinehart2020} present a more general approach that consists in learning a probabilistic model $q(s)$ of expert trajectories used as a prior, and inferring the maximum a posteriori trajectory given a test-time goal likelihood $p\parentheses{goal\mid s}$.
 
 \subsection{Reinforcement Learning}
 
-Reinforcement Learning is a general decision-making framework formulated as an optimal control problem. It is typically formalized as a \emph{Markov Decision Process} (MDP), in which at each time step $t$, an agent observes its current state $s_t\in S$ and picks an action $a_t\in A$, before transitioning to a next state $s_{t+1}\in S$ drawn from a transition distribution $P(s_{t+1}|s_t,a_t)$ and receiving a bounded reward $r_t\in[0, 1]$ drawn from a reward distribution $P(r_t|s_t,a_t)$. The agent must act so as to optimise in expectation its cumulative discounted reward, also called \emph{return}, where $\gamma\in[0,1)$ is the discount factor:
+Reinforcement Learning is a general framework for learning-based sequential decision-making. It is formulated as an optimal control problem: the policy $\pi$ is chosen to optimise an objective function. It is generally formalized as a \emph{Markov Decision Process} (MDP), a tuple $(\cS, \cA, P, R, \Gamma)$ in which at each step, a bounded reward $r_t\in[0, 1]$ drawn from a reward distribution $R(r_t|s_t,a_t)$. The agent must act so as to optimise in expectation its cumulative discounted reward, also called \emph{return}, where $\gamma\in[0,1)$ is the discount factor:
 
 \begin{equation*}
 \max_{\pi}\expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\right].
 \end{equation*}
 
+\TODO{Several performance measures: return, cumulative regret, simple regret, PAC}
+
 Convenient framework for analysis, but it's often too narrow a frame for the real world to fit in. In the following, we will enumerate several assumptions behind the MDP framework that may not hold in practice, and for which variants have been developed. We will focus on applications of the variants the particular context of Autonomous Driving.
 
 \section{States and partial observability}
 
-The first modelling assumption of the MDP framework is that the agent perfectly knows its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements. In addition to noise, some part of the state may simply be missing: occlusion.
-\TODO{Insert image of partial observability}
+The MDP framework is based on the hypothesis that the agent has access to its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements \citep{Ulbrich2013,Du2010}. Worse, parts of the state may be missing altogether, as is the case when a scene entity is occulted by an obstacle, as shown in \Cref{fig:po-occlusion}. \citep{Brechtel2013,Bouton2018}
+
+
+\begin{figure}[tp]
+	\centering
+	\subfloat["Area of potential danger". A partial observability stemming from sensor occlusion in a turn.]{
+		\includegraphics[width=0.7\linewidth]{img/po-sensors}
+		\label{fig:po-occlusion}
+	}\\
+	\subfloat["Area of uncertainty". A partial observability stemming from unknown intentions of human agents.]{
+		\includegraphics[width=0.4\linewidth]{img/po-intentions}
+	}
+	\caption{Sources of Partial Observability in Autonomous Driving. Illustrations from \citep{ObjCode2017}.}
+	\label{fig:partial-observability}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/pomdp}
+	\caption{Information-seeking behaviours: the tailgating vehicle (top) should slow down, although it might decrease its immediate rewards, to gain valuable information in return (bottom). Image from \citep{ObjCode2017}.}
+	\label{fig:information-seeking}
+\end{figure}
+
 
 Proposed model: POMDP.
 Belief state propagation: Kalman filtering for linear system and gaussian noise.
 Algo: PBVI, POMCP
 
-Examples:
-- Sensor noise: [Probabilistic Online POMDP Decision Making for Lane Changes in Fully Automated Driving]
-- Motion planning for a UAV with no GPS, landmark localization: [A POMDP Approach to Robot Motion Planning under Uncertainty]. 
 - Planning at an intersection with a moving occluded obstacle (8D system): [Solving Continuous POMDPs:  Value Iteration with Incremental Learning of an Efficient Space Representation]
 - ?? : [Probabilistic decision-making under uncertainty for autonomous driving using continuous POMDPs]
 - The other drivers locations are observed but not their intentions [Intention-Aware Motion Planning]. MOMDP framework.
@@ -114,6 +123,13 @@ Examples:
  
 
 \section{Actions and temporal abstraction}
+
+Driving involves reasoning at several time scales: which route to take in the next minutes? how to coordinate with other agents in the next dozen of seconds? what throttle and steering controls to apply in the next second?
+Temporal abstraction: the notion of low-level actions and high-level temporally extended skills called \emph{options}. Hierarchical reinforcement learning.
+In autonomous driving, this hierarchy is typically imposed by the robotics pipeline presented in \Cref{chapter:1}. 
+Can also be learned: [Safe, Multi-Agent, Reinforcement Learning for Autonomous Driving]
+Learned locomotion skills (follow, overtake) used as meta-actions: [Combining Neural Networks and Tree Search for Task and Motion Planning in Challenging Environments, ]
+
 \section{Rewards and inverse reinforcement learning}
 \section{Dynamics and transfer}
 \section{Optimisation criterion and safety}
