@@ -33,7 +33,7 @@ In a \emph{Markov Decision Process} (MDP), an agent observes its current state $
 	\item Third, we provide a time and memory efficient implementation of \OLOP and \KLOLOP, bringing an exponential speedup that allows to scale these algorithms to high sample budgets.
 \end{itemize}
 
-The paper is structured as follows: in section \ref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in section \ref{sec:sample-complexity}. In section \ref{sec:time-complexity}, we propose an efficient implementation of the two algorithms. Finally in section \ref{sec:experiments}, we evaluate them in several numerical experiments.
+The paper is structured as follows: in section \ref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in section \ref{sec:sample-complexity}. In section \ref{sec:time-complexity}, we propose an efficient implementation of the two algorithms. Finally in section \ref{sec:planning-experiments}, we evaluate them in several numerical experiments.
 
 \paragraph{Notations}
 We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in A^*$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in A^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in A^t$. $A^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in A^*$ and $b\in A^*$ can be concatenated as $ab\in A^*$, the set of finite and infinite suffixes of $a$ are respectively $a A^* = \{c\in\mathcal{A}^*: \exists b\in A^*$ such that $c=ab\}$ and $aA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
@@ -574,7 +574,7 @@ By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the
 
 
 \section{Experiments and Conclusion}
-\label{sec:experiments}
+\label{sec:planning-experiments}
 
 We have performed some numerical experiments to evaluate and compare the following planning algorithms\footnote[1]{The source code is available at \url{https://eleurent.github.io/kl-olop/}}:
 \begin{itemize}

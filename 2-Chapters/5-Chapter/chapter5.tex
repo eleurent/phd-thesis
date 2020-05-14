@@ -15,7 +15,7 @@ We work in the space of budgeted policies, where a policy $\pi$ both depends on 
 
 We cast the BMDP problem as a multi-objective MDP problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \cB$ and $\ocA= \cA\times \cB$, and equip them with the augmented dynamics $\ov{P}\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
 \begin{equation}
-\label{eq:dynamics}
+\label{eq:augmented-dynamics}
 \ov{P}\left(\os' \condbar \os, \oa\right) = \ov{P}\left((s',\beta') \condbar (s,\beta), (a, \beta_a)\right) \eqdef P(s'|s, a)\delta(\beta' - \beta_a),
 \end{equation}
 where $\delta$ is the Dirac indicator distribution.
@@ -60,7 +60,7 @@ We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\beta)\in\ocS: 
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-	Because of the budget dynamics $\beta' = \beta_a$ in \eqref{eq:dynamics}, we can see in \eqref{eq:bellman_expectation} that for all $\os=(s, \beta)$ and $\oa=(a, \beta_a)$, $Q^\pi(\os, \oa)$ only depends on $s, a, \beta_a$ and not on $\beta$. We will slightly abuse notations and sometimes denote in the following $Q^\pi(s, a, \beta_a) \eqdef Q^\pi(\os, \oa)$.
+	Because of the budget dynamics $\beta' = \beta_a$ in \eqref{eq:augmented-dynamics}, we can see in \eqref{eq:bellman_expectation} that for all $\os=(s, \beta)$ and $\oa=(a, \beta_a)$, $Q^\pi(\os, \oa)$ only depends on $s, a, \beta_a$ and not on $\beta$. We will slightly abuse notations and sometimes denote in the following $Q^\pi(s, a, \beta_a) \eqdef Q^\pi(\os, \oa)$.
 	\end{leftbar}
 \end{remark}
 
@@ -137,7 +137,7 @@ The Budgeted Bellman Optimality equation is a fixed-point equation, which motiva
 	\end{leftbar}
 \end{theorem}
 
-Unfortunately, as $\cT$ is not a contraction, we can guarantee neither the convergence of \autoref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\autoref{sec:experiments}). We conjecture a possible explanation:
+Unfortunately, as $\cT$ is not a contraction, we can guarantee neither the convergence of \autoref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\autoref{sec:brl-experiments}). We conjecture a possible explanation:
 
 \begin{theorem}[Contractivity of $\cT$ on smooth $Q$-functions]
 	\begin{leftbar}[theorembar]
@@ -266,26 +266,26 @@ The computation of $\pi_\text{hull}$ in \autoref{algo:pi_hull} is illustrated in
 
 \subsection{Function approximation}
 
-Neural networks are well suited to model Q-functions in Reinforcement Learning algorithms \citep{Riedmiller2005,Mnih2015}.  We approximate $Q = (Q_r, Q_c)$ using one single neural network. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $Q$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $Q$-function:~the budget $\beta_a$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of $\beta$ compared to $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state. The overall architecture is shown in \autoref{fig:architecture} in \autoref{sec:bftq-full}.
+Neural networks are well suited to model Q-functions in Reinforcement Learning algorithms \citep{Riedmiller2005,Mnih2015}.  We approximate $Q = (Q_r, Q_c)$ using one single neural network. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $Q$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $Q$-function:~the budget $\beta_a$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of $\beta$ compared to $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state. The overall architecture is shown in \autoref{fig:bftq-architecture} in \autoref{sec:bftq-full}.
 
 \subsection{Parallel computing}
 \label{subsec:parallel-computing}
 In a simulated environment, a first process that can be distributed is the collection of samples in the exploration procedure of \autoref{algo:risk-sensitive-exploration}, as $\pi_\text{greedy}$ stays constant within each mini-batch which avoids the need of synchronisation between workers. Second, the main bottleneck of \BFTQ is the computation of the target $\cT Q$. Indeed, when computing $\pi_\text{hull}$ we must perform at each epoch a Graham-scan of complexity $\cO(|\cA||\tilde{\cB}| \log |\cA\tilde{\cB}|)$ per sample in $\mathcal{D}$ to compute the convex hulls of $Q$ (where $\tilde{\cB}$ is a finite discretisation of $\cB$). The resulting total time-complexity is $\cO(\frac{|\mathcal{D}||\cA||\tilde{\cB}|}{1-\gamma} \log |\cA||\tilde{\cB}|)$. This operation can easily be distributed over several CPUs provided that we first evaluate the model $Q(s',\cA\tilde{\cB})$ for each sample $s'\in\cD$, which can be done in a single forward pass. By using multiprocessing in the computations of $\pi_\text{hull}$, we enjoy a linear speedup.
-The full description of our scalable implementation of \BFTQ is recalled in \autoref{algo:bftq_full}, and the architecture of the neural network in  \autoref{fig:architecture}.
+The full description of our scalable implementation of \BFTQ is recalled in \autoref{algo:bftq_full}, and the architecture of the neural network in  \autoref{fig:bftq-architecture}.
 
 
 \begin{figure}[tp]
 	\centering
 	\input{2-Chapters/5-Chapter/src/architecture.tex}
 	\caption{Neural Network for $Q$-functions approximation when $\cS=\Real^2$ and $|\cA| = 2$.}
-	\label{fig:architecture}
+	\label{fig:bftq-architecture}
 \end{figure}
 
 \input{2-Chapters/5-Chapter/src/bftq-pseudo-code.tex}
 
 
 \section{Experiments}
-\label{sec:experiments}
+\label{sec:brl-experiments}
 There are two hypotheses we want to validate.
 
 \paragraph{Exploration strategies}\label{par:ex-explo} We claimed in \autoref{sec:exploration} that a risk-sensitive exploration was required in the setting of BMDPs. We test this hypotheses by confronting our strategy to a classical risk-neutral strategy. The latter is chosen to be a $\epsilon$-greedy policy slowly transitioning from a random to a greedy policy\footnote{We train this greedy policy using \FTQ.} that aims to maximise $\expectedvalue_{\pi} G_r^\pi$ regardless of $\expectedvalue_{\pi} G_c^\pi$. The quality of the resulting batches $\cD$ is assessed by training a \BFTQ policy and comparing the resulting performance.
@@ -347,11 +347,11 @@ Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budge
 		\includegraphics[width=0.49\linewidth]{img/slot-filling}
 		\includegraphics[width=0.49\linewidth]{img/highway}
 		\caption{Performance comparison of \FTQl and \BFTQ on \text{slot-filling} (left) and \text{highway-env}(right) }
-		\label{fig:results}
+		\label{sec:brl-results}
 	\end{center}
 \end{figure}
 
-In a second experiment displayed in \autoref{fig:results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
+In a second experiment displayed in \autoref{sec:brl-results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
 Qualitatively, the budgeted agents display a variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
 For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[G_c|\beta=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\cT}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $Q_\theta$ instead of $Q$. 
 

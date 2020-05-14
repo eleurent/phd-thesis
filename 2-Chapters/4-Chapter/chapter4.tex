@@ -107,7 +107,7 @@ This permutation invariance property \eqref{eq:permutation} can also be implemen
 
 Out of a complex scene description, the model should be able to filter information and consider only what is relevant for decision. In other words, the agent should \emph{pay attention} to vehicles that are close or conflict with the planned route. 
 
-The proposed architecture is presented in \autoref{fig:architecture}. It is used to represent the $Q$-function that will be optimized by the DQN algorithm. It is composed of a first linear encoding layer whose weights are shared between all vehicles. At that point, the embeddings only contain individual features of size $d_x$. They are then fed to an ego-attention layer, composed of several heads stacked together. The \emph{ego} prefix highlights that it similar to a multi-head self-attention layer \citep{Vaswani2017} but with only a single output corresponding to the ego-vehicle. Such an ego-attention head is illustrated in \autoref{fig:ego-attention} and works in the following way: in order to select a subset of vehicles depending on the context, the ego-vehicle  first emits a single query $Q = [q_0]\in\Real^{1 \times d_k}$, computed with a linear projection $L_q\in\Real^{d_x \times d_k}$ of its embedding. This query is then compared to a set of keys $K = [k_0, \dots, k_N]\in\Real^{N \times d_k}$ containing descriptive features $k_i$ for each vehicle, again computed with a shared linear projection $L_k\in\Real^{d_x \times d_k}$. The similarity between the query $q_0$ and any key $k_i$ is assessed by their dot product $q_0 k_i^T$. These similarities are then scaled by the inverse-square-root-dimension $1/\sqrt{d_k}$\footnote{This scaling is due to the fact that the dot-product of two independent random vectors with mean 0,  variance 1, and dimension $d_k$, is a random variable with mean 0 and variance $d_k$} and normalised with a softmax function $\sigma$ across vehicles. We obtain a stochastic matrix called the \emph{attention matrix}, which is finally used to gather a set of output value $V = [v_0, \dots, v_N]$, where each value $v_i$ is a feature computed with a shared linear projection $L_v\in\Real^{d_x \times d_v}$. Overall, the attention computation for each head can be written as:
+The proposed architecture is presented in \autoref{fig:ego-architecture}. It is used to represent the $Q$-function that will be optimized by the DQN algorithm. It is composed of a first linear encoding layer whose weights are shared between all vehicles. At that point, the embeddings only contain individual features of size $d_x$. They are then fed to an ego-attention layer, composed of several heads stacked together. The \emph{ego} prefix highlights that it similar to a multi-head self-attention layer \citep{Vaswani2017} but with only a single output corresponding to the ego-vehicle. Such an ego-attention head is illustrated in \autoref{fig:ego-attention} and works in the following way: in order to select a subset of vehicles depending on the context, the ego-vehicle  first emits a single query $Q = [q_0]\in\Real^{1 \times d_k}$, computed with a linear projection $L_q\in\Real^{d_x \times d_k}$ of its embedding. This query is then compared to a set of keys $K = [k_0, \dots, k_N]\in\Real^{N \times d_k}$ containing descriptive features $k_i$ for each vehicle, again computed with a shared linear projection $L_k\in\Real^{d_x \times d_k}$. The similarity between the query $q_0$ and any key $k_i$ is assessed by their dot product $q_0 k_i^T$. These similarities are then scaled by the inverse-square-root-dimension $1/\sqrt{d_k}$\footnote{This scaling is due to the fact that the dot-product of two independent random vectors with mean 0,  variance 1, and dimension $d_k$, is a random variable with mean 0 and variance $d_k$} and normalised with a softmax function $\sigma$ across vehicles. We obtain a stochastic matrix called the \emph{attention matrix}, which is finally used to gather a set of output value $V = [v_0, \dots, v_N]$, where each value $v_i$ is a feature computed with a shared linear projection $L_v\in\Real^{d_x \times d_v}$. Overall, the attention computation for each head can be written as:
 \begin{equation}
 \text{output}=\underbrace{\sigma\left(\frac{QK^T}{\sqrt{d_k}}\right)}_{\text{attention matrix}}V
 \label{eq:selfattention}
@@ -151,7 +151,7 @@ The outputs from all heads are finally combined with a linear layer, and the res
 	\draw (DEC1.east) -- (Y1.west);
 	\end{tikzpicture}
 	\caption{Block diagram of our model architecture. It is composed of several linear identical encoders, a stack of ego-attention heads, and a linear decoder.}
-	\label{fig:architecture}	
+	\label{fig:ego-architecture}	
 \end{figure}
 
 \begin{figure}[tp]
@@ -281,7 +281,7 @@ These agents are all trained with the DQN algorithm using the same hyperparamete
 
 \paragraph{Performances}
 
-We plot in \autoref{fig:results} the evolution of the total reward, episode length and average velocity during training, over 4000 episodes and repeated across 120 random seeds.
+We plot in \autoref{fig:attention-results} the evolution of the total reward, episode length and average velocity during training, over 4000 episodes and repeated across 120 random seeds.
 The \MLPL agent learns to accelerate to earn short-term rewards, as shown by its high average velocity, but fails to exploit the information of other vehicles and crashes often, leading to short episodes. We obtain a risky and blind policy that is the worst performing.
 Conversely, the \CNNG architecture benefits from its invariance to permutations and manages to learn to brake upon arrival at the intersection to avoid collisions, as we can see from its higher episode length. However, it only proceeds when the intersection has been fully cleared, as reflected by its low average velocity. This results in an overly cautious policy -- a common trait colloquially known as the \emph{freezing robot problem} \citep{Trautman2010} -- with a slight increase in performance.
 In stark contrast, the \EgoAtt policy quickly learns both when it must slow down at the intersection (see the high episode length), but also when it can exploit the gaps in the traffic and take way to vehicles that are far or slow enough (see the higher average velocity than \CNNG). This translates as a significant performance improvement, and the overall resulting behaviour is qualitatively more nuanced and human-like.
@@ -298,7 +298,7 @@ In stark contrast, the \EgoAtt policy quickly learns both when it must slow down
 		\includegraphics[width=.6\linewidth]{img/velocity}
 	}
 	\caption{The episode total rewards, lengths, and average velocity (higher is better). We display the mean values -- along with their 95\% confidence interval -- averaged over 120 random seeds.}
-	\label{fig:results}
+	\label{fig:attention-results}
 \end{figure}
 
 \paragraph{Attention interpretation}
@@ -355,10 +355,10 @@ The agent decisions regarding right of way are not enforced through rewards but 
 \begin{figure}[htp]
 	\centering
 	\subfloat[]{
-		\includegraphics[width=.49\linewidth]{img/priority1}
+		\includegraphics[width=.48\linewidth]{img/priority1}
 	}
 	\subfloat[]{
-		\includegraphics[width=.49\linewidth]{img/priority2}
+		\includegraphics[width=.48\linewidth]{img/priority2}
 	}
 	\caption{Effect of the right of way. \emph{Left}: when trained on a non-priority road, the agent learns to yield to incoming vehicles. \emph{Right}: when trained on a priority road, the agent expects other vehicles to give way and is consequently more aggressive.}
 	\label{fig:priority}

@@ -50,14 +50,14 @@ Our goal is to design a robust model predictive control for \eqref{eq:dynamics},
 \begin{figure}[t]
 	\centering
 	\includegraphics[trim={0 2cm 0 0}, clip, width=0.6\linewidth]{img/ellipsoid}
-	\caption{The model estimation procedure, running on the obstacle avoidance problem of \autoref{sec:experiments}. The confidence region $C_{[N],\delta}$ shrinks with the number of samples $N$.}
+	\caption{The model estimation procedure, running on the obstacle avoidance problem of \autoref{sec:interval-experiments}. The confidence region $C_{[N],\delta}$ shrinks with the number of samples $N$.}
 	\label{fig:estimation}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/obstacle_small}
-	\caption{The state prediction procedure running on the obstacle avoidance problem of \autoref{sec:experiments}. At each time step (red to green), we bound the set of reachable states under model uncertainty \eqref{eq:confidence}}
+	\caption{The state prediction procedure running on the obstacle avoidance problem of \autoref{sec:interval-experiments}. At each time step (red to green), we bound the set of reachable states under model uncertainty \eqref{eq:confidence}}
 	\label{fig:prediction}
 \end{figure}
 
@@ -104,7 +104,7 @@ The \autoref{alg:full} shows the full integration of the three procedures of est
 
 \paragraph{Model selection} In \autoref{sec:multi-model}, our forth contribution extends the proposed framework to consider multiple modelling assumptions, while narrowing uncertainty through data-driven model rejection, and still ensuring safety via robust model-selection during planning.
 
-\paragraph{Experiments} Finally, in \autoref{sec:experiments} we demonstrate the applicability of our proposed \autoref{alg:full} in two numerical experiments. First, a simple illustrative example and then, a more challenging simulation for safe autonomous driving.
+\paragraph{Experiments} Finally, in \autoref{sec:interval-experiments} we demonstrate the applicability of our proposed \autoref{alg:full} in two numerical experiments. First, a simple illustrative example and then, a more challenging simulation for safe autonomous driving.
 
 \begin{algorithm}[tb]
 	\caption{Robust Estimation, Prediction and Control}
@@ -328,7 +328,8 @@ The objective of this paper is to propose an interval predictor for linear time-
 
 The paper is organized as follows. An introduction to the theory of interval estimation for LTI systems is given in Section \ref{sec:Preliminaries}. The problem statement and a motivating example are introduced in Section \ref{sec:Problem-statement}. An improved interval predictor is presented in Section \ref{sec:Main-results}. The asymptotic accuracy is enhanced using frequency based estimation in Section \ref{sec:Frequency}. Application of the developed theory to the problem of path planning for an autonomous vehicle is shown in Section \ref{sec:Examples}.
 
-\subsubsection{\label{sec:Preliminaries} Preliminaries}
+\subsubsection{Preliminaries}
+\label{sec:Preliminaries}
 
 We denote the real numbers  by $\mathbb{R}$, the integers by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\cap\Real_{+}$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted as $|x|$, and for a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$ the symbol $||u||_{[t_{0},t_{1}]}$ denotes its $L_{\infty}$ norm:
 \[
@@ -384,7 +385,8 @@ This result allows to represent the system \eqref{eq:LTI_syst} in its nonnegativ
 \end{lemma}
 In the last lemma, the existence of similarity transformation is proven for an interval of matrices, \emph{e.g}. in the case of LPV dynamics.
 
-\subsubsection{\label{sec:Problem-statement} Problem statement}
+\subsubsection{Problem statement}
+\label{sec:Problem-statement}
 
 Consider an LPV system:
 \begin{equation}
@@ -450,7 +452,8 @@ then it is obvious to verify that the relations \eqref{eq:Interval_Goal} are sat
 	\end{figure}
 \end{example*}
 
-\subsection{\label{sec:Main-results} Interval predictor design}
+\subsection{Interval predictor design}
+\label{sec:Main-results}
 
 Note that, in related papers \cite{AitRami2008,RVZ10,Bolajraf2011,Efimov_a2013,Efimov_tac2013,Chebotarev2015}, various interval observers for LPV systems have been proposed, but in those works the cooperativity and stability of the estimation error dynamics are ensured by a proper selection of observer gains and/or by design of control algorithms, which can be dependent on $\underline{x}$, $\overline{x}$ and guarantee the observer robust stability. For interval predictor there is no such a freedom, then a careful selection of hypotheses has to be made in order to provide a desired solution.
 We will additionally assume the following:
@@ -478,10 +481,8 @@ then the following interval predictor can be designed:
 	\begin{leftbar}[theorembar]
 	Let assumptions \ref{ass:a1}\textendash \ref{ass:a3} be satisfied for the system \eqref{eq:LPV_syst}, then an interval predictor
 	\begin{eqnarray}
-	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)\nonumber \\
-	&  & +B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:IP_main}\\
-	\dot{\overline{x}}(t) & = & A_{0}\overline{x}(t)+\Delta A_{+}\overline{x}^{+}(t)+\Delta A_{-}\underline{x}^{-}(t)\nonumber \\
-	&  & +B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
+	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)  +B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:interval-predictor}\\
+	\dot{\overline{x}}(t) & = & A_{0}\overline{x}(t)+\Delta A_{+}\overline{x}^{+}(t)+\Delta A_{-}\underline{x}^{-}(t)  +B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
 	&  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0}\nonumber 
 	\end{eqnarray}
 	ensures the property \eqref{eq:Interval_Goal}. If there exist diagonal matrices $P$, $Q$, $Q_{+}$, $Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2n\times2n}$ such that the following LMIs are satisfied:
@@ -511,7 +512,7 @@ then the following interval predictor can be designed:
 		-\Delta A_{-} & 0
 		\end{array}\right],
 		\end{gather*}
-	}then the predictor \eqref{eq:IP_main} is input-to-state stable with respect to the inputs $\underline{d}$, $\overline{d}$.
+	}then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{d}$, $\overline{d}$.
 \end{leftbar}
 \end{theorem}
 Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \cite{FarinaRinaldi2000}.
@@ -542,7 +543,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\end{gather*}
 	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:Interval_Goal} holds and due to the calculations above. Note that the relations \eqref{eq:Interval_Goal} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \cite{Smith95}, which confirms the relations \eqref{eq:Interval_Goal}.
 	
-	Second, let us consider the stability of \eqref{eq:IP_main}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation:
+	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation:
 	\[
 	\dot{X}(t)=\mathcal{A}X(t)+R_{+}X^{+}(t)-R_{-}X^{-}(t)+\delta(t),
 	\]
@@ -603,7 +604,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\[
 	\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
 	\]
-	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:IP_main} is input-to-state stable \cite{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
+	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \cite{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
 \end{proof}
 \begin{remark}
 	\begin{leftbar}[remarkbar]
@@ -621,7 +622,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-	Assume that $-\underline{d}=\overline{d}=const\ne0$ and the conditions of Theorem \ref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:IP_main} takes the form for sufficiently high values of $t\geq0$:
+	Assume that $-\underline{d}=\overline{d}=const\ne0$ and the conditions of Theorem \ref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:interval-predictor} takes the form for sufficiently high values of $t\geq0$:
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & (A_{0}-\Delta A_{+})\underline{x}(t)-\Delta A_{-}\overline{x}(t)\\
 		&  & +B^{+}\underline{d}-B^{-}\overline{d},\\
@@ -647,7 +648,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\end{leftbar}
 \end{remark}
 \begin{example*}
-	[motivating, continue] Let us apply the predictor \eqref{eq:IP_main}
+	[motivating, continue] Let us apply the predictor \eqref{eq:interval-predictor}
 	to the motivation example:
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & -\overline{\theta}\underline{x}(t)-(\overline{\theta}-\underline{\theta})\underline{x}^{-}(t)+\underline{d},\\
@@ -658,14 +659,14 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 		\begin{centering}
 			\includegraphics[width=\linewidth]{img/predictor}
 			\par\end{centering}
-		\caption{\label{fig:IP_New} The results of prediction by \eqref{eq:IP_main}: the new predictor is stable and produces tight bounds.}
+		\caption{\label{fig:IP_New} The results of prediction by \eqref{eq:interval-predictor}: the new predictor is stable and produces tight bounds.}
 	\end{figure}
 \end{example*}
 
 
 \subsection{Frequency based interval estimation}
 \label{sec:Frequency}
-The domain of convergence of the linear system \eqref{eq:linear-asympt}, and hence of \eqref{eq:IP_main}, can be tightened under an additional hypothesis that $d(t)$ has a known and bounded frequency spectrum.
+The domain of convergence of the linear system \eqref{eq:linear-asympt}, and hence of \eqref{eq:interval-predictor}, can be tightened under an additional hypothesis that $d(t)$ has a known and bounded frequency spectrum.
 Assume that there exist two signals $\underline{\omega},\overline{\omega}:\Real_{+}\to\Real^{q}$ and two vectors $\underline{x}_{0},\overline{x}_{0}\in\Real^{n}$ such that
 \begin{gather*}
 \underline{\omega}(t)\leq\omega(t)\leq\overline{\omega}(t),\quad\forall t\geq0,\\
@@ -733,8 +734,8 @@ The interval observer \eqref{eq:IO_LTI}, if we assume that $\overline{\omega}(t)
 	\end{figure}
 \end{example*}
 
-\subsection{\label{sec:Examples} Prediction for a self-driving vehicle}
-
+\subsection{Prediction for a self-driving vehicle}
+\label{sec:Examples}
 We consider the problem of safe decision-making for autonomous highway driving \cite{highway-env}. The videos and source code of all experiments are available\footnote{\href{https://eleurent.github.io/interval-prediction/}{https://eleurent.github.io/interval-prediction/}}.
 
 An autonomous vehicle is driving on a highway populated with $N$ other agents, and uses Model Predictive Control to plan a sequence of decisions. To that end, it relies on parametrized dynamical model for each agent to predict the future trajectory of each traffic participant: $$\dot{z}_i=f_i(Z,\theta_i),\;i=\overline{1,N},$$ where $f_i$ are described below, $z_i\in\Real^4$ is the state of an agent, $Z = [z_1,\dots,z_N]^\top\in\Real^{4N}$ and $\theta_i\in\Real^5$ is the corresponding vector of unknown parameters. Crucially, this system describes the couplings and interactions between vehicles, so that the autonomous agent can properly anticipate their reactions. 
@@ -866,7 +867,7 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 		\label{sub:hw-a}
 	}
 
-	\subfloat[The proposed predictor \eqref{eq:IP_main} remains stable]{
+	\subfloat[The proposed predictor \eqref{eq:interval-predictor} remains stable]{
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/driving_predictor.png}
 		\label{sub:hw-b}
@@ -889,7 +890,7 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 \end{figure}
 
 
-We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:IP_direct} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \cite{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \cite{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:IP_main} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
+We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:IP_direct} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \cite{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \cite{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
 
 \subsection*{Conclusion}
 
@@ -1067,7 +1068,7 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \autoref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $A(\theta)\in\cC_{[N],\delta}$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \autoref{thm:control-error}. Finally, the two approaches of Sections \ref{sec:control} and \ref{sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
-\label{sec:experiments}
+\label{sec:interval-experiments}
 
 \paragraph{Obstacle avoidance with unknown friction}
 We first consider a simple illustrative example, shown in \autoref{fig:prediction}: the control of a 2D system with position $(p_x,p_y)$ and velocity $(v_x, v_y)$ moving by means of a force $(u_x, u_y)$ in an environment with unknown anisotropic friction.
