@@ -91,9 +91,6 @@ Convenient framework for analysis, but it's often too narrow a frame for the rea
 
 \section{States and partial observability}
 
-The MDP framework is based on the hypothesis that the agent has access to its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements \citep{Ulbrich2013,Du2010}. Worse, parts of the state may be missing altogether, as is the case when a scene entity is occulted by an obstacle, as shown in \Cref{fig:po-occlusion}. \citep{Brechtel2013,Bouton2018}
-
-
 \begin{figure}[tp]
 	\centering
 	\subfloat["Area of potential danger". A partial observability stemming from sensor occlusion in a turn.]{
@@ -113,26 +110,20 @@ The MDP framework is based on the hypothesis that the agent has access to its ow
 	\label{fig:information-seeking}
 \end{figure}
 
+The MDP framework is based on the hypothesis that the agent has access to its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements \citep{Ulbrich2013,Du2010}. Worse, parts of the state may be missing altogether, as is the case when a scene entity is occulted by an obstacle \citep[\eg][]{Brechtel2013,Bouton2018,Sun2019}, as shown in \Cref{fig:po-occlusion}. To account for these difficulties, the concept of a \emph{Partially Observable} Markov Decision Process (POMDP) was introduced in \citep{Astrom1965}, extending the MDP framework with two additional quantities: an observation space $\Omega$, and an measurement model $O$ such that the observation $o\in\Omega$ is observed at state $s'$ with the conditional probability $O\parentheses{o\mid s',a}$. At each time step $t$, a belief $b_t\in\cM(\cS)$ over the state $s_t\in \cS$ is updated by performing Bayesian Filtering to compute the posterior state distribution:
+\begin{equation*}
+b_{t+1}(s_{t+1}) = \frac{O(o_t|s_{t+1}, a_t)\sum_{s_{t}\in\cS}P\parentheses{s_{t+1} \mid s_t, a_t}b_t(s_t)}{\sum_{s\in\cS} O(o_t|s, a_t)\sum_{s_{t}\in\cS}P\parentheses{s \mid s_t, a_t}b_t(s_t)}.
+\end{equation*}
+By conditioning the policy $\pi(a_t|b_t)$ on the belief $b_t$, the POMDP framework allows to optimally balance between information gathering and task completion, as shown in \Cref{fig:information-seeking}. However, there is a price to pay: the belief space $\cM(\cS)$ is much larger than the state space $\cS$ (\eg continuous of dimension $n$ when $\cS$ is finite of size $n$), which drastically increases the planning complexity. Exact solutions exist when $\cS$ is finite \citep{Pineau2003}, and approximate ones when it is compact \citep{Porta2006,Silver2010}. Even the belief update is intractable in general, when $\cS$ is compact. In the case of linear dynamics and Gaussian measurement noise, the belief update is known as Kalman Filtering \citep{Kalman1960}. It has been applied in the context of quadratic costs --the so-called LQG problem-- which enables efficient computation of the optimal policy \citep[see e.g.][]{VanDenBerg2011}. The more complex observation model of sensor occlusion is handled in \citep[e.g.][]{Sun2019}, in which the observed behaviour of nearby vehicles is used to infer the presence of potentially occluded pedestrians. Taking into account state uncertainty naturally lead to more conservative behaviours, as observed in \citep{Brechtel2013} where a vehicle reaching an intersection with a moving occluded obstacle is required to brake.
 
-The POMDP framework allows to optimally balances information gathering
-and task completion.
-1 Provide an observation model
-2 Perform bayesian filtering to update a belief state.
 
-Belief state propagation: .
-e.g. LQG systems with linear dynamics and gaussian noise: belief update = Kalman filtering \citep{VanDenBerg2011}
-
-This can be difficult if the observation model is complex, in particular with occlusions. \citet{Sun2019} use the behaviour of nearby vehicles to infer the presence of potentially occluded pedestrians.
-
-3 Plan in the belief space
 Algo: PBVI, POMCP
 
 
 \citep{Brechtel2011}
-- Planning at an intersection with a moving occluded obstacle (8D system): learn a policy that brakes when reaching an intersection \citep{Brechtel2013}
 - ?? : \citep{Brechtel2014}
 
-Also Uncertainty in the intentions of other agents, cf \Cref{fig:information-seeking}.
+Also Uncertainty in the intentions of other agents, cf .
 
 - The other drivers locations are observed but not their intentions \citep{Bandyopadhyay2013}. MOMDP framework.
 - [ Probabilistic Decision-Making at Road Intersections: Formulation and Quantitative Evaluation ]

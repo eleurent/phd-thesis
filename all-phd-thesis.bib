@@ -473,6 +473,20 @@
 	year = {2017}
 }
 
+@article{Astrom1965,
+	author       = {Åström, Karl Johan},
+	issn         = {0022-247X},
+	language     = {eng},
+	pages        = {174--205},
+	publisher    = {Elsevier},
+	series       = {Journal of Mathematical Analysis and Applications},
+	title        = {Optimal Control of Markov Processes with Incomplete State Information I},
+	url          = {https://lup.lub.lu.se/search/ws/files/5323668/8867085.pdf},
+	doi          = {10.1016/0022-247X(65)90154-X},
+	volume       = {10},
+	year         = {1965},
+}
+
 @inproceedings{Ulbrich2013,
 	abstract = {The Stadtpilot project aims at fully automated driving on Braunschweig's inner city ring road. The TU Braunschweig's research vehicle 'Leonie' is one of the first vehicles having the ability of fully automated driving in real urban traffic scenarios. This paper shows our decision making approach for performing lane changes while driving fully automated in urban environments. We apply an online Partially Observable Markov Decision Process (POMDP) to accommodate inevitable sensor noise to be faced in urban traffic scenarios. In this paper we propose a two step algorithm to keep the complexity of the POMDP low enough for real-time decision making while driving. The presented approach has been integrated in our vehicle and was evaluated in real urban traffic. {\textcopyright} 2013 IEEE.},
 	author = {Ulbrich, Simon and Maurer, Markus},
@@ -599,6 +613,45 @@
 	issn = {2330765X},
 	title = {{Planning for autonomous cars that leverage effects on human actions}},
 	year = {2016}
+}
+
+@inproceedings{Pineau2003,
+	abstract = {This paper introduces the Point-Based Value Iteration (PBVI) algorithm for POMDP planning. PBVI approximates an exact value iteration solution by selecting a small set of representative belief points and then tracking the value and its derivative for those points only. By using stochastic trajectories to choose belief points, and by maintaining only one value hyper-plane per point, PBVI successfully solves large problems: we present results on a robotic laser tag problem as well as three test domains from the literature.},
+	author = {Pineau, Joelle and Gordon, Geoff and Thrun, Sebastian},
+	booktitle = {IJCAI International Joint Conference on Artificial Intelligence},
+	issn = {10450823},
+	title = {{Point-based value iteration: An anytime algorithm for POMDPs}},
+	year = {2003}
+}
+
+@article{Porta2006,
+	abstract = {We propose a novel approach to optimize Partially Observable Markov Decisions Processes (POMDPs) defined on continuous spaces. To date, most algorithms for model-based POMDPs are restricted to discrete states, actions, and observations, but many real-world problems such as, for instance, robot navigation, are naturally defined on continuous spaces. In this work, we demonstrate that the value function for continuous POMDPs is convex in the beliefs over continuous state spaces, and piecewise-linear convex for the particular case of discrete observations and actions but still continuous states. We also demonstrate that continuous Bellman backups are contracting and isotonic ensuring the monotonic convergence of value-iteration algorithms. Relying on those properties, we extend the PERSEUS algorithm, originally developed for discrete POMDPs, to work in continuous state spaces by representing the observation, transition, and reward models using Gaussian mixtures, and the beliefs using Gaussian mixtures or particle sets. With these representations, the integrals that appear in the Bellman backup can be computed in closed form and, therefore, the algorithm is computationally feasible. Finally, we further extend PERSEUS to deal with continuous action and observation sets by designing effective sampling approaches.},
+	author = {Porta, Josep M. and Vlassis, Nikos and Spaan, Matthijs T.J. and Poupart, Pascal},
+	doi = {10.13039/501100000780},
+	issn = {15337928},
+	journal = {Journal of Machine Learning Research},
+	keywords = {Continuous action space,Continuous observation space,Continuous state space,Partially observable Markov decision processes,Planning under uncertainty,Point-based value iteration},
+	title = {{Point-based value iteration for continuous POMDPs}},
+	year = {2006}
+}
+
+@inproceedings{Silver2010,
+	abstract = {This paper introduces a Monte-Carlo algorithm for online planning in large POMDPs. The algorithm combines a Monte-Carlo update of the agent's belief state with a Monte-Carlo tree search from the current belief state. The new algorithm, POMCP, has two important properties. First, Monte-Carlo sampling is used to break the curse of dimensionality both during belief state updates and during planning. Second, only a black box simulator of the POMDP is required, rather than explicit probability distributions. These properties enable POMCP to plan effectively in significantly larger POMDPs than has previously been possible. We demonstrate its effectiveness in three large POMDPs. We scale up a well-known benchmark problem, rocksample, by several orders of magnitude. We also introduce two challenging new POMDPs: 10 × 10 battleship and partially observable PacMan, with approximately 10 18 and 10 56 states respectively. Our Monte-Carlo planning algorithm achieved a high level of performance with no prior knowledge, and was also able to exploit simple domain knowledge to achieve better results with less search. POMCP is the first general purpose planner to achieve high performance in such large and unfactored POMDPs.},
+	author = {Silver, David and Veness, Joel},
+	booktitle = {Advances in Neural Information Processing Systems 23: 24th Annual Conference on Neural Information Processing Systems 2010, NIPS 2010},
+	isbn = {9781617823800},
+	title = {{Monte-Carlo planning in large POMDPs}},
+	year = {2010}
+}
+
+@article{Kalman1960,
+	abstract = {The classical filtering and prediction problem is re-examined using the Bode-Sliannon representation of random processes and the “state-transition” method of analysis of dynamic systems. New results are: (1) The formulation and methods of solution of the problem apply without modification to stationary and nonstationary statistics and to growing-memory and infinitememory filters. (2) A nonlinear difference (or differential) equation is derived for the covariance matrix of the optimal estimation error. From the solution of this equation the coefficients of the difference (or differential) equation of the optimal linear filter are obtained without further calculations. (3) The filtering problem is shown to be the dual of the noise-free regulator problem. The new method developed here is applied to two well-known problems, confirming and extending earlier results. The discussion is largely self-contained and proceeds from first principles; basic concepts of the theory of random processes are reviewed in the Appendix. {\textcopyright} 1960 by ASME.},
+	author = {Kalman, R. E.},
+	doi = {10.1115/1.3662552},
+	issn = {1528901X},
+	journal = {Journal of Fluids Engineering, Transactions of the ASME},
+	title = {{A new approach to linear filtering and prediction problems}},
+	year = {1960}
 }
 
 @inproceedings{VanDenBerg2017,
