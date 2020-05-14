@@ -628,6 +628,8 @@ supported!}
 % Moved below other usepackage definitions to fix PDFLaTeX footnote warning
 % Based on the suggestion by John Plaice
 
+\RequirePackage{float}
+
 \ifsetDVI
   \special{papersize=\the\paperwidth,\the\paperheight}
   \RequirePackage[unicode=true]{hyperref}  % extra option dvips
