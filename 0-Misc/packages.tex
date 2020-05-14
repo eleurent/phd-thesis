@@ -127,14 +127,6 @@
 \renewcommand{\nomname}{Abbreviations and Notations}
 
 % --- User Defined
-% \renewcommand{\partname}{Partie}
-% \renewcommand{\chaptername}{Chapitre}
-% \renewcommand{\listfigurename}{Liste des Figures}
-% \renewcommand{\listtablename}{Liste des Tableaux}
-% \renewcommand{\listlistingname}{Liste des Exemples de Programmes}
-% \renewcommand{\appendixtocname}{Liste des Annexes}
-% \renewcommand{\appendixname}{Annexe}
-
 \newcommand*{\everymodeprime}{\ensuremath{\prime}}
 
 % --- Table of Content
@@ -147,15 +139,6 @@
 % --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
 
 \usepackage{framed}
-%\usepackage[chapter,draft=false,final=true]{minted}
-
-% https://tex.stackexchange.com/a/64845/97964
-%\renewcommand{\listingscaption}{Code Example}% Listing -> Code Example
-%\renewcommand{\listoflistingscaption}{List of Code Examples}% List of Listings -> List of Code Examples
-
-% % https://tex.stackexchange.com/a/64845/97964
-% \renewcommand{\lstlistingname}{Code example}% Listing -> Algorithm
-% \renewcommand{\lstlistlistingname}{List of \lstlistingname s}% List of Listings -> List of Algorithms
 
 % --- To Do notes
 \ifsetDraft
@@ -171,10 +154,15 @@
 	\newcommand{\FIXME}[1]{}
 \fi
 
+% --- Remove some warnings ---
+%\pdfoptionpdfminorversion=7
+\usepackage{silence}
+\pdfsuppresswarningpagegroup=1
+\WarningFilter{minitoc(hints)}{W0023}
+\WarningFilter{minitoc(hints)}{W0028}
+\WarningFilter{minitoc(hints)}{W0030}
+
 %% Theorem English
-%\newtheorem{theorem}{Théorème}[chapter]
-%\newtheorem{lemma}{Lemme}[chapter]
-% \newtheorem{proposition}{Proposition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{assumption}[theorem]{Assumption}
 \newtheorem{claim}[theorem]{Claim}
@@ -187,13 +175,6 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 
-%\addto\captionsfrench{\def\figurename{{Figure}}}
-%\addto\captionsfrench{\def\tablename{{Tableau}}}
-%\addto\captionsfrench{\def\ALG@mname{{Tableau}}}
-% \makeatletter
-%\renewcommand{\ALG@name}{Algorithme}
-% \makeatother
-% \makeatletter
 \newcommand{\clearevenpage}{%
 	\clearpage%
 	\if@twoside%
@@ -235,18 +216,6 @@
 }
 \makeatother
 
-% https://tex.stackexchange.com/questions/25137/how-to-change-the-background-color-only-for-the-current-page
-% \usepackage{afterpage}% for "\afterpage"
-% \usepackage{pagecolor}% With option pagecolor={somecolor or none}
-% \newcommand{\colorthispage}[1]{
-% 	\newpagecolor{#1}%
-% 	\afterpage{\restorepagecolor}%
-% }
-% \newcommand{\emptycolorpage}[1]{
-% 	\newpagecolor{#1}%
-% 	\newpage%
-% 	\afterpage{\restorepagecolor}%
-% }
 % FIXME comment or uncomment if you need to compress the document
 \newcommand{\emptycolorpage}[1]{
 	% \null
@@ -280,23 +249,3 @@
 \pagecolor{white}
 \usepackage{pdfpages}
 
-
-% \usepackage{ifxetex,ifluatex}
-% \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0% if pdftex
-% 	\usepackage[T1]{fontenc}
-% 	\usepackage[utf8]{inputenc}
-% \else% if luatex or xelatex
-% 	\ifxetex
-% 		\usepackage{mathspec}
-% 	\else
-% 		\usepackage{fontspec}
-% 	\fi
-% 	\defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-% \fi
-% % use upquote if available, for straight quotes in verbatim environments
-% \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% % use microtype if available
-% \IfFileExists{microtype.sty}{%
-% \usepackage{microtype}
-% \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-% }{}
