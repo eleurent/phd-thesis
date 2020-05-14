@@ -38,12 +38,10 @@
 	\input{1-Preamble/preambles}
 
 	% *************************** TOC & Nomenclature ****************************
-	% \begin{small}   % XXX
-		\begin{spacing}{1}
-			\dominitoc
-			\tableofcontents
-		\end{spacing}
-	% \end{small}   % XXX
+	\begin{spacing}{1}
+		\dominitoc
+		\tableofcontents
+	\end{spacing}
 
 	% *************** Chapters ****************
 	\mainmatter
@@ -77,11 +75,6 @@
 		\listofalgorithms
 		\addcontentsline{toc}{chapter}{List of Algorithms}
 		\let\cleardoublepage\clearpage%
-%		\begin{spacing}{1.50}%
-%			\listoflistings
-%			\addcontentsline{toc}{chapter}{List of Code Examples}
-%		\end{spacing}
-		\let\cleardoublepage\clearpage%
 		\listoftables
 	}
 	\end{spacing}
@@ -93,7 +86,7 @@
 %		\bibliographystyle{plainnat}
 		\cleardoublepage
 		% \nocite{*}
-		\bibliography{all-phd-thesis}
+		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2}
 
 		\vfill{}
 		\hr{}		
