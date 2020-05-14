@@ -419,20 +419,18 @@ Note that since the function $A$ and the set $\Pi$ are known, and $\theta\in\Pi$
 
 The objective of this work is to design an \emph{interval predictor} for the system \eqref{eq:LPV_syst}, which takes the information on the initial conditions $[\underline{x}_{0},\overline{x}_{0}]$, the admissible bounds on the values of the exogenous input $[\underline{d}(t),\overline{d}(t)]$, the information about $A$ and $\Pi$ (\emph{e.g}. the matrices $\underline{A},\overline{A}$, but not the instant value of $\theta(t)$) and generates bounded interval estimates $\underline{x}(t),\overline{x}(t)\in\Real^{n}$ such that
 \begin{equation}
-\underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.\label{eq:Interval_Goal}
+\underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.\label{eq:inclusion-property}
 \end{equation}
 
 \subsubsection{A motivation example}
 
 Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem used in \cite{Leurent2018}:
 \begin{eqnarray}
-\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)\nonumber \\
-&  & +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:IP_direct}\\
-\dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t)\nonumber \\
-&  & +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
+\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:IP_direct}\\
+\dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
 &  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0},\nonumber 
 \end{eqnarray}
-then it is obvious to verify that the relations \eqref{eq:Interval_Goal} are satisfied, but the stability analysis of the system \eqref{eq:IP_direct} is more tricky. Indeed, \eqref{eq:IP_direct} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:IP_direct} is not:
+then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:IP_direct} is more tricky. Indeed, \eqref{eq:IP_direct} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:IP_direct} is not:
 \begin{example*}
 	[motivating] Consider a scalar system:
 	\[
@@ -485,7 +483,7 @@ then the following interval predictor can be designed:
 	\dot{\overline{x}}(t) & = & A_{0}\overline{x}(t)+\Delta A_{+}\overline{x}^{+}(t)+\Delta A_{-}\underline{x}^{-}(t)  +B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
 	&  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0}\nonumber 
 	\end{eqnarray}
-	ensures the property \eqref{eq:Interval_Goal}. If there exist diagonal matrices $P$, $Q$, $Q_{+}$, $Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2n\times2n}$ such that the following LMIs are satisfied:
+	ensures the property \eqref{eq:inclusion-property}. If there exist diagonal matrices $P$, $Q$, $Q_{+}$, $Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2n\times2n}$ such that the following LMIs are satisfied:
 	\begin{gather*}
 	P+\min\{Z_{+},Z_{-}\}>0,\;\Upsilon\preceq0,\;\Gamma>0,\\
 	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
@@ -517,7 +515,7 @@ then the following interval predictor can be designed:
 \end{theorem}
 Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \cite{FarinaRinaldi2000}.
 \begin{proof}
-	First, let us demonstrate \eqref{eq:Interval_Goal}, to this end note that
+	First, let us demonstrate \eqref{eq:inclusion-property}, to this end note that
 	\[
 	-\Delta A_{i}^{-}\leq\lambda_{i}\Delta A_{i}=\lambda_{i}\Delta A_{i}^{+}-\lambda_{i}\Delta A_{i}^{-}\leq\Delta A_{i}^{+}
 	\]
@@ -541,7 +539,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\overline{r}_{1}=\Delta A_{+}\overline{x}^{+}+\Delta A_{-}\underline{x}^{-}-\sum_{i=1}^{N}\lambda_{i}\Delta A_{i}x,\\
 	\overline{r}_{2}=B^{+}\overline{d}-B^{-}\underline{d}-Bd.
 	\end{gather*}
-	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:Interval_Goal} holds and due to the calculations above. Note that the relations \eqref{eq:Interval_Goal} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \cite{Smith95}, which confirms the relations \eqref{eq:Interval_Goal}.
+	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:inclusion-property} holds and due to the calculations above. Note that the relations \eqref{eq:inclusion-property} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \cite{Smith95}, which confirms the relations \eqref{eq:inclusion-property}.
 	
 	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation:
 	\[
@@ -1101,7 +1099,9 @@ We first consider a simple illustrative example, shown in \autoref{fig:predictio
 \end{bmatrix}
 \end{equation*}
 
-Note that \autoref{assumpt:metzler} is always verified. The reward is non-smooth and encodes the task of navigating to reach a goal state $x_g$ while avoiding collisions with obstacles: $R(x) = \delta(x)/(1 + \|x - x_g\|_2)$  where $\delta(x)$ is $0$ whenever $x$ collides with an obstacle, $1$ otherwise. The actions $\cA$ are constant controls in the up, down, left and right directions.
+
+% TODO: \autoref{assumpt:metzler}
+Note that the Metzler assumption for $A_0$ is always verified. The reward is non-smooth and encodes the task of navigating to reach a goal state $x_g$ while avoiding collisions with obstacles: $R(x) = \delta(x)/(1 + \|x - x_g\|_2)$  where $\delta(x)$ is $0$ whenever $x$ collides with an obstacle, $1$ otherwise. The actions $\cA$ are constant controls in the up, down, left and right directions.
 
 We run \autoref{alg:full} for 100 simulations, and compare in \autoref{tab:obstacle} its performances to that of the nominal agent, i.e. the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \gamma^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \autoref{fig:regret}, along with its 95\% confidence interval. We see that \autoref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \autoref{thm:control-error}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all time. In contrast, the nominal agent has an even smaller regret but collided with obstacles in $4\%$ of simulations.
 
