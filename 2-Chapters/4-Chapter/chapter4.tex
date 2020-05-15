@@ -356,13 +356,15 @@ The agent decisions regarding right of way are not enforced through rewards but 
 
 \begin{figure}[htp]
 	\centering
-	\subfloat[test1]{
-		\includegraphics[width=.48\linewidth]{img/priority1}
-	}
-	\subfloat[test2]{
-		\includegraphics[width=.48\linewidth]{img/priority2}
-	}
-	\caption{Effect of the right of way. \emph{Left}: when trained on a non-priority road, the agent learns to yield to incoming vehicles. \emph{Right}: when trained on a priority road, the agent expects other vehicles to give way and is consequently more aggressive.}
+	\begin{subfigure}[b]{0.48\linewidth}
+		\includegraphics[width=\linewidth]{img/priority1}
+		\caption{When trained on a non-priority road, the agent learns to yield to incoming vehicles.}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.48\linewidth}
+		\includegraphics[width=\linewidth]{img/priority2}
+		\caption{When trained on a priority road, the agent expects other vehicles to give way and is consequently more aggressive.}
+	\end{subfigure}
+	\caption{Effect of the right of way.}
 	\label{fig:priority}
 \end{figure}
 
