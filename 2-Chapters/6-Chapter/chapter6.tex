@@ -594,29 +594,31 @@ They are evaluated on the following tasks, using a discount factor of $\gamma=0.
 
 \begin{figure}[pth]
 	\centering
-	\subfloat{
+	\begin{subfigure}[b]{0.8\linewidth}
 		\includegraphics[width=\textwidth]{img/hw_return_svg-tex}
+		\caption{Highway}
 		\label{sub:highway}
-	}
+	\end{subfigure}
 	\newline
-	\subfloat{
-		\includegraphics[width=0.49\textwidth]{img/gw_return_svg-tex}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\textwidth]{img/gw_return_svg-tex}
+		\caption{Gridworld}
 		\label{sub:gridworld}
-	}
-	\subfloat{
-		\includegraphics[width=0.49\textwidth]{img/gw_stoch_return_svg-tex}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\textwidth]{img/gw_stoch_return_svg-tex}
+		\caption{Stochastic Gridworld}
 		\label{sub:gridworld_stoch}
-	}
+	\end{subfigure}
 	\caption{Numerical experiments: for each environment-agent configuration, we compute the average return over 100 runs –- along with its 95\% confidence interval –- with respect to the available budget $n$.}
 	\label{fig:experiments}
-	%\end{minipage}
 \end{figure}
 
 \begin{figure}[pth]
 	\centering
 	
-	\includegraphics[width=0.64\textwidth]{img/tree_OPD_svg-tex} \includegraphics[width=0.64\textwidth]{img/tree_OLOP_svg-tex}
-	\includegraphics[width=0.64\textwidth]{img/tree_KL-OLOP_svg-tex}
+	\includegraphics[width=0.6\textwidth]{img/tree_OPD_svg-tex} \includegraphics[width=0.6\textwidth]{img/tree_OLOP_svg-tex}
+	\includegraphics[width=0.6\textwidth]{img/tree_KL-OLOP_svg-tex}
 	
 	\caption{The look-ahead trees (down to depth 6) expanded by the planning algorithms from the same initial state in the highway environment with the same budget $n=10^3$. The width of edges represents the nodes visit count $T_a(M)$.}
 	\label{fig:trees}

@@ -859,29 +859,30 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 
 \begin{figure}
 	\begin{center}
-	\subfloat[The naive predictor \eqref{eq:IP_direct} quickly diverges]{
+	\begin{subfigure}[b]{0.8\linewidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/driving_observer.png}
+		\caption{The naive predictor \eqref{eq:IP_direct} quickly diverges}
 		\label{sub:hw-a}
-	}
-
-	\subfloat[The proposed predictor \eqref{eq:interval-predictor} remains stable]{
+	\end{subfigure}
+	\begin{subfigure}[b]{0.8\linewidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/driving_predictor.png}
+		\caption{The proposed predictor \eqref{eq:interval-predictor} remains stable}
 		\label{sub:hw-b}
-	}
-
-	\subfloat[Prediction during a lane change maneuver]{
+	\end{subfigure}
+	\begin{subfigure}[b]{0.8\linewidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/lane_change_predictor.png}
+		\caption{Prediction during a lane change maneuver}
 		\label{sub:hw-c}
-	}
-
-	\subfloat[Prediction with uncertainty in the followed lane $L_i$]{
+	\end{subfigure}
+	\begin{subfigure}[b]{0.8\linewidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/overtake.png}
+		\caption{Prediction with uncertainty in the followed lane $L_i$}
 		\label{sub:hw-d}
-	}
+	\end{subfigure}
 	\end{center}
 	\caption{State intervals obtained by the two methods in different conditions.}
 	\label{fig:highway}

@@ -288,15 +288,15 @@ In stark contrast, the \EgoAtt policy quickly learns both when it must slow down
 
 \begin{figure}[htp]
 	\centering
-	\subfloat{
-		\includegraphics[width=.6\linewidth]{img/total_reward}
-	}\\
-	\subfloat{
-		\includegraphics[width=.6\linewidth]{img/length}
-	}\\
-	\subfloat{
-		\includegraphics[width=.6\linewidth]{img/velocity}
-	}
+	\begin{subfigure}[b]{0.6\linewidth}
+		\includegraphics[width=\linewidth]{img/total_reward}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/length}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/velocity}
+	\end{subfigure}
 	\caption{The episode total rewards, lengths, and average velocity (higher is better). We display the mean values -- along with their 95\% confidence interval -- averaged over 120 random seeds.}
 	\label{fig:attention-results}
 \end{figure}
@@ -325,13 +325,15 @@ In any given state, the attention matrix can be visualised in the following way:
 
 \begin{figure}[tp]
 	\centering
-	\subfloat{
-		\includegraphics[width=.4\linewidth]{img/watch1}
-	}
-	\subfloat{
-		\includegraphics[width=.4\linewidth]{img/watch2}
-	}
-	\caption{Sensitivity to uncertainty. \emph{Left}: the agent has stopped at the intersection, its attention is focused on an incoming vehicle whose destination is still uncertain. \emph{Right}: as soon as the vehicle orientation changes, revealing its intention of turning right, the attention drops and the agent starts accelerating right away.}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{img/watch1}
+		\caption{The agent has stopped at the intersection, its attention is focused on an incoming vehicle whose destination is still uncertain.}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{img/watch2}
+		\caption{As soon as the vehicle orientation changes, revealing its intention of turning right, the attention drops and the agent starts accelerating right away.}
+	\end{subfigure}
+	\caption{Sensitivity to uncertainty.}
 	\label{fig:sensitivity}
 \end{figure}
 
@@ -354,10 +356,10 @@ The agent decisions regarding right of way are not enforced through rewards but 
 
 \begin{figure}[htp]
 	\centering
-	\subfloat[]{
+	\subfloat[test1]{
 		\includegraphics[width=.48\linewidth]{img/priority1}
 	}
-	\subfloat[]{
+	\subfloat[test2]{
 		\includegraphics[width=.48\linewidth]{img/priority2}
 	}
 	\caption{Effect of the right of way. \emph{Left}: when trained on a non-priority road, the agent learns to yield to incoming vehicles. \emph{Right}: when trained on a priority road, the agent expects other vehicles to give way and is consequently more aggressive.}

@@ -93,13 +93,16 @@ Convenient framework for analysis, but it's often too narrow a frame for the rea
 
 \begin{figure}[tp]
 	\centering
-	\subfloat["Area of potential danger". A partial observability stemming from sensor occlusion in a turn.]{
-		\includegraphics[width=0.7\linewidth]{img/po-sensors}
+	\begin{subfigure}[b]{.7\linewidth}
+		\includegraphics[width=\linewidth]{img/po-sensors}
+		\caption{"Area of potential danger". A partial observability stemming from sensor occlusion in a turn.}
 		\label{fig:po-occlusion}
-	}\\
-	\subfloat["Area of uncertainty". A partial observability stemming from unknown intentions of human agents.]{
-		\includegraphics[width=0.4\linewidth]{img/po-intentions}
-	}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\linewidth}
+		\includegraphics[width=\linewidth]{img/po-intentions}
+		\caption{"Area of uncertainty". A partial observability stemming from unknown intentions of human agents.}
+		\label{fig:po-intentions}
+	\end{subfigure}
 	\caption{Sources of Partial Observability in Autonomous Driving. Illustrations from \citep{ObjCode2017}.}
 	\label{fig:partial-observability}
 \end{figure}
