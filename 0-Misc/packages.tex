@@ -28,10 +28,8 @@
 \usepackage{amsfonts}
 \usepackage{empheq}
 \usepackage{blkarray}
-
 \usepackage{enumitem}
 \usepackage{stmaryrd}
-
 \usepackage{setspace}
 \usepackage{stmaryrd}
 \usepackage{cases}
@@ -42,16 +40,7 @@
 \usepackage[small,bf,labelsep=endash,tableposition=bottom]{caption}
 \usepackage{graphicx}
 \DeclareGraphicsExtensions{.jpg,.pdf,.mps,.eps,.png}
-% \usepackage{graphics}
-
-% \usepackage{rotating}
-% \usepackage{wrapfig}
-% \usepackage{float}
-%\usepackage[caption=false,font=footnotesize]{subfig}
-% \usepackage[lofdepth,lotdepth]{subfig}
-% \usepackage{subfigure}
-\usepackage{subcaption}
-% \newcommand{\subcaption}[1]{\caption{#1}}
+\usepackage[list=true]{subcaption}
 \usepackage{cleveref}
 
 % --- Figures Tikz
@@ -66,7 +55,7 @@
 \usetikzlibrary{automata}
 \usetikzlibrary{intersections}
 \usetikzlibrary{decorations.pathreplacing}
-\usepackage{tikzsymbols}  % http://texdoc.net/texmf-dist/doc/latex/comprehensive/symbols-a4.pdf for the \Coffeecup{} command!
+\usepackage{tikzsymbols}
 
 % --- Color definition
 \usepackage{xcolor}
@@ -89,7 +78,7 @@
 \usepackage{multicol}
 \usepackage{rotating}
 \usepackage{array}
-\usepackage{multirow}  % https://en.wikibooks.org/wiki/LaTeX/Tables#Columns_spanning_multiple_rows
+\usepackage{multirow}
 \usepackage{arydshln}
 \usepackage{hhline}
 \usepackage{makecell}
@@ -102,14 +91,6 @@
 \usepackage{nomencl}
 \makenomenclature
 
-% --- Line Spacing
-%\doublespacing
-%\onehalfspacing
-%\singlespacing
-
-% --- Footnotes
-%\usepackage[perpage]{footmisc}
-
 % --- Bibliography
 % Add `custombib' in the document class option to use this section
 \ifuseCustomBib
@@ -120,24 +101,18 @@
 	%\DefineBibliographyExtras{french}{\restorecommand\mkbibnamelast}
 	%\bibliography{all-phd-thesis}
 \fi
-
 % changes the default name `Bibliography` -> `References'
 \renewcommand{\bibname}{List of References}
 \renewcommand{\contentsname}{Table of Contents}
 \renewcommand{\nomname}{Abbreviations and Notations}
 
-% --- User Defined
-\newcommand*{\everymodeprime}{\ensuremath{\prime}}
-
 % --- Table of Content
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{1}
-% TODO FIXME change tocdepth to 1 for final version of the manuscript
 \usepackage{minitoc}
 \setcounter{minitocdepth}{1}
 
 % --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
-
 \usepackage{framed}
 
 % --- To Do notes
@@ -175,18 +150,6 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 
-\newcommand{\clearevenpage}{%
-	\clearpage%
-	\if@twoside%
-		\ifodd\c@page%
-			\hbox{}\newpage%
-			\if@twocolumn%
-				\hbox{}\newpage%
-			\fi%
-		\fi%
-	\fi%
-}
-\makeatother
 
 \makeatletter
 % https://tex.stackexchange.com/a/365249/97964
@@ -216,26 +179,6 @@
 }
 \makeatother
 
-% FIXME comment or uncomment if you need to compress the document
-\newcommand{\emptycolorpage}[1]{
-	% \null
-	% \if@print
-		% \clearpage%
-		\cleardoublepage%
-		% \cleartoleftpage%
-		% \newpage%
-		\thispagestyle{plain}%
-		\null%
-		% \pagecolor{#1}%  FIXME bring back color if I need
-		\pagecolor{white}%
-		% \null%
-		\newpage%
-		% \null%
-		\pagecolor{white}%
-	% \fi
-}
-% \newcommand{\emptycolorpage}[1]{\pagecolor{white}}
-
 % Macros from Émilie Kaufmann's articles
 \usepackage{0-Misc/macrosText}
 
@@ -244,8 +187,6 @@
 \usepackage{tgpagella}
 % \usepackage{eulervm}
 
-
-% pagecolorWhen  setting  the  background  color  with\pagecolor(a  commandfromcolor.sty), the first\pagecolormustprecede\usepackage{pdfpages}.\usepackage{color}\pagecolor{white}\usepackage{pdfpages}The color is nonrelevant, it can be changed afterwards by using\pagecoloragain.   Just  the  order  (first\pagecolorbefore\usepackage{pdfpages})  isimportant.
 \pagecolor{white}
 \usepackage{pdfpages}
 
