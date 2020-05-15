@@ -113,28 +113,15 @@ Convenient framework for analysis, but it's often too narrow a frame for the rea
 	\label{fig:information-seeking}
 \end{figure}
 
-The MDP framework is based on the hypothesis that the agent has access to its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements \citep{Ulbrich2013,Du2010}. Worse, parts of the state may be missing altogether, as is the case when a scene entity is occulted by an obstacle \citep[\eg][]{Brechtel2013,Bouton2018,Sun2019}, as shown in \Cref{fig:po-occlusion}. To account for these difficulties, the concept of a \emph{Partially Observable} Markov Decision Process (POMDP) was introduced in \citep{Astrom1965}, extending the MDP framework with two additional quantities: an observation space $\Omega$, and an measurement model $O$ such that the observation $o\in\Omega$ is observed at state $s'$ with the conditional probability $O\parentheses{o\mid s',a}$. At each time step $t$, a belief $b_t\in\cM(\cS)$ over the state $s_t\in \cS$ is updated by performing Bayesian Filtering to compute the posterior state distribution:
+The MDP framework is based on the hypothesis that the agent has access to its own state $s\in\cS$. In practice, information about the scene can only be obtained through sensors, which produce typically noisy measurements \citep{Ulbrich2013,Du2010}. Worse, parts of the state may be missing altogether, as is the case when a scene entity is occluded by an obstacle \citep[\eg][]{Brechtel2013,Bouton2018,Sun2019}, as shown in \Cref{fig:po-occlusion}. To account for these difficulties, the concept of a \emph{Partially Observable} Markov Decision Process (POMDP) was introduced in \citep{Astrom1965}, extending the MDP framework with two additional quantities: an observation space $\Omega$, and an measurement model $O$ such that the observation $o\in\Omega$ is measured at state $s'$ with the conditional probability $O\parentheses{o\mid s',a}$. At each time step $t$, a belief $b_t\in\cM(\cS)$ over the state $s_t\in \cS$ is updated by performing Bayesian Filtering to compute the posterior state distribution:
 \begin{equation*}
 b_{t+1}(s_{t+1}) = \frac{O(o_t|s_{t+1}, a_t)\sum_{s_{t}\in\cS}P\parentheses{s_{t+1} \mid s_t, a_t}b_t(s_t)}{\sum_{s\in\cS} O(o_t|s, a_t)\sum_{s_{t}\in\cS}P\parentheses{s \mid s_t, a_t}b_t(s_t)}.
 \end{equation*}
-By conditioning the policy $\pi(a_t|b_t)$ on the belief $b_t$, the POMDP framework allows to optimally balance between information gathering and task completion, as shown in \Cref{fig:information-seeking}. However, there is a price to pay: the belief space $\cM(\cS)$ is much larger than the state space $\cS$ (\eg continuous of dimension $n$ when $\cS$ is finite of size $n$), which drastically increases the planning complexity. Exact solutions exist when $\cS$ is finite \citep{Pineau2003}, and approximate ones when it is compact \citep{Porta2006,Silver2010}. Even the belief update is intractable in general, when $\cS$ is compact. In the case of linear dynamics and Gaussian measurement noise, the belief update is known as Kalman Filtering \citep{Kalman1960}. It has been applied in the context of quadratic costs --the so-called LQG problem-- which enables efficient computation of the optimal policy \citep[see e.g.][]{VanDenBerg2011}. The more complex observation model of sensor occlusion is handled in \citep[e.g.][]{Sun2019}, in which the observed behaviour of nearby vehicles is used to infer the presence of potentially occluded pedestrians. Taking into account state uncertainty naturally lead to more conservative behaviours, as observed in \citep{Brechtel2013} where a vehicle reaching an intersection with a moving occluded obstacle is required to brake.
+By conditioning the policy $\pi(a_t|b_t)$ on the belief $b_t$, the POMDP framework allows to optimally balance between information gathering and task completion, as shown in \Cref{fig:information-seeking}. However, there is a price to pay: the belief space $\cM(\cS)$ is much larger than the state space $\cS$ (\eg continuous of dimension $n$ when $\cS$ is finite of size $n$), which drastically increases the planning complexity. Exact solutions exist when $\cS$ is finite \citep{Pineau2003}, and approximate ones when it is compact \citep{Porta2006,Silver2010}. Even the belief update is intractable in general, when $\cS$ is compact. In the case of linear dynamics and Gaussian measurement noise, the belief update is known as Kalman Filtering \citep{Kalman1960}. It has been applied in \citep[\eg]{Bry2011,Bouton2017,VanDenBerg2017}, and in the context of quadratic costs --\ie the standard LQG problem-- which enables efficient computation of the optimal policy \citep[see e.g.][]{Xu2014,VanDenBerg2011}. The more complex observation model of sensor occlusions in continuous-space is handled in \citep{Brechtel2013,Brechtel2014,Bouton2018} where cautious driving policies are learned for crossing intersections; and in \citep[][]{Sun2019} where the observed behaviour of nearby vehicles is used to infer the presence of potentially occluded pedestrians.
+Furthermore, the POMDP framework has been used to account for uncertainty in the intentions of other agents, as illustrated in \Cref{fig:po-intentions}. In \citep{Bandyopadhyay2013}, the authors propose a Mixed-Observability framework (MOMDP) in which the other drivers locations are observed but not their destinations. In \citep{Barbier2018}, the uncertainty lies in whether the other agents intend to yield of take the right of way.
 
-
-Algo: PBVI, POMCP
-
-
-\citep{Brechtel2011}
-- ?? : \citep{Brechtel2014}
-
-Also Uncertainty in the intentions of other agents, cf .
-
-- The other drivers locations are observed but not their intentions \citep{Bandyopadhyay2013}. MOMDP framework.
-- [ Probabilistic Decision-Making at Road Intersections: Formulation and Quantitative Evaluation ]
-- Kalman + POMCP for intersection \citep{Barbier2018}
 - \citep{Sunberg2017}: evaluate the POMDP vs MDP approximation with an assumed internal state.
 
-- \citep{Bry2011}
-- \citep{Xu2014,Sadigh2016}
 - \citep{VanDenBerg2017}
 
 
@@ -157,10 +144,13 @@ Learned locomotion skills (follow, overtake) used as meta-actions: [Combining Ne
 
 Shorter action duration means smaller signal-to-noise ratio, which leads to slow learning [“On a Formal Model of Safe and Scalable Self-driving Cars]
 
+\citep{Barbier2018}: Stop, yield, pass
+
 \section{Rewards and inverse reinforcement learning}
 
 
 \citep{Sun2019}: estimate driver preferences
+\citep{Sadigh2016}: model the human as an optimal planner, reward learnt with IRL.
 
 \section{Dynamics and transfer}
 \section{Optimisation criterion and safety}
