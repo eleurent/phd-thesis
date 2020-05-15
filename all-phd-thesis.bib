@@ -1,3 +1,7 @@
+@Comment{Chap1,
+	title =	 {Introduction},
+}
+
 @article{Foot1967,
 	volume = {5},
 	pages = {5--15},
@@ -119,6 +123,9 @@
 	hal_version = {v1},
 }
 
+@Comment{Chap2_1,
+	title =	 {Motion Planning},
+}
 
 @article{Gonzalez2016,
 	author={D. {González} and J. {Pérez} and V. {Milanés} and F. {Nashashibi}},
@@ -329,6 +336,10 @@
 	year = {2005}
 }
 
+@Comment{Chap2_2,
+	title =	 {Imitation Learning},
+}
+
 @incollection{Pomerleau89,
 	title = {ALVINN: An Autonomous Land Vehicle in a Neural Network},
 	author = {Pomerleau, Dean A.},
@@ -467,6 +478,10 @@
 	booktitle={International Conference on Learning Representations (ICLR)}
 }
 
+@Comment{Chap2_3,
+	title =	 {Partial Observability},
+}
+
 @misc{ObjCode2017,
 	author = {{Editions Nationales du Permis de Conduire}},
 	title = {{Objectif Code !}},
@@ -569,6 +584,20 @@
 	hal_version = {v1},
 }
 
+@inproceedings{Bouton2017,
+	abstract = {Urban intersections represent a complex environment for autonomous vehicles with many sources of uncertainty. The vehicle must plan in a stochastic environment with potentially rapid changes in driver behavior. Providing an efficient strategy to navigate through urban intersections is a difficult task. This paper frames the problem of navigating unsignalized intersections as a partially observable Markov decision process (POMDP) and solves it using a Monte Carlo sampling method. Empirical results in simulation show that the resulting policy outperforms a threshold-based heuristic strategy on several relevant metrics that measure both safety and efficiency.},
+	archivePrefix = {arXiv},
+	arxivId = {1704.04322},
+	author = {Bouton, Maxime and Cosgun, Akansel and Kochenderfer, Mykel J.},
+	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	doi = {10.1109/IVS.2017.7995818},
+	eprint = {1704.04322},
+	isbn = {9781509048045},
+	title = {{Belief state planning for autonomously navigating urban intersections}},
+	year = {2017}
+}
+
+
 @inproceedings{Sunberg2017,
 	abstract = {Safe interaction with human drivers is one of the primary challenges for autonomous vehicles. In order to plan driving maneuvers effectively, the vehicle's control system must infer and predict how humans will behave based on their latent internal state (e.g., intentions and aggressiveness). This research uses a simple model for human behavior with unknown parameters that make up the internal states of the traffic participants and presents a method for quantifying the value of estimating these states and planning with their uncertainty explicitly modeled. An upper performance bound is established by an omniscient Monte Carlo Tree Search (MCTS) planner that has perfect knowledge of the internal states. A baseline lower bound is established by planning with MCTS assuming that all drivers have the same internal state. MCTS variants are then used to solve a partially observable Markov decision process (POMDP) that models the internal state uncertainty to determine whether inferring the internal state offers an advantage over the baseline. Applying this method to a freeway lane changing scenario reveals that there is a significant performance gap between the upper bound and baseline. POMDP planning techniques come close to closing this gap, especially when important hidden model parameters are correlated with measurable parameters.},
 	archivePrefix = {arXiv},
@@ -602,17 +631,6 @@
 	issn = {10504729},
 	title = {{Motion planning under uncertainty for on-road autonomous driving}},
 	year = {2014}
-}
-
-@inproceedings{Sadigh2016,
-	abstract = {Traditionally, autonomous cars make predictions about other drivers' future trajectories, and plan to stay out of their way. This tends to result in defensive and opaque behaviors. Our key insight is that an autonomous car's actions will actually affect what other cars will do in response, whether the car is aware of it or not. Our thesis is that we can leverage these responses to plan more efficient and communicative behaviors. We model the interaction between an autonomous car and a human driver as a dynamical system, in which the robot's actions have immediate consequences on the state of the car, but also on human actions. We model these consequences by approximating the human as an optimal planner, with a reward function that we acquire through Inverse Reinforcement Learning. When the robot plans with this reward function in this dynamical system, it comes up with actions that purposefully change human state: it merges in front of a human to get them to slow down or to reach its own goal faster; it blocks two lanes to get them to switch to a third lane; or it backs up slightly at an intersection to get them to proceed first. Such behaviors arise from the optimization, without relying on hand-coded signaling strategies and without ever explicitly modeling communication. Our user study results suggest that the robot is indeed capable of eliciting desired changes in human state by planning using this dynamical system.},
-	author = {Sadigh, Dorsa and Sastry, Shankar and Seshia, Sanjit A. and Dragan, Anca D.},
-	booktitle = {Robotics: Science and Systems},
-	doi = {10.15607/rss.2016.xii.029},
-	isbn = {9780992374723},
-	issn = {2330765X},
-	title = {{Planning for autonomous cars that leverage effects on human actions}},
-	year = {2016}
 }
 
 @inproceedings{Pineau2003,
@@ -688,3 +706,17 @@
 	year = {2019}
 }
 
+@Comment{Chap2_4,
+	title =	 {Inverse Reinforcement Learning},
+}
+
+@inproceedings{Sadigh2016,
+	abstract = {Traditionally, autonomous cars make predictions about other drivers' future trajectories, and plan to stay out of their way. This tends to result in defensive and opaque behaviors. Our key insight is that an autonomous car's actions will actually affect what other cars will do in response, whether the car is aware of it or not. Our thesis is that we can leverage these responses to plan more efficient and communicative behaviors. We model the interaction between an autonomous car and a human driver as a dynamical system, in which the robot's actions have immediate consequences on the state of the car, but also on human actions. We model these consequences by approximating the human as an optimal planner, with a reward function that we acquire through Inverse Reinforcement Learning. When the robot plans with this reward function in this dynamical system, it comes up with actions that purposefully change human state: it merges in front of a human to get them to slow down or to reach its own goal faster; it blocks two lanes to get them to switch to a third lane; or it backs up slightly at an intersection to get them to proceed first. Such behaviors arise from the optimization, without relying on hand-coded signaling strategies and without ever explicitly modeling communication. Our user study results suggest that the robot is indeed capable of eliciting desired changes in human state by planning using this dynamical system.},
+	author = {Sadigh, Dorsa and Sastry, Shankar and Seshia, Sanjit A. and Dragan, Anca D.},
+	booktitle = {Robotics: Science and Systems},
+	doi = {10.15607/rss.2016.xii.029},
+	isbn = {9780992374723},
+	issn = {2330765X},
+	title = {{Planning for autonomous cars that leverage effects on human actions}},
+	year = {2016}
+}
