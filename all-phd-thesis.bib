@@ -1,5 +1,5 @@
 @Comment{Chap1,
-	title =	 {Introduction},
+	title =	{Introduction},
 }
 
 @article{Foot1967,
@@ -124,7 +124,7 @@
 }
 
 @Comment{Chap2_1,
-	title =	 {Motion Planning},
+	title =	{Motion Planning},
 }
 
 @article{Gonzalez2016,
@@ -336,8 +336,8 @@
 	year = {2005}
 }
 
-@Comment{Chap2_2,
-	title =	 {Imitation Learning},
+@Comment{Chap2_1_3,
+	title = {Imitation Learning},
 }
 
 @incollection{Pomerleau89,
@@ -478,8 +478,8 @@
 	booktitle={International Conference on Learning Representations (ICLR)}
 }
 
-@Comment{Chap2_3,
-	title =	 {Partial Observability},
+@Comment{Chap2_2,
+	title =	{Partial Observability},
 }
 
 @misc{ObjCode2017,
@@ -494,11 +494,12 @@
 	language     = {eng},
 	pages        = {174--205},
 	publisher    = {Elsevier},
-	series       = {Journal of Mathematical Analysis and Applications},
+	journal      = {Journal of Mathematical Analysis and Applications},
 	title        = {Optimal Control of Markov Processes with Incomplete State Information I},
 	url          = {https://lup.lub.lu.se/search/ws/files/5323668/8867085.pdf},
 	doi          = {10.1016/0022-247X(65)90154-X},
 	volume       = {10},
+	number       = {1},
 	year         = {1965},
 }
 
@@ -706,8 +707,87 @@
 	year = {2019}
 }
 
+@Comment{Chap2_3,
+	title =	{Temporal abstraction},
+}
+
+@article{Sutton1999,
+	abstract = {Learning, planning, and representing knowledge at multiple levels of temporal abstraction are key, longstanding challenges in AI. The ways how to address these challenges within the mathematical framework of reinforcement learning and Markov decision processes (MDP) are discussed. A set options defined over an MDP constitutes a semi-MDP (SMDP), and the theory of SMDPs provides the foundation for the theory of options.},
+	author = {Sutton, Richard S. and Precup, Doina and Singh, Satinder},
+	doi = {10.1016/S0004-3702(99)00052-1},
+	issn = {00043702},
+	journal = {Artificial Intelligence},
+	title = {{Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning}},
+	year = {1999}
+}
+
+@misc{ShalevShwartz2017,
+    title={On a Formal Model of Safe and Scalable Self-driving Cars},
+    author={Shai Shalev-Shwartz and Shaked Shammah and Amnon Shashua},
+    year={2017},
+    eprint={1708.06374},
+    archivePrefix={arXiv},
+    primaryClass={cs.RO}
+}
+
+@misc{ShalevShwartz2016,
+    title={Safe, Multi-Agent, Reinforcement Learning for Autonomous Driving},
+    author={Shai Shalev-Shwartz and Shaked Shammah and Amnon Shashua},
+    year={2016},
+    eprint={1610.03295},
+    archivePrefix={arXiv},
+    primaryClass={cs.AI}
+}
+
+@inproceedings{Paxton2017,
+	abstract = {Task and motion planning subject to Linear Temporal Logic (LTL) specifications in complex, dynamic environments requires efficient exploration of many possible future worlds. Model-free reinforcement learning has proven successful in a number of challenging tasks, but shows poor performance on tasks that require long-term planning. In this work, we integrate Monte Carlo Tree Search with hierarchical neural net policies trained on expressive LTL specifications. We use reinforcement learning to find deep neural networks representing both low-level control policies and task-level 'option policies' that achieve high-level goals. Our combined architecture generates safe and responsive motion plans that respect the LTL constraints. We demonstrate our approach in a simulated autonomous driving setting, where a vehicle must drive down a road in traffic, avoid collisions, and navigate an intersection, all while obeying rules of the road.},
+	archivePrefix = {arXiv},
+	arxivId = {1703.07887},
+	author = {Paxton, Chris and Raman, Vasumathi and Hager, Gregory D. and Kobilarov, Marin},
+	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
+	doi = {10.1109/IROS.2017.8206505},
+	eprint = {1703.07887},
+	isbn = {9781538626825},
+	issn = {21530866},
+	title = {{Combining neural networks and tree search for task and motion planning in challenging environments}},
+	year = {2017}
+}
+
+@inproceedings{Bacon2017,
+	abstract = {Temporal abstraction is key to scaling up learning and planning in reinforcement learning. While planning with temporally extended actions is well understood, creating such abstractions autonomously from data has remained challenging. We tackle this problem in the framework of options [Sutton, Precup {\&}Singh, 1999; Precup, 2000]. We derive policy gradient theorems for options and propose a new option-critic architecture capable of learning both the internal policies and the termination conditions of options, in tandem with the policy over options, and without the need to provide any additional rewards or subgoals. Experimental results in both discrete and continuous environments showcase the flexibility and efficiency of the framework.},
+	archivePrefix = {arXiv},
+	arxivId = {1609.05140},
+	author = {Bacon, Pierre Luc and Harb, Jean and Precup, Doina},
+	booktitle = {31st AAAI Conference on Artificial Intelligence, AAAI 2017},
+	eprint = {1609.05140},
+	title = {{The option-critic architecture}},
+	year = {2017}
+}
+
+@inproceedings{Vezhnevets2017,
+abstract = {We introduce FeUdal Networks (FuNs): a novel architecture for hierarchical reinforcement learning. Our approach is inspired by the feudal reinforcement learning proposal of Dayan and Hinton, and gains power and efficacy by decoupling end-to-end learning across multiple levels-allowing it to utilise different resolutions of time. Our framework employs a Manager module and a Worker module. The Manager operates at a lower temporal resolution and sets abstract goals which are conveyed to and enacted by the Worker. The Worker generates primitive actions at every tick of the environment. The decoupled structure of FuN conveys several benefits-in ad-dition to facilitating very long timescale credit assignment it also encourages the emergence of sub-policies associated with different goals set by the Manager. These properties allow FuN to dramatically outperform a strong baseline agent on tasks that involve long-term credit assignment or memorisation.},
+archivePrefix = {arXiv},
+arxivId = {1703.01161},
+author = {Vezhnevets, Alexander Sasha and Osindero, Simon and Schaul, Tom and Heess, Nicolas and Jaderberg, Max and Silver, David and Kavukcuoglu, Koray},
+booktitle = {34th International Conference on Machine Learning, ICML 2017},
+eprint = {1703.01161},
+isbn = {9781510855144},
+title = {{FeUdal networks for hierarchical reinforcement learning}},
+year = {2017}
+}
+
+@misc{Heess2016,
+    title={Learning and Transfer of Modulated Locomotor Controllers},
+    author={Nicolas Heess and Greg Wayne and Yuval Tassa and Timothy Lillicrap and Martin Riedmiller and David Silver},
+    year={2016},
+    eprint={1610.05182},
+    archivePrefix={arXiv},
+    primaryClass={cs.RO}
+}
+
+
 @Comment{Chap2_4,
-	title =	 {Inverse Reinforcement Learning},
+	title = {Inverse Reinforcement Learning},
 }
 
 @inproceedings{Sadigh2016,
