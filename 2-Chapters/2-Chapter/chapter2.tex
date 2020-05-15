@@ -85,9 +85,9 @@ Reinforcement Learning is a general framework for learning-based sequential deci
 \max_{\pi}\expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\right].
 \end{equation*}
 
-\TODO{Several performance measures: return, cumulative regret, simple regret, PAC}
+\TODO{Present the Several performance measures? return, cumulative regret, simple regret, PAC ? + fix next paragraph}
 
-Convenient framework for analysis, but it's often too narrow a frame for the real world to fit in. In the following, we will enumerate several assumptions behind the MDP framework that may not hold in practice, and for which variants have been developed. We will focus on applications of the variants the particular context of Autonomous Driving.
+While the MDP framework undoubtedly consitutes a convenient theoretical framework for analysis, it may be too narrow a frame for the real world to fit in. In the sequel, by trying to cast the problem of Autonomous Driving as an MDP, we will identify multiple underlying assumptions that do not hold in practice, and relate them to existing research areas for which researchers proposed variants and solutions.
 
 \section{States and partial observability}
 
@@ -137,13 +137,35 @@ Furthermore, the POMDP framework has been used to account for uncertainty in the
 	\label{fig:options-graph}
 \end{figure}
 
-The second step of when specifying an MDP is to choose an action space $\cA$. Suppose you are taking your first driving lesson, your instructor will be providing you with very detailed instructions about actuation such as: \emph{"turn the steering wheel by a full turn"}, \emph{"change gear"}, \emph{"brake smoothly"}, etc. After a few lessons however, the instructor will switch to more general instructions such as \emph{"change lane to overtake this vehicle"}, \emph{"yield to vehicles on the roundabout before merging"} or \emph{"drive slower in this area"}. And when, having finally got your driver's license, you start driving in an unfamiliar city, your friend in the passenger seat will merely give you directions: \emph{"follow the signs for the train station, and turn into the third street on the left"}. In short, driving involves reasoning at several time scales, and the corresponding decisions have different granularities. This can hardly be expressed in the MDP framework, where a single action space $\cA$ is considered. In particular, relying on shorter actions yields a smaller signal-to-noise ratio, which leads to slow learning when planning over long time horizon \citep{ShalevShwartz2017}. To address this issue, the concept of \emph{temporal abstraction} was introduced: nuclear actions $a\in\cA$ can be used to define temporally-extended \emph{skills} $\pi_o:\cS \rightarrow \cM(\cA)$, also called \emph{options}, which in turn can be used as meta-actions by a high-level \emph{option policy} $\pi(o|s)$. This idea is also referred to as \emph{Hierarchical Reinforcement Learning}, and was first analysed with the \emph{semi}-Markov Decision Process (SMDP) extension \citep{Sutton1999}, illustrated in \Cref{fig:smdp}. In autonomous driving, this hierarchy is typically imposed by the Route/Behaviour/Motion planning paradigm presented in \Cref{chapter:1}. However, this requires manually specifying the interfaces at each layer. For instance, in \citep{Barbier2018} a behavioural policy can only be trained after having defined a finite set of low-level skills, namely \emph{Stop}, \emph{Yield}, and \emph{Pass}. Consequently, using a fixed set of options constrains the exhaustivity of the set of option-policies, and may prevent recovering optimality if the architecture is not versatile enough. To bypass these limitations, \citet{ShalevShwartz2016} proposed to ensure sufficient exhaustivity of the class of available options by generating new options on-the-fly as paths in an option-graph, shown in \Cref{fig:options-graph}. Other works attempt to learn low-level skills jointly with the meta-policy \citep{Bacon2017,Vezhnevets2017,Heess2016}. In \citep{Paxton2017}, low-level skills such as \emph{follow} and \emph{overtake} are trained using Neural Networks and ad-hoc reward functions, while serving as meta-actions for a high-level tree-based planner.
+The second step of when specifying an MDP is to choose an action space $\cA$. Suppose you are taking your first driving lesson, your instructor will be providing you with very detailed instructions about actuation such as: \emph{"turn the steering wheel by a full turn"}, \emph{"change gear"}, \emph{"brake smoothly"}, etc. After a few lessons however, the instructor will switch to more general instructions such as \emph{"change lane to overtake this vehicle"}, \emph{"yield to vehicles on the roundabout before merging"} or \emph{"drive slower in this area"}. And when, having finally got your driver's license, you start driving in an unfamiliar city, your friend in the passenger seat will merely give you directions: \emph{"follow the signs for the train station, and turn into the third street on the left"}. In short, driving involves reasoning at several time scales, and the corresponding decisions have different granularities. This can hardly be expressed in the MDP framework, where a single action space $\cA$ is considered. In particular, relying on shorter actions yields a smaller signal-to-noise ratio, which leads to slow learning when planning over long time horizon \citep{ShalevShwartz2017}. To address this issue, the concept of \emph{temporal abstraction} was introduced: nuclear actions $a\in\cA$ can be used to define temporally-extended \emph{skills} $\pi_o:\cS \rightarrow \cM(\cA)$, also called \emph{options}, which in turn can be used as meta-actions by a high-level \emph{option policy} $\pi(o|s)$. This idea is also referred to as \emph{Hierarchical Reinforcement Learning}, and was first analysed with the \emph{semi}-Markov Decision Process (SMDP) extension \citep{Sutton1999}, illustrated in \Cref{fig:smdp}. In autonomous driving, this hierarchy is typically imposed by the pipeline presented in \Cref{chapter:1}: Behavioural planning corresponds to the policy over options $\pi(o|s)$, while the low-level options $\pi_o$ are achieved in the Motion planning layer. However, this requires manually specifying the interfaces at each layer. For instance, in \citep{Barbier2018} a behavioural policy can only be trained after having defined a finite set of low-level skills, namely \emph{Stop}, \emph{Yield}, and \emph{Pass}. Consequently, using a fixed set of options constrains the exhaustivity of the set of option-policies, and may prevent recovering optimality if the architecture is not versatile enough. To bypass these limitations, \citet{ShalevShwartz2016} proposed to ensure sufficient exhaustivity of the class of available options by generating new options on-the-fly as paths in an option-graph, shown in \Cref{fig:options-graph}. Other works attempt to learn low-level skills jointly with the meta-policy \citep{Bacon2017,Vezhnevets2017,Heess2016}. In \citep{Paxton2017}, low-level skills such as \emph{follow} and \emph{overtake} are trained using Neural Networks and ad-hoc reward functions, while serving as meta-actions for a high-level tree-based planner.
 
 \section{Rewards and inverse reinforcement learning}
 
+How to define a good reward function ?
+Paradoxically, humans know how to drive, but not necessarily how to justify and explain their actions.
+Reward engineering: manually define a set of features of interest, and weighted average. Many use-cases yield many rules, some which contradict. Hard to strike the right tradeoff.
 
+One practical solution would be to iteratively refine a reward function until the learnt policy matches the expected behavior.
+C'est inversé par rapport au but initial du RL, ou le comportement découle de la reward.
+
+We assume that the agents act to optimize an unknown reward function.
+Inverse Reinforcement Learning
+Search for a reward function that makes the expert behaviour appear (near)-uniquely (near)-optimal.
+
+RL o IRL is the dual problem of state-action occupancy matching with respect to expert trajectories [Generative Adversarial Imitation Learning]
+
+
+has been applied for
+Modeling of routing preferences of taxi-drivers [Navigate like a cabbie: Probabilistic reasoning from observed context-aware behavior]
+Prediction of pedestrians’ future trajectory [Planning-based Prediction for Pedestrians]
+Imitation of comfortable driving style [Learning Driving Styles for Autonomous Vehicles from
+Demonstration]
 \citep{Sun2019}: estimate driver preferences
 \citep{Sadigh2016}: model the human as an optimal planner, reward learnt with IRL.
 
+
 \section{Dynamics and transfer}
+
+
 \section{Optimisation criterion and safety}
+
