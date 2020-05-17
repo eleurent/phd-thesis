@@ -292,7 +292,7 @@ supported!}
 }
 
 % *************************** Graphics and Figures *****************************
-\RequirePackage[usenames, dvipsnames]{color}
+\RequirePackage[usenames, dvipsnames]{xcolor}
 \ifpdf
   % Convert eps figures to pdf
   \RequirePackage{epstopdf}
