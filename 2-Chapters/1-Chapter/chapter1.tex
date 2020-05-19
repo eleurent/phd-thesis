@@ -41,11 +41,14 @@ In the first few weeks of my PhD, I observed that layman interlocutors, when con
 
 The traditional robotics pipeline, shown in \Cref{fig:robotics-pipeline}, involves three main tasks: \emph{Perception}, \emph{Decision}, and \emph{Control} (also called the Sense-Plan-Act paradigm, or Navigation, Guidance and Control in aerospace engineering). The \emph{Perception} module takes raw sensor data as input and produces a high-level reconstruction of the scene. The \emph{Decision} module then determines the desired trajectory of the vehicle, based on the current situation. Finally, the \emph{Control} module manipulates forces, by way of steering and throttle controls, to track the desired trajectory. In the context of Autonomous Driving, the Decision module is often implemented with a hierachical structure whose layers work at different timescales. First, a \emph{Route Planning} module searches for the shortest route in a road network from the current location to the desires destination. Second, the \emph{Behavioural Layer} specifies a coarse driving behaviour through short-term goals or semantic decisions, such as choosing to change lane, to slow down at an intersection, or to yield to a vehicle. This layer is thus responsible for following the planned route while adapting to the current traffic state in real time. Third, the \emph{Motion Planning} layer generates a continuous, feasible trajectory that implements the desired behaviour, while ensuring comfort and safety.
 
-Great strides have been made in the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning, and many control schemes \citep[surveyed in][]{Polack2018} have been developed for ground vehicles. Even in the Decision module, Route Planning is virtually solved and already provided by services such as \href{https://wiki.openstreetmap.org/wiki/Routing}{Open Street Maps}, and there exist a vast body of Motion Planning algorithms, presented in \Cref{sec:sequential-decision-making}. All these building blocks are widely used in both industrial applications, including ADAS functions such as LKA, ACC, or AES, and in academic reasearch challenges. Ultimately, we claim that Behavioural Planning remains the only neglected link in the chain. Indeed, most of these applications focused hitherto on simple settings with little complexity: ADAS systems are mostly tailored for highway driving and struggle when merges and interaction. [ref needed]. Similarly, most academic challenges focused on highway driving, with the exception of the DARPA Urban challenge which required more advanced interactions with other vehicles. Yet, even this event still consituted a controlled environment, simple enough that all participants merely relied on rule-based systems for behavioural planning \citep{Buehler2009}, such as finite state machines whose transitions are triggered by handcrafted criteria \citep[\eg][]{Baker2008}. Yet, there is little hope that this approach can scale to complex scenes, and unit responses cannot be easily merged.
+Great strides have been made in the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning, and many control schemes \citep[surveyed in][]{Polack2018} have been developed for ground vehicles. Even in the Decision module, Route Planning is virtually solved and already provided by services such as \href{https://wiki.openstreetmap.org/wiki/Routing}{Open Street Maps}, and there exist a vast body of Motion Planning algorithms, presented in \Cref{sec:sequential-decision-making}. All these building blocks are widely used in both industrial applications, including ADAS functions such as LKA, ACC, or AES, and in academic research challenges. Ultimately, we claim that Behavioural Planning remains the only neglected link in the chain. Indeed, most of these applications focused hitherto on simple settings with little complexity: ADAS systems are mostly tailored for highway driving and struggle when merges and interaction. [ref needed]. Similarly, most academic challenges focused on highway driving, with the exception of the DARPA Urban challenge which required more advanced interactions with other vehicles. Yet, even this event still constitutes a controlled environment, simple enough that all participants merely relied on rule-based systems for behavioural planning \citep{Buehler2009}, such as finite state machines whose transitions are triggered by handcrafted criteria \citep[\eg][]{Baker2008}. Unfortunately, there is little hope that this approach can scale to complex scenes: responses designed for specific use-cases cannot be easily merged.
 
 \subsection{Scope and Challenges of this Thesis}
 
-\paragraph{Challenge 1: Decision-making under uncertainty: humans in the loop}
+In the light of of this observation of Behavioural Planning by .
+Three challenges need to be addressed.
+
+\paragraph{Challenge 1. Decision-making under uncertainty: humans in the loop}
 Even if we had magically access to magical perception and control, would we have solved the problem? What remains to do?
 Why is it difficult?
 
@@ -59,12 +62,12 @@ Idea -> leverage data and sequential learning, to hope for better exhausivity.
 We want to quantify uncertainty
 Recall aletoric vs epistemic uncertainty?
 
-\paragraph{Challenge 2: Social interactions and coupled dynamics}
+\paragraph{Challenge 2. Social interactions and coupled dynamics}
 - complex dynamics: coupling -> fast propagation of uncertainty, not isolated.
 We want socially aware decision-making (account for other agents, and how our actions impact their behaviours)
 We want to contain the uncertainty build up, prevent instability.
 
-\paragraph{Challenge 3: Safety and efficiency}
+\paragraph{Challenge 3. Safety and efficiency}
 - multiple contradictory objectives, interplay, hard to specify: defensive / aggressive tradeoff and negotiation.
 the pitfall of reward engineering.
 - how to guarantee safety for a leaning system, in the presence of uncertainty?
