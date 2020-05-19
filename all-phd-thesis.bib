@@ -811,3 +811,229 @@ year = {2017}
 	title = {{Planning for autonomous cars that leverage effects on human actions}},
 	year = {2016}
 }
+
+@Comment{Chap2_5,
+	title = {Transfer},
+}
+
+@inproceedings{Pan2017,
+	abstract = {Reinforcement learning is considered as a promising direction for driving policy learning. However, training autonomous driving vehicle with reinforcement learning in real environment involves non-affordable trial-and-error. It is more desirable to first train in a virtual environment and then transfer to the real environment. In this paper, we propose a novel realistic translation network to make model trained in virtual environment be workable in real world. The proposed network can convert non-realistic virtual image input into a realistic one with similar scene structure. Given realistic frames as input, driving policy trained by reinforcement learning can nicely adapt to real world driving. Experiments show that our proposed virtual to real (VR) reinforcement learning (RL) works pretty well. To our knowledge, this is the first successful case of driving policy trained by reinforcement learning that can adapt to real world driving data.},
+	archivePrefix = {arXiv},
+	arxivId = {1704.03952},
+	author = {Pan, Xinlei and You, Yurong and Wang, Ziyan and Lu, Cewu},
+	booktitle = {British Machine Vision Conference 2017, BMVC 2017},
+	doi = {10.5244/c.31.11},
+	eprint = {1704.03952},
+	isbn = {190172560X},
+	title = {{Virtual to real reinforcement learning for autonomous driving}},
+	year = {2017}
+}
+
+@misc{Liang2019,
+	title={Federated Transfer Reinforcement Learning for Autonomous Driving},
+	author={Xinle Liang and Yang Liu and Tianjian Chen and Ming Liu and Qiang Yang},
+	year={2019},
+	eprint={1910.06001},
+	archivePrefix={arXiv},
+	primaryClass={cs.LG}
+}
+
+@inproceedings{Tobin2017,
+	abstract = {Bridging the 'reality gap' that separates simulated robotics from experiments on hardware could accelerate robotic research through improved data availability. This paper explores domain randomization, a simple technique for training models on simulated images that transfer to real images by randomizing rendering in the simulator. With enough variability in the simulator, the real world may appear to the model as just another variation. We focus on the task of object localization, which is a stepping stone to general robotic manipulation skills. We find that it is possible to train a real-world object detector that is accurate to 1.5 cm and robust to distractors and partial occlusions using only data from a simulator with non-realistic random textures. To demonstrate the capabilities of our detectors, we show they can be used to perform grasping in a cluttered environment. To our knowledge, this is the first successful transfer of a deep neural network trained only on simulated RGB images (without pre-training on real images) to the real world for the purpose of robotic control.},
+	archivePrefix = {arXiv},
+	arxivId = {1703.06907},
+	author = {Tobin, Josh and Fong, Rachel and Ray, Alex and Schneider, Jonas and Zaremba, Wojciech and Abbeel, Pieter},
+	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
+	doi = {10.1109/IROS.2017.8202133},
+	eprint = {1703.06907},
+	isbn = {9781538626825},
+	issn = {21530866},
+	title = {{Domain randomization for transferring deep neural networks from simulation to the real world}},
+	year = {2017}
+}
+
+
+@Comment{Chap2_6,
+	title = {Safety},
+}
+
+@article{Garcia2015,
+	abstract = {Safe Reinforcement Learning can be defined as the process of learning policies that maxi-mize the expectation of the return in problems in which it is important to ensure reasonable system performance and/or respect safety constraints during the learning and/or deploy-ment processes. We categorize and analyze two approaches of Safe Reinforcement Learning. The first is based on the modification of the optimality criterion, the classic discounted fi-nite/infinite horizon, with a safety factor. The second is based on the modification of the exploration process through the incorporation of external knowledge or the guidance of a risk metric. We use the proposed classification to survey the existing literature, as well as suggesting future directions for Safe Reinforcement Learning.},
+	author = {Garc{\'{i}}a, Javier and Fern{\'{a}}ndez, Fernando},
+	doi = {10.1109/TNNLS.2017.2654539},
+	file = {::},
+	issn = {15337928},
+	journal = {Journal of Machine Learning Research},
+	keywords = {reinforcement learning,risk sensitivity,safe exploration,teacher advice},
+	pages = {1437--1480},
+	title = {{A Comprehensive Survey on Safe Reinforcement Learning}},
+	volume = {16},
+	year = {2015}
+}
+
+@inproceedings{Berkenkamp2015,
+	abstract = {This paper introduces a learning-based robust control algorithm that provides robust stability and performance guarantees during learning. The approach uses Gaussian process (GP) regression based on data gathered during operation to update an initial model of the system and to gradually decrease the uncertainty related to this model. Embedding this data-based update scheme in a robust control framework guarantees stability during the learning process. Traditional robust control approaches have not considered online adaptation of the model and its uncertainty before. As a result, their controllers do not improve performance during operation. Typical machine learning algorithms that have achieved similar high-performance behavior by adapting the model and controller online do not provide the guarantees presented in this paper. In particular, this paper considers a stabilization task, linearizes the nonlinear, GP-based model around a desired operating point, and solves a convex optimization problem to obtain a linear robust controller. The resulting performance improvements due to the learning-based controller are demonstrated in experiments on a quadrotor vehicle.},
+	author = {Berkenkamp, Felix and Schoellig, Angela P.},
+	booktitle = {2015 European Control Conference, ECC 2015},
+	doi = {10.1109/ECC.2015.7330913},
+	isbn = {9783952426937},
+	title = {{Safe and robust learning control with Gaussian processes}},
+	year = {2015}
+}
+
+@inproceedings{Bouton2019,
+	abstract = {Navigating urban environments represents a complex task for automated vehicles. They must reach their goal safely and efficiently while considering a multitude of traffic participants. We propose a modular decision making algorithm to autonomously navigate intersections, addressing challenges of existing rule-based and reinforcement learning (RL) approaches. We first present a safe RL algorithm relying on a model-checker to ensure safety guarantees. To make the decision strategy robust to perception errors and occlusions, we introduce a belief update technique using a learning based approach. Finally, we use a scene decomposition approach to scale our algorithm to environments with multiple traffic participants. We empirically demonstrate that our algorithm outperforms rule-based methods and reinforcement learning techniques on a complex intersection scenario.},
+	archivePrefix = {arXiv},
+	arxivId = {1904.11483},
+	author = {Bouton, Maxime and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J.},
+	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	doi = {10.1109/IVS.2019.8813803},
+	eprint = {1904.11483},
+	isbn = {9781728105604},
+	title = {{Safe reinforcement learning with scene decomposition for navigating complex urban environments}},
+	year = {2019}
+}
+
+@article{Bouton2019workshop,
+	title={Reinforcement learning with probabilistic guarantees for autonomous driving},
+	author={Bouton, Maxime and Karlsson, Jesper and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J and Tumova, Jana},
+	journal={Workshop on Safety Risk and Uncertainty in Reinforcement Learning, Conference on Uncertainty in Artificial Intelligence (UAI)},
+	year={2019}
+}
+
+@inproceedings{Koller2019,
+	abstract = {Learning-based methods have been successful in solving complex control tasks without significant prior knowledge about the system. However, these methods typically do not provide any safety guarantees, which prevents their use in safety-critical, real-world applications. In this paper, we present a learning-based model predictive control scheme that can provide provable high-probability safety guarantees. To this end, we exploit regularity assumptions on the dynamics in terms of a Gaussian process prior to construct provably accurate confidence intervals on predicted trajectories. Unlike previous approaches, we do not assume that model uncertainties are independent. Based on these predictions, we guarantee that trajectories satisfy safety constraints. Moreover, we use a terminal set constraint to recursively guarantee the existence of safe control actions at every iteration. In our experiments, we show that the resulting algorithm can be used to safely and efficiently explore and learn about dynamic systems.},
+	archivePrefix = {arXiv},
+	arxivId = {1803.08287},
+	author = {Koller, Torsten and Berkenkamp, Felix and Turchetta, Matteo and Krause, Andreas},
+	booktitle = {Proceedings of the IEEE Conference on Decision and Control},
+	doi = {10.1109/CDC.2018.8619572},
+	eprint = {1803.08287},
+	isbn = {9781538613955},
+	issn = {07431546},
+	title = {{Learning-Based Model Predictive Control for Safe Exploration}},
+	year = {2019}
+}
+
+@techreport{Williams2018,
+	abstract = {We present an algorithmic framework for stochastic model predictive control that is able to optimize non-linear systems with cost functions that have sparse, discontinuous gradient information. The proposed framework combines the benefits of sampling-based model predictive control with linearization-based trajectory optimization methods. The resulting algorithm consists of a novel utilization of Tube-based model predictive control. We demonstrate robust algorithmic performance on a variety of simulated tasks, and on a real-world fast autonomous driving task.},
+	author = {Williams, Grady and Goldfain, Brian and Drews, Paul and Saigol, Kamil and Rehg, James M and Theodorou, Evangelos A},
+	title = {{Robust Sampling Based Model Predictive Control with Sparse Objective Information}},
+	year = {2018}
+}
+
+@article{Naghshvar2018,
+	archivePrefix = {arXiv},
+	arxivId = {arXiv:1812.01254v1},
+	author = {Naghshvar, Mohammad and Sadek, Ahmed K and Wiggers, Auke J},
+	eprint = {arXiv:1812.01254v1},
+	title = {{Risk-averse Behavior Planning for Autonomous Driving under Uncertainty}},
+	year = {2018}
+}
+
+@inproceedings{Berkenkamp2016,
+	abstract = {One of the most fundamental problems when designing controllers for dynamic systems is the tuning of the controller parameters. Typically, a model of the system is used to obtain an initial controller, but ultimately the controller parameters must be tuned manually on the real system to achieve the best performance. To avoid this manual tuning step, methods from machine learning, such as Bayesian optimization, have been used. However, as these methods evaluate different controller parameters on the real system, safety-critical system failures may happen. In this paper, we overcome this problem by applying, for the first time, a recently developed safe optimization algorithm, SafeOpt, to the problem of automatic controller parameter tuning. Given an initial, low-performance controller, SafeOpt automatically optimizes the parameters of a control law while guaranteeing safety. It models the underlying performance measure as a Gaussian process and only explores new controller parameters whose performance lies above a safe performance threshold with high probability. Experimental results on a quadrotor vehicle indicate that the proposed method enables fast, automatic, and safe optimization of controller parameters without human intervention.},
+	archivePrefix = {arXiv},
+	arxivId = {1509.01066},
+	author = {Berkenkamp, Felix and Schoellig, Angela P. and Krause, Andreas},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2016.7487170},
+	eprint = {1509.01066},
+	isbn = {9781467380263},
+	issn = {10504729},
+	title = {{Safe controller optimization for quadrotors with Gaussian processes}},
+	year = {2016}
+}
+
+@inproceedings{Turchetta2016,
+	abstract = {In classical reinforcement learning agents accept arbitrary short term loss for long term gain when exploring their environment. This is infeasible for safety critical applications such as robotics, where even a single unsafe action may cause system failure or harm the environment. In this paper, we address the problem of safely exploring finite Markov decision processes (MDP). We define safety in terms of an a priori unknown safety constraint that depends on states and actions and satisfies certain regularity conditions expressed via a Gaussian process prior. We develop a novel algorithm, SAFEMDP, for this task and prove that it completely explores the safely reachable part of the MDP without violating the safety constraint. To achieve this, it cautiously explores safe states and actions in order to gain statistical confidence about the safety of unvisited state-action pairs from noisy observations collected while navigating the environment. Moreover, the algorithm explicitly considers reachability when exploring the MDP, ensuring that it does not get stuck in any state with no safe way out. We demonstrate our method on digital terrain models for the task of exploring an unknown map with a rover.},
+	archivePrefix = {arXiv},
+	arxivId = {1606.04753},
+	author = {Turchetta, Matteo and Berkenkamp, Felix and Krause, Andreas},
+	booktitle = {Advances in Neural Information Processing Systems},
+	eprint = {1606.04753},
+	issn = {10495258},
+	title = {{Safe exploration in finite Markov decision processes with Gaussian processes}},
+	year = {2016}
+}
+
+@book{Altman1999,
+	title = {Constrained Markov Decision Processes},
+	author = {Altman, Eitan},
+	year = {1999},
+	publisher = {Chapman and Hall/CRC},
+}
+
+@inproceedings{Achiam2017,
+	abstract = {For many applications of reinforcement learning it can be more convenient to specify both a reward function and constraints, rather than trying to design behavior through the reward function. For example, systems that physically interact with or around humans should satisfy safety constraints. Recent advances in policy search algorithms (Mnih et al., 2016; Schulman et al., 2015; Lillicrap et al., 2016; Levine et al., 2016) have enabled new capabilities in high-dimensional control, but do not consider the constrained setting. We propose Constrained Policy Optimization (CPO), the first generalpurpose policy search algorithm for constrained reinforcement learning with guarantees for nearconstraint satisfaction at each iteration. Our method allows us to train neural network policies for high-dimensional control while making guarantees about policy behavior all throughout training. Our guarantees are based on a new theoretical result, which is of independent interest: we prove a bound relating the expected returns of two policies to an average divergence between them. We demonstrate the effectiveness of our approach on simulated robot locomotion tasks where the agent must satisfy constraints motivated by safety.},
+	archivePrefix = {arXiv},
+	arxivId = {1705.10528},
+	author = {Achiam, Joshua and Held, David and Tamar, Aviv and Abbeel, Pieter},
+	booktitle = {34th International Conference on Machine Learning, ICML 2017},
+	eprint = {1705.10528},
+	isbn = {9781510855144},
+	title = {{Constrained policy optimization}},
+	year = {2017}
+}
+
+@inproceedings{Tessler2019,
+	abstract = {Solving tasks in Reinforcement Learning is no easy feat. As the goal of the agent is to maximize the accumulated reward, it often learns to exploit loopholes and misspecifications in the reward signal resulting in unwanted behavior. While constraints may solve this issue, there is no closed form solution for general constraints. In this work, we present a novel multi-timescale approach for constrained policy optimization, called 'Reward Constrained Policy Optimization' (RCPO), which uses an alternative penalty signal to guide the policy towards a constraint satisfying one. We prove the convergence of our approach and provide empirical evidence of its ability to train constraint satisfying policies.},
+	archivePrefix = {arXiv},
+	arxivId = {1805.11074},
+	author = {Tessler, Chen and Mankowitz, Daniel J. and Mannor, Shie},
+	booktitle = {7th International Conference on Learning Representations, ICLR 2019},
+	eprint = {1805.11074},
+	title = {{Reward constrained policy optimization}},
+	year = {2019}
+}
+
+@article{leung2018infusing,
+	title={On infusing reachability-based safety assurance within probabilistic planning frameworks for human-robot vehicle interactions},
+	author={Leung, Karen and Schmerling, Edward and Chen, Mo and Talbot, John and Gerdes, J Christian and Pavone, Marco},
+	journal={arXiv preprint arXiv:1812.11315},
+	year={2018}
+}
+
+@article{Fisac2019,
+	abstract = {The proven efficacy of learning-based control schemes strongly motivates their application to robotic systems operating in the physical world. However, guaranteeing correct operation during the learning process is currently an unresolved issue, which is of vital importance in safety-critical systems. We propose a general safety framework based on Hamilton-Jacobi reachability methods that can work in conjunction with an arbitrary learning algorithm. The method exploits approximate knowledge of the system dynamics to guarantee constraint satisfaction while minimally interfering with the learning process. We further introduce a Bayesian mechanism that refines the safety analysis as the system acquires new evidence, reducing initial conservativeness when appropriate while strengthening guarantees through real-Time validation. The result is a least-restrictive, safety-preserving control law that intervenes only when the computed safety guarantees require it, or confidence in the computed guarantees decays in light of new observations. We prove theoretical safety guarantees combining probabilistic and worst-case analysis and demonstrate the proposed framework experimentally on a quadrotor vehicle. Even though safety analysis is based on a simple point-mass model, the quadrotor successfully arrives at a suitable controller by policy-gradient reinforcement learning without ever crashing, and safely retracts away from a strong external disturbance introduced during flight.},
+	archivePrefix = {arXiv},
+	arxivId = {1705.01292},
+	author = {Fisac, Jaime F. and Akametalu, Anayo K. and Zeilinger, Melanie N. and Kaynama, Shahab and Gillula, Jeremy and Tomlin, Claire J.},
+	doi = {10.1109/TAC.2018.2876389},
+	eprint = {1705.01292},
+	issn = {15582523},
+	journal = {IEEE Transactions on Automatic Control},
+	keywords = {Gaussian processes,Safety,autonomous systems,robot learning,robust optimal control},
+	title = {{A General Safety Framework for Learning-Based Control in Uncertain Robotic Systems}},
+	year = {2019}
+}
+
+@inproceedings{Le2019,
+	abstract = {When learning policies for real-world domains, two important questions arise: (i) how to efficiently use pre-collected off-policy, non-optimal behavior data; and (ii) how to mediate among different competing objectives and constraints. We thus study the problem of batch policy learning under multiple constraints, and offer a systematic solution. We first propose a flexible meta-algorithm that admits any batch reinforcement learning and online learning procedure as subroutines. We then present a specific algorithmic instantiation and provide performance guarantees for the main objective and all constraints. As part of off-policy learning, we propose a simple method for off-policy policy evaluation (OPR) and derive PAC-style bounds. Our algorithm achieves strong empirical results in different domains, including in a challenging problem of simulated car driving subject to multiple constraints such as lane keeping and smooth driving. We also show experimentally that our OPR method outperforms other popular OPR techniques on a standalone basis, especially in a high-dimensional setting.},
+	archivePrefix = {arXiv},
+	arxivId = {1903.08738},
+	author = {Le, Hoang M. and Voloshin, Cameron and Yue, Yisong},
+	booktitle = {36th International Conference on Machine Learning, ICML 2019},
+	eprint = {1903.08738},
+	isbn = {9781510886988},
+	title = {{Batch policy learning under constraints}},
+	year = {2019}
+}
+
+@InProceedings{Torossian19a,
+	title = 	 {$\mathcal{X}$-Armed Bandits: Optimizing Quantiles, CVaR and Other Risks},
+	author = 	 {Torossian, L\'eonard and Garivier, Aur\'elien and Picheny, Victor},
+	booktitle = 	 {Proceedings of The Eleventh Asian Conference on Machine Learning},
+	pages = 	 {252--267},
+	year = 	 {2019},
+	editor = 	 {Lee, Wee Sun and Suzuki, Taiji},
+	volume = 	 {101},
+	series = 	 {Proceedings of Machine Learning Research},
+	address = 	 {Nagoya, Japan},
+	month = 	 {17--19 Nov},
+	publisher = 	 {PMLR},
+	pdf = 	 {http://proceedings.mlr.press/v101/torossian19a/torossian19a.pdf},
+	url = 	 {http://proceedings.mlr.press/v101/torossian19a.html},
+	abstract = 	 {We propose and analyze StoROO, an algorithm for risk optimization on stochastic black-box functions derived from StoOO. Motivated by risk-averse decision making fields like agriculture, medicine, biology or finance, we do not focus on the mean payoff but on generic functionals of the return distribution. We provide a generic regret analysis of StoROO and illustrate its applicability with two examples: the optimization of quantiles and CVaR. Inspired by the bandit literature and black-box mean optimizers, StoROO relies on the possibility to construct confidence intervals for the targeted functional based on random-size samples. We detail their construction in the case of quantiles, providing tight bounds based on Kullback-Leibler divergence. We finally present numerical experiments that show a dramatic impact of tight bounds for the optimization of quantiles and CVaR.}
+}
+

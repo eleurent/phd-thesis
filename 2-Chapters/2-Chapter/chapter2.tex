@@ -15,6 +15,10 @@
 	Konstantinos Kavafis, \href{https://eleurent.github.io/sisyphe/texts/ithaki.html}{\emph{Ithaque}}.
 \end{flushright}
 
+\abstractStartChapter{}%
+This chapter provides an overview of sequential decision making in the specific context of Autonomous Driving. Not exhaustive, aims at breadth rather than depth. What have researchers been doing? What questions may a one practitioner ask when trying to apply RL for AD.
+\minitocStartChapter{}
+
 \section{Sequential decision-making}
 \label{sec:sequential-decision-making}
 
@@ -59,7 +63,7 @@ An orthogonal strategy to motion planning techniques is to learn a reactive poli
 \end{equation*}
 This approach is also referred to as behavioural cloning, and is particularly suited when only low-level high-dimensional inputs are available, such as camera images, which prevents access to the dynamics model required by motion planning approaches. 
 The first application of imitation learning to autonomous driving is the ALVINN (Autonomous Land Vehicle In a Neural Network) project \citep{Pomerleau89}, where a 3-layer neural network was trained for the task of road following, as shown in \Cref{fig:alvinn}.
-\begin{figure}[tp]
+\begin{figure}[th]
 	\centering
 	\includegraphics[width=0.4\linewidth]{img/alvinn}
 	\caption{The 3-layer architecture used in ALVINN \citep{Pomerleau89}.}
@@ -67,7 +71,7 @@ The first application of imitation learning to autonomous driving is the ALVINN 
 \end{figure}
 
 \paragraph{Compounding errors} Unfortunately, the behavioural cloning paradigm is known to suffer from \emph{compounding errors}: since the future states depend on previous predictions (actions), the \iid assumption made in statistical learning does not hold. Therefore, small mistakes will place the system into states that are outside the training data distribution, as illustrated in \Cref{fig:compounding}, and resulting policies struggle to maintain high performances on long time horizons. This effect was identified and tackled in \citep{Ross2011}, who proposed to iteratively request expert labels (actions) from the states encountered by the current trained policy, rather than from the initial expert distribution. However, this can only be accomplished at the cost of a significant labelling effort. 
-\begin{figure}[tp]
+\begin{figure}[th]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/cp4}
 	\caption{As the agent deviates from the expert trajectories, the errors compound and push the agent further and further from the training distribution.}
@@ -91,7 +95,7 @@ While the MDP framework undoubtedly consitutes a convenient theoretical framewor
 
 \section{States and partial observability}
 
-\begin{figure}[tp]
+\begin{figure}[th]
 	\centering
 	\begin{subfigure}[b]{.7\linewidth}
 		\includegraphics[width=\linewidth]{img/po-sensors}
@@ -106,7 +110,7 @@ While the MDP framework undoubtedly consitutes a convenient theoretical framewor
 	\caption{Sources of Partial Observability in Autonomous Driving. Illustrations from \citep{ObjCode2017}.}
 	\label{fig:partial-observability}
 \end{figure}
-\begin{figure}
+\begin{figure}[th]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/pomdp}
 	\caption{Information-seeking behaviours: the tailgating vehicle (top) should slow down, although it might decrease its immediate rewards, to gain valuable information in return (bottom). Image from \citep{ObjCode2017}.}
@@ -124,20 +128,21 @@ Furthermore, the POMDP framework has been used to account for uncertainty in the
 
 \section{Actions and temporal abstraction}
 
-\begin{figure}
+\begin{figure}[th]
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/smdp}
 	\caption{Temporally extended sequences of actions can be used as skills, or \emph{options}, and futher used by a meta-policy to plan over long time horizons \citep{Sutton1999}.}
 	\label{fig:smdp}
 \end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[width=0.3\linewidth]{img/options}
-	\caption{Temporally extended sequences of actions can be used as skills, or \emph{options}, and futher used by a meta-policy to plan over long time horizons \citep{Sutton1999}.}
-	\label{fig:options-graph}
-\end{figure}
 
 The second step of when specifying an MDP is to choose an action space $\cA$. Suppose you are taking your first driving lesson, your instructor will be providing you with very detailed instructions about actuation such as: \emph{"turn the steering wheel by a full turn"}, \emph{"change gear"}, \emph{"brake smoothly"}, etc. After a few lessons however, the instructor will switch to more general instructions such as \emph{"change lane to overtake this vehicle"}, \emph{"yield to vehicles on the roundabout before merging"} or \emph{"drive slower in this area"}. And when, having finally got your driver's license, you start driving in an unfamiliar city, your friend in the passenger seat will merely give you directions: \emph{"follow the signs for the train station, and turn into the third street on the left"}. In short, driving involves reasoning at several time scales, and the corresponding decisions have different granularities. This can hardly be expressed in the MDP framework, where a single action space $\cA$ is considered. In particular, relying on shorter actions yields a smaller signal-to-noise ratio, which leads to slow learning when planning over long time horizon \citep{ShalevShwartz2017}. To address this issue, the concept of \emph{temporal abstraction} was introduced: nuclear actions $a\in\cA$ can be used to define temporally-extended \emph{skills} $\pi_o:\cS \rightarrow \cM(\cA)$, also called \emph{options}, which in turn can be used as meta-actions by a high-level \emph{option policy} $\pi(o|s)$. This idea is also referred to as \emph{Hierarchical Reinforcement Learning}, and was first analysed with the \emph{semi}-Markov Decision Process (SMDP) extension \citep{Sutton1999}, illustrated in \Cref{fig:smdp}. In autonomous driving, this hierarchy is typically imposed by the pipeline presented in \Cref{chapter:1}: Behavioural planning corresponds to the policy over options $\pi(o|s)$, while the low-level options $\pi_o$ are achieved in the Motion planning layer. However, this requires manually specifying the interfaces at each layer. For instance, in \citep{Barbier2018} a behavioural policy can only be trained after having defined a finite set of low-level skills, namely \emph{Stop}, \emph{Yield}, and \emph{Pass}. Consequently, using a fixed set of options constrains the exhaustivity of the set of option-policies, and may prevent recovering optimality if the architecture is not versatile enough. To bypass these limitations, \citet{ShalevShwartz2016} proposed to ensure sufficient exhaustivity of the class of available options by generating new options on-the-fly as paths in an option-graph, shown in \Cref{fig:options-graph}. Other works attempt to learn low-level skills jointly with the meta-policy \citep{Bacon2017,Vezhnevets2017,Heess2016}. In \citep{Paxton2017}, low-level skills such as \emph{follow} and \emph{overtake} are trained using Neural Networks and ad-hoc reward functions, while serving as meta-actions for a high-level tree-based planner.
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[width=0.3\linewidth]{img/options}
+	\caption{A graph used to generate options \citep{ShalevShwartz2016}.}
+	\label{fig:options-graph}
+\end{figure}
 
 \section{Rewards and inverse reinforcement learning}
 
@@ -146,7 +151,8 @@ Paradoxically, humans know how to drive, but not necessarily how to justify and 
 Reward engineering: manually define a set of features of interest, and weighted average. Many use-cases yield many rules, some which contradict. Hard to strike the right tradeoff.
 
 One practical solution would be to iteratively refine a reward function until the learnt policy matches the expected behavior.
-C'est inversé par rapport au but initial du RL, ou le comportement découle de la reward.
+
+This is the inverse problem to RL, where the optimal behaviour stems from the reward.
 
 We assume that the agents act to optimize an unknown reward function.
 Inverse Reinforcement Learning
@@ -166,6 +172,80 @@ Demonstration]
 
 \section{Dynamics and transfer}
 
+The last element of the MDP tuple.
+Usually, no need to specify them: the dynamics are unknown, and only accessed by interaction.
+But in the case of AD, this is not realistic.
+Would require exploration, generating accidents, which is out of question.
+ 
+How do we proceed?
+Two ways: 
+- offline RL
+- simulation
 
-\section{Optimisation criterion and safety}
+But simulation-reality gap.
+\citep{Pan2017,Liang2019}
 
+Domain randomization: \citep{Tobin2017}
+
+\section{Optimality criterion and safety}
+
+Once the MDP is fully specified, the optimal policy maximises the expected return.
+But is it an appropriate performance measure ?
+
+A simple counter example
+
+This has lead researchers and practitioners to consider alternative definitions of Optimality. Typically in critical settings, these approaches are are grouped under the name of \emph{Safe} RL.
+Survey by \citep{Garcia2015}
+
+\paragraph{Risk-sensitive Criterion}
+
+Bandit / RL
+\citep{Torossian19a} for risk optimization of stochastic blackbox functions.
+Application to AD: \citep{Naghshvar2018} stationary object on the road, and highway ramp
+
+
+\paragraph{Worst-case criterion}
+
+Bandit / RL / Control theory:
+Worst-case has been studied in the context of finite Markov Decision Processes with uncertain parameters by \citet{Iyengar2005}, \citet{Nilim2005} and \citet{Wiesemann2013}
+
+\citep{Berkenkamp2015} with respect to the $\cH_2$ system norm.
+H infinity control
+
+Application to AD
+\citep{Williams2018} TubeMPC for driving
+
+\paragraph{Constrained Criterion}
+
+In \citep{Berkenkamp2016}, blackbox optimization : and constraint is imposed during training.
+
+CMDP optimization problem is to find a policy $\pi$ that maximizes $V^r$ subject to the constraint $V^c \leq \beta$
+
+\citep{Altman1999,Achiam2017}
+
+\citep{Tessler2019}: general constraints (discounted sums or average cost settings)
+
+$$\max R \text{ s.t. } C \geq \beta$$
+
+Applied to AD in \citep{Le2019}: two behavioral constraints: smooth driving and lane centering on CarRacing
+
+
+\paragraph{Safe Exploration}
+
+Constrain not the optimality definition but the exploration process: prevent error states through external knowledge (demonstrations, initial feasible policy).
+
+\citep{Turchetta2016}: initial safe states and smoothness of the safety function : $r(s,a) > h$: explores the maximum reachable safe set without visiting unsafe states.
+
+\citep{Koller2019}
+additional model uncertainty under GP prior
+given a safe controller, verify X and U polytopic constraints
+
+
+This setting is questionable for AD, might be too restrictive: some standard states are prone to errors under adversarial behaviours, and cannot be avoided.
+\citep{ShalevShwartz2017} instead defines a notion of Responsibility-Sensitive Safety.
+
+\citep{Bouton2019}
+\citep{Bouton2019workshop}: $P(reach goal |s, a) \geq \lambda$
+
+\citep{leung2018infusing} HJI reachability
+\citep{Fisac2019} HJI equation, non-convex constraints X,U
