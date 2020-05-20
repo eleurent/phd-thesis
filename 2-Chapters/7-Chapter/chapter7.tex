@@ -980,6 +980,7 @@ the form:
 where $\cD_{i}=\cA_{i}+\cB K_{i}$ for $i\in[3]$, and the restrictions,
 which the gains $K_{0},K_{1},K_{2}$ have to respect, are given below:
 \begin{theorem}
+	\begin{leftbar}[theorembar]
 	\label{thm:ISS_pr} If there exist diagonal matrices $P$, $Q$, $Q_{+}$,
 	$Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2p\times2p}$
 	such that the following linear matrix inequalities are satisfied:
@@ -1001,6 +1002,7 @@ which the gains $K_{0},K_{1},K_{2}$ have to respect, are given below:
 	\end{gather*}
 	then \eqref{eq:closed-loop_pr} is input-to-state stable with respect
 	to $\underline{\omega},\overline{\omega}$.
+	\end{leftbar}
 \end{theorem}
 Note that the requirement that the matrix $P$ has to be diagonal is not
 restrictive, since for a Metzler matrix $\cD_{0}$ (the case of \eqref{eq:predictor-naive}
@@ -1081,6 +1083,7 @@ The conditions of Theorem \ref{thm:ISS_pr} assume that the control
 gains $K_{0},K_{1},K_{2}$ are given, let us find these gains as solutions
 of linear matrix inequalities:
 \begin{corollary}
+	\begin{leftbar}[corollarybar]
 	If there exist diagonal matrices $P$, $\tilde{Q}$, $\tilde{Q}_{+}$,
 	$\tilde{Q}_{-}$, $Z_{+}$, $Z_{-}$, $\tilde{\Psi}_{+}$, $\tilde{\Psi}_{-}$,
 	$\tilde{\Psi}$, $\Gamma\in\Real^{2p\times2p}$ and matrices $U_{0},U_{1},U_{2}\in\Real^{q\times2p}$
@@ -1107,6 +1110,7 @@ of linear matrix inequalities:
 	then \eqref{eq:closed-loop_pr} for $K_{0}=U_{0}P$, $K_{1}=U_{1}Z_{+}$
 	and $K_{2}=U_{2}Z_{-}$ is input-to-state stable with respect to the
 	inputs $\underline{\omega},\overline{\omega}$.
+	\end{leftbar}
 \end{corollary}
 \begin{proof}
 	Note that the conditions $P>0$, $Z_{+}>0$, $Z_{-}>0$ imply $P+\min\{Z_{+},Z_{-}\}>0$,
@@ -1158,6 +1162,7 @@ For brevity, the results of this section are given for the predictor
 can be considered by skipping Assumption \ref{assu:metzler} in the
 formulation). We need the following hypothesis in this section:
 \begin{assumption}
+	\begin{leftbar}[assumptionbar]
 	\label{assu:ctrl} There exist $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$
 	satisfying the conditions of Theorem \ref{thm:ISS_pr} for the matrices
 	$A_{0}$ and $\Delta A_{i}$ with $i\in[2d]$ calculated in \eqref{eq:polytope}
@@ -1171,6 +1176,7 @@ formulation). We need the following hypothesis in this section:
 	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
 	\]
 	for any $\xi\in\X_{f}$ and $t\geq0$.
+	\end{leftbar}
 \end{assumption}
 These properties guarantee that there exists a control \eqref{eq:control_pr}
 that can be always applied to stabilize the predictor \eqref{eq:interval-predictor}
@@ -1249,6 +1255,7 @@ of the terminal set \eqref{eq:X_f}).
 
 The main result of the paper is as follows:
 \begin{theorem}
+	\begin{leftbar}[theorembar]
 	\label{th:MPC} Let $\underline{x}_{0},\overline{x}_{0}\in\X$, and
 	assumptions \ref{assu:main}--\ref{assu:ctrl} hold with $\overline{\omega},\overline{\omega}-\underline{\omega}$
 	being non-increasing functions of $t\geq0$. Then the closed-loop
@@ -1261,6 +1268,7 @@ The main result of the paper is as follows:
 		\item Recursive feasibility with reaching $\X_{f}$ in a finite time; 
 		\item Constraint satisfaction.
 	\end{enumerate}
+\end{leftbar}
 \end{theorem}
 \begin{proof}
 	Recall that $\theta\in\hat{\Theta}(t)$ for all $t\geq0$ due to the
@@ -1305,6 +1313,7 @@ The main result of the paper is as follows:
 	are always satisfied.
 \end{proof}
 \begin{remark}
+	\begin{leftbar}[remarkbar]
 	At each $t_{i}$, $i\in\Natural_{+}$, the gains $K_{0},K_{1},K_{2}$
 	can be recalculated for the currently estimated set $\hat{\Theta}(t_{i})$.
 	If next, the obtained in \eqref{eq:X_f} set $\X_{f}$ satisfies 
@@ -1318,6 +1327,7 @@ The main result of the paper is as follows:
 	for any $\xi\in\X_{f}$ and $t\geq0$, as in Assumption \ref{assu:ctrl},
 	then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
 	can be used in \eqref{eq:control}.
+	\end{leftbar}
 \end{remark}
 
 We illustrate the efficiency of the proposed MPC approach by numerical

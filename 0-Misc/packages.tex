@@ -112,6 +112,10 @@
 \usepackage{minitoc}
 \setcounter{minitocdepth}{1}
 
+\newcommand\Chapter[2]{
+	\chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
+}
+
 % --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
 \usepackage{framed}
 

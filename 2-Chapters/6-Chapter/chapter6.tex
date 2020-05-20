@@ -2,7 +2,7 @@
 
 \graphicspath{{2-Chapters/6-Chapter/}}
 
-\chapter{Planning Fast by Hoping for the Best}
+\Chapter{Planning Fast}{by Hoping for the Best}
 \label{chapter:6}
 
 \begin{flushright}
@@ -631,11 +631,11 @@ The results of our experiments are shown in Figure \ref{fig:experiments}. The \O
 We introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Finally, we proposed an efficient implementation that benefits from a substantial speedup, facilitating its use for real-time planning applications.
 
 
-\section{Graph-Based Planning for Deterministic Systems}
+\section{Graph-based optimistic planning}
 \label{sec:gbopd}
 
-We consider the simple setting of MDPs with deterministic dynamics and rewards, and will denote $r(s,a)$ and $P(s,a)$ the unique reward $r$ and next state $s'$ sampled from $P\left(r,s'|s,a\right)$, respectively.
-We start by giving some background on the interplay of data structures and optimistic planning algorithms.
+We start by considering the simple setting of MDPs with deterministic dynamics and rewards, and will denote $r(s,a)$ and $P(s,a)$ the unique reward $r$ and next state $s'$ sampled from $P\left(r,s'|s,a\right)$, respectively.
+Let us give some background on the interplay of data structures and optimistic planning algorithms.
 
 \subsection{Data structures}
 
@@ -683,6 +683,7 @@ These rules can be chosen with the goal of minimising the simple regret $r_n$.
 A popular approach is to follow the principle of \emph{Optimism in the Face of Uncertainty} (OFU) \citep[see][]{Munos14}, which consists in exploring the option that maximises an upper-bound of the true objective. In the context of planning, it has been applied by forming bounds on the value function $V$.
 
 \begin{definition}[Value bounds]
+	\begin{leftbar}[defnbar]
 	{\textbf{On trees.}} We denote by $L:\Tau_n \rightarrow \Real$ and  $U:\Tau_n \rightarrow \Real$ a lower-bound and upper-bound for the state value $V$ defined on the tree $\Tau_n$, such that
 	\begin{equation*}
 	\forall a\in\Tau_n, \qquad L(a) \leq V(s(a)) \leq U(a).
@@ -692,6 +693,7 @@ A popular approach is to follow the principle of \emph{Optimism in the Face of U
 	\begin{equation*}
 	\forall s\in\cG_n, \qquad \cL(s) \leq V(s) \leq \cU(s).
 	\end{equation*}
+	\end{leftbar}
 \end{definition}
 
 Following the OFU principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010open, Busoniu2012optimistic}.
@@ -700,6 +702,7 @@ For instance, since we assume that the rewards are bounded in [0, 1], trivial bo
 $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
 
 \begin{definition}[Bellman optimality operator]
+	\begin{leftbar}[defnbar]
 	\label{def:bellman}
 	{\textbf{On trees.}} We define the Bellman optimality operator $B_n$ on the tree $\Tau_n$ as:
 	\begin{equation}
@@ -721,11 +724,14 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 	\end{cases}
 	\end{equation}
 	The updates of both Bellman operators are depicted in \Cref{fig:bellman}.
+	\end{leftbar}
 \end{definition}
 
-%\begin{remark}
-%	For ease of notation, we will sometimes drop the $n$ index on $B$ and $\cB$ when it is non-ambiguous.
-%\end{remark}
+\begin{remark}
+	\begin{leftbar}[remarkbar]
+	For ease of notation, we will sometimes drop the $n$ index on $B$ and $\cB$ when it is non-ambiguous.
+	\end{leftbar}
+\end{remark}
 
 
 \begin{figure}[tp]
@@ -740,14 +746,17 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 \citet{Hren2008optimistic} used this Bellman operator $B_n$ in their \texttt{OPD} algorithm to define a pair of bounds $(L_n,\, U_n)$ at each iteration $n$. They use trivial bounds at the leaves, and backup these estimates up to the root by iteratively applying $B_n$. We can show that, under a \textit{monotonicity} condition (satisfied by the trivial bounds $0$ and $V_{max}$), applying $B_n$ can only tighten a bound and converges in a finite time.
 
 \begin{definition}[Monotonicity]
+	\begin{leftbar}[defnbar]
 	A pair of bounds ($L$, $U$) or $(\cL, \cU)$ is \emph{monotonic} if they are respectively non-decreasing and non-increasing along transitions:
 	\begin{align*}
 	\forall a\in{\Tau}_n, \quad & L(a) \leq B_n(L)(a), & U(a) & \geq B_n(U)(a)\\
 	\forall (s)\in\inte{\cG}_n, \quad &\; \cL(s) \leq \cB_n(\cL)(s),&   \cU(s) & \geq \cB_n(\cU)(s)
 	\end{align*}
+	\end{leftbar}
 \end{definition}
 
 \begin{lemma}[Properties of $B_n$]
+	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-tree}
 	\begin{enumerate}[label=(\roman*)]
 		\item $B_n$ preserves monotonicity and tightens monotonic bounds: $$
@@ -755,6 +764,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 		$$
 		\item $(B_n^k)_k$ converges in a finite time $d_n$, where $d_n$ is the depth of $T_n$. 
 	\end{enumerate}
+	\end{leftbar}
 \end{lemma}
 This enables \citet{Hren2008optimistic} to define\footnote{We use an iteration of operators while a recursive definition was used originally.} non-trivial valid bounds on $V$:
 \begin{align}
@@ -764,6 +774,7 @@ L_n \eqdef B_n^{d_n}(0), \qquad U_n \eqdef B_n^{d_n}(V_{\max}),
 where $0$ is the null function.
 The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewise, we have:
 \begin{lemma}[Properties of $\cB_n$]
+	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-graph}
 	\begin{enumerate}[label=(\roman*)]
 		\item $\cB_n$ preserves monotonicity and tightens monotonic bounds: $$
@@ -771,6 +782,7 @@ The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewis
 		$$
 		\item $\cB$ is a $\gamma$-contraction, and we denote $\cB_n^{\infty} \eqdef \lim_{k\rightarrow \infty} \cB_n^k$.
 	\end{enumerate}
+	\end{leftbar}
 \end{lemma}
 which motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref{alg:opd} adapted to a graph structure.
 
@@ -813,12 +825,14 @@ which motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref
 \end{algorithm}
 
 \begin{remark}[Termination and complexity]
+	\begin{leftbar}[remarkbar]
 	There are two procedures in \GBOPD that may not terminate in finite time when $\cG_n$ contains a loop:
 	\begin{enumerate*}[label=(\roman*)]
 		\item the computation of $\cB_n^\infty$ (line 1); and
 		\item the sampling rule loop (line 2),
 	\end{enumerate*}
 	In the Supplementary Material, we discuss an approximate implementation where these two procedures are stopped whenever they reach a desired accuracy $\varepsilon$, along with an analysis of the corresponding time complexity and impact on the planning performance.
+	\end{leftbar}
 \end{remark}
 
 Though both algorithms share a similar design, we claim that using graphs provides substantial theoretical and practical performance improvements, and back up this statement in \Cref{sec:analysis,sec:experiments}.
@@ -833,35 +847,40 @@ Comparing \OPD and \GBOPD directly is difficult since they do not involve the sa
 First, we recall the analysis of \citet{Hren2008optimistic}. We start by introducing some notations.
 
 \begin{definition}[Sequence values]
+	\begin{leftbar}[defnbar]
 	The value of a finite \textbf{sequence} of actions $a\in A^h$ is:
 	\begin{equation*}
 	\label{eq:state_value}
 	V(a) = R(s_0,a) + \gamma^{h} V(s(a)),
 	\end{equation*}
 	where $R(s, a) = \sum_{t=0}^{h-1} \gamma^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
+	\end{leftbar}
 \end{definition}
 
 This enables to define a measure of the difficulty of a planning problem.
 
 \begin{definition}[Difficulty measure]
+	\begin{leftbar}[defnbar]
 	We define the near-optimal branching factor $\hlrb{\kappa}$ of an MDP as
 	\begin{equation}
 	\hlrb{\kappa = \limsup_{h\rightarrow\infty} |\hlrb{\Tau_h^\infty}|^{1/h}} \in [1, K]
 	\end{equation}
 	where $\Tau^\infty_h = \displaystyle \left\{a\in A^h: V^\star-V(a) \leq \frac{\gamma^h}{1-\gamma}\right\}$ is the set of near-optimal nodes at depth $h$.
+	\end{leftbar}
 \end{definition}
 
 This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the subtree $T^\infty=\bigcup_h T_h^\infty$ of near-optimal nodes that can be sampled by \OPD, and acts as an effective branching factor as opposed to the true branching factor $K$. When $\hlrb{\kappa}$ is small, fewer nodes must be explored at a given depth allowing the algorithm to plan deeper for a given budget $n$. Thus, it directly impacts the simple regret that can be achieved by \OPD when run on a given MDP.
 
 
 \begin{theorem}[Regret bound of \citealt{Hren2008optimistic}]
+	\begin{leftbar}[theorembar]
 	\label{thm:regret-opd}
 	The \Cref{alg:opd} enjoys the following regret bound:
 	\begin{align*}
 	\quad r_n = \tilde{\cO}\left( n^{-\log \frac{1}{\gamma}/\hlrb{\log\kappa}}\right),
 	\end{align*}
 	where $f_n = \tilde{\cO}(n^{-\alpha})$ means that for any $\alpha'<\alpha$, $f_n = \cO(n^{-\alpha'}).$
-	
+	\end{leftbar}
 \end{theorem}
 
 The near-optimal branching factor $\hlrb{\kappa}$ is related \citep{Bubeck2010open} to the near-optimality dimension studied in the online optimisation literature \citep[see e.g.][]{Bubeck2009,Munos2011}.
@@ -894,6 +913,7 @@ Likewise, the recommendation rule simply uses \eqref{eq:recommendation_rule} wit
 Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ provided by an oracle: $$0\leq L\leq V\leq U\leq V_{\max}.$$
 \vspace*{-0.5cm}
 \begin{definition}[A finer difficulty measure]
+	\begin{leftbar}[defnbar]
 	We define the near-optimal branching factor \emph{according to the bounds $(L,\,U)$} as 
 	\begin{equation}
 	\hlbb{\kappa(L,U) \eqdef \limsup_{h\rightarrow\infty} \left|\Tau_h^\infty(L,U)\right|^{1/h}}\in(1, K], 
@@ -902,21 +922,26 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	$ \displaystyle
 	{\Tau_h^\infty(L,U)}=\left\{a\in A^h: V^\star - V(a)\leq \gamma^{h}(U(a)-L(a))\right\}.
 	$
+	\end{leftbar}
 \end{definition}
 
 \begin{lemma}
+	\begin{leftbar}[lemmabar]
 	\label{lem:shrink}
 	This branching factor shrinks as the bounds $(L,\,U)$ get tighter:
 	\[L_2\leq L_1\leq V\leq U_1\leq U_2\implies \kappa(L_1,U_1) \leq \kappa(L_2,U_2).\]
 	In particular, $\hlbb{\kappa(L,U)} \leq \hlrb{\kappa}$.
+	\end{leftbar}
 \end{lemma}
 
 \begin{theorem}
+	\begin{leftbar}[theorembar]
 	\label{thm:regret-bound-U}
 	Let $L \leq V\leq U$ monotonic bounds, then planning with $L$ and $U$ in \eqref{eq:sampling_rule} and \eqref{eq:recommendation_rule} yields the following simple regret bound:
 	\begin{equation*}
 	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlbb{\log \kappa(L,U)}}\right).
 	\end{equation*}
+	\end{leftbar}
 \end{theorem}
 
 
@@ -957,6 +982,7 @@ In $T(\cG_n)$, the unrolling mechanics behave as if any leaf $a$ sharing the sam
 The sampling and recommendation rules of \GBOPD also amount to running those of \OPD on the tree $T(\cG_n)$, except that the sampled sequence $b_n$ and recommended sequence $a_n$ can now have infinite depth since $T(\cG_n)$ itself can be infinite (we say that $a_n$ and $b_n$ are represented by nodes of infinite depth). In the sequel, we analyse how these rules behave on $T(\cG_n)$.
 
 \begin{lemma}[Expansion]
+	\begin{leftbar}[lemmabar]
 	\label{lem:expansion-bound}
 	Any node $a$ of depth $h$ traversed by the optimistic sampling rule of \GBOPD at iteration $n$ belongs to $T_h^\infty(L_n, U_n)$: 
 	\begin{equation}
@@ -965,12 +991,15 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 	\end{equation}
 	
 	In particular, if the sampling rule samples an infinite sequence $a\in A^\infty$, it is an optimal sequence, and we write that \eqref{alg:gbop-d} also holds for $a$ with $h=\infty$.
+	\end{leftbar}
 \end{lemma}
 
 
 \begin{lemma}[Recommendation]
+	\begin{leftbar}[lemmabar]
 	\label{lem:recommendation-bound}
 	The action $a_n$ recommended by \GBOPD has a simple regret $r_n \leq \frac{\gamma^{d_n}}{1-\gamma}$, where $d_n\in\Real\cup\{\infty\}$ is the maximal depth of expanded nodes in $T(\cG_n)$.
+	\end{leftbar}
 \end{lemma}
 Note that even though $T(\cG_n)$ can be infinite, there is only one node $b_t$ that is selected for expansion at each iteration $t\leq n$.
 
@@ -981,11 +1010,13 @@ In \Cref{thm:regret-bound-U}, we assumed that some bounds $(L,\,U)$ were reveale
 We can consider the sequence $\kappa_n = \kappa(L_n, U_n)$. It is non-increasing and lower-bounded by $1$, thus converges. Let $\hlgb{\kappa_\infty = \lim_{n\rightarrow\infty} \kappa(L_n, U_n)} \in[1,K]$.
 
 \begin{theorem}
+	\begin{leftbar}[theorembar]
 	\label{thm:regret-gbop}
 	\GBOPD enjoys the following regret bound, with $\hlgb{\kappa_\infty} \leq \hlrb{\kappa}$: 
 	\begin{align*}
 	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlgb{\log \kappa_\infty}}\right).
 	\end{align*}
+	\end{leftbar}
 \end{theorem}
 
 Intuitively, $\kappa_\infty$ should be much lower than $\kappa$ in problems where trajectories overlap a lot. For instance, it will be the case for problems where two actions cancel each-other out (e.g. moving left or right), or are commutative (e.g. placing pawns on a board game). However, this is merely an intuition. We now show that there exist problem instances in which $\hlgb{\kappa_\infty} < \hlrb{\kappa}$, which is a legitimate concern since their non-existence would make \Cref{thm:regret-gbop} trivial.
@@ -1002,6 +1033,7 @@ We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are describ
 \end{figure}
 
 \begin{proposition}[Comparison of branching factors]
+	\begin{leftbar}[propositionbar]
 	\label{prop:illustrative-example}
 	The MDP $\cM$ verifies $\hlrb{\kappa = K-1}$ and $\hlgb{\kappa_\infty = 1}$.
 	% :
@@ -1009,6 +1041,7 @@ We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are describ
 	%     \item $\hlrb{\kappa = K-1}$;
 	%     \item $\hlgb{\kappa_\infty = 1}$.
 	% \end{enumerate}
+	\end{leftbar}
 \end{proposition}
 This result confirms that \Cref{thm:regret-gbop} is non-trivial since we exhibit a problem for which $\hlgb{\kappa_\infty} < \hlrb{\kappa}$ (when $K\geq 3$), and legitimates our attempt to improve planning performances by merging the tree into a graph.
 
