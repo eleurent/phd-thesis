@@ -426,17 +426,17 @@ The objective of this work is to design an \emph{interval predictor} for the sys
 
 Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem used in \cite{Leurent2018}:
 \begin{eqnarray}
-\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:IP_direct}\\
+\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:predictor-naive}\\
 \dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
 &  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0},\nonumber 
 \end{eqnarray}
-then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:IP_direct} is more tricky. Indeed, \eqref{eq:IP_direct} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:IP_direct} is not:
+then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
 \begin{example*}
 	[motivating] Consider a scalar system:
 	\[
 	\dot{x}(t)=-\theta(t)x(t)+d(t),\;t\geq0,
 	\]
-	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $d(t)\in[\underline{d},\overline{d}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:IP_direct} takes the form:
+	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $d(t)\in[\underline{d},\overline{d}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:predictor-naive} takes the form:
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & -\overline{\theta}\overline{x}^{+}(t)+\underline{\theta}\overline{x}^{-}(t)+\underline{d},\\
 		\dot{\overline{x}}(t) & = & -\underline{\theta}\underline{x}^{+}(t)+\overline{\theta}\underline{x}^{-}(t)+\overline{d}.
@@ -446,7 +446,7 @@ then it is obvious to verify that the relations \eqref{eq:inclusion-property} ar
 		\begin{centering}
 			\includegraphics[width=\linewidth]{img/observer}
 			\par\end{centering}
-		\caption{\label{fig:IP_Direct} The results of prediction by \eqref{eq:IP_direct}: even in such a simplistic setting, the predictor is unstable and diverges quickly.}
+		\caption{\label{fig:IP_Direct} The results of prediction by \eqref{eq:predictor-naive}: even in such a simplistic setting, the predictor is unstable and diverges quickly.}
 	\end{figure}
 \end{example*}
 
@@ -862,7 +862,7 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 	\begin{subfigure}[b]{0.8\linewidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/driving_observer.png}
-		\caption{The naive predictor \eqref{eq:IP_direct} quickly diverges}
+		\caption{The naive predictor \eqref{eq:predictor-naive} quickly diverges}
 		\label{sub:hw-a}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.8\linewidth}
@@ -889,7 +889,7 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 \end{figure}
 
 
-We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:IP_direct} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \cite{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \cite{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
+We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:predictor-naive} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \cite{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \cite{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
 
 \subsection*{Conclusion}
 
@@ -899,7 +899,488 @@ The prediction problem for uncertain LPV systems is solved by designing an inter
 
 \section{Robust stabilization and constraint satisfaction}
 
-%TODO
+
+Our goal is to design a robust control that stabilizes \eqref{eq:dynamics},
+\eqref{eq:outputs} at a vicinity of the origin under Assumption \ref{assu:main}
+such that
+\begin{equation}
+x(t)\in\X,\;u(t)\in\U\quad\forall t\geq0,\label{eq:constraints}
+\end{equation}
+where $[\underline{x}_{0},\overline{x}_{0}]\subset\X\subset\Real^{p}$
+and $\U\subset\Real^{q}$ are given bounded constraint sets for the
+state and the control, respectively.
+
+
+\subsection{Stabilizing control for \eqref{eq:predictor-naive} and \eqref{eq:interval-predictor}}
+
+Note that both interval predictors, \eqref{eq:predictor-naive} and
+\eqref{eq:interval-predictor}, admit a representation in the form (we use the
+time argument $t=s$ in this subsection):
+\begin{equation}
+\dot{\xi}(t)=\cA_{0}\xi(t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\delta(t),\label{eq:predictor}
+\end{equation}
+where $\xi(t)=[\underline{x}^{\top}(t)\;\overline{x}^{\top}(t)]^{\top}\in\Real^{2p}$
+is the extended state vector of the predictors,
+\[
+\delta(t)=\left[\begin{array}{cc}
+D^{+} & -D^{-}\\
+-D^{-} & D^{+}
+\end{array}\right]\left[\begin{array}{c}
+\underline{\omega}(t)\\
+\overline{\omega}(t)
+\end{array}\right]\in\Real^{2p}
+\]
+is the external known input, $\cB=[B^{\top}\;B^{\top}]^{\top}$, 
+\[
+\cA_{0}=0,\;\cA_{1}=\left[\begin{array}{cc}
+\underline{A}^{+} & -\underline{A}^{-}\\
+-\overline{A}^{-} & \overline{A}^{+}
+\end{array}\right],\;\cA_{2}=\left[\begin{array}{cc}
+-\overline{A}^{+} & \overline{A}^{-}\\
+\underline{A}^{-} & -\underline{A}^{+}
+\end{array}\right]
+\]
+for \eqref{eq:predictor-naive} and
+\[
+\cA_{0}=\left[\begin{array}{cc}
+A_{0} & 0\\
+0 & A_{0}
+\end{array}\right],\;\cA_{1}=\left[\begin{array}{cc}
+0 & -\Delta A_{-}\\
+0 & \Delta A_{+}
+\end{array}\right],\;\cA_{2}=\left[\begin{array}{cc}
+-\Delta A_{+} & 0\\
+\Delta A_{-} & 0
+\end{array}\right]
+\]
+for \eqref{eq:interval-predictor}. Note that \eqref{eq:predictor}
+is a nonlinear system due to the presence of globally Lipschitz nonlinearities
+$\xi^{+}(t)$ and $\xi^{-}(t)$. 
+
+Due to \eqref{eq:inclusion-generic}, the boundedness of $\xi(t)$
+implies the same property of $x(t)$. Therefore, in order to regulate
+\eqref{eq:dynamics} it is required to design a state feedback $u(t)$
+minimizing the asymptotic amplitude of the state $\xi(t)$ for given
+input $\delta(t)$ \cite{Efimov2013a}. In other words, it is necessary
+to design a control $u(t)$ that input-to-state stabilizes \eqref{eq:predictor}.
+It is proposed to look for such a control in the form:
+\begin{equation}
+u(t)=K_{0}\xi(t)+K_{1}\xi^{+}(t)+K_{2}\xi^{-}(t)+S\delta(t),\label{eq:control_pr}
+\end{equation}
+where $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$ and $S\in\Real^{q\times2p}$
+are the gains to be designed (\eqref{eq:control_pr} contains a nonlinear
+feedback). The selection of $S$ is simple, it has to minimize the
+norm of $\cB S+I_{2p}$, and it can be made independently of $K_{0},K_{1},K_{2}$.
+Therefore, denoting $\tilde{\delta}(t)=(\cB S+I_{2p})\delta(t)$ the
+closed-loop system \eqref{eq:predictor}, \eqref{eq:control_pr} takes
+the form:
+\begin{equation}
+\dot{\xi}(t)=\cD_{0}\xi(t)+\cD_{1}\xi^{+}(t)+\cD_{2}\xi^{-}(t)+\tilde{\delta}(t),\label{eq:closed-loop_pr}
+\end{equation}
+where $\cD_{i}=\cA_{i}+\cB K_{i}$ for $i\in[3]$, and the restrictions,
+which the gains $K_{0},K_{1},K_{2}$ have to respect, are given below:
+\begin{theorem}
+	\label{thm:ISS_pr} If there exist diagonal matrices $P$, $Q$, $Q_{+}$,
+	$Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2p\times2p}$
+	such that the following linear matrix inequalities are satisfied:
+	\begin{gather*}
+	P+\min\{Z_{+},Z_{-}\}>0,\;\Upsilon\preceq0,\;\Gamma>0,\\
+	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
+	\end{gather*}
+	where
+	\begin{gather*}
+	\Upsilon=\left[\begin{array}{cccc}
+	\Upsilon_{11} & \Upsilon_{12} & \Upsilon_{13} & P\\
+	\Upsilon_{12}^{\top} & \Upsilon_{22} & \Upsilon_{23} & Z_{+}\\
+	\Upsilon_{13}^{\top} & \Upsilon_{23}^{\top} & \Upsilon_{33} & -Z_{-}\\
+	P & Z_{+} & -Z_{-} & -\Gamma
+	\end{array}\right],\\
+	\Upsilon_{11}=\cD_{0}^{\top}P+P\cD_{0}+Q,\;\Upsilon_{12}=\cD_{0}^{\top}Z_{+}+P\cD_{1}+\Psi_{+},\\
+	\Upsilon_{13}=P\cD_{2}-\cD_{0}^{\top}Z_{-}-\Psi_{-},\;\Upsilon_{22}=Z_{+}\cD_{1}+\cD_{1}^{\top}Z_{+}+Q_{+},\\
+	\Upsilon_{23}=Z_{+}\cD_{2}-\cD_{1}^{\top}Z_{-}+\Psi,\;\Upsilon_{33}=-Z_{-}\cD_{2}-\cD_{2}^{\top}Z_{-}+Q_{-},
+	\end{gather*}
+	then \eqref{eq:closed-loop_pr} is input-to-state stable with respect
+	to $\underline{\omega},\overline{\omega}$.
+\end{theorem}
+Note that the requirement that the matrix $P$ has to be diagonal is not
+restrictive, since for a Metzler matrix $\cD_{0}$ (the case of \eqref{eq:predictor-naive}
+and \eqref{eq:interval-predictor}), its stability is equivalent to
+existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P\cD_{0}\prec0$
+\cite{Positive}.
+\begin{proof}
+	Consider a candidate Lyapunov function:
+	\begin{gather*}
+	V(\xi)=\xi^{\top}P\xi+\xi{}^{\top}Z_{+}\xi^{+}-\xi^{\top}Z_{-}\xi^{-}\\
+	=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
+	=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}|\xi_{k}|\xi_{k}^{+}+(Z_{-})_{k,k}|\xi_{k}|\xi_{k}^{-},
+	\end{gather*}
+	which is positive definite provided that
+	\[
+	P+\min\{Z_{+},Z_{-}\}>0
+	\]
+	since all terms in $V$ are quadratic-like, and whose derivative for
+	the system \eqref{eq:closed-loop_pr} dynamics takes the form:
+	\begin{gather*}
+	\dot{V}=2\dot{\xi}^{\top}P\xi+2\dot{\xi}^{\top}Z_{+}\xi^{+}-2\dot{\xi}^{\top}Z_{-}\xi^{-}\\
+	=\left[\begin{array}{c}
+	\xi\\
+	\xi^{+}\\
+	\xi^{-}\\
+	\tilde{\delta}
+	\end{array}\right]^{\top}\Upsilon\left[\begin{array}{c}
+	\xi\\
+	\xi^{+}\\
+	\xi^{-}\\
+	\tilde{\delta}
+	\end{array}\right]-\xi^{\top}Q\xi-(\xi^{+})^{\top}Q_{+}\xi^{+}\\
+	-(\xi^{-})^{\top}Q_{-}\xi^{-}-2(\xi^{+})^{\top}\Psi\xi^{-}-2(\xi^{+})^{\top}\Psi_{+}\xi\\
+	-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}.
+	\end{gather*}
+	Note that
+	\begin{gather*}
+	(\xi^{+})^{\top}\Psi\xi^{-}=0,\\
+	(\xi^{+})^{\top}\Psi_{+}\xi\geq0,\;(-\xi^{-})^{\top}\Psi_{-}\xi\geq0
+	\end{gather*}
+	for any diagonal matrix $\Psi$ and $\Psi_{+}\geq0$, $\Psi_{-}\geq0$.
+	Hence, if $\Upsilon\preceq0$, as it is assumed in the theorem, we
+	obtain that
+	\begin{eqnarray*}
+		\dot{V} & \leq & -\xi^{\top}Q\xi-(\xi^{+})^{\top}Q_{+}\xi^{+}-(\xi^{-})^{\top}Q_{-}\xi^{-}\\
+		&  & -2(\xi^{+})^{\top}\Psi_{+}\xi-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}\\
+		& \leq & -\xi^{\top}\Omega\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta},
+	\end{eqnarray*}
+	\[
+	\text{where }\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
+	\]
+	is a diagonal matrix. The substantiated properties of $V$ and its
+	derivative imply that \eqref{eq:closed-loop_pr} is input-to-state
+	stable \cite{Sontag:01:Springer,Dashkovskiy:11:AiT} with respect
+	to the input $\tilde{\delta}$ (or, by its definition, with respect
+	to $(\underline{\omega},\overline{\omega})$).
+\end{proof}
+Following the proof of Theorem \ref{thm:ISS_pr}, for all $\xi\in\Real^{2p}$,
+\[
+\xi^{\top}(P+\min\{Z_{+},Z_{-}\})\xi\leq V(\xi)\leq\xi^{\top}(P+Z_{+}^{+}+Z_{-}^{+})\xi,
+\]
+then
+\[
+\dot{V}\leq-\alpha V+\tilde{\delta}^{\top}\Gamma\tilde{\delta}
+\]
+for all $\xi,\tilde{\delta}\in\Real^{2p}$, where
+\[
+\alpha=\min_{i\in[2p]}\lambda_{i}\left(\Omega(P+Z_{+}^{+}+Z_{-}^{+})^{-1}\right),
+\]
+and we can define the set (recall that the signal $\tilde{\delta}(t)$
+is known for all $t\geq0$)
+\begin{equation}
+\X_{f}=\{\xi\in\Real^{2p}:V(\xi)\leq\alpha^{-1}\sup_{t\geq0}|\tilde{\delta}^{\top}(t)\Gamma\tilde{\delta}(t)|\},\label{eq:X_f}
+\end{equation}
+as the set that asymptotically attracts all trajectories in \eqref{eq:closed-loop_pr}.
+
+The conditions of Theorem \ref{thm:ISS_pr} assume that the control
+gains $K_{0},K_{1},K_{2}$ are given, let us find these gains as solutions
+of linear matrix inequalities:
+\begin{corollary}
+	If there exist diagonal matrices $P$, $\tilde{Q}$, $\tilde{Q}_{+}$,
+	$\tilde{Q}_{-}$, $Z_{+}$, $Z_{-}$, $\tilde{\Psi}_{+}$, $\tilde{\Psi}_{-}$,
+	$\tilde{\Psi}$, $\Gamma\in\Real^{2p\times2p}$ and matrices $U_{0},U_{1},U_{2}\in\Real^{q\times2p}$
+	such that the following linear matrix inequalities are satisfied:
+	\begin{gather*}
+	P>0,\;Z_{+}>0,\;Z_{-}>0,\;\Pi\preceq0,\;\Gamma>0,\\
+	\tilde{Q}+\min\{\tilde{Q}_{+},\tilde{Q}_{-}\}+2\min\{\tilde{\Psi}_{+},\tilde{\Psi}_{-}\}>0,
+	\end{gather*}
+	where
+	\begin{gather*}
+	\Pi=\left[\begin{array}{cccc}
+	\Pi_{11} & \Pi_{12} & \Pi_{13} & I\\
+	\Pi_{12}^{\top} & \Pi_{22} & \Pi_{23} & I\\
+	\Pi_{13}^{\top} & \Pi_{23}^{\top} & \Pi_{33} & -I\\
+	I & I & -I & -\Gamma
+	\end{array}\right],\\
+	\Pi_{11}=P^{-1}\cA_{0}^{\top}+\cA_{0}P^{-1}+U_{0}^{\top}\cB^{\top}+\cB U_{0}+\tilde{Q},\\
+	\Pi_{12}=\cA_{1}Z_{+}^{-1}+\cB U_{1}+P^{-1}\cA_{0}^{\top}+U_{0}^{\top}\cB^{\top}+\tilde{\Psi}_{+},\\
+	\Pi_{13}=\cA_{2}Z_{-}^{-1}+\cB U_{2}-P^{-1}\cA_{0}^{\top}-U_{0}^{\top}\cB^{\top}-\tilde{\Psi}_{-},\\
+	\Pi_{22}=Z_{+}^{-1}\cA_{1}^{\top}+\cA_{1}Z_{+}^{-1}+U_{1}^{\top}\cB^{\top}+\cB U_{1}+\tilde{Q}_{+},\\
+	\Pi_{23}=\cA_{2}Z_{-}^{-1}+\cB U_{2}-Z_{+}^{-1}\cA_{1}^{\top}-U_{1}^{\top}\cB^{\top}+\tilde{\Psi},\\
+	\Pi_{33}=\tilde{Q}_{-}-Z_{-}^{-1}\cA_{2}^{\top}-\cA_{2}Z_{-}^{-1}-U_{2}^{\top}\cB^{\top}-\cB U_{2},
+	\end{gather*}
+	then \eqref{eq:closed-loop_pr} for $K_{0}=U_{0}P$, $K_{1}=U_{1}Z_{+}$
+	and $K_{2}=U_{2}Z_{-}$ is input-to-state stable with respect to the
+	inputs $\underline{\omega},\overline{\omega}$.
+\end{corollary}
+\begin{proof}
+	Note that the conditions $P>0$, $Z_{+}>0$, $Z_{-}>0$ imply $P+\min\{Z_{+},Z_{-}\}>0$,
+	and 
+	\[
+	\Upsilon=\left[\begin{array}{cccc}
+	P & 0 & 0 & 0\\
+	0 & Z_{+} & 0 & 0\\
+	0 & 0 & Z_{-} & 0\\
+	0 & 0 & 0 & I_{2p}
+	\end{array}\right]\Pi\left[\begin{array}{cccc}
+	P & 0 & 0 & 0\\
+	0 & Z_{+} & 0 & 0\\
+	0 & 0 & Z_{-} & 0\\
+	0 & 0 & 0 & I_{2p}
+	\end{array}\right]
+	\]
+	under substitution $U_{0}=K_{0}P^{-1}$, $U_{1}=K_{1}Z_{+}^{-1}$,
+	$U_{2}=K_{2}Z_{-}^{-1}$, $\tilde{Q}=P^{-1}QP^{-1}$, $\tilde{Q}_{+}=Z_{+}^{-1}Q_{+}Z_{+}^{-1}$,
+	$\tilde{Q}_{-}=Z_{-}^{-1}Q_{-}Z_{-}^{-1}$, $\tilde{\Psi}=Z_{-}^{-1}\Psi Z_{+}^{-1}$,
+	$\tilde{\Psi}_{+}=P^{-1}\Psi_{+}Z_{+}^{-1}$ and $\tilde{\Psi}_{-}=P^{-1}\Psi_{-}Z_{-}^{-1}$.
+	Hence, $\Upsilon\preceq0$ provided that $\Pi\preceq0$. The inequalities
+	$\tilde{Q}+\min\{\tilde{Q}_{+},\tilde{Q}_{-}\}+2\min\{\tilde{\Psi}_{+},\tilde{\Psi}_{-}\}>0$
+	and $Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0$ are equivalent
+	due to the diagonal structure of all matrices. Therefore, under introduced
+	restrictions all conditions of Theorem \ref{thm:ISS_pr} are verified
+	for $K_{0}=U_{0}P$, $K_{1}=U_{1}Z_{+}$ and $K_{2}=U_{2}Z_{-}$.
+\end{proof}
+The requirements imposed on $P,Z_{+},Z_{-}$ in this corollary are
+more restrictive than the conditions of Theorem \ref{thm:ISS_pr},
+but it allows the gains $K_{0},K_{1},K_{2}$ to be efficiently calculated.
+
+Under conditions of Theorem \ref{thm:ISS_pr}, the control \eqref{eq:control_pr}
+ensures stabilization of the predictor \eqref{eq:predictor} (\emph{i.e}.,
+\eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in
+a vicinity $\X_{f}$ of the origin. The size of the vicinity is proportional
+to the system \eqref{eq:dynamics} uncertainty (it can be optimized
+by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-generic},
+it implies that the system \eqref{eq:dynamics} also will reach a
+neighborhood of the origin under the control \eqref{eq:control_pr}.
+Hence, the posed control problem would be solved provided that \eqref{eq:constraints}
+holds. In order to ensure the robust constraint satisfaction we
+consider an MPC design in the next section.
+
+\subsection{\label{sec:control} Robust Control}
+
+For brevity, the results of this section are given for the predictor
+\eqref{eq:interval-predictor} only (and the case of \eqref{eq:predictor-naive}
+can be considered by skipping Assumption \ref{assu:metzler} in the
+formulation). We need the following hypothesis in this section:
+\begin{assumption}
+	\label{assu:ctrl} There exist $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$
+	satisfying the conditions of Theorem \ref{thm:ISS_pr} for the matrices
+	$A_{0}$ and $\Delta A_{i}$ with $i\in[2d]$ calculated in \eqref{eq:polytope}
+	for $\hat{\Theta}(t)=\Theta$, and
+	\[
+	\X_{f}\subset\X^{2},
+	\]
+	where the corresponding set $\X_{f}$ is given in \eqref{eq:X_f},
+	and
+	\[
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
+	\]
+	for any $\xi\in\X_{f}$ and $t\geq0$.
+\end{assumption}
+These properties guarantee that there exists a control \eqref{eq:control_pr}
+that can be always applied to stabilize the predictor \eqref{eq:interval-predictor}
+(the worst-case estimate set $\Theta$ is used to calculate the system
+matrices) and into the set $\X_{f}$ the restrictions \eqref{eq:constraints}
+also hold for such a control. Define $T>0$ and $\tau\in(0,T)$ as the interval of prediction and
+the application time for MPC, \emph{i.e}., at each $t\geq0$ to design
+input $u(t)$, an optimal control problem is solved on the interval
+$[t,t+T]$, and this optimal control problem is resolved again
+after $\tau$ units of time (on the interval $[t,t+\tau)$ the obtained
+optimal control is applied). Denote $t_{i}=i\tau$ for $i\in\Natural_{+}$,
+then the developed MPC algorithm can be formalized as follows for
+any $t_{i}\geq0$:
+\begin{enumerate}
+	\item Take $\hat{\Theta}(t_{i})$ from \eqref{eq:set_LS} and calculate
+	the matrices $A_{0}$ and $\Delta A_{i}$ with $i\in[2d]$ for \eqref{eq:polytope}.
+	\item Find
+	\begin{gather}
+	\cU=\text{argmin}_{u:[t_{i},t_{i}+T]\to\Real^{q}}\xi^{\top}(t_{i}+T)W_{1}\xi(t_{i}+T)\label{eq:OCP}\\
+	+\int_{t_{i}}^{t_{i}+T}\xi^{\top}(s)W_{2}\xi(s)+u^{\top}(s)W_{3}u(s)ds,\nonumber 
+	\end{gather}
+	where $W_{i}\in\Real^{2p\times2p}$ are given positive definite symmetric
+	matrices, such that the following constraints are satisfied: 
+	\begin{enumerate}
+		\item $\xi:[t_{i},t_{i}+T]\to\Real^{2p}$ is a solution of \eqref{eq:interval-predictor}
+		with $t=t_{i}$ and additionally (to counteract the influence of big
+		measurement perturbations)
+		\begin{align}
+		[\underline{x}&(t_{i}),\overline{x}(t_{i})]=\label{eq:update}\\
+		&\begin{cases}
+		[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i=0\\
+		\quad\cap[\underline{x}_{0},\overline{x}_{0}];\\{}
+		[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i\geq1\\
+		\quad\cap[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)],
+		\end{cases}\nonumber
+		\end{align}
+		where $(\underline{x}^{\top}(t_{i-1}+\tau),\overline{x}^{\top}(t_{i-1}+\tau))^{\top}=\xi(t_{i-1}+\tau)$
+		is obtained during the prediction on the previous iteration.
+		\item $\xi(s)\in\X^{2}$ and $u(s)\in\U$ for $s\in[t_{i},t_{i}+T]$; 
+		\item $\xi(t_{i}+T)\in\X_{f}$.
+	\end{enumerate}
+	\item For $t\in[t_{i},t_{i}+\tau)$ select
+	\begin{equation}
+	u(t)=\begin{cases}
+	\cU(t) & \xi(t_{i})\notin\X_{f}\\
+	\eqref{eq:control_pr} & \xi(t_{i})\in\X_{f}
+	\end{cases},\label{eq:control}
+	\end{equation}
+	where $K_{0},K_{1},K_{2}$ are taken from Assumption \ref{assu:ctrl}.
+\end{enumerate}
+As we can conclude, the idea of the proposed dual MPC scheme (see
+also \cite{Michalska1993,MPC1,MPC:Tube2}) is to use an open-loop
+optimal control to reach a neighborhood of the origin $\X_{f}$ ensuring
+a robust constraint satisfaction \eqref{eq:constraints}, where a
+closed-loop control \eqref{eq:control_pr} can be applied, which provides
+asymptotic performances (stability and robustness, also with constraint
+satisfaction due to Assumption \ref{assu:ctrl} and the definition
+of the terminal set \eqref{eq:X_f}). 
+
+%The proposed rule of the initial condition setup for prediction \eqref{eq:update}
+%is chosen in a way to use all available information about the state:
+%at $t_{0}=0$ it is intersection of the measured interval $[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})]$
+%and the set $[\underline{x}_{0},\overline{x}_{0}]$ (since we assume
+%that initially the state is in this set by Assumption \ref{assu:main}),
+%and at $t_{i}$ with $i\geq1$, we again take the measured information
+%and project it into the interval $[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)]$,
+%which is the predicted set of admissible values of $x(t_{i})$ at
+%$t_{i-1}$ with the selected optimal control \eqref{eq:control}.
+%Due to the inclusion property \eqref{eq:inclusion-generic}, which
+%is always satisfied for the predictor \eqref{eq:interval-predictor}
+%(or \eqref{eq:predictor-naive}) by its construction, the intersection
+%of $[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})]$
+%(measured currently) with $[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)]$
+%(predicted $\tau$ units of time ago) may help in reducing the influence
+%of the measurement noise $\nu_{1}(t)$.
+
+The main result of the paper is as follows:
+\begin{theorem}
+	\label{th:MPC} Let $\underline{x}_{0},\overline{x}_{0}\in\X$, and
+	assumptions \ref{assu:main}--\ref{assu:ctrl} hold with $\overline{\omega},\overline{\omega}-\underline{\omega}$
+	being non-increasing functions of $t\geq0$. Then the closed-loop
+	system given by \eqref{eq:dynamics}, \eqref{eq:outputs}, \eqref{eq:interval-predictor}
+	and \eqref{eq:control} has the following properties:
+	\begin{enumerate}
+		\item Input-to-state stability for $\underline{x},\;\overline{x}$ and practical
+		input-to-state stability for $x$ with respect to $\underline{\omega},\overline{\omega}$
+		in the terminal set $\X_{f}$; 
+		\item Recursive feasibility with reaching $\X_{f}$ in a finite time; 
+		\item Constraint satisfaction.
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	Recall that $\theta\in\hat{\Theta}(t)$ for all $t\geq0$ due to the
+	result of Proposition \ref{prop:LS}, and the size of the set $\hat{\Theta}(t)$
+	is not growing with time by definition of \eqref{eq:set_LS}.
+	
+	Note that if for some $t_{k}\geq0$ the initial conditions $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}\subset\X^{2}$,
+	then the control \eqref{eq:control} equals to \eqref{eq:control_pr}.
+	According to the definition \eqref{eq:X_f} of $\X_{f}$ and Assumption
+	\ref{assu:ctrl}, $\xi(t)\in\X_{f}$ and $u(t)\in\U$ for all $t\geq t_{k}$,
+	and the system is input-to-state stable with respect to $\xi(t)=[\underline{x}^{\top}(t)\;\overline{x}^{\top}(t)]^{\top}$
+	due to the result of Theorem \ref{thm:ISS_pr}. Since $|x(t)|\leq|\xi(t)|$
+	under \eqref{eq:inclusion-generic} for $t\geq t_{k}$ and $|\xi(t_{k})|\leq|x(t_{k})|+\zeta$
+	with $\zeta>0$ (that is well defined for all initial conditions in
+	$\X_{f}$), the practical input-to-state stability for the variable
+	$x(t)$ follows. The point \emph{1)} is proven.
+	
+	Now, let $(\underline{x}^{\top}(0),\overline{x}^{\top}(0))^{\top}\in\X^{2}\setminus\X_{f}$
+	and assume that there is a solution of the optimal control problem
+	\eqref{eq:OCP}. Applying such a control through \eqref{eq:control}
+	for $t\in[0,\tau)$, we have that $\xi(t)\in\X$ and $u(t)\in\U$
+	on this time interval. At $t=t_{1}=\tau$, if again $(\underline{x}^{\top}(t_{1}),\overline{x}^{\top}(t_{1}))^{\top}\in\X^{2}\setminus\X_{f}$
+	(where $\underline{x}(t_{1}),\overline{x}(t_{1})$ are calculated
+	as in \eqref{eq:update}), then it recursively exists a solution to
+	\eqref{eq:OCP} since the set $\hat{\Theta}(t)$ is shrinking by its
+	design and the signals $\overline{\omega}(t),\overline{\omega}(t)-\underline{\omega}(t)$
+	are non-increasing by hypotheses of the theorem (\emph{i.e}., the
+	solution obtained at $t_{i}$ is a sub-optimal branch of the solution
+	calculated at $t_{i-1}$ for all $i\geq1$). Thus, recursive feasibility
+	follows. Note that $\X_{f}$ is a neighborhood of the origin, and
+	the given in \eqref{eq:OCP} cost with positive definite matrices
+	$W_{1}$, $W_{2}$ and $W_{3}$ is minimized inside $\X_{f}$. Using
+	this and sub-optimality arguments, since $\xi(t_{i}+T)\in\X_{f}$
+	in \eqref{eq:OCP} (provided that the optimal control $\cU$ is applied)
+	and $[\underline{x}(t_{i}),\overline{x}(t_{i})]\subset[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)]$
+	for all $i\geq1$, there is a finite time instant $t_{k}\geq T$ such
+	that $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}$,
+	and the system further stays there. The point \emph{2)} is substantiated.
+	
+	The point \emph{3)} is a consequence of the previous analysis: under
+	the control \eqref{eq:control} the constrains \eqref{eq:constraints}
+	are always satisfied.
+\end{proof}
+\begin{remark}
+	At each $t_{i}$, $i\in\Natural_{+}$, the gains $K_{0},K_{1},K_{2}$
+	can be recalculated for the currently estimated set $\hat{\Theta}(t_{i})$.
+	If next, the obtained in \eqref{eq:X_f} set $\X_{f}$ satisfies 
+	$
+	\X_{f}\subset\X^{2},
+	$
+	and
+	$
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
+	$
+	for any $\xi\in\X_{f}$ and $t\geq0$, as in Assumption \ref{assu:ctrl},
+	then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
+	can be used in \eqref{eq:control}.
+\end{remark}
+
+We illustrate the efficiency of the proposed MPC approach by numerical
+experiments.
+
+\subsection{\label{sec:experiments} Numerical experiment}
+
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
+Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
+% \begin{align*}
+% \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
+% \dot{r} &= \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{I_z v_x} v_y + \frac{-2(C_{\alpha_f}a^2 + C_{\alpha_r}b^2)}{I_z v_x} r + \frac{a}{I_z} u.
+% \end{align*}
+% We can rewrite them as :
+\begin{align*}
+x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\transp,\quad
+\theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp,
+\end{align*}
+\[
+A = \begin{bmatrix}
+0 & v_x & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 0 & - v_x \\
+0 & 0 & 0 & 0
+\end{bmatrix},\quad
+B =
+\begin{bmatrix}
+0 \\
+0 \\
+\frac{2}{m} \\
+\frac{a}{I_z}
+\end{bmatrix},
+\]
+
+\[
+\phi_1 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & I_z & a I_z \\
+0 & 0 & a m & a^2 m \\
+\end{bmatrix},
+\]
+
+\[
+\phi_2 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & I_z & -b I_z \\
+0 & 0 & - bm & b^2 m \\
+\end{bmatrix}.
+\]
+
+Instead of simply stabilizing the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/lane-keeping.png}
+	\caption{\textbf{Top}: the model estimation showing the confidence region $\hat{\Theta}(t)$ from \eqref{eq:predictor} at different times $t$. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in green, and $\xi(t)$ as an area with a color gradient.}
+	\label{fig:lane-keeping}
+\end{figure}
+
+The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme \cite{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at this url: \url{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr_ql_/}.
+
 
 \section{Minimax control with generic costs}
 
