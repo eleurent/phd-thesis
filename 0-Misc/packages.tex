@@ -89,7 +89,22 @@
 
 % --- Nomenclature
 \usepackage{nomencl}
+\renewcommand\nomname{List of Symbols}
 \makenomenclature
+
+% --- Acronyms
+\usepackage[printonlyused,withpage]{acronym}
+\makeatletter % starred version = no hyperlink
+\AtBeginDocument{%
+	\renewcommand*\AC@hyperlink{%
+		\ifAC@starred
+		\expandafter\@secondoftwo
+		\else
+		\expandafter\hyperlink
+		\fi
+	}%
+}
+\makeatother
 
 % --- Bibliography
 % Add `custombib' in the document class option to use this section
@@ -104,7 +119,6 @@
 % changes the default name `Bibliography` -> `References'
 \renewcommand{\bibname}{List of References}
 \renewcommand{\contentsname}{Table of Contents}
-\renewcommand{\nomname}{Abbreviations and Notations}
 
 % --- Table of Content
 \setcounter{secnumdepth}{2}
