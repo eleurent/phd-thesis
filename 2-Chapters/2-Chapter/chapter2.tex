@@ -22,7 +22,7 @@ This chapter provides an overview of sequential decision making in the specific 
 \section{Sequential decision-making}
 \label{sec:sequential-decision-making}
 
-The skill of driving a car involves taking a series of decisions, where early stages influence the resulting outcomes and subsequent reasoning at late stages. This aspect is known as sequential (or multistage) decision-making. Let us start by introducing some useful notations. At each time step $t$, the system is described by its \emph{state} $s_t$ that belongs to a measurable state space $\cS$. Then, the agent can take an \emph{action} $a_t$ within a measurable action space $\cA$, before transitioning to a next state $s_{t+1}\in\cS$, drawn from a conditional distribution $P\parentheses{s_{t+1} \mid s_t, a_t}$ that we call the \emph{system dynamics}. The agent actions can themselves be drawn from a distribution $\pi\parentheses{a_t\mid s_t}$, called the \emph{policy}. This section describes the main design principles for coming up with a good driving policy $\pi$.
+This section describes the main design principles for coming up with a good driving policy $\pi$.
 
 \subsection{Motion Planning}
 
@@ -82,14 +82,6 @@ In the context of a Lane Keeping application, \citep{Bojarski2016} proposed inst
 \paragraph{Policy conditioning} A limitation of imitation learning for autonomous driving is fact that simply imitating human drivers by sampling likely trajectories is not sufficient: the sampling must also be conditioned on the current short-term destination specified by the Route planner. \citep{Codevilla2018} propose to achieve this by considering several policy heads for three possible behaviours when reaching an intersection: go straight, turn left or turn right. At test time, the appropriate policy is used at each intersection depending on the planned route. \citep{Rhinehart2020} present a more general approach that consists in learning a probabilistic model $q(s)$ of expert trajectories used as a prior, and inferring the maximum a posteriori trajectory given a test-time goal likelihood $p\parentheses{goal\mid s}$.
 
 \subsection{Reinforcement Learning}
-
-Reinforcement Learning is a general framework for learning-based sequential decision-making. It is formulated as an optimal control problem: the policy $\pi$ is chosen to optimise an objective function. It is generally formalized as a \emph{Markov Decision Process} (MDP), a tuple $(\cS, \cA, P, R, \Gamma)$ in which at each step, a bounded reward $r_t\in[0, 1]$ drawn from a reward distribution $R(r_t|s_t,a_t)$. The agent must act so as to optimise in expectation its cumulative discounted reward, also called \emph{return}, where $\gamma\in[0,1)$ is the discount factor:
-
-\begin{equation*}
-\max_{\pi}\expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\right].
-\end{equation*}
-
-\TODO{Present the Several performance measures? return, cumulative regret, simple regret, PAC ? + fix next paragraph}
 
 While the MDP framework undoubtedly consitutes a convenient theoretical framework for analysis, it may be too narrow a frame for the real world to fit in. In the sequel, by trying to cast the problem of Autonomous Driving as an MDP, we will identify multiple underlying assumptions that do not hold in practice, and relate them to existing research areas for which researchers proposed variants and solutions.
 
