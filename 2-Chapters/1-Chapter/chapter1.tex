@@ -41,22 +41,19 @@ Should we base driving decisions on a set of rules? And can these rules be learn
 	\label{fig:robotics-pipeline}
 \end{figure}
 
-The traditional robotics pipeline, shown in \Cref{fig:robotics-pipeline}, involves three main tasks: \emph{Perception}, \emph{Decision}, and \emph{Control} (also called the Sense-Plan-Act paradigm, or Navigation, Guidance and Control in aerospace engineering). The \emph{Perception} module takes raw sensor data as input and produces a high-level reconstruction of the scene. The \emph{Decision} module then determines the desired trajectory of the vehicle, based on the current situation. Finally, the \emph{Control} module manipulates forces, by way of steering and throttle controls, to track the desired trajectory. In the context of Autonomous Driving, the Decision module is often implemented with a hierarchical structure whose layers work at different timescales. First, a \emph{Route Planning} module searches for the shortest route in a road network from the current location to the desires destination. Second, the \emph{Behavioural Layer} specifies a coarse driving behaviour through short-term goals or semantic decisions, such as choosing to change lane, to slow down at an intersection, or to yield to a vehicle. This layer is thus responsible for following the planned route while adapting to the current traffic state in real time. Third, the \emph{Motion Planning} layer generates a continuous, feasible trajectory that implements the desired behaviour, while ensuring comfort and safety.
+Historically, autonomous vehicles have been developed by following a traditional robotics pipeline, shown in \Cref{fig:robotics-pipeline}. It involves three main tasks: \emph{Perception}, \emph{Decision}, and \emph{Control} (also called the Sense-Plan-Act paradigm, or Navigation, Guidance and Control in aerospace engineering). The \emph{Perception} module takes raw sensor data as input and produces a high-level reconstruction of the scene. The \emph{Decision} module then determines the desired trajectory of the vehicle, based on the current situation. Finally, the \emph{Control} module manipulates forces, by way of steering and throttle controls, to track the desired trajectory. In the context of Autonomous Driving, the Decision module is often implemented with a hierarchical structure whose layers work at different timescales. First, a \emph{Route Planning} module searches for the shortest route in a road network from the current location to the desires destination. Second, the \emph{Behavioural Planning} layer specifies a coarse driving behaviour through short-term goals or semantic decisions, such as choosing to change lane, to slow down at an intersection, or to yield to a vehicle. This layer is thus responsible for following the planned route while adapting to the current traffic state in real time. Third, the \emph{Motion Planning} layer generates a continuous, feasible trajectory that implements the desired behaviour, while ensuring comfort and safety.
 
 Great strides have been made in the two end-of-pipe tasks: Perception has benefited from the substantial progress in the field of Computer Vision due to the recent advent of Deep Learning, and many control schemes \citep[surveyed in][]{Polack2018} have been developed for ground vehicles. In the Decision module, Route Planning is virtually solved and already provided by services such as \href{https://wiki.openstreetmap.org/wiki/Routing}{Open Street Maps}, and there exist a vast body of Motion Planning algorithms, presented in \Cref{sec:sequential-decision-making}. All these building blocks are widely used in both industrial applications, including \ac{ADAS} functions such as \ac{LKA}, \ac{ACC}, \ac{AEB} or \ac{AES}, and in academic research challenges. Ultimately, we claim that Behavioural Planning remains the only neglected link in the chain. Indeed, most of these applications focused hitherto on simple settings with little complexity: \ac*{ADAS} systems are mostly tailored for highway driving and struggle when merges and interaction. [ref needed]. Similarly, most academic challenges focused on highway driving, with the exception of the DARPA Urban challenge which required more advanced interactions with other vehicles. Yet, even this event still constitutes a controlled environment, simple enough that all participants could rely on rule-based systems for behavioural planning \citep{Buehler2009}, such as finite state machines whose transitions are triggered by handcrafted criteria \citep[\eg][]{Baker2008}. Unfortunately, there is little hope that this approach can scale to complex scenes, since responses tailored for specific use-cases cannot be easily merged together.
 
 \subsection{Scope and Challenges of this Thesis}
 
-In the light of the above, this thesis is dedicated to Behavioural Planning, a weak link in the Autonomous Driving pipeline.  We ask the following question: assume that we had access to a ground truth perception and a perfectly accurate control system, what steps would remain to achieve fully autonomous driving?
+In the light of the above, this thesis is dedicated to addressing a weak link in the Autonomous Driving pipeline: \emph{Behavioural Planning}.  We ask the following question: assume that we had access to a ground truth perception and a perfectly accurate control system, what steps would remain to achieve fully autonomous driving?
 %Leverage learning to design driving policies, and hope for a better comprehensiveness.
 
 
 \paragraph{Humans in the loop}
-% Without humans, the problem is solved
-% 1st objection: humans -> hard to model -> learn from data
 
-It is safe to assume that, in the absence of dedicated self-driving infrastructure, Autonomous Vehicles will have to share the road with human drivers at some point. 
-This introduces a great deal of uncertainty in the decision problem. Indeed, while the location and velocity of a vehicle can be perceived, the mind of its driver remains impenetrable. Even though the present state is known, the future becomes uncertain: where are they headed? Are they paying attention to their surroundings? In that respect, it seems impossible to manually model all the factors involved in the human decision-making process. Yet, human drivers do not drive erratically either. Their behaviour is highly structured: humans drivers tend to follow the lanes, avoid collisions with other vehicles, and generally respect road signage. In other words, human drivers are \emph{predictable}. This motivates the idea of learning from data.%, either direct predictive models of human behaviours, or a driving policy based on implicit predictions of what they might do next.
+In the absence of dedicated self-driving infrastructure, Autonomous Vehicles will have to share the road with human drivers. This introduces a great deal of uncertainty in the decision problem. Indeed, while the location and velocity of a vehicle can be perceived, the mind of its driver remains impenetrable. Even though the present state is known, the future becomes uncertain: where are they headed? Are they paying attention to their surroundings? In that respect, it seems impossible to manually model all the factors involved in the human decision-making process. Yet, human drivers do not drive erratically either. Their behaviour is highly structured: humans drivers tend to follow the lanes, avoid collisions with other vehicles, and generally respect road signage. In other words, human drivers are \emph{predictable}. This motivates the idea of learning from data.%, either direct predictive models of human behaviours, or a driving policy based on implicit predictions of what they might do next.
 % We want to quantify uncertainty
 % Recall aletoric vs epistemic uncertainty?
 
@@ -70,47 +67,43 @@ The skill of driving a car involves taking a series of decisions, where early st
 V^*(s) = \max_{\pi}V^\pi(s),\, \text{ where } V^\pi(s) = \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\condbar s_0 = s\right].
 \end{equation*}
 
-Several performance measures have been introduced to evaluate \ac*{RL} algorithms. The \ac{PAC} Policy objective aims at finding a near-optimal policy $\pi^*$ with high probability in the smallest possible number of interactions (sample complexity). Likewise, \textit{simple regret} minimisation aims at minimizing the \emph{expected} sub-optimality of the recommenced policy after a fixed number $n$ of interactions. 
-
+Several performance measures have been introduced to evaluate \ac*{RL} algorithms. In this thesis, we consider the goal of finding a near-optimal policy as fast as possible. In the \emph{fixed-confidence} setting, the goal is to find a near-optimal policy $\pi^*$ with high probability with the smallest required sample complexity, \ie number of interactions. Alternatively, in the \emph{fixed-budget} setting, the \emph{simple regret} $r_n$ of an algorithm measures the \emph{expected} sub-optimality of the recommenced policy $\hat{\pi}_n$ after a fixed number $n$ of interactions.
 \begin{equation*}
-r_n(s, \cA) = \expectedvalue_{\hat{\pi}_n\sim \cA} \left[ V^*(s) - V^{\hat{\pi}}(s) \right]
+r_n(s) = \expectedvalue_{\hat{\pi}_n} \left[ V^\star(s) - V^{\hat{\pi}}(s) \right]
 \end{equation*}
-This is particularly relevant when exploration is not costly, for instance when a simulator is available. Conversely, in real environments where exploration is costly, another objective is to minimise the \textit{cumulative regret}.
 
-\begin{equation*}
-\cR_n(s_0, \cA) = \expectedvalue_{\hat{\pi}_t\sim \cA}\left[ \sum_{t=0}^{n-1} V^*(s_t) - V^{\hat{\pi}_t}(s_t) \right]
-\end{equation*}
-\TODO{Define Cumulative regret. Is this useful?}
+%Conversely, in real environments where exploration is costly, another objective is to minimise the \textit{cumulative regret}.
+%\begin{equation*}
+%\cR_n(s_0, \cA) = \expectedvalue_{\hat{\pi}_t\sim \cA}\left[ \sum_{t=0}^{n-1} V^\star(s_t) - V^{\hat{\pi}_t}(s_t) \right]
+%\end{equation*}
 
+The first goal of this thesis is to provide \emph{sample-efficient} algorithms for learning a driving policy. In the particular context of Behavioural Planning for Autonomous Driving, this goal will be articulated around three main questions and challenges.
 
 \paragraph{Model-free \vs model-based}
 
-In order to find an optimal policy $\pi^*$, existing \ac*{RL} algorithms can be grouped into two main families. 
-\emph{Model-free} \ac*{RL} algorithms aim to optimise a policy $\pi$ directly. This often involves an \emph{evaluation} step, where the state value function $V^\pi$, or state-action value function
-\begin{equation*}
-Q^\pi(s,a) = \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\condbar s_0 = s, a_0 = a\right]
-\end{equation*}
-are estimated, and an \emph{improvement} step, where the policy $\pi$ is update to maximise $V^\pi$.
-
-\emph{Model-based} \ac*{RL} algorithms attempt to estimate the \ac*{MDP} parameters $\hat{P}$ and $\hat{R}$ based on a history of transitions $\cD = \{(s_{t},a_t, r_t, s_{t+1})\}$, using \eg \ac{MLE}.
+\ac*{RL} algorithms can be grouped into two main families. 
+In order to find an optimal policy $\pi^*$, \emph{Model-based} \ac*{RL} algorithms first attempt to estimate the \ac*{MDP} parameters $\hat{P}$ and $\hat{R}$ based on a history of transitions $\cD = \{(s_{t},a_t, r_t, s_{t+1})\}$, using for instance \ac{MLE} in a hypothesis class of dynamics and reward distributions.
 \begin{equation*}
 \max_{\hat{P}} \sum_{t}\hat{P}\parentheses{s_{t+1} \mid s_t,a_t} \quad \text{and} \quad \max_{\hat{R}} \sum_{t}\hat{R}\parentheses{r_{t} \mid s_t,a_t}
 \end{equation*}
+This allows to \emph{plan} in the estimated \ac*{MDP} $(S,A,\hat{R}, \hat{P}, \gamma)$, i.e. compute the associated optimal policy $\hat{\pi}^\star$. Conversely, \emph{Model-free} \ac*{RL} algorithms do not estimate the underlying \ac*{MDP} and aim instead to optimise a policy $\pi$ directly. This often involves an \emph{evaluation} step, where the state value function $V^\pi$, or state-action value function
+\begin{equation*}
+Q^\pi(s,a) = \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\condbar s_0 = s, a_0 = a\right]
+\end{equation*}
+are estimated, and an \emph{improvement} step, where the policy $\pi$ is updated to maximise $V^\pi$.
 
-
+The question of which approach is better depends on the underlying problem. Indeed, the model-based approach is relevant when the dynamics are simple but the optimal policy is complex. For instance, the case of Computer Go was tackled in AlphaGo \citep{Silver2016,Silver2017,Silver2018} with a \ac{MCTS} planning module, which leveraged the knowledge of the Go dynamics (placing pawns on the board) to sample sequences of moves online. On the contrary, the model-free approach is useful when the system dynamics are complex, but the optimal policy is simpler. Thus, a swimming robot would require heavy fluid dynamics simulation to accurately predict the effect of moving its fins, while a simple periodic gait could suffice to propel it forward in water. Which brings us to the question: which scenario does Autonomous Driving fall into? Unfortunately, the answer is not so clear-cut. On one hand, the motion planning literature has historically been heavily relying on kinematics and dynamics models to plan trajectories, as will be detailed in \Cref{chapter:2}. Reliable priors are available to describe the physics of a vehicle, but not so much for the intents of its driver. On the other hand, automotive companies such as Mobileye reportedly\footnote{these comments are reported from discussions between Renault and Mobileye} advocated that the task of predicting a driving scene is actually more difficult than driving properly. The case of Autonomous Driving is actually peculiar in that the two problems of prediction and control are somehow equivalent, due to the presence of other drivers: a good trajectory predictor can be applied to predict the action that a human would do in place of the ego-vehicle, and a good driving policy can be applied to each agent in the scene to produce reasonable trajectories. Hence, both approaches seem relevant and are considered in this thesis.
 
 \paragraph{Social interactions and coupled dynamics}
 
 Conservative behaviours struggle when interacting with other vehicles, a task often referred to as \emph{negotiation}. Scenarios of unprotected left-turns, intersections, or merging onto a highway (see \eg \href{%https://twitter.com/nitguptaa/status/990683818825736192
 	https://www.youtube.com/watch?v=HjtiiGCe1pE}{this video} where a Waymo car fails to merge). Other example: the freezing robot.
-Thus, for an autonomous vehicle to efficiently integrate with the traffic flow, it must anticipate the effect of its own actions on the behaviours of other agents. This skill is known as \emph{socially-aware} decision-making. Unfortunately, these interactions between vehicles translates as complex and coupled traffic dynamics. Local deviations must be propagated from one vehicle to the next, which can result in a quick and chaotic build-up of uncertainty. We will need to contain this build up of uncertainty, and prevent instability.
+Thus, for an autonomous vehicle to efficiently integrate with the traffic flow, it must anticipate the effect of its own actions on the behaviours of other agents. This skill is known as \emph{socially-aware} decision-making. Unfortunately, these interactions between vehicles translates as complex and coupled traffic dynamics. Local deviations must be propagated from one vehicle to the next, which can result in a quick and chaotic build-up of uncertainty. We will need to contain this build up of uncertainty, and prevent instability. On the other hand, researchers claim that the task of predicting is actually harder to that of driving properly.
 
 \paragraph{Safety and efficiency}
-- multiple contradictory objectives, interplay, hard to specify: defensive / aggressive tradeoff and negotiation.
-the pitfall of reward engineering.
-- how to guarantee safety for a leaning system, in the presence of uncertainty?
-We want to formalize a notion of risk. Risk as a constraint ? As a worst-case outcome?
 
+The complexity of human driving behaviours lead us to consider learning algorithms. However, the use of these methods typically raises a legitimate concern of car manufacturers: how to guarantee the \emph{safety} of such systems, in the presence of uncertainty? In this thesis, we will strive to formalize this concern by formalising different notions of \emph{risk}, as functions of the distribution of outcomes induced by a policy. These risk measures must be  
+However, protecting against risk often comes at the price of efficiency in achieving a goal. Indeed, the two objectives of driving fast and safely are contradictory. This induces a trade-off that is typically observed in human drivers, especially in situations of negotiations: some people adopt \emph{aggressive} behaviours and try to force their way through traffic, while others act more \emph{defensively}, favouring safety. This trade-off is difficult to capture manually when defining the desired objective of an autonomous vehicle, and soon leads to the pitfall of reward engineering.
 
 \section{Contributions}
 
