@@ -176,6 +176,25 @@
 	year = {1959}
 }
 
+@INPROCEEDINGS{Fraichard1993,
+	author={T. {Fraichard}},
+	booktitle={Proceedings of 1993 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS '93)}, 
+	title={Dynamic trajectory planning with dynamic constraints: A 'state-time space' approach}, 
+	year={1993},
+	volume={2},
+	number={},
+	pages={1393-1400 vol.2},}
+
+@ARTICLE{Laumond1994,
+	author={J. -. {Laumond} and P. E. {Jacobs} and M. {Taix} and R. M. {Murray}},
+	journal={IEEE Transactions on Robotics and Automation}, 
+	title={A motion planner for nonholonomic mobile robots}, 
+	year={1994},
+	volume={10},
+	number={5},
+	pages={577-593},
+}
+
 @article{Hart1968,
 	abstract = {Although the problem of determining the minimum cost path through a graph arises naturally in a number of interesting applications, there has been no underlying theory to guide the development of efficient search procedures. Moreover, there is no adequate conceptual framework within which the various ad hoc search strategies proposed to date can be compared. This paper describes how heuristic information from the problem domain can be incorporated into a formal mathematical theory of graph searching and demonstrates an optimality property of a class of search strategies. Copyright {\textcopyright} 1968 by The Institute of Electrical and Electronics Engineers, Inc.},
 	author = {Hart, Peter E. and Nilsson, Nils J. and Raphael, Bertram},
@@ -285,6 +304,60 @@
 	year = {1996}
 }
 
+@inproceedings{Faust2018,
+	abstract = {We present PRM-RL, a hierarchical method for long-range navigation task completion that combines sampling-based path planning with reinforcement learning (RL). The RL agents learn short-range, point-to-point navigation policies that capture robot dynamics and task constraints without knowledge of the large-scale topology. Next, the sampling-based planners provide roadmaps which connect robot configurations that can be successfully navigated by the RL agent. The same RL agents are used to control the robot under the direction of the planning, enabling long-range navigation. We use the Probabilistic Roadmaps (PRMs) for the sampling-based planner. The RL agents are constructed using feature-based and deep neural net policies in continuous state and action spaces. We evaluate PRM-RL, both in simulation and on-robot, on two navigation tasks with non-trivial robot dynamics: end-to-end differential drive indoor navigation in office environments, and aerial cargo delivery in urban environments with load displacement constraints. Our results show improvement in task completion over both RL agents on their own and traditional sampling-based planners. In the indoor navigation task, PRM-RL successfully completes up to 215 m long trajectories under noisy sensor conditions, and the aerial cargo delivery completes flights over 1000 m without violating the task constraints in an environment 63 million times larger than used in training.},
+	archivePrefix = {arXiv},
+	arxivId = {1710.03937},
+	author = {Faust, Aleksandra and Oslund, Kenneth and Ramirez, Oscar and Francis, Anthony and Tapia, Lydia and Fiser, Marek and Davidson, James},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2018.8461096},
+	eprint = {1710.03937},
+	isbn = {9781538630815},
+	issn = {10504729},
+	title = {{PRM-RL: Long-range robotic navigation tasks by combining reinforcement learning and sampling-based planning}},
+	year = {2018}
+}
+
+@inproceedings{Lenz2016,
+	abstract = {Human drivers use nonverbal communication and anticipation of other drivers' actions to master conflicts occurring in everyday driving situations. Without a high penetration of vehicle-to-vehicle communication an autonomous vehicle has to have the possibility to understand intentions of others and share own intentions with the surrounding traffic participants. This paper proposes a cooperative combinatorial motion planning algorithm without the need for inter vehicle communication based on Monte Carlo Tree Search (MCTS). We motivate why MCTS is particularly suited for the autonomous driving domain. Furthermore, adoptions to the MCTS algorithm are presented as for example simultaneous decisions, the usage of the Intelligent Driver Model as microscopic traffic simulation, and a cooperative cost function. We further show simulation results of merging scenarios in highway-like situations to underline the cooperative nature of the approach.},
+	author = {Lenz, David and Kessler, Tobias and Knoll, Alois},
+	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	doi = {10.1109/IVS.2016.7535424},
+	isbn = {9781509018215},
+	title = {{Tactical cooperative planning for autonomous highway driving using Monte-Carlo Tree Search}},
+	year = {2016}
+}
+
+@article{Latombe1991,
+	abstract = {A car-like indoor mobile robot is a kinematically$\backslash$r$\backslash$nconstrained robot that can be modelled as a 2D$\backslash$r$\backslash$nobject translating and rotating in the horizontal$\backslash$r$\backslash$nplane among well-defined obstacles. The kinematic$\backslash$r$\backslash$nconstraints impose that the linear velocity of the$\backslash$r$\backslash$nrobot point along its main axis (no sidewise motion$\backslash$r$\backslash$nis possible) and restrict the range of admissible$\backslash$r$\backslash$nvalues for the steering angle. In this paper' we$\backslash$r$\backslash$ndescribe a fast path planner for such a robot. This$\backslash$r$\backslash$nplanner is one to two orders of magnitude faster$\backslash$r$\backslash$nthan previously implemented planners for the same$\backslash$r$\backslash$ntype of robot. In addition, it has an anytime flavor$\backslash$r$\backslash$nthat allows it to return a path in a short amount$\backslash$r$\backslash$nof time, and to improve that path through iterative$\backslash$r$\backslash$noptimization according to the amount of time$\backslash$r$\backslash$nthat is devoted to path planning, The planner is$\backslash$r$\backslash$nessentially a combination of preexisting ideas. Its$\backslash$r$\backslash$nefficiency derives from the good match between$\backslash$r$\backslash$nthese ideas and from various technical improvements$\backslash$r$\backslash$nbrought to them. },
+	author = {Latombe, J.C.},
+	journal = {Proceedings of the ninth National conference on Artificial intelligence},
+	title = {{A Fast Path Planner for a Car-Like Indoor Mobile Robot}},
+	year = {1991}
+}
+
+@inproceedings{Sanchez2002,
+	author = {L., Abraham S\'{a}nchez and Zapata, Ren\'{e} and B., J. Abraham Arenas},
+	title = {Motion Planning for Car-Like Robots Using Lazy Probabilistic Roadmap Method},
+	year = {2002},
+	isbn = {3540434755},
+	publisher = {Springer-Verlag},
+	address = {Berlin, Heidelberg},
+	booktitle = {Proceedings of the Second Mexican International Conference on Artificial Intelligence: Advances in Artificial Intelligence},
+	pages = {1–10},
+	numpages = {10},
+	series = {MICAI ’02}
+}
+
+@ARTICLE{Lamiraux2001,	
+	author={F. {Lamiraux} and J. -. {Lammond}},
+	journal={IEEE Transactions on Robotics and Automation}, 
+	title={Smooth motion planning for car-like vehicles}, 
+	year={2001},
+	volume={17},
+	number={4},
+	pages={498-501},}
+
 @inproceedings{Kocsis2006,
 	abstract = {For large state-space Markovian Decision Problems Monte-Carlo planning is one of the few viable approaches to find near-optimal solutions. In this paper we introduce a new algorithm, UCT, that applies bandit ideas to guide Monte-Carlo planning. In finite-horizon or discounted MDPs the algorithm is shown to be consistent and finite sample bounds are derived on the estimation error due to sampling. Experimental results show that in several domains, UCT is significantly more efficient than its alternatives. {\textcopyright} Springer-Verlag Berlin Heidelberg 2006.},
 	author = {Kocsis, Levente and Szepesv{\'{a}}ri, Csaba},
@@ -346,6 +419,63 @@
 	title = {{Efficient constrained path planning via search in state lattices}},
 	year = {2005}
 }
+
+@ARTICLE{LaValle1998,	
+	author={S. M. {LaValle} and S. A. {Hutchinson}},
+	journal={IEEE Transactions on Robotics and Automation}, 
+	title={Optimal motion planning for multiple robots having independent goals}, 
+	year={1998},
+	volume={14},
+	number={6},
+	pages={912-925},
+}
+
+
+@INPROCEEDINGS{Svestka1995,
+	author={P. {Svestka} and M. H. {Overmars}},
+	booktitle={Proceedings of 1995 IEEE International Conference on Robotics and Automation}, 
+	title={Coordinated motion planning for multiple car-like robots using probabilistic roadmaps}, 
+	year={1995},
+	volume={2},
+	number={},
+	pages={1631-1636 vol.2},
+}
+
+@inproceedings{Altche2016,
+	abstract = {In this paper, we address the problem of timeoptimal coordination of mobile robots under kinodynamic constraints along specified paths. We propose a novel approach based on time discretization that leads to a mixed-integer linear programming (MILP) formulation. This problem can be solved using general-purpose MILP solvers in a reasonable time, resulting in a resolution-optimal solution. Moreover, unlike previous work found in the literature, our formulation allows an exact linear modeling (up to the discretization resolution) of second-order dynamic constraints. Extensive simulations are performed to demonstrate the effectiveness of our approach.},
+	archivePrefix = {arXiv},
+	arxivId = {1603.04610},
+	author = {Altch{\'{e}}, Florent and Qian, Xiangjun and {De La Fortelle}, Arnaud},
+	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
+	doi = {10.1109/IROS.2016.7759737},
+	eprint = {1603.04610},
+	isbn = {9781509037629},
+	issn = {21530866},
+	title = {{Time-optimal coordination of mobile robots along specified paths}},
+	year = {2016}
+}
+
+@inproceedings{Altche2016b,
+	abstract = {The deployment of Cooperative Intelligent Transportation Systems (C-ITS) raises the question of future traffic management systems, which will be operating with an increasing amount of information and control over the infrastructure and the vehicles. This topic of research shares some similarities with robot coordination problems, inspiring our research on autonomous intersection management. In this article, we use a mixed-integer linear programming formulation for time-optimal robots coordination along specified paths and apply it to intersection management for autonomous vehicles. Our formulation allows to simultaneously solve a discrete optimal vehicle ordering problem, and a (discretized) continuous optimal velocity planning problem taking into account kinodynamics constraints. This allows faster pruning of the decision tree for the discrete problem, thus reducing computation time. A possible application for ITS is to evaluate the efficiency loss from a given vehicle ordering policy, or dynamically adapt policies to improve their efficiency. Moreover, any intermediary solution found by the solver can be used as a heuristically good policy, with proved bounds on sub-optimality.},
+	author = {Altche, Florent and {De La Fortelle}, Arnaud},
+	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	doi = {10.1109/IVS.2016.7535369},
+	isbn = {9781509018215},
+	title = {{Analysis of optimal solutions to robot coordination problems to improve autonomous intersection management policies}},
+	year = {2016}
+}
+
+@article{Altche2017,
+	abstract = {Before reaching full autonomy, vehicles will gradually be equipped with more and more advanced driver assistance systems (ADAS), effectively rendering them semi-autonomous. However, current ADAS technologies seem unable to handle complex traffic situations, notably when dealing with vehicles arriving from the sides, either at intersections or when merging on highways. The high rate of accidents in these settings proves that they constitute difficult driving situations. Moreover, intersections and merging lanes are often the source of important traffic congestion and, sometimes, deadlocks. In this paper, we propose a cooperative framework to safely coordinate semi-autonomous vehicles in such settings, removing the risk of collision or deadlocks while remaining compatible with human driving. More specifically, we present a supervised coordination scheme that overrides control inputs from human drivers when they would result in an unsafe or blocked situation. To avoid unnecessary intervention and remain compatible with human driving, overriding only occurs when collisions or deadlocks are imminent. In this case, safe overriding controls are chosen while ensuring they deviate minimally from those originally requested by the drivers. Simulation results based on a realistic physics simulator show that our approach is scalable to real-world scenarios, and computations can be performed in real time on a standard computer for up to a dozen simultaneous vehicles.},
+	author = {Altche, Florent and Qian, Xiangjun and {De La Fortelle}, Arnaud},
+	doi = {10.1109/TITS.2017.2736532},
+	issn = {15249050},
+	journal = {IEEE Transactions on Intelligent Transportation Systems},
+	keywords = {Semi-autonomous driving,safety,supervised driving,supervisor},
+	title = {{An Algorithm for Supervised Driving of Cooperative Semi-Autonomous Vehicles}},
+	year = {2017}
+}
+
 
 @Comment{Chap2_1_3,
 	title = {Imitation Learning},

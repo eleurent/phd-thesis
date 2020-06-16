@@ -118,9 +118,9 @@ However, protecting against risk often comes at the price of efficiency in achie
 % Part I
 The ultimate goal of this thesis could be summarized in the following question: \emph{"how can an algorithm learn to drive and avoid accidents?"}. The first step in such an endeavour must necessarily be to formalize more precisely the meaning of this ill-posed formula, and so we try in \Cref{part:1}.
 
-It is only natural that we begin this journey by turning to the standard model for sequential decision making: the \acl*{MDP}. At first glance, this framework shines with its simplicity and elegance, but also its apparent generality and representation power. Yet, as we embark on the ambitious task of casting the blurry problem of autonomous driving into this rigid mould, we highlight in \Cref{chapter:2} how reductive each step of the formalization is, how approximations and assumptions always hide behind each symbol and each equation. This observation is supported by the numerous variations of the framework that have been developed by the research community, in as many attempts to address these concerns. Such limitations are as varied as partial observability, temporal abstraction, the reward hypothesis, simulation to real-world transfer and safety, and we relate these research directions to specific works in the autonomous driving literature.
+It is only natural that we begin this journey by turning to the standard model for sequential decision making: the \acl*{MDP}. At first glance, this framework shines with its simplicity and elegance, but also its apparent generality and representation power. Yet, as we embark on the ambitious task of casting the blurry problem of autonomous driving into this rigid mould, we highlight in \Cref{chapter:2} how reductive each step of the formalization is, how approximations and assumptions always hide behind each symbol and each equation. This observation is supported by the numerous variations of the framework that have been developed by the research community, in as many attempts to address these concerns. Such limitations are as varied as partial observability, temporal abstraction, the reward hypothesis, transfer from simulation to real-world and safety; and we relate these research directions to specific works in the autonomous driving literature.
 
-In order to progress, we put aside some of these questions in \Cref{chapter:3} and commit to an (observable) state space, a (hierachical) action space, a (quasi-linear) system dynamics and a (dense) reward function that we deem suitable for a class of behavioural planning tasks. This allows us to refocus on two fundamental issues: \textit{sample-efficient} and \textit{safe} \acl*{RL}. In the sequel, we tackle them through the perspective of the two main approaches to \acl*{RL} aforementioned: first model-free, and then model-based algorithms.
+In order to progress, we put aside some of these questions in \Cref{chapter:3} and commit to an (observable) state space, a (hierarchical) action space, a (quasi-linear) system dynamics and a (dense) reward function that we deem suitable for a class of behavioural planning tasks. This allows us to refocus on two fundamental issues: \textit{sample-efficient} and \textit{safe} \acl*{RL}. In the sequel, we tackle them through the perspective of the two main approaches to \acl*{RL} aforementioned: first model-free, and then model-based algorithms.
 
 % Part II
 \Cref{part:2} is dedicated to the study of how model-free methods can be applied in the context of autonomous driving. In \Cref{chapter:4}, we question the choice of state representation and model architecture in relation to its associated sample-efficiency. In particular, we identify a few desirable properties and inductive biases, mainly that of \emph{permutation invariance} regarding the observed vehicles in the scene. We propose an attention-based architecture that fulfils our wishes, and compare it to standard representations and architectures that have been used for behavioural planning tasks. 
@@ -139,24 +139,24 @@ In \Cref{chapter:7}, \dots
 \subsubsection*{Publications in international conferences with proceedings}
 
 \begin{itemize}
-	\item \bibentry{Leurent2019interval}
-	\item \bibentry{Leurent2020practical}
-	\item \bibentry{CarraraLeurent2019}
+	\item \bibentry{Leurent2019interval} (used in \Cref{chapter:7})
+	\item \bibentry{Leurent2020practical} (used in \Cref{chapter:6})
+	\item \bibentry{CarraraLeurent2019} (used in \Cref{chapter:5})
 \end{itemize}
 
 \subsubsection*{Workshop presentations in international conferences}
 
 \begin{itemize}
-	\item \bibentry{Leurent2019social}
-	\item \bibentry{Leurent2018approximate}
+	\item \bibentry{Leurent2019social} (used in \Cref{chapter:4})
+	\item \bibentry{Leurent2018approximate} (used in \Cref{chapter:7})
 \end{itemize}
 
 \subsubsection*{Submitted works}
 
 \begin{itemize}
-	\item Robust-Adaptive Control of Linear Systems: beyond Quadratic Costs
-	\item Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems
-	\item Monte-Carlo Graph Search: the Value of Merging Similar States
+	\item Robust-Adaptive Control of Linear Systems: beyond Quadratic Costs (used in \Cref{chapter:7})
+	\item Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems (used in \Cref{chapter:7})
+	\item Monte-Carlo Graph Search: the Value of Merging Similar States (used in \Cref{chapter:6})
 \end{itemize}
 
 \subsubsection*{Collaborations not presented in this thesis}
