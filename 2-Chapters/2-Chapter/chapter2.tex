@@ -22,7 +22,7 @@ This chapter provides an overview of the sequential decision-making literature i
 \section{Sequential decision-making}
 \label{sec:sequential-decision-making}
 
-In \Cref{sec:scopes-and-challenges}, we presented the \acl*{RL} framework, that formulates the learning procedure as an optimal control problem. In this section, we start by recalling other design principles that have been considered for coming up with a good driving policy $\pi$.
+\Cref{sec:scopes-and-challenges} presented the \acl*{RL} framework, that formulates the learning procedure as an optimal control problem. In this section, I start by recalling other design principles that have been considered for coming up with a good driving policy $\pi$.
 
 \subsection{Motion Planning}
 
@@ -55,6 +55,7 @@ However, this framework does not allow to represent human behaviours, or more ge
 
 
 \subsection{Imitation Learning}
+\label{sec:imitation-learning}
 
 An orthogonal strategy to motion planning techniques is to learn a reactive policy $\pi(a|s)$ under supervision of an expert $\pi_E$ that produces a dataset $\cD$ of demonstration trajectories. To that end, a parametrized policy $\pi_\theta$ is optimised to minimise a regression loss $\cL$, for instance the $KL$ divergence to the expert actions distribution:
 \begin{equation*}
@@ -137,33 +138,27 @@ The second step of when specifying an MDP is to choose an action space $\cA$. Su
 
 \section{Rewards and inverse reinforcement learning}
 
-How to define a good reward function ?
-Paradoxically, humans know how to drive, but not necessarily how to justify and explain their actions.
-Reward engineering: manually define a set of features of interest, and weighted average. Many use-cases yield many rules, some which contradict. Hard to strike the right tradeoff.
+Having defined the state and action spaces $\cS$ and $\cA$, we come to specify which state-action pairs are deemed \emph{desirable}, through the definition of the reward function $R$. Paradoxically enough, humans know how to drive but not necessarily how to explain their actions and justify why . A common approach to reward specification is colloquially known as \emph{reward engineering}, in which the reward function is parametrized as a linear combination of features $R(s,a) = \sum_i \omega_i \phi_i(s,a)$ . For example, such features may include the ego-vehicle speed, its longitudinal distance to a short-term goal, lateral distance to the lane centerline, or the presence of collisions.
+By handling more and more use-cases, the number of features to consider will rise quickly, some of which contradicting each other. Then, the issue of how the properly choose the weights $\omega_i$ remains, and it can be increasingly hard to strike the right trade-off.
+Besides, this difficulty is further exacerbated by an ambiguity lying in the blurry boundary between the reward function $R(s,a)$ and the value function $V(s)$. For instance, are safety distances desirable \textit{per se}, or only because respecting them means we are less likely to end up in an accident, which is the actual feature of interest here? Likewise, do road traffic regulation rules describe rewarding states or high-value states?
 
-One practical solution would be to iteratively refine a reward function until the learnt policy matches the expected behavior.
-
-This is the inverse problem to RL, where the optimal behaviour stems from the reward.
-
-We assume that the agents act to optimize an unknown reward function.
-Inverse Reinforcement Learning
-Search for a reward function that makes the expert behaviour appear (near)-uniquely (near)-optimal.
-
-RL o IRL is the dual problem of state-action occupancy matching with respect to expert trajectories [Generative Adversarial Imitation Learning]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/pedestrian}
+	\caption{Trajectory prediction for a pedestrian modelled as an optimal planner with a learned cost \citep{Ziebart2009}.}
+	\label{fig:irl-pedestrian}
+\end{figure}
 
 
-has been applied for
-Modeling of routing preferences of taxi-drivers [Navigate like a cabbie: Probabilistic reasoning from observed context-aware behavior]
-Prediction of pedestrians’ future trajectory [Planning-based Prediction for Pedestrians]
-Imitation of comfortable driving style [Learning Driving Styles for Autonomous Vehicles from
-Demonstration]
-\citep{Sun2019}: estimate driver preferences
-\citep{Sadigh2016}: model the human as an optimal planner, reward learnt with IRL.
+One practical solution to these concerns is to iteratively refine the reward function $R$ until the corresponding optimal policy $\pi^\star$ matches the expected behaviour $\pi_E$ of human drivers. The careful or well-versed reader will have noticed that this approach is directly opposed to the \acl*{RL} problem, where the optimal behaviour $\pi^*$ stems from the reward function $R$. Accordingly, the aptly named \ac{IRL} framework aims at finding a reward function that makes the expert behaviour appear uniquely (near)-optimal. At first glance, this problem seems related to Imitation Learning formulation of \Cref{sec:imitation-learning} in its attempt to reproduce expert behaviour. This intuition is supported by the fact that \ac{RL} $\circ$ \ac{IRL} is the dual problem of state-action occupancy matching with respect to expert trajectories \citep{Ho2016}. Example applications of \ac*{IRL} to \acl*{AD} include the work of \citet{Kuderer2015} who learn the trade-off between comfort and efficacy in human lane-change trajectories. 
+
+In addition to finding a good candidate reward for the ego-vehicle behaviour, \acl*{IRL} can also be applied for the purpose of predicting how other agents in the scenes are likely to behave, by modelling them as rational agents trying to maximise an unknown reward function to be learned. In that sense, \ac{RL} $\circ$ \ac{IRL} is a form of model-based \acl*{RL}.
+For instance, this approach has been used to model of routing preferences of taxi-drivers \citep{Ziebart2008}, to predict the future trajectory of pedestrians \citep{Ziebart2009} as shown in \Cref{fig:irl-pedestrian}, and the behaviour of human drivers at an intersection \citep{Sun2019} or on a highway \citep{Sadigh2016}.
 
 
 \section{Dynamics and transfer}
 
-The last element of the MDP tuple.
+The last element of the \acl*{MDP} tuple.
 Usually, no need to specify them: the dynamics are unknown, and only accessed by interaction.
 But in the case of AD, this is not realistic.
 Would require exploration, generating accidents, which is out of question.
@@ -180,7 +175,7 @@ Domain randomization: \citep{Tobin2017}
 
 \section{Optimality criterion and safety}
 
-Once the MDP is fully specified, the optimal policy maximises the expected return.
+Once the \acl*{MDP} is fully specified, the optimal policy maximises the expected return.
 But is it an appropriate performance measure ?
 
 A simple counter example

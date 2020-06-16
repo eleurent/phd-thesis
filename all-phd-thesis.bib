@@ -931,6 +931,50 @@ year = {2017}
 	title = {Inverse Reinforcement Learning},
 }
 
+@inproceedings{Ho2016,
+	abstract = {Consider learning a policy from example expert behavior, without interaction with the expert or access to a reinforcement signal. One approach is to recover the expert's cost function with inverse reinforcement learning, then extract a policy from that cost function with reinforcement learning. This approach is indirect and can be slow. We propose a new general framework for directly extracting a policy from data as if it were obtained by reinforcement learning following inverse reinforcement learning. We show that a certain instantiation of our framework draws an analogy between imitation learning and generative adversarial networks, from which we derive a model-free imitation learning algorithm that obtains significant performance gains over existing model-free methods in imitating complex behaviors in large, high-dimensional environments.},
+	archivePrefix = {arXiv},
+	arxivId = {1606.03476},
+	author = {Ho, Jonathan and Ermon, Stefano},
+	booktitle = {Advances in Neural Information Processing Systems},
+	eprint = {1606.03476},
+	issn = {10495258},
+	title = {{Generative adversarial imitation learning}},
+	year = {2016}
+}
+
+@inproceedings{Kuderer2015,
+	abstract = {It is expected that autonomous vehicles capable of driving without human supervision will be released to market within the next decade. For user acceptance, such vehicles should not only be safe and reliable, they should also provide a comfortable user experience. However, individual perception of comfort may vary considerably among users. Whereas some users might prefer sporty driving with high accelerations, others might prefer a more relaxed style. Typically, a large number of parameters such as acceleration profiles, distances to other cars, speed during lane changes, etc., characterize a human driver's style. Manual tuning of these parameters may be a tedious and error-prone task. Therefore, we propose a learning from demonstration approach that allows the user to simply demonstrate the desired style by driving the car manually. We model the individual style in terms of a cost function and use feature-based inverse reinforcement learning to find the model parameters that fit the observed style best. Once the model has been learned, it can be used to efficiently compute trajectories for the vehicle in autonomous mode. We show that our approach is capable of learning cost functions and reproducing different driving styles using data from real drivers.},
+	author = {Kuderer, Markus and Gulati, Shilpa and Burgard, Wolfram},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2015.7139555},
+	issn = {10504729},
+	title = {{Learning driving styles for autonomous vehicles from demonstration}},
+	year = {2015}
+}
+
+@inproceedings{Ziebart2008,
+	abstract = {We present PROCAB, an efficient method for Probabilistically Reasoning from Observed Context-Aware Behavior. It models the context-dependent utilities and underlying reasons that people take different actions. The model generalizes to unseen situations and scales to incorporate rich contextual information. We train our model using the route preferences of 25 taxi drivers demonstrated in over 100,000 miles of collected data, and demonstrate the performance of our model by inferring: (1) decision at next intersection, (2) route to known destination, and (3) destination given partially traveled route. {\textcopyright} 2008 ACM.},
+	author = {Ziebart, Brian D. and Maas, Andrew L. and Dey, Anind K. and Bagnell, J. Andrew},
+	booktitle = {UbiComp 2008 - Proceedings of the 10th International Conference on Ubiquitous Computing},
+	doi = {10.1145/1409635.1409678},
+	isbn = {9781605581361},
+	keywords = {Decision modeling,Route prediction,Vehicle navigation},
+	title = {{Navigate like a cabbie: Probabilistic reasoning from observed context-aware behavior}},
+	year = {2008}
+}
+
+@inproceedings{Ziebart2009,
+	abstract = {We present a novel approach for determining robot movements that efficiently accomplish the robot's tasks while not hindering the movements of people within the environment. Our approach models the goal-directed trajectories of pedestrians using maximum entropy inverse optimal control. The advantage of this modeling approach is the generality of its learned cost function to changes in the environment and to entirely different environments. We employ the predictions of this model of pedestrian trajectories in a novel incremental planner and quantitatively show the improvement in hindrance-sensitive robot trajectory planning provided by our approach. {\textcopyright} 2009 IEEE.},
+	author = {Ziebart, Brian D. and Ratliff, Nathan and Gallagher, Garratt and Mertz, Christoph and Peterson, Kevin and Bagnell, J. Andrew and Hebert, Martial and Dey, Anind K. and Srinivasa, Siddhartha},
+	booktitle = {2009 IEEE/RSJ International Conference on Intelligent Robots and Systems, IROS 2009},
+	doi = {10.1109/IROS.2009.5354147},
+	isbn = {9781424438044},
+	title = {{Planning-based prediction for pedestrians}},
+	year = {2009}
+}
+
+
 @inproceedings{Sadigh2016,
 	abstract = {Traditionally, autonomous cars make predictions about other drivers' future trajectories, and plan to stay out of their way. This tends to result in defensive and opaque behaviors. Our key insight is that an autonomous car's actions will actually affect what other cars will do in response, whether the car is aware of it or not. Our thesis is that we can leverage these responses to plan more efficient and communicative behaviors. We model the interaction between an autonomous car and a human driver as a dynamical system, in which the robot's actions have immediate consequences on the state of the car, but also on human actions. We model these consequences by approximating the human as an optimal planner, with a reward function that we acquire through Inverse Reinforcement Learning. When the robot plans with this reward function in this dynamical system, it comes up with actions that purposefully change human state: it merges in front of a human to get them to slow down or to reach its own goal faster; it blocks two lanes to get them to switch to a third lane; or it backs up slightly at an intersection to get them to proceed first. Such behaviors arise from the optimization, without relying on hand-coded signaling strategies and without ever explicitly modeling communication. Our user study results suggest that the robot is indeed capable of eliciting desired changes in human state by planning using this dynamical system.},
 	author = {Sadigh, Dorsa and Sastry, Shankar and Seshia, Sanjit A. and Dragan, Anca D.},
