@@ -931,18 +931,6 @@ year = {2017}
 	title = {Inverse Reinforcement Learning},
 }
 
-@inproceedings{Ho2016,
-	abstract = {Consider learning a policy from example expert behavior, without interaction with the expert or access to a reinforcement signal. One approach is to recover the expert's cost function with inverse reinforcement learning, then extract a policy from that cost function with reinforcement learning. This approach is indirect and can be slow. We propose a new general framework for directly extracting a policy from data as if it were obtained by reinforcement learning following inverse reinforcement learning. We show that a certain instantiation of our framework draws an analogy between imitation learning and generative adversarial networks, from which we derive a model-free imitation learning algorithm that obtains significant performance gains over existing model-free methods in imitating complex behaviors in large, high-dimensional environments.},
-	archivePrefix = {arXiv},
-	arxivId = {1606.03476},
-	author = {Ho, Jonathan and Ermon, Stefano},
-	booktitle = {Advances in Neural Information Processing Systems},
-	eprint = {1606.03476},
-	issn = {10495258},
-	title = {{Generative adversarial imitation learning}},
-	year = {2016}
-}
-
 @inproceedings{Kuderer2015,
 	abstract = {It is expected that autonomous vehicles capable of driving without human supervision will be released to market within the next decade. For user acceptance, such vehicles should not only be safe and reliable, they should also provide a comfortable user experience. However, individual perception of comfort may vary considerably among users. Whereas some users might prefer sporty driving with high accelerations, others might prefer a more relaxed style. Typically, a large number of parameters such as acceleration profiles, distances to other cars, speed during lane changes, etc., characterize a human driver's style. Manual tuning of these parameters may be a tedious and error-prone task. Therefore, we propose a learning from demonstration approach that allows the user to simply demonstrate the desired style by driving the car manually. We model the individual style in terms of a cost function and use feature-based inverse reinforcement learning to find the model parameters that fit the observed style best. Once the model has been learned, it can be used to efficiently compute trajectories for the vehicle in autonomous mode. We show that our approach is capable of learning cost functions and reproducing different driving styles using data from real drivers.},
 	author = {Kuderer, Markus and Gulati, Shilpa and Burgard, Wolfram},
@@ -990,6 +978,58 @@ year = {2017}
 	title = {Transfer},
 }
 
+@misc{levine2020offline,
+	title={Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems},
+	author={Sergey Levine and Aviral Kumar and George Tucker and Justin Fu},
+	year={2020},
+	eprint={2005.01643},
+	archivePrefix={arXiv},
+	primaryClass={cs.LG}
+}
+
+@inproceedings{Laroche2019,
+	title={Safe Policy Improvement with Baseline Bootstrapping},
+	author={Laroche, Romain and Trichelair, Paul and Tachet des Combes, R\'emi},
+	booktitle={Proceedings of the International Conference on Machine Learning (ICML)},
+	year={2019}
+}
+
+@article{Nadjahi2019,
+	abstract = {Batch Reinforcement Learning (Batch RL) consists in training a policy using trajectories collected with another policy, called the behavioural policy. Safe policy improvement (SPI) provides guarantees with high probability that the trained policy performs better than the behavioural policy, also called baseline in this setting. Previous work shows that the SPI objective improves mean performance as compared to using the basic RL objective, which boils down to solving the MDP with maximum likelihood. Here, we build on that work and improve more precisely the SPI with Baseline Bootstrapping algorithm (SPIBB) by allowing the policy search over a wider set of policies. Instead of binarily classifying the state-action pairs into two sets (the $\backslash$textit{\{}uncertain{\}} and the $\backslash$textit{\{}safe-to-train-on{\}} ones), we adopt a softer strategy that controls the error in the value estimates by constraining the policy change according to the local model uncertainty. The method can take more risks on uncertain actions all the while remaining provably-safe, and is therefore less conservative than the state-of-the-art methods. We propose two algorithms (one optimal and one approximate) to solve this constrained optimization problem and empirically show a significant improvement over existing SPI algorithms both on finite MDPs and on infinite MDPs with a neural network function approximation.},
+	archivePrefix = {arXiv},
+	arxivId = {1907.05079},
+	author = {Nadjahi, Kimia and Laroche, Romain and des Combes, R{\'{e}}mi Tachet},
+	eprint = {1907.05079},
+	file = {:D$\backslash$:/Downloads/339.pdf:pdf},
+	mendeley-groups = {Safety},
+	pages = {1--17},
+	title = {{Safe Policy Improvement with Soft Baseline Bootstrapping}},
+	url = {http://arxiv.org/abs/1907.05079},
+	year = {2019}
+}
+
+@article{Kakade2002,
+	abstract = {Abstract In order to solve realistic reinforcement learning problems, it is critical that approximate algorithms be used. In this paper, we present the conservative policy iteration algorithm which finds an" approximately" optimal policy, given access to a restart ... $\backslash$n},
+	author = {Kakade, Sham and Langford, John},
+	isbn = {1-55860-873-7},
+	journal = {Proceedings of the 19th International Conference on Machine Learning},
+	title = {{Approximately Optimal Approximate Reinforcement Learning}},
+	year = {2002}
+}
+
+@inproceedings{Schulman2015,
+	abstract = {In this article, we describe a method for optimizing control policies, with guaranteed monotonic improvement. By making several approximations to the theoretically-justified scheme, we develop a practical algorithm, called Trust Region Policy Optimization (TRPO). This algorithm is effective for optimizing large nonlinear policies such as neural networks. Our experiments demonstrate its robust performance on a wide variety of tasks: learning simulated robotic swimming, hopping, and walking gaits; and playing Atari games using images of the screen as input. Despite its approximations that deviate from the theory, TRPO tends to give monotonic improvement, with little tuning of hyperparameters.},
+	archivePrefix = {arXiv},
+	arxivId = {1502.05477},
+	author = {Schulman, John and Levine, Sergey and Moritz, Philipp and Jordan, Michael and Abbeel, Pieter},
+	booktitle = {32nd International Conference on Machine Learning, ICML 2015},
+	eprint = {1502.05477},
+	isbn = {9781510810587},
+	title = {{Trust region policy optimization}},
+	year = {2015}
+}
+
+
 @inproceedings{Pan2017,
 	abstract = {Reinforcement learning is considered as a promising direction for driving policy learning. However, training autonomous driving vehicle with reinforcement learning in real environment involves non-affordable trial-and-error. It is more desirable to first train in a virtual environment and then transfer to the real environment. In this paper, we propose a novel realistic translation network to make model trained in virtual environment be workable in real world. The proposed network can convert non-realistic virtual image input into a realistic one with similar scene structure. Given realistic frames as input, driving policy trained by reinforcement learning can nicely adapt to real world driving. Experiments show that our proposed virtual to real (VR) reinforcement learning (RL) works pretty well. To our knowledge, this is the first successful case of driving policy trained by reinforcement learning that can adapt to real world driving data.},
 	archivePrefix = {arXiv},
@@ -1024,6 +1064,92 @@ year = {2017}
 	issn = {21530866},
 	title = {{Domain randomization for transferring deep neural networks from simulation to the real world}},
 	year = {2017}
+}
+
+@misc{openai2019solving,
+	title={Solving Rubik's Cube with a Robot Hand},
+	author={OpenAI and Ilge Akkaya and Marcin Andrychowicz and Maciek Chociej and Mateusz Litwin and Bob McGrew and Arthur Petron and Alex Paino and Matthias Plappert and Glenn Powell and Raphael Ribas and Jonas Schneider and Nikolas Tezak and Jerry Tworek and Peter Welinder and Lilian Weng and Qiming Yuan and Wojciech Zaremba and Lei Zhang},
+	year={2019},
+	eprint={1910.07113},
+	archivePrefix={arXiv},
+	primaryClass={cs.LG}
+}
+
+@inproceedings{Prakash2019,
+	abstract = {We present structured domain randomization (SDR), a variant of domain randomization (DR) that takes into account the structure of the scene in order to add context to the generated data. In contrast to DR, which places objects and distractors randomly according to a uniform probability distribution, SDR places objects and distractors randomly according to probability distributions that arise from the specific problem at hand. In this manner, SDR-generated imagery enables the neural network to take the context around an object into consideration during detection. We demonstrate the power of SDR for the problem of 2D bounding box car detection, achieving competitive results on real data after training only on synthetic data. On the KITTI easy, moderate, and hard tasks, we show that SDR outperforms other approaches to generating synthetic data (VKITTI, Sim 200k, or DR), as well as real data collected in a different domain (BDD100K). Moreover, synthetic SDR data combined with real KITTI data outperforms real KITTI data alone.11Video is at http://youtu.be/1WdjWJYx9AY.},
+	archivePrefix = {arXiv},
+	arxivId = {1810.10093},
+	author = {Prakash, Aayush and Boochoon, Shaad and Brophy, Mark and Acuna, David and Cameracci, Eric and State, Gavriel and Shapira, Omer and Birchfield, Stan},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2019.8794443},
+	eprint = {1810.10093},
+	isbn = {9781538660263},
+	issn = {10504729},
+	title = {{Structured domain randomization: Bridging the reality gap by context-aware synthetic data}},
+	year = {2019}
+}
+
+@inproceedings{Pouyanfar2019,
+	abstract = {End-to-end deep learning has emerged as a simple and promising approach for autonomous driving recently. However, collecting large-scale real-world data representing the full spectrum of road scenarios and rare events remains the main hurdle in this area. For this purpose, this paper addresses the problem of end-to-end collision-free deep driving using only simulation data. It extends the idea of domain randomization to bridge the reality gap between simulation and the real world. Using a range of domain randomization flavors in a primitive simulation, it is shown that a model can learn to drive in realistic environments without seeing any real or photo-realistic images. The proposed work dramatically reduces the need for collecting large real-world or high-fidelity simulated datasets, along with allowing for the creation of rare events in the simulation. Finally, this is the first time domain randomization is used for the application of 'deep driving' which can avoid obstacles. The effectiveness of the proposed method is demonstrated with extensive experiments on both simulation and real-world datasets.},
+	author = {Pouyanfar, Samira and Saleem, Muneeb and George, Nikhil and Chen, Shu Ching},
+	booktitle = {IEEE Computer Society Conference on Computer Vision and Pattern Recognition Workshops},
+	doi = {10.1109/CVPRW.2019.00166},
+	isbn = {9781728125060},
+	issn = {21607516},
+	title = {{ROADS: Randomization for obstacle avoidance and driving in simulation}},
+	year = {2019}
+}
+
+@InProceedings{Mueller2018,
+	title = 	 {Driving Policy Transfer via Modularity and Abstraction},
+	author = 	 {Mueller, Matthias and Dosovitskiy, Alexey and Ghanem, Bernard and Koltun, Vladlen},
+	booktitle = 	 {Proceedings of The 2nd Conference on Robot Learning},
+	pages = 	 {1--15},
+	year = 	 {2018},
+	editor = 	 {Billard, Aude and Dragan, Anca and Peters, Jan and Morimoto, Jun},
+	volume = 	 {87},
+	series = 	 {Proceedings of Machine Learning Research},
+	address = 	 {},
+	month = 	 {29--31 Oct},
+	publisher =  {PMLR},
+	pdf = 	 {http://proceedings.mlr.press/v87/mueller18a/mueller18a.pdf},
+	url = 	 {http://proceedings.mlr.press/v87/mueller18a.html},
+	abstract = 	 {End-to-end approaches to autonomous driving have high sample complexity and are difficult to scale to realistic urban driving. Simulation can help end-to-end driving systems by providing a cheap, safe, and diverse training environment. Yet training driving policies in simulation brings up the problem of transferring such policies to the real world. We present an approach to transferring driving policies from simulation to reality via modularity and abstraction. Our approach is inspired by classic driving systems and aims to combine the benefits of modular architectures and end-to-end deep learning approaches. The key idea is to encapsulate the driving policy such that it is not directly exposed to raw perceptual input or low-level vehicle dynamics. We evaluate the presented approach in simulated urban environments and in the real world. In particular, we transfer a driving policy trained in simulation to a 1/5-scale robotic truck that is deployed in a variety of conditions, with no finetuning, on two continents.}
+}
+
+@incollection{Liu2017,
+	title = {Unsupervised Image-to-Image Translation Networks},
+	author = {Liu, Ming-Yu and Breuel, Thomas and Kautz, Jan},
+	booktitle = {Advances in Neural Information Processing Systems 30},
+	editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+	pages = {700--708},
+	year = {2017},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-networks.pdf}
+}
+
+@INPROCEEDINGS{Ros2016,
+	author={G. {Ros} and L. {Sellart} and J. {Materzynska} and D. {Vazquez} and A. M. {Lopez}},
+	booktitle={2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+	title={The SYNTHIA Dataset: A Large Collection of Synthetic Images for Semantic Segmentation of Urban Scenes}, 
+	year={2016},
+	volume={},
+	number={},
+	pages={3234-3243},
+}
+
+@inproceedings{Cordts2016,
+	abstract = {Visual understanding of complex urban street scenes is an enabling factor for a wide range of applications. Object detection has benefited enormously from large-scale datasets, especially in the context of deep learning. For semantic urban scene understanding, however, no current dataset adequately captures the complexity of real-world urban scenes. To address this, we introduce Cityscapes, a benchmark suite and large-scale dataset to train and test approaches for pixel-level and instance-level semantic labeling. Cityscapes is comprised of a large, diverse set of stereo video sequences recorded in streets from 50 different cities. 5000 of these images have high quality pixel-level annotations, 20 000 additional images have coarse annotations to enable methods that leverage large volumes of weakly-labeled data. Crucially, our effort exceeds previous attempts in terms of dataset size, annotation richness, scene variability, and complexity. Our accompanying empirical study provides an in-depth analysis of the dataset characteristics, as well as a performance evaluation of several state-of-the-art approaches based on our benchmark.},
+	archivePrefix = {arXiv},
+	arxivId = {1604.01685},
+	author = {Cordts, Marius and Omran, Mohamed and Ramos, Sebastian and Rehfeld, Timo and Enzweiler, Markus and Benenson, Rodrigo and Franke, Uwe and Roth, Stefan and Schiele, Bernt},
+	booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+	doi = {10.1109/CVPR.2016.350},
+	eprint = {1604.01685},
+	isbn = {9781467388504},
+	issn = {10636919},
+	title = {{The Cityscapes Dataset for Semantic Urban Scene Understanding}},
+	year = {2016}
 }
 
 

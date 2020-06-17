@@ -144,7 +144,7 @@ Besides, this difficulty is further exacerbated by an ambiguity lying in the blu
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\linewidth]{img/pedestrian}
+	\includegraphics[width=0.6\linewidth]{img/pedestrian}
 	\caption{Trajectory prediction for a pedestrian modelled as an optimal planner with a learned cost \citep{Ziebart2009}.}
 	\label{fig:irl-pedestrian}
 \end{figure}
@@ -156,19 +156,25 @@ In addition to finding a good candidate reward for the ego-vehicle behaviour, \a
 For instance, this approach has been used to model of routing preferences of taxi-drivers \citep{Ziebart2008}, to predict the future trajectory of pedestrians \citep{Ziebart2009} as shown in \Cref{fig:irl-pedestrian}, and the behaviour of human drivers at an intersection \citep{Sun2019} or on a highway \citep{Sadigh2016}.
 
 
-\section{Dynamics and transfer}
+\section{Dynamics, offline learning and transfer}
 
-We now come to the last element of the \acl*{MDP} tuple: the dynamics $P\parentheses{s'\mid s,a}$. Contrary to the state and actions which are the input and output interfaces of the agent, and the reward function which is often chosen by the system designer, usually there is actually no need to specify the dynamics. Indeed, one of the biggest assets of Reinforcement Learning is its ability to handle unknown dynamics that are only accessed through interaction. Unfortunately, this assumption that the agent is allowed direct interaction with true environment is both unacceptable and unrealistic in the context of \acl*{AD}. Indeed, the traditional \emph{learning-by-acting} pipeline requires exploration, which would imply having autonomous vehicles violate the rules of the road and generate accidents, which is out of question. Besides, most \acl*{RL} algorithms require a tremendous amount of interaction data to learn an optimal policy, including for \acp*{MDP} such as Atari games which are arguably less diverse and complex than real-world driving scenes. Not to mention that, perhaps evidently but contrary to simulated games, \emph{the real world can only run in real time}.
+We now come to the last element of the \acl*{MDP} tuple: the dynamics $P\parentheses{s'\mid s,a}$. Contrary to the state and actions which are the input and output interfaces of the agent, and to the reward function which is generally chosen by the system designer, there is usually no need to actually specify the system dynamics. Indeed, one of the biggest assets of Reinforcement Learning is its ability to handle unknown dynamics that are only accessed through interaction. Unfortunately, this assumption that the agent is allowed direct interaction with true environment is both unacceptable and unrealistic in the context of \acl*{AD}. Indeed, the traditional \emph{learning-by-acting} pipeline requires exploration, which would imply having autonomous vehicles violate the rules of the road and generate accidents, which is obviously out of question. Besides, most \acl*{RL} algorithms require a tremendous amount of interaction data to learn an optimal policy, including for \acp*{MDP} such as Atari games which are arguably less diverse and complex than real-world driving scenes. Not to mention that, perhaps evidently but contrary to simulated games, \emph{the real world can only run in real time}.
 
-How do we proceed?
-Two ways: 
-- offline RL
-- simulation
+This issue can be addressed in two ways. A first solution is to consider the \emph{offline} \acl*{RL} problem \citep{levine2020offline}, in which the agent no longer has the ability to interact with the environment and is instead provided with a \emph{static} dataset $\cD = \{(s_t, a_t, r_t, s_{t+1})\}$ of interaction data, and must learn the best policy it can with this dataset. These interaction data that are collected by an exploration policy $\pi_E$, in our case human driving. However, for the same reasons mentioned in \Cref{sec:imitation-learning}, this limited data available induces a loss of optimality: any attempt to improve the policy may steer the agent in regions of the state space $\cS$ that are not present in the dataset $\cD$, typically accident states, off-road driving, \etc in the case of \acl*{AD}. Still, safe policy improvement guarantees can be derived under some conditions, \eg for finite \acp*{MDP} \citep{Laroche2019,Nadjahi2019}. This often requires to constrain how much the learned policy $\pi$ can differ from the exploration policy $\pi_E$, so as to bound the state distribution shift \citep{Kakade2002,Schulman2015}.
 
-But simulation-reality gap.
-\citep{Pan2017,Liang2019}
+\begin{figure}
+	\includegraphics[width=\linewidth]{img/transfer}
+	\caption{Sim-to-real unsupervised transfer \citep{Liu2017} from synthetic images of the \textsc{cynthia} dataset \citep{Ros2016} to realistic images of the \textsc{Cityscapes} dataset \citep{Cordts2016}.}
+	\label{fig:transfer}
+\end{figure}
 
-Domain randomization: \citep{Tobin2017}
+A second decision is to leverage \emph{simulation}. The vast majority of \acl*{RL} systems currently running are interacting simulated environments. Indeed, simulation provides many advantages: it is generally much cheaper than real experiments, it can run much faster, be easily parallelised, be reset to any initial state when it fails, and failures are not costly and can be experienced at will. Unfortunately, all these benefits come at a price: there is always a \emph{gap} between simulation and reality, an issue also known as \emph{model bias}. The problem of adapting a policy learned in one environment to another related one is known as \emph{Transfer}, and has been tackled by researchers in different ways. A general strategy is to use simulation as a pre-training and fine-tune to the policy in the target environment \citep{Liang2019}. This allows to obtain satisfactory initial behaviour and cut down on training time. To reduce the gap between the simulation and reality, three approaches can be taken:
+\begin{enumerate}[label=(\roman*)]
+	\item make the simulation as \textit{realistic} as possible. For instance, \citet{Pan2017} translate the virtual images rendered by a simulator to synthetic realistic images, using an Image-to-Image Translation Networks similar to that shown in \Cref{fig:transfer}, so that the observations seen by the agent while training at closer to those it will observe when deployed in the real environment.
+	\item make the simulation more \textit{diverse}, by partially randomizing the observations and dynamics, so that the real world appears like yet another realization of that diversity. This approach is known as \emph{Domain Randomization}, and has been widely applied to robotic manipulation tasks \citep{Tobin2017,openai2019solving}, and in the context of \acl*{AD} \citep{Prakash2019,Pouyanfar2019}.
+	\item make both the simulation and the real-world \textit{abstract}, by mapping them to intermediate observation and action spaces so that the encapsulated policy is not directly exposed to raw perceptual inputs and low-level controls. For instance, semantically segmented images and waypoints are used as observations and actions in \citep{Mueller2018}.
+\end{enumerate}
+
 
 \section{Optimality criterion and safety}
 

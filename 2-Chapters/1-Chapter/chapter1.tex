@@ -48,13 +48,12 @@ Great strides have been made in the two end-of-pipe tasks: Perception has benefi
 \subsection{Scope and Challenges of this Thesis}
 \label{sec:scopes-and-challenges}
 
-In the light of the above, this thesis is dedicated to addressing a weak link in the Autonomous Driving pipeline: \emph{Behavioural Planning}.  We ask the following question: assume that we had access to a ground truth perception and a perfectly accurate control system, what steps would remain to achieve fully autonomous driving?
-%Leverage learning to design driving policies, and hope for a better comprehensiveness.
+In the light of the above, this thesis is dedicated to addressing a weak link in the \acl*{AD} chain: \emph{Behavioural Planning}.  We ask the following question: assuming that we had access to a ground truth perception and a perfectly accurate control system, what steps would remain to achieve fully autonomous driving?
 
 
 \paragraph{Humans in the loop}
 
-In the absence of dedicated self-driving infrastructure, Autonomous Vehicles will have to share the road with human drivers. This introduces a great deal of uncertainty in the decision problem. Indeed, while the location and velocity of a vehicle can be perceived, the mind of its driver remains impenetrable. Even though the present state is known, the future becomes uncertain: where are they headed? Are they paying attention to their surroundings? In that respect, it seems impossible to manually model all the factors involved in the human decision-making process. Yet, human drivers do not drive erratically either. Their behaviour is highly structured: humans drivers tend to follow the lanes, avoid collisions with other vehicles, and generally respect road signage. In other words, human drivers are \emph{predictable}. This motivates the idea of learning from data.%, either direct predictive models of human behaviours, or a driving policy based on implicit predictions of what they might do next.
+In the absence of dedicated self-driving infrastructure, Autonomous Vehicles will have to share the road with human drivers. This introduces a great deal of uncertainty in the decision problem. Indeed, while the location and velocity of a vehicle can be perceived, the mind of its driver remains impenetrable. Even though the present state is known, the future becomes uncertain: where are they headed? Are they paying attention to their surroundings? In that respect, it seems impossible to manually model all the factors involved in the human decision-making process. Yet, human drivers do not drive erratically either. Their behaviour is highly structured: humans drivers tend to follow the lanes, avoid collisions with other vehicles, and generally respect road signage. In other words, human drivers are \emph{predictable}. This motivates the idea of learning from data, and hope for a better comprehensiveness than handcrafted decision systems.%, either direct predictive models of human behaviours, or a driving policy based on implicit predictions of what they might do next.
 % We want to quantify uncertainty
 % Recall aletoric vs epistemic uncertainty?
 
