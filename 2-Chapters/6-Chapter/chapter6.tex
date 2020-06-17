@@ -631,6 +631,19 @@ The results of our experiments are shown in Figure \ref{fig:experiments}. The \O
 We introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Finally, we proposed an efficient implementation that benefits from a substantial speedup, facilitating its use for real-time planning applications.
 
 
+\section{On a closed-loop algorithm}
+
+We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \MDPGapE, was developed as part of a collaboration \citep{jonsson2020planning} and analysed in the fixed-confidence setting.
+
+It relies on estimating confidence sets $\cC_t$ on the probability vector $p(\cdot|s,a)$
+$$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \leq \frac {\beta^p(n_t(s,a), n)} {n_t(s,a)}\right\},$$
+
+and forming recursive upper and lower confidence bounds in the form
+\begin{align*}
+U_{h}(s) &= \max_{a\in A} \left[u_t(s,a) + \gamma \max_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a) U_{h+1}(s')\right], \\
+L_{h}(s) &= \max_{a\in A} \left[\ell_t(s,a) + \gamma \min_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a)L_{h+1}(s')\right].
+\end{align*}
+
 \section{Graph-based optimistic planning}
 \label{sec:gbopd}
 
