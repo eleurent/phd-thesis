@@ -162,7 +162,7 @@ We now come to the last element of the \acl*{MDP} tuple: the dynamics $P\parenth
 
 This issue can be addressed in two ways. A first solution is to consider the \emph{offline} \acl*{RL} problem \citep{levine2020offline}, in which the agent no longer has the ability to interact with the environment and is instead provided with a \emph{static} dataset $\cD = \{(s_t, a_t, r_t, s_{t+1})\}$ of interaction data, and must learn the best policy it can with this dataset. These interaction data that are collected by an exploration policy $\pi_E$, in our case human driving. However, for the same reasons mentioned in \Cref{sec:imitation-learning}, this limited data available induces a loss of optimality: any attempt to improve the policy may steer the agent in regions of the state space $\cS$ that are not present in the dataset $\cD$, typically accident states, off-road driving, \etc in the case of \acl*{AD}. Still, safe policy improvement guarantees can be derived under some conditions, \eg for finite \acp*{MDP} \citep{Laroche2019,Nadjahi2019}. This often requires to constrain how much the learned policy $\pi$ can differ from the exploration policy $\pi_E$, so as to bound the state distribution shift \citep{Kakade2002,Schulman2015}.
 
-\begin{figure}
+\begin{figure}[ht]
 	\includegraphics[width=\linewidth]{img/transfer}
 	\caption{Sim-to-real unsupervised transfer \citep{Liu2017} from synthetic images of the \textsc{cynthia} dataset \citep{Ros2016} to realistic images of the \textsc{Cityscapes} dataset \citep{Cordts2016}.}
 	\label{fig:transfer}
@@ -178,17 +178,45 @@ A second decision is to leverage \emph{simulation}. The vast majority of \acl*{R
 
 \section{Optimality criterion and safety}
 
-Once the \acl*{MDP} is fully specified, the optimal policy maximises the expected return.
-But is it an appropriate performance measure ?
 
-A simple counter example
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/roundabout}
+	\caption{A risky situation: should the vehicle merge into the roundabout?}
+	\label{fig:risky-problem}
+\end{figure}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{lccc}
+		\toprule
+		Decision & \multicolumn{2}{c}{Merge} & Wait \\
+		\cmidrule(lr){2-3}
+		\cmidrule(lr){4-4}
+		Outcome & Success & Failure & Boredom \\
+		Probability & $1-\delta$ & $\delta$ & 1 \\
+		Reward & $1$ & $-\frac{1-\delta}{\delta}$ & 0 \\
+		\midrule
+		$\expectedvalue[R]$ & \multicolumn{2}{c}{$0$} & $0$ \\
+		$\min R$ & \multicolumn{2}{c}{$-\frac{1-\delta}{\delta} \simeq -\frac{1}{\delta}$} & $0$ \\
+		$\mathop{\mathbb{V}}(R)$ & \multicolumn{2}{c}{$\frac{(1-\frac{1}{2}\delta)^2}{\delta} \simeq \frac{1}{\delta}$} & $0$ \\
+		\bottomrule	
+	\end{tabular}
+	\caption{A simple bandit problem associated with \Cref{fig:risky-problem}. When trying to merge, an accident happens with probability $\delta$ and the agent suffers a high penalty $\frac{1-\delta}{\delta}$. If the agent decides to wait instead, it suffers a small penalty of $0$ for the inconvenience. We show the associated expected reward, worst-case reward, and reward variance.}
+\end{table}
 
-This has lead researchers and practitioners to consider alternative definitions of Optimality. Typically in critical settings, these approaches are are grouped under the name of \emph{Safe} RL.
-Survey by \citep{Garcia2015}
+Once the \acl*{MDP} is fully specified, a policy $\pi$ is said to be optimal if it maximises the \emph{expected} return.
+\begin{equation*}
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t \right]
+\end{equation*}
+
+But is it an appropriate performance measure? Consider a driving decision, say merging into a roundabout, that given the uncertainty on the behaviour of other agents can lead to a collision with a certain probability $p$. When maximising the return in expectation, the agent is allowed to weight the collision penalty and balance it with the likely gains linked with other factors, such as comfort and short-term goal achievement. In other words, the optimal agent is willing to risk a collision once in a while, if in return it. As observed by \citep{ShalevShwartz2017}, given normalized rewards in $[0, 1]$ for standard behaviours, avoiding accidents with probability $1-\delta$ requires for the penalty associated with a collision to be in order of $1/\delta$. Such a high variance in the definition of the reward function is likely to impede learning.
+
+This has lead researchers and practitioners to consider alternative definitions of optimality, especially facing critical environments. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and were survey by \citet{Garcia2015} who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
 
 \paragraph{Risk-sensitive Criterion}
 
-Bandit / RL
+A first variation of the traditional expected return criterion consists in adding a term that penalizes the \emph{variance} of the return. Consider the example mentioned above: the decision to merge would end-up in a collision and a resulting penalty $-1/\delta$ with probability $\delta$, and to a successful merge and reward of $1$ with probability $1-\delta$.
+
 \citep{Torossian19a} for risk optimization of stochastic blackbox functions.
 Application to AD: \citep{Naghshvar2018} stationary object on the road, and highway ramp
 
