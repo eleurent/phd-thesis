@@ -197,28 +197,38 @@ A second decision is to leverage \emph{simulation}. The vast majority of \acl*{R
 		Reward & $1$ & $-\frac{1-\delta}{\delta}$ & 0 \\
 		\midrule
 		$\expectedvalue[R]$ & \multicolumn{2}{c}{$0$} & $0$ \\
+		$\mathop{\mathbb{V}}(R)$ & \multicolumn{2}{c}{$\frac{1-\delta}{\delta} \simeq \frac{1}{\delta}$} & $0$ \\
 		$\min R$ & \multicolumn{2}{c}{$-\frac{1-\delta}{\delta} \simeq -\frac{1}{\delta}$} & $0$ \\
-		$\mathop{\mathbb{V}}(R)$ & \multicolumn{2}{c}{$\frac{(1-\frac{1}{2}\delta)^2}{\delta} \simeq \frac{1}{\delta}$} & $0$ \\
 		\bottomrule	
 	\end{tabular}
 	\caption{A simple bandit problem associated with \Cref{fig:risky-problem}. When trying to merge, an accident happens with probability $\delta$ and the agent suffers a high penalty $\frac{1-\delta}{\delta}$. If the agent decides to wait instead, it suffers a small penalty of $0$ for the inconvenience. We show the associated expected reward, worst-case reward, and reward variance.}
+	\label{tab:risky-problem}
 \end{table}
 
-Once the \acl*{MDP} is fully specified, a policy $\pi$ is said to be optimal if it maximises the \emph{expected} return.
+Once the \acl*{MDP} is fully specified, a policy $\pi$ is said to be optimal if it maximises the \emph{expected} return
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t \right]
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t \right].
 \end{equation*}
 
-But is it an appropriate performance measure? Consider a driving decision, say merging into a roundabout, that given the uncertainty on the behaviour of other agents can lead to a collision with a certain probability $p$. When maximising the return in expectation, the agent is allowed to weight the collision penalty and balance it with the likely gains linked with other factors, such as comfort and short-term goal achievement. In other words, the optimal agent is willing to risk a collision once in a while, if in return it. As observed by \citep{ShalevShwartz2017}, given normalized rewards in $[0, 1]$ for standard behaviours, avoiding accidents with probability $1-\delta$ requires for the penalty associated with a collision to be in order of $1/\delta$. Such a high variance in the definition of the reward function is likely to impede learning.
+But is this an appropriate performance measure? Consider a driving decision --say merging into a roundabout as illustrated in \Cref{fig:risky-problem}-- that, given the uncertainty on the behaviour of other agents, can lead to a collision with a certain probability $\delta$. When maximising the return in expectation, the agent is allowed balance the (rate) accident penalty with the more likely perspective of a successful merge. A first observation is made by \citet{ShalevShwartz2017}: assuming that rewards in normalized in $[0, 1]$ for standard behaviours, for the agent to care about avoiding accidents with probability $1-\delta$ requires the penalty associated with a collision to be in order of $1/\delta$, as we illustrate in \Cref{tab:risky-problem}. This leads to a high variance in the observed rewards, which is likely to impede learning. And even then, the optimal agent can be willing to risk a collision once in a while, if it allows for an increased efficiency the rest of the time.
 
-This has lead researchers and practitioners to consider alternative definitions of optimality, especially facing critical environments. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and were survey by \citet{Garcia2015} who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
+The question of whether this weighing of human lives and economical benefits is desirable brings us straight back to the ethical considerations of \Cref{sec:trolley}. Such questions often arise, as described by [ref needed]. Another recent example is the \emph{optimal} duration of COVID-19 lockdown policies, which has opposite implications for public health and economics [ref needed].
+This questioning has lead researchers and practitioners to consider alternative definitions of optimality, especially tailored for safety-critical domains. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and typically involve giving up some  expected performance in favour of the lower tail of the return distribution. They were surveyed by \citet{Garcia2015}, who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
 
 \paragraph{Risk-sensitive Criterion}
 
-A first variation of the traditional expected return criterion consists in adding a term that penalizes the \emph{variance} of the return. Consider the example mentioned above: the decision to merge would end-up in a collision and a resulting penalty $-1/\delta$ with probability $\delta$, and to a successful merge and reward of $1$ with probability $1-\delta$.
+A first variation of the traditional expected return criterion consists in adding a term that penalizes the \emph{variance} of the return. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}. The variance-penalized criterion takes the form
 
-\citep{Torossian19a} for risk optimization of stochastic blackbox functions.
-Application to AD: \citep{Naghshvar2018} stationary object on the road, and highway ramp
+\begin{equation*}
+\max_\pi \expectedvalue_{\pi, P} \left[G_P^\pi\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[G_P^\pi\right],
+\end{equation*}
+
+where $\alpha > 0$ is a variance penalty coefficient, and would favour \texttt{Wait} over \texttt{Merge}.
+
+Other measures of the risk can be considered, such as quantiles,  VaR, CVaR.
+Optimisation of risk measures has been studied in the \acl*{MAB} setting, \eg by \citet{Torossian19a} for risk optimisation of stochastic blackbox functions.
+[ref needed in RL.]
+In the context of \acl*{AD}, \citet{Naghshvar2018} propose to optimise a variance-penalised objective with a tree-based planner and estimate variance of the return thanks to the unscented transform. They apply it to highway ramp scenarios where uncertainty stems from occlusions and limited sensor range.
 
 
 \paragraph{Worst-case criterion}
@@ -266,3 +276,25 @@ This setting is questionable for AD, might be too restrictive: some standard sta
 
 \citep{leung2018infusing} HJI reachability
 \citep{Fisac2019} HJI equation, non-convex constraints X,U
+
+
+Safety with respect to error states
+
+We can define the concept of \emph{inevitable collision states} (ICS)
+\includegraphics[height=0.4\textheight]{img/ics}
+	All obstacles must be considered \emph{globally}.
+\includegraphics[height=0.4\textheight]{img/ics-global}
+\citep{Fraichard2004}
+		
+	
+Absolute motion safety is not achievable
+We cannot always avoid this region of the state-space.
+\includegraphics[height=0.3\textheight]{img/safety-no}
+But we can consider weaker models of safety:
+
+\begin{itemize}
+\item Passive motion safety (Braking ICS)\citep{Bouraine2012}
+\item Passive-friendly motion safety
+\item Responsibility-Sensitive Safety \citep{ShalevShwartz2017}
+\end{itemize}
+
