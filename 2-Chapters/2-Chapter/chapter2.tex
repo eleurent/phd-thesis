@@ -234,24 +234,21 @@ In model-based \acl*{RL}, the model parameters are typically estimated from nois
 \end{equation*}
 
 This problem was first studied by the control community, who focused on the minimax control of the $\cH_\infty$-norm \citep[][]{Basar1996} and $\cH_2$-norm \citep{Berkenkamp2015} of linear systems. Minimax-control of quadratic costs --the so-called robust \ac{LQ} problem-- was later considered in \citep{abbasi-yadkori11a,Ibrahimi2013,Faradonbeh2017,Ouyang2017,abeille18a,Dean2017,Dean2018}.
-The case of finite \acp*{MDP} with uncertain parameters was studied by \citet{Iyengar2005,Nilim2005,Wiesemann2013}, who showed that the main results of \ac{DP} could be recovered under a \emph{rectangularity} assumption for the structure of uncertainty. Their work was extended to the \ac*{RL} setting in \citep{Tamar2014}. 
+The case of finite \acp*{MDP} with uncertain parameters was studied by \citet{Iyengar2005,Nilim2005,Wiesemann2013}, who showed that the main results of \ac{DP} could be recovered under a \emph{rectangularity} assumption for the structure of uncertainty. Their work was extended to the \ac*{RL} setting in \citep{Tamar2014}.
+
 %In the context of \acl*{AD}, \citep{Williams2018} used TubeMPC for driving.
 
 \paragraph{Constrained Criterion}
 
-In \citep{Berkenkamp2016}, blackbox optimization : and constraint is imposed during training.
+Another approach is to formulate safety as a constraint. Typically, that some cost function $g$ of the state stays below a given threshold in expectation. \citep{Berkenkamp2016} apply this idea to blackbox optimisation and enforce the constraint at all time using Gaussian Process regression. This idea is extended to a sequential decision-making in the \ac{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \acp*{MDP} augmented with a cost function $R^c$, and such that the return maximisation is subjected to a constraint on the maximum expected cumulative discounted cost:
 
-\citep{Chow2018} constraint on percentile, with policy gradient
+\begin{equation*}
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R^r_t \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R^c_t \right] \leq \beta.
+\end{equation*}
 
-CMDP optimization problem is to find a policy $\pi$ that maximizes $V^r$ subject to the constraint $V^c \leq \beta$
-
-\citep{Altman1999,Achiam2017}
-
-\citep{Tessler2019}: general constraints (discounted sums or average cost settings)
-
-$$\max R \text{ s.t. } C \geq \beta$$
-
-Applied to AD in \citep{Le2019}: two behavioral constraints: smooth driving and lane centering on CarRacing
+In \citep{Tessler2019}: general constraints (discounted sums or average cost settings)
+%In \citep{Chow2018} constraint on percentile, with policy gradient
+Applied to AD in \citep{Le2019}: two behavioural constraints: smooth driving and lane centering on CarRacing
 
 
 \paragraph{Safe Exploration}
