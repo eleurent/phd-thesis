@@ -210,41 +210,38 @@ Once the \acl*{MDP} is fully specified, a policy $\pi$ is said to be optimal if 
 \max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t \right].
 \end{equation*}
 
-But is this an appropriate performance measure? Consider a driving decision --say merging into a roundabout as illustrated in \Cref{fig:risky-problem}-- that, given the uncertainty on the behaviour of other agents, can lead to a collision with a certain probability $\delta$. When maximising the return in expectation, the agent is allowed balance the (rate) accident penalty with the more likely perspective of a successful merge. A first observation is made by \citet{ShalevShwartz2017}: assuming that rewards in normalized in $[0, 1]$ for standard behaviours, for the agent to care about avoiding accidents with probability $1-\delta$ requires the penalty associated with a collision to be in order of $1/\delta$, as we illustrate in \Cref{tab:risky-problem}. This leads to a high variance in the observed rewards, which is likely to impede learning. And even then, the optimal agent can be willing to risk a collision once in a while, if it allows for an increased efficiency the rest of the time.
+But is this an appropriate performance measure? Consider a driving decision --say merging into a roundabout as illustrated in \Cref{fig:risky-problem}-- that, given the uncertainty on the behaviour of other agents, can lead to a collision with a certain probability $\delta$. When maximising the return in expectation, the agent is allowed balance the rare accident penalty with the more likely perspective of a successful merge. As observed by \citet{ShalevShwartz2017}, assuming that rewards in normalized in $[0, 1]$ for standard behaviours, for the agent to care about avoiding accidents with probability $1-\delta$ requires the penalty associated with a collision to be in order of $1/\delta$, as we illustrate in \Cref{tab:risky-problem}. This leads to a high variance in the observed rewards, which is likely to impede learning. 
+Furthermore, the optimal agent is willing to gamble a collision now and then, if it allows for an increased efficiency the rest of the time. This question of whether and how to weigh human lives with economical benefits brings us straight back to the ethical considerations of \Cref{sec:trolley}.
 
-The question of whether this weighing of human lives and economical benefits is desirable brings us straight back to the ethical considerations of \Cref{sec:trolley}. Such questions often arise, as described by [ref needed]. Another recent example is the \emph{optimal} duration of COVID-19 lockdown policies, which has opposite implications for public health and economics [ref needed].
-This questioning has lead researchers and practitioners to consider alternative definitions of optimality, especially tailored for safety-critical domains. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and typically involve giving up some  expected performance in favour of the lower tail of the return distribution. They were surveyed by \citet{Garcia2015}, who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
+This questioning has lead researchers and practitioners to consider alternative definitions of optimality, tailored for an increased awareness of events of small probability and high consequences. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and typically involve giving up some expected performance in favour of the lower tail of the return distribution. They were surveyed by \citet{Garcia2015}, who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
 
 \paragraph{Risk-sensitive Criterion}
 
-A first variation of the traditional expected return criterion consists in adding a term that penalizes the \emph{variance} of the return. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}. The variance-penalized criterion takes the form
-
+Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form:
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[G_P^\pi\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[G_P^\pi\right],
+\max_\pi \expectedvalue_{\pi, P} \left[G_P^\pi\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[G_P^\pi\right].
 \end{equation*}
 
-where $\alpha > 0$ is a variance penalty coefficient, and would favour \texttt{Wait} over \texttt{Merge}.
-
-Other measures of the risk can be considered, such as quantiles,  VaR, CVaR.
-Optimisation of risk measures has been studied in the \acl*{MAB} setting, \eg by \citet{Torossian19a} for risk optimisation of stochastic blackbox functions.
-[ref needed in RL.]
-In the context of \acl*{AD}, \citet{Naghshvar2018} propose to optimise a variance-penalised objective with a tree-based planner and estimate variance of the return thanks to the unscented transform. They apply it to highway ramp scenarios where uncertainty stems from occlusions and limited sensor range.
-
+Many other risk measures have been investigated such as the \ac{VaR}, the \ac{CVaR} and percentile performance, in both the \acl*{MAB} setting \citet{Torossian19a} and the \acl*{RL} setting \citep{Moody2001,Tamar2012,Prashanth2013,Delage2010}. In their seminal paper, \citet{Artzner1999} identified a set of properties deemed necessary for a risk measure to be \emph{coherent}, and policy gradient methods have been designed to optimise this class of measures \citep{Tamar2015}.
+In the context of \acl*{AD}, the variance-penalised objective has been applied in \eg \citep{Naghshvar2018} to highway ramp scenarios with occlusions and limited sensor range.
 
 \paragraph{Worst-case criterion}
 
-Bandit / RL / Control theory:
-Worst-case has been studied in the context of finite Markov Decision Processes with uncertain parameters by \citet{Iyengar2005}, \citet{Nilim2005} and \citet{Wiesemann2013}
+In model-based \acl*{RL}, the model parameters are typically estimated from noisy interaction data, which can lead to modelling errors that may have fatal consequences in real, physical systems. To address this issue, robust control community has formulated to optimise the outcome of a policy $\pi$ with respect to an \emph{ambiguity set} $\cP$ of likely dynamics:
 
-\citep{Berkenkamp2015} with respect to the $\cH_2$ system norm.
-H infinity control
+\begin{equation*}
+\max_\pi \min_{P\in\cP} \expectedvalue_{\pi, P} \left[G_P^\pi\right]
+\end{equation*}
 
-Application to AD
-\citep{Williams2018} TubeMPC for driving
+This problem was first studied by the control community, who focused on the minimax control of the $\cH_\infty$-norm \citep[][]{Basar1996} and $\cH_2$-norm \citep{Berkenkamp2015} of linear systems. Minimax-control of quadratic costs --the so-called robust \ac{LQ} problem-- was later considered in \citep{abbasi-yadkori11a,Ibrahimi2013,Faradonbeh2017,Ouyang2017,abeille18a,Dean2017,Dean2018}.
+The case of finite \acp*{MDP} with uncertain parameters was studied by \citet{Iyengar2005,Nilim2005,Wiesemann2013}, who showed that the main results of \ac{DP} could be recovered under a \emph{rectangularity} assumption for the structure of uncertainty. Their work was extended to the \ac*{RL} setting in \citep{Tamar2014}. 
+%In the context of \acl*{AD}, \citep{Williams2018} used TubeMPC for driving.
 
 \paragraph{Constrained Criterion}
 
 In \citep{Berkenkamp2016}, blackbox optimization : and constraint is imposed during training.
+
+\citep{Chow2018} constraint on percentile, with policy gradient
 
 CMDP optimization problem is to find a policy $\pi$ that maximizes $V^r$ subject to the constraint $V^c \leq \beta$
 
@@ -262,6 +259,9 @@ Applied to AD in \citep{Le2019}: two behavioral constraints: smooth driving and 
 Constrain not the optimality definition but the exploration process: prevent error states through external knowledge (demonstrations, initial feasible policy).
 
 \citep{Turchetta2016}: initial safe states and smoothness of the safety function : $r(s,a) > h$: explores the maximum reachable safe set without visiting unsafe states.
+
+
+\citep{Geibel2005}: Markov Decision Processes (MDPs) with error states
 
 \citep{Koller2019}
 additional model uncertainty under GP prior
