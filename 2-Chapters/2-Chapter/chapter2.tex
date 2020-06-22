@@ -181,7 +181,7 @@ A second decision is to leverage \emph{simulation}. The vast majority of \acl*{R
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.5\linewidth]{img/roundabout}
+	\includegraphics[trim={0 0.5cm 0 0}, clip, width=0.5\linewidth]{img/roundabout}
 	\caption{A risky situation: should the vehicle merge into the roundabout?}
 	\label{fig:risky-problem}
 \end{figure}
@@ -239,54 +239,61 @@ The case of finite \acp*{MDP} with uncertain parameters was studied by \citet{Iy
 %In the context of \acl*{AD}, \citep{Williams2018} used TubeMPC for driving.
 
 \subsection{Constrained Criterion}
+\label{sec:constrained-criterion}
 
-Another approach is to formulate safety as a constraint. Typically, that some cost function $g$ of the state stays below a given threshold in expectation. \citep{Berkenkamp2016} apply this idea to blackbox optimisation and enforce the constraint at all time using Gaussian Process regression. This idea is extended to a sequential decision-making in the \ac{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \acp*{MDP} augmented with a cost function $R^c$, and such that the return maximisation is subjected to a constraint on the maximum expected cumulative discounted cost:
+Another approach is to formulate safety as constrained optimisation: the task is to maximise a target function $f(x)$ while satisfying an inequality constraint $g(x)\leq \beta$. For instance, \citet{Berkenkamp2016} apply this principle to safe blackbox optimisation using Gaussian Process regression. This idea is extended to a sequential decision-making in the \ac{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \acp*{MDP} augmented with a cost function $C$, and such that the return maximisation objective is subjected to a constraint on the maximum expected cumulative discounted cost:
 
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R^r_t \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R^c_t \right] \leq \beta.
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R(s_t, a_t) \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \gamma^t C(s_t, a_t) \right] \leq \beta.
 \end{equation*}
 
-In \citep{Tessler2019}: general constraints (discounted sums or average cost settings)
-%In \citep{Chow2018} constraint on percentile, with policy gradient
-Applied to AD in \citep{Le2019}: two behavioural constraints: smooth driving and lane centering on CarRacing
+Extensions have also been proposed to this framework: in \citep{Tessler2019}, more general constraints than discounted sums only are considered, while in \citep{Geibel2005,Chow2018} the constraint does concern the expectation of the discounted total cost, but rather its percentile or \ac*{CVaR}. In \citep{Le2019}, \acp*{CMDP} are applied in a car racing simulation to enforce two behavioural constraints of smooth driving (expected number of braking actions) and lane tracking (expected distance to the lane center).
 
 
 \subsection{Safe Exploration}
 
-Constrain not the optimality definition but the exploration process: prevent error states through external knowledge (demonstrations, initial feasible policy).
+The three paradigms mentioned so far aim to revisit the definition of optimality. However, these adjustments only alter the optimal policy once it is learnt, but they leave the exploration process subject to failures. Consequently, other approaches have been developed to enforce safety constraints at all time. The most common formalisation consists in preventing the agent from visiting any \emph{error state} during exploration-- or equivalently to remain within a set $\mathbb{X}$ of \emph{safe states} --by relying on prior knowledge such as expert demonstrations or an initial feasible policy.
+According to \citet{Fraichard2014}, this objective is challenging as it requires the ability to \textit{"reason about the future"} as illustrated in \Cref{fig:ics-1}, and to \textit{"consider obstacles globally and not individually"} as shown in \Cref{fig:ics-2}.
 
-\citep{Turchetta2016}: initial safe states and smoothness of the safety function : $r(s,a) > h$: explores the maximum reachable safe set without visiting unsafe states.
+\begin{figure}[ht]
+	\begin{subfigure}[b]{0.48\linewidth}
+		\includegraphics[width=\linewidth]{img/ics}
+		\caption{A minimum horizon $T > t_c - t_{ics}$ is required}
+		\label{fig:ics-1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.48\linewidth}
+		\includegraphics[width=\linewidth]{img/ics-global}
+		\caption{Obstacles must be considered \emph{globally}.}
+		\label{fig:ics-2}
+	\end{subfigure}
+	\caption{Inevitable Collision States (ICS), images from \citep{Fraichard2014}.}
+	\label{fig:ics}
+\end{figure}
+
+When the system is fully known, a general solution to this problem is provided by the \ac{HJI} reachability equation, a differential game that allows to handle general constraints $\mathbb{X}$ \citep{leung2018infusing,Fisac2019}.
+
+When the error states are defined through a level-set of safety function  $r(s,a) < h$ whose smoothness is known, \citep{Turchetta2016} propose an algorithm that explores the maximum reachable safe set without visiting unsafe states.
 
 
-\citep{Geibel2005}: Markov Decision Processes (MDPs) with error states
+But often intractable.
+Common example: robust constraint satisfaction with linear systems.
 
 \citep{Koller2019}
 additional model uncertainty under GP prior
 given a safe controller, verify X and U polytopic constraints
 
 
-This setting is questionable for AD, might be too restrictive: some standard states are prone to errors under adversarial behaviours, and cannot be avoided.
+This setting is questionable for AD, might be too restrictive: some standard states are prone to errors under adversarial behaviours, and cannot be avoided. But avoiding these states altogether is also unacceptable.
+
+We cannot always avoid this region of the state-space.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.3\linewidth,angle=90]{img/safety-no}
+	\caption{Absolute motion safety is not achievable (or undesirable) in \acl*{AD}}
+\end{figure}
+
 \citep{ShalevShwartz2017} instead defines a notion of Responsibility-Sensitive Safety.
 
-\citep{Bouton2019}
-\citep{Bouton2019workshop}: $P(reach goal |s, a) \geq \lambda$
-
-\citep{leung2018infusing} HJI reachability
-\citep{Fisac2019} HJI equation, non-convex constraints X,U
-
-
-Safety with respect to error states
-
-We can define the concept of \emph{inevitable collision states} (ICS)
-\includegraphics[height=0.4\textheight]{img/ics}
-	All obstacles must be considered \emph{globally}.
-\includegraphics[height=0.4\textheight]{img/ics-global}
-\citep{Fraichard2004}
-		
-	
-Absolute motion safety is not achievable
-We cannot always avoid this region of the state-space.
-\includegraphics[height=0.3\textheight]{img/safety-no}
 But we can consider weaker models of safety:
 
 \begin{itemize}
@@ -294,4 +301,7 @@ But we can consider weaker models of safety:
 \item Passive-friendly motion safety
 \item Responsibility-Sensitive Safety \citep{ShalevShwartz2017}
 \end{itemize}
+
+Also \citep{Bouton2019}
+\citep{Bouton2019workshop}: $P(reach goal |s, a) \geq \lambda$
 
