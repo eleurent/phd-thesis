@@ -215,7 +215,7 @@ Furthermore, the optimal agent is willing to gamble a collision now and then, if
 
 This questioning has lead researchers and practitioners to consider alternative definitions of optimality, tailored for an increased awareness of events of small probability and high consequences. These approaches are grouped under the name of \emph{Safe} \acl*{RL}, and typically involve giving up some expected performance in favour of the lower tail of the return distribution. They were surveyed by \citet{Garcia2015}, who identified four main paradigms: the first three involve a change of the optimisation criterion, while the fourth one defines a constraint on the exploration process.
 
-\paragraph{Risk-sensitive Criterion}
+\subsection{Risk-sensitive Criterion}
 
 Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form:
 \begin{equation*}
@@ -225,7 +225,7 @@ Risk-sensitive methods augment the traditional expected performance criterion wi
 Many other risk measures have been investigated such as the \ac{VaR}, the \ac{CVaR} and percentile performance, in both the \acl*{MAB} setting \citet{Torossian19a} and the \acl*{RL} setting \citep{Moody2001,Tamar2012,Prashanth2013,Delage2010}. In their seminal paper, \citet{Artzner1999} identified a set of properties deemed necessary for a risk measure to be \emph{coherent}, and policy gradient methods have been designed to optimise this class of measures \citep{Tamar2015}.
 In the context of \acl*{AD}, the variance-penalised objective has been applied in \eg \citep{Naghshvar2018} to highway ramp scenarios with occlusions and limited sensor range.
 
-\paragraph{Worst-case criterion}
+\subsection{Worst-case criterion}
 
 In model-based \acl*{RL}, the model parameters are typically estimated from noisy interaction data, which can lead to modelling errors that may have fatal consequences in real, physical systems. To address this issue, robust control community has formulated to optimise the outcome of a policy $\pi$ with respect to an \emph{ambiguity set} $\cP$ of likely dynamics:
 
@@ -238,7 +238,7 @@ The case of finite \acp*{MDP} with uncertain parameters was studied by \citet{Iy
 
 %In the context of \acl*{AD}, \citep{Williams2018} used TubeMPC for driving.
 
-\paragraph{Constrained Criterion}
+\subsection{Constrained Criterion}
 
 Another approach is to formulate safety as a constraint. Typically, that some cost function $g$ of the state stays below a given threshold in expectation. \citep{Berkenkamp2016} apply this idea to blackbox optimisation and enforce the constraint at all time using Gaussian Process regression. This idea is extended to a sequential decision-making in the \ac{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \acp*{MDP} augmented with a cost function $R^c$, and such that the return maximisation is subjected to a constraint on the maximum expected cumulative discounted cost:
 
@@ -251,7 +251,7 @@ In \citep{Tessler2019}: general constraints (discounted sums or average cost set
 Applied to AD in \citep{Le2019}: two behavioural constraints: smooth driving and lane centering on CarRacing
 
 
-\paragraph{Safe Exploration}
+\subsection{Safe Exploration}
 
 Constrain not the optimality definition but the exploration process: prevent error states through external knowledge (demonstrations, initial feasible policy).
 
