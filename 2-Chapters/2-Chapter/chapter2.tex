@@ -247,12 +247,12 @@ Another approach is to formulate safety as constrained optimisation: the task is
 \max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R(s_t, a_t) \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \gamma^t C(s_t, a_t) \right] \leq \beta.
 \end{equation*}
 
-Extensions have also been proposed to this framework: in \citep{Tessler2019}, more general constraints than discounted sums only are considered, while in \citep{Geibel2005,Chow2018} the constraint does concern the expectation of the discounted total cost, but rather its percentile or \ac*{CVaR}. In \citep{Le2019}, \acp*{CMDP} are applied in a car racing simulation to enforce two behavioural constraints of smooth driving (expected number of braking actions) and lane tracking (expected distance to the lane center).
-
+Extensions have also been proposed to this framework: in \citep{Tessler2019}, more general constraints than discounted sums only are considered, while in \citep{Geibel2005,Chow2018} the constraint does concern the expectation of the discounted total cost, but rather its percentile or \ac*{CVaR}. 
+\acp*{CMDP} have been applied in \citep{Bouton2019workshop,Bouton2019} to control the probability for the ego-vehicle to reach its goal safely, and in \citep{Le2019} to enforce two behavioural constraints in car racing simulation: smooth driving (expected number of braking actions) and lane tracking (expected distance to the lane center).
 
 \subsection{Safe Exploration}
 
-The three paradigms mentioned so far aim to revisit the definition of optimality. However, these adjustments only alter the optimal policy once it is learnt, but they leave the exploration process subject to failures. Consequently, other approaches have been developed to enforce safety constraints at all time. The most common formalisation consists in preventing the agent from visiting any \emph{error state} during exploration-- or equivalently to remain within a set $\mathbb{X}$ of \emph{safe states} --by relying on prior knowledge such as expert demonstrations or an initial feasible policy.
+The three paradigms mentioned so far aim to revisit the definition of optimality. However, these adjustments only alter the optimal policy once it is learnt, but they leave the exploration process subject to failures. Consequently, other approaches have been developed to enforce safety constraints at all time. The most common formalisation, robust constraint satisfaction, consists in preventing the agent from visiting any \emph{error state} during exploration --or equivalently to remain within a safe set $\mathbb{X}$-- by relying on prior knowledge such as expert demonstrations or an initial feasible policy.
 According to \citet{Fraichard2014}, this objective is challenging as it requires the ability to \textit{"reason about the future"} as illustrated in \Cref{fig:ics-1}, and to \textit{"consider obstacles globally and not individually"} as shown in \Cref{fig:ics-2}.
 
 \begin{figure}[ht]
@@ -270,38 +270,15 @@ According to \citet{Fraichard2014}, this objective is challenging as it requires
 	\label{fig:ics}
 \end{figure}
 
-When the system is fully known, a general solution to this problem is provided by the \ac{HJI} reachability equation, a differential game that allows to handle general constraints $\mathbb{X}$ \citep{leung2018infusing,Fisac2019}.
+When the system is fully known, a general solution to this problem is provided by the \ac{HJI} reachability equation, in the form of a differential game. This approach is followed in \citep{leung2018infusing,Fisac2019} by decomposing the system into a known deterministic part subject to an adversarial bounded perturbation. In the context of finite \acp*{MDP} with unknown dynamics, 
+assuming the safe states are defined as a level-set of safety function  $r(s,a) \geq h$ whose smoothness is known, \citep{Turchetta2016} propose an algorithm that explores a maximum \emph{reachable ergodic safe set} without visiting unsafe states.
+Since solving the \ac*{HJI} equation is intractable in general, researchers have considered more structured special cases, namely linear systems and convex (often polytopic) constraints \citep{Fukushima2007,Adetola2009,Aswani2013,Lorenzen2017,Kohler2019,Lu2019}.
 
-When the error states are defined through a level-set of safety function  $r(s,a) < h$ whose smoothness is known, \citep{Turchetta2016} propose an algorithm that explores the maximum reachable safe set without visiting unsafe states.
-
-
-But often intractable.
-Common example: robust constraint satisfaction with linear systems.
-
-\citep{Koller2019}
-additional model uncertainty under GP prior
-given a safe controller, verify X and U polytopic constraints
-
-
-This setting is questionable for AD, might be too restrictive: some standard states are prone to errors under adversarial behaviours, and cannot be avoided. But avoiding these states altogether is also unacceptable.
-
-We cannot always avoid this region of the state-space.
-\begin{figure}
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.45\linewidth]{img/safety_no_2_small}
-	\caption{Absolute motion safety is not achievable (or undesirable) in \acl*{AD}}
+	\caption{An ordinary highway-driving situation, but prone to accidents under adversarial behaviours.}
+	\label{fig:no-safety}
 \end{figure}
-
-\citep{ShalevShwartz2017} instead defines a notion of Responsibility-Sensitive Safety.
-
-But we can consider weaker models of safety:
-
-\begin{itemize}
-\item Passive motion safety (Braking ICS)\citep{Bouraine2012}
-\item Passive-friendly motion safety
-\item Responsibility-Sensitive Safety \citep{ShalevShwartz2017}
-\end{itemize}
-
-Also \citep{Bouton2019}
-\citep{Bouton2019workshop}: $P(reach goal |s, a) \geq \lambda$
+Yet, it is questionable whether the property of robust constraint satisfaction under adversarial disturbances is relevant for an \acl*{AD} application. Indeed, this requirement might be too restrictive since many nominal states are prone to errors under adversarial behaviours, as shown in the example of \Cref{fig:no-safety}. A strategy of avoiding this region of the state-space altogether would be overly cautious and unacceptable. To cope with that issue, weaker models of safety have been proposed. Thus, rather than avoiding all collisions, \emph{Passive} motion safety \citep{Macek2009,Bouraine2012,Bouraine2014} only requires the robot to be motionless whenever a collision could possibly occur. To account for limited dynamic capabilities of other agents, the stronger \emph{Passive-friendly} motion safety was introduced \citep{Mitsch2017}, ensuring not only that the ego-vehicle safely stops itself, but also allows sufficient space for other vehicles to stop before a collision occurs. Note that this is equivalent to the original motion safety model with a restricted set of adversarial behaviours for other agents, requiring them to brake and avoid collisions when possible. Finally, \citet{ShalevShwartz2017} defines a notion of \emph{Responsibility Sensitive Safety} specific to \acl*{AD}, which formalizes \emph{"an interpretation of \emph{Duty of Care} from Tort law"}. This interpretation is summarized by five main rules tailored for a specific set of use-cases (including several road geometries, right of way rules, pedestrians and occlusions) and implemented as a set of dynamic geometrical constraints.
 

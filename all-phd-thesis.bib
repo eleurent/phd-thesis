@@ -1519,3 +1519,121 @@ year = {2017}
 	HAL_ID = {hal-00965176},
 	HAL_VERSION = {v2},
 }
+
+
+@article{Fukushima2007,
+	abstract = {This paper proposes an adaptive model predictive control (MPC) algorithm for a class of constrained linear systems, which estimates system parameters on-line and produces the control input satisfying input/state constraints for possible parameter estimation errors. The key idea is to combine the robust MPC method based on the comparison model with an adaptive parameter estimation method suitable for MPC. To this end, first, a new parameter update method based on the moving horizon estimation is proposed, which allows to predict an estimation error bound over the prediction horizon. Second, an adaptive MPC algorithm is developed by combining the on-line parameter estimation with an MPC method based on the comparison model, suitably modified to cope with the time-varying case. This method guarantees feasibility and stability of the closed-loop system in the presence of state/input constraints. A numerical example is given to demonstrate its effectiveness. {\textcopyright} 2006 Elsevier Ltd. All rights reserved.},
+	author = {Fukushima, Hiroaki and Kim, Tae Hyoung and Sugie, Toshiharu},
+	doi = {10.1016/j.automatica.2006.08.026},
+	issn = {00051098},
+	journal = {Automatica},
+	keywords = {Adaptive estimation,Comparison principle,Constrained systems,Model predictive control,Robust stability},
+	title = {{Adaptive model predictive control for a class of constrained linear systems based on the comparison model}},
+	year = {2007}
+}
+
+
+@article{Adetola2009,
+	abstract = {In this paper, a method is proposed for the adaptive model predictive control of constrained nonlinear system. Rather than relying on the inherent robustness properties of standard NMPC, the developed technique explicitly account for the transient effect of parametric estimation error by combining a parameter adjustment mechanism with robust MPC algorithms. The parameter estimation routine employed guarantees non-increase of the estimation error vector. This means that the controller employs a process model which approaches that of the true system over time. These estimates are used to update the parameter uncertainty set at every time step, resulting in a gradual reduction in the conservative and/or computational effects of the incorporated robust features. {\textcopyright} 2008 Elsevier B.V. All rights reserved.},
+	author = {Adetola, Veronica and DeHaan, Darryl and Guay, Martin},
+	doi = {10.1016/j.sysconle.2008.12.002},
+	issn = {01676911},
+	journal = {Systems and Control Letters},
+	keywords = {Adaptive control,Model predictive control,Nonlinear systems,Robust control},
+	title = {{Adaptive model predictive control for constrained nonlinear systems}},
+	year = {2009}
+}
+
+
+@article{Aswani2013,
+	abstract = {Controller design faces a trade-off between robustness and performance, and the reliability of linear controllers has caused many practitioners to focus on the former. However, there is renewed interest in improving system performance to deal with growing energy constraints. This paper describes a learning-based model predictive control (LBMPC) scheme that provides deterministic guarantees on robustness, while statistical identification tools are used to identify richer models of the system in order to improve performance; the benefits of this framework are that it handles state and input constraints, optimizes system performance with respect to a cost function, and can be designed to use a wide variety of parametric or nonparametric statistical tools. The main insight of LBMPC is that safety and performance can be decoupled under reasonable conditions in an optimization framework by maintaining two models of the system. The first is an approximate model with bounds on its uncertainty, and the second model is updated by statistical methods. LBMPC improves performance by choosing inputs that minimize a cost subject to the learned dynamics, and it ensures safety and robustness by checking whether these same inputs keep the approximate model stable when it is subject to uncertainty. Furthermore, we show that if the system is sufficiently excited, then the LBMPC control action probabilistically converges to that of an MPC computed using the true dynamics. {\textcopyright} 2013 Elsevier Ltd. All rights reserved.},
+	author = {Aswani, Anil and Gonzalez, Humberto and Sastry, S. Shankar and Tomlin, Claire},
+	doi = {10.1016/j.automatica.2013.02.003},
+	issn = {00051098},
+	journal = {Automatica},
+	keywords = {Learning control,Predictive control,Robustness,Safety analysis,Statistics},
+	title = {{Provably safe and robust learning-based model predictive control}},
+	year = {2013}
+}
+
+@Article{Lorenzen2017,
+	author={Lorenzen, Matthias
+	and Allg{\"o}wer, Frank
+	and Cannon, Mark},
+	title={Adaptive Model Predictive Control with Robust Constraint Satisfaction},
+	journal={IFAC-PapersOnLine},
+	year={2017},
+	month={Jul},
+	day={01},
+	volume={50},
+	number={1},
+	pages={3313-3318},
+	keywords={Model Predictive Control; Adaptive Control; Constraint Satisfaction Problems; Uncertain Linear Systems; System Identification},
+	abstract={Adaptive control for constrained, linear systems is addressed and a solution based on Model Predictive Control (MPC) and set-membership system identification is presented. The paper introduces a computationally tractable solution which uses observations of past state and input trajectories to update the model and improve control performance while maintaining guaranteed constraint satisfaction and recursive feasibility. The developed approach is applied to a stabilizing MPC scheme and practical stability under persistent, additive disturbance is proved. A numerical example and brief comparison with non-adaptive MPC is provided.},
+	issn={2405-8963}
+}
+
+@inproceedings{Lu2019,
+	abstract = {An adaptive Model Predictive Control (adaptive MPC) strategy is proposed for linear systems with constant unknown model parameters, bounded additive disturbances and state and control constraints. By combining online set-based identification and robust tube MPC, the proposed controller reduces the conservativeness of constraint handling, guarantees recursive feasibility and provides asymptotic bounds on the closed loop system state that depend explicitly on the the identified parameter set. Computational tractability is ensured by using fixed complexity polytopic sets to bound the model parameters and predicted states. Convex conditions for persistence of excitation are considered. The results are illustrated by a numerical example.},
+	author = {Lu, Xiaonan and Cannon, Mark},
+	booktitle = {Proceedings of the American Control Conference},
+	isbn = {9781538679265},
+	issn = {07431619},
+	title = {{Robust adaptive tube model predictive control}},
+	year = {2019}
+}
+
+@INPROCEEDINGS{Kohler2019,
+	author={J. {Köhler} and E. {Andina} and R. {Soloperto} and M. A. {Müller} and F. {Allgöwer}},
+	booktitle={2019 IEEE 58th Conference on Decision and Control (CDC)}, 
+	title={Linear robust adaptive model predictive control: Computational complexity and conservatism}, 
+	year={2019},
+	volume={},
+	number={},
+	pages={1383-1388},
+}
+
+@article{Macek2009,
+	abstract = {This paper describes the deliberative part of a navigation architecture designed for safe vehicle navigation in dynamic urban environments. It comprises two key modules working together in a hierarchical fashion: (a) the Route Planner whose purpose is to compute a valid itinerary towards the a given goal. An itinerary comprises a geometric path augmented with additional information based on the structure of the environment considered and traffic regulations, and (b) the Partial Motion Planner whose purpose is to ensure the proper following of the itinerary while dealing with the moving objects present in the environment (eg other vehicles, pedestrians). In the architecture proposed, a special attention is paid to the motion safety issue, ie the ability to avoid collisions. Different safety levels are explored and their operational conditions are explicitly spelled out (something which is usually not done).},
+	author = {Ma{\^{c}}ek, Kristijan and Vasquez, Dizan and Fraichard, Thierry and Siegwart, Roland},
+	issn = {00051144},
+	journal = {Automatika},
+	keywords = {Dynamic environment,Motion planning,Motion safety,Urban navigation},
+	title = {{Towards safe vehicle navigation in dynamic urban scenarios}},
+	year = {2009}
+}
+
+@article{Bouraine2012,
+	abstract = {This paper addresses the problem of navigating in a provably safe manner a mobile robot with a limited field-of-view placed in a unknown dynamic environment. In such a situation, absolute motion safety (in the sense that no collision will ever take place whatever happens in the environment) is impossible to guarantee in general. It is therefore settled for a weaker level of motion safety dubbed passive motion safety: it guarantees that, if a collision takes place, the robot will be at rest. The primary contribution of this paper is the concept of Braking Inevitable Collision States (ICS), i.e. a version of the ICS corresponding to passive motion safety. Braking ICS are defined as states such that, whatever the future braking trajectory followed by the robot, a collision occurs before it is at rest. Passive motion safety is obtained by avoiding Braking ICS at all times. It is shown that Braking ICS verify properties that allow the design of an efficient Braking ICS-Checking algorithm, i.e. an algorithm that determines whether a given state is a Braking ICS or not. To validate the Braking ICS concept and demonstrate its usefulness, the Braking ICS-Checking algorithm is integrated in a reactive navigation scheme called PASSAVOID. It is formally established that PASSAVOID is provably passively safe in the sense that it is guaranteed that the robot will always stay away from Braking ICS no matter what happens in the environment. {\textcopyright} 2011 Springer-Verlag.},
+	author = {Bouraine, Sara and Fraichard, Thierry and Salhi, Hassen},
+	doi = {10.1007/s10514-011-9258-8},
+	issn = {09295593},
+	journal = {Autonomous Robots},
+	keywords = {Autonomous navigation,Collision avoidance,Dynamic environments,Inevitable collision states,Mobile robots,Motion safety},
+	title = {{Provably safe navigation for mobile robots with limited field-of-views in dynamic environments}},
+	year = {2012}
+}
+
+@inproceedings{Bouraine2014,
+	abstract = {This paper addresses the problem of planning the motion of a mobile robot with a limited sensory field-of-view in an unknown dynamic environment. In such a situation, the upper-bounded planning time prevents from computing a complete motion to the goal, partial motion planning is in order. Besides the presence of moving obstacles whose future behaviour is unknown precludes absolute motion safety (in the sense that no collision will ever take place whatever happens) is impossible to guarantee. The stance taken herein is to settle for a weaker level of motion safety called passive motion safety: it guarantees that, if a collision takes place, the robot will be at rest. The primary contribution of this paper is PassPMP, a partial motion planner enforcing passive motion safety. PassPMP periodically computes a passively safe partial trajectory designed to drive the robot towards its goal state. Passive motion safety is handled using a variant of the Inevitable Collision State (ICS) concept called Braking ICS, i.e. states such that, whatever the future braking trajectory of the robot, a collision occurs before it is at rest. Simulation results demonstrate how PassPMP operates and handles limited sensory field-of-views, occlusions and moving obstacles with unknown future behaviour. More importantly, PassPMP is provably passively safe.},
+	author = {Bouraine, S. and Fraichard, Th and Azouaoui, O. and Salhi, Hassen},
+	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	doi = {10.1109/ICRA.2014.6907375},
+	issn = {10504729},
+	title = {{Passively safe partial motion planning for mobile robots with limited field-of-views in unknown dynamic environments}},
+	year = {2014}
+}
+
+@article{Mitsch2017,
+	abstract = {This article answers fundamental safety questions for ground robot navigation: under which circumstances does which control decision make a ground robot safely avoid obstacles? Unsurprisingly, the answer depends on the exact formulation of the safety objective, as well as the physical capabilities and limitations of the robot and the obstacles. Because uncertainties about the exact future behavior of a robot's environment make this a challenging problem, we formally verify corresponding controllers and provide rigorous safety proofs justifying why the robots can never collide with the obstacle in the respective physical model. To account for ground robots in which different physical phenomena are important, we analyze a series of increasingly strong properties of controllers for increasingly rich dynamics and identify the impact that the additional model parameters have on the required safety margins. We analyze and formally verify: (i) static safety, which ensures that no collisions can happen with stationary obstacles; (ii) passive safety, which ensures that no collisions can happen with stationary or moving obstacles while the robot moves; (iii) the stronger passive-friendly safety, in which the robot further maintains sufficient maneuvering distance for obstacles to avoid collision as well; and (iv) passive orientation safety, which allows for imperfect sensor coverage of the robot, i.e., the robot is aware that not everything in its environment will be visible. We formally prove that safety can be guaranteed despite sensor uncertainty and actuator perturbation. We complement these provably correct safety properties with liveness properties: we prove that provably safe motion is flexible enough to let the robot navigate waypoints and pass intersections. To account for the mixed influence of discrete control decisions and the continuous physical motion of the ground robot, we develop corresponding hybrid system models and use differential dynamic logic theorem-proving techniques to formally verify their correctness. Since these models identify a broad range of conditions under which control decisions are provably safe, our results apply to any control algorithm for ground robots with the same dynamics. As a demonstration, we also synthesize provably correct runtime monitor conditions that check the compliance of any control algorithm with the verified control decisions.},
+	archivePrefix = {arXiv},
+	arxivId = {1605.00604},
+	author = {Mitsch, Stefan and Ghorbal, Khalil and Vogelbacher, David and Platzer, Andr{\'{e}}},
+	doi = {10.1177/0278364917733549},
+	eprint = {1605.00604},
+	issn = {17413176},
+	journal = {International Journal of Robotics Research},
+	keywords = {Provable correctness,ground robot,hybrid systems,navigation,obstacle avoidance,theorem proving},
+	title = {{Formal verification of obstacle avoidance and navigation of ground robots}},
+	year = {2017}
+}
