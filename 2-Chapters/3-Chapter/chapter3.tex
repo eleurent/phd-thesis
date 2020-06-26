@@ -8,10 +8,149 @@
 % Se retourne pensif vers les jours oubliés.
 % Charles-Marie LECONTE DE LISLE - Dies Irae
 
+At the violet hour, when the eyes and back
+Turn upward from the desk, when the human engine waits
+Like a taxi throbbing waiting,
+I Tiresias, though blind, throbbing between two lives,
+Perceived the scene, and foretold the rest —
+
 \chapter{Problem Statement}
 \label{chapter:3}
 
+
+\abstractStartChapter{}%
+Having discussed at length the range of \acl*{AD} modelling perspectives in \Cref{chapter:2}, we now formalize the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \acl*{MDP}, by specifying each element of a $(\cS, \cA, P, R, \gamma)$ tuple suitable for a set of tactical decision-making tasks.
+\minitocStartChapter{}
+
 \section{Perception}
+
+As discussed in \Cref{sec:nuts-and-bolts,sec:partial-observability}, information about the world is typically obtained from noisy sensory measurements. The Perception module is responsible for recognizing and tracking the signal from the noise, so as to provide a high-level probabilistic description of the scene. In particular, 
+\begin{enumerate}[label=(\roman*)]
+	\item a \emph{Mapping} layer reconstructs the geometry of the road network and its associated signage, including stop signs and traffic lights;
+	\item a \emph{Localisation} layer recovers the position, velocity and heading of the ego-vehicle;
+	\item a \emph{Scene understanding} layer returns the position, velocity and geometry of any vehicle or obstacle nearby.
+\end{enumerate}
+
+Since we focus on the Decision module, we will take a simplifying assumption and ignore all aspects related to Perception.
+Namely, we take the liberty of assuming to a noise-free access to every feature of the driving scene that we will deem relevant.
+
+\paragraph{Vehicles}
+
+As mentioned in \Cref{chapter:1}, the main challenge of Behavioural Planning is to interact with other vehicles. Therefore, the state should include a description of every vehicle nearby. In addition to the ego-vehicle, indexed by 0, the scene contains a number $N_v$ of other vehicles indexed by the range $[1, N_v]$.
+Any vehicle of index $i\in[0,N_v]$ is represented by 
+\begin{enumerate}[label=(\roman*)]
+	\item its position $(x_i, y_i)\in\Real^2$,
+	\item its forward speed $v_i\in\Real$, 
+	\item its heading $\psi_i\in\Real$.
+\end{enumerate}
+
+The resulting joint state is the traffic description: 
+$$s = \begin{bmatrix}
+x_0 & y_0 & v_0 & \psi_0\\
+\vdots & \vdots & \vdots & \vdots\\
+x_{N_v} & y_{N_v} & v_{N_v} & \psi_{N_v}\\
+\end{bmatrix}
+\in\cS \eqdef\Real^{(N_v+1) \times 4}.$$
+
+We can make a few observations: first, the state space is continuous, which means we will have to resort to function approximation to represent either the policy $\pi$, the value function $Q$ or the dynamics $P$. Second, it has a variable size, since it depends on the number of vehicles nearby, which the function approximation scheme will have to accommodate. Its dimensionality should be in the order of fifty at most, for a dozen observed vehicles.
+
+\paragraph{Roads}
+
+We also assume knowledge of the road network, comprising:
+\begin{enumerate}[label=(\roman*)]
+	\item a graph description of the network topology, where the nodes represent intersections and the edges represent road segments
+	\item the geometry of every lane $L$ in the network (every edge), described by its centre-line parametric curve
+	$
+	s \rightarrow (x_{L}(s), y_{L}(s))\in \Real^2,
+	$
+	\noindent and heading $\psi_L:s \rightarrow \tan^{-1}\left({\odv{y_L}{s}(s)}/{\odv{x_L}{s}(s)}\right) \in \Real$
+	where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
+\end{enumerate}
+
+However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, model-free algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, model-based algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
+
+\section{Behvioural Decisions}
+
+We follow the hierarchical architecture of the Decision module discussed in \Cref{sec:nuts-and-bolts, sec:temporal-abstraction}. Since we focus on Behavioural Planning specifically, we are going to assume the availability\footnote{These two modules are described as part of the dynamics.} of
+\begin{enumerate}[label=(\roman*)]
+	\item a Route Planning layer, that automatically selects the next road segment to be followed at each intersection, \eg the proper exit on a highway, or the right direction at an intersection;
+	\item a Motion Planning and Control layer, that controls the vehicle by way of low-level throttle and steering actuators to reach any desired position and speed in the selected road segment. 
+\end{enumerate}
+
+Thus, the purpose of the Behavioural Planning layer is to specify short-term instructions for the Motion Planning layer, in the form of a lane to follow and a speed to adapt. The produced trajectory will always conform to the planned route, but the Behavioural Planner is in charge of \eg deciding when to merge on a highway, negotiating right of way at an intersection, overtaking vehicles, \etc. To that end, we specify the following space of \emph{meta-actions}:
+
+\[
+\cA \eqdef \left\{ \begin{array}{c}
+\text{change to the left lane},\, \text{change to the right lane}, \\
+\text{drive faster},\, \text{drive slower},\, \text{maintain speed and lane}
+\end{array}\right\}
+\]
+
 \section{Traffic dynamics}
-\section{Driving decisions}
+
+This section describes how the behavioural decisions influence the evolution of the perceived states, under their above definitions, through the dynamics distribution $P\parentheses{s' \mid s,a}$.
+
+\subsection{Kinematics}
+
+We represent the non-holonomic motion capabilities of every vehicle $i\in[0, N_v]$ in the scene by the Kinematic Bicycle Model \citep[see \eg][]{Polack2017}:
+\begin{align}
+\begin{split}
+\dot{x}_i &= v_i\cos(\psi_i + \beta_i), \\
+\dot{y}_i &= v_i\sin(\psi_i + \beta_i),\\
+\dot{v}_i &= a_i,\\
+\dot{\psi}_i &= \frac{v_i}{l}\sin(\beta_i),
+\end{split}
+\end{align}
+where $l$ is the vehicle half-length, $a_i$ is the throttle command and $\beta_i$ is the slip angle at the centre of gravity, used as a steering command.
+
+\subsection{Motion Planning and Control}
+
+We equip the ego-vehicle --and also other vehicles $i\in[0, N_v]$ in the scene-- with a capability to execute the meta actions $\cA$. This requires the ability to follow a lane $L_i$, described by the road information mentioned above through its lateral position $y_{L_i}$ and heading $\psi_{L_i}$ . To that end, vehicles follow a cascade controller of lateral position and heading in the form:
+\begin{align}
+\label{eq:heading-command}
+\begin{split}
+\dot{\psi}_i &= K_i^\psi\left(\psi_{L_i}+\sin^{-1}\left(\frac{\tilde{v}_{i,y}}{v_i}\right)-\psi_i\right),\\
+\tilde{v}_{i,y} &= K_i^y (y_{L_i}-y_i),
+\end{split}
+\end{align}
+where $K_i^y\in\Real$ and $K_i^\psi\in\Real$ are control gains.
+Note that the corresponding steering command $\beta_i$ can be obtained from \eqref{eq:heading-command} as: $$\beta_i = \sin^{-1}\left(\frac{l}{v_i}\dot{\psi}_i\right).$$
+
+Furthermore, the ego-vehicle needs to be able to control its speed as per the meta actions $\cA$. To that end, a linear longitudinal controller is used:
+\begin{equation}
+a_0 = K_0^v(v_r - v_0),
+\end{equation}
+where $v_r\in\Real$ is the reference speed, incremented by $\pm 5 \si[per-mode=symbol]{\meter\per\second}$ by the \emph{drive faster} and \emph{drive slower} meta-actions, and $K_0^v\in\Real$ is a control gain.
+
+\subsection{Behavioural models}
+
+IDM
+
+Mobil
+
+State is known but dynamics depend on unknown parameters.
+
+
+\subsection{Route Planning}
+
+
+\section{Rewards}
+
+
+Rewards are bounded
+By convention, we require them to be normalized in the range $[0, 1]$.
+Note that we prevent negative rewards, since it may incentivize the ego-vehicle to prefer terminating an episode.
+
+The reward function $R$ is the following:
+\[
+R(x) = 
+\begin{cases}
+1 & \text{if the ego-vehicle is at full velocity;}\\
+0 & \text{if the ego-vehicle has collided with another vehicle;}\\
+0.5 & \text{else.}
+\end{cases}\]
+
 \section{Implementation}
+
+Presented in \Cref{chapter:a}.
+

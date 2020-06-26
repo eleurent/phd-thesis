@@ -739,49 +739,9 @@ We consider the problem of safe decision-making for autonomous highway driving \
 An autonomous vehicle is driving on a highway populated with $N$ other agents, and uses Model Predictive Control to plan a sequence of decisions. To that end, it relies on parametrized dynamical model for each agent to predict the future trajectory of each traffic participant: $$\dot{z}_i=f_i(Z,\theta_i),\;i=\overline{1,N},$$ where $f_i$ are described below, $z_i\in\Real^4$ is the state of an agent, $Z = [z_1,\dots,z_N]^\top\in\Real^{4N}$ and $\theta_i\in\Real^5$ is the corresponding vector of unknown parameters. Crucially, this system describes the couplings and interactions between vehicles, so that the autonomous agent can properly anticipate their reactions. 
 However, we assume that we do not have access to the true values of the behavioural parameters $\theta=[\theta_1,\dots,\theta_N]^\top$; instead, we merely know that these parameters lie in a set of admissible values $\Pi\subset\Real^{5N}$. In order to act safely in the face of uncertainty, we follow the framework of robust decision-making: the agent must consider all the possible trajectories in the space of $Z$ that each vehicle can follow in order to take its decisions. In this work, we focus on how to compute these trajectory enclosures through interval prediction.
 
-In the following, we describe the system and its associated interval predictor.
-
-\subsubsection{Kinematics}
-
-The kinematics of any vehicle $i\in\overline{1,N}$ are represented by the Kinematic Bicycle Model \cite{Polack2017}:
-\begin{empheq}[left = \empheqlbrace]{align}
-	\dot{x}_i &= v_i\cos(\psi_i), \nonumber\\
-	\dot{y}_i &= v_i\sin(\psi_i), \nonumber\\
-	\dot{v}_i &= a_i, \nonumber\\
-	\dot{\psi}_i &= \frac{v_i}{l}tan(\beta_i), \nonumber
-\end{empheq}
-where $(x_i, y_i)$ is the vehicle position, $v_i$ is its forward velocity and $\psi_i$ is its heading, $l$ is the vehicle half-length, $a_i$ is the acceleration command and $\beta_i$ is the slip angle at the centre of gravity, used as a steering command.
-
-\subsubsection{Longitudinal control}
-Longitudinal behaviour is modelled by a linear controller using three features inspired from the intelligent driver model (IDM) \cite{Treiber2000}: a desired velocity, a braking term to drive slower than the front vehicle, and a braking term to respect a safe distance to the front vehicle.
-
-Denoting $f_i$ the index of the front vehicle preceding vehicle $i$, the acceleration command can be presented as follows:
-\begin{equation*}
-a_i = \begin{bmatrix}
-\theta_{i,1} & \theta_{i,2} & \theta_{i,3}
-\end{bmatrix} \begin{bmatrix}
-v_0 - v_i \\
--(v_{f_i}-v_i)^- \\
--(x_{f_i} - x_i - (d_0 + v_iT))^- \\
-\end{bmatrix},
-\label{eq:theta_a}
-\end{equation*}
-where $v_0, d_0$ and $T$ respectively denote the speed limit, jam distance and time gap given by traffic rules.
-
-\subsubsection{Lateral control}
-
-The lane $L_i$ with the lateral position $y_{L_i}$ and heading $\psi_{L_i}$ is tracked by a cascade controller of lateral position and heading $\beta_i$, which is selected in a way the closed-loop dynamics take the form:
-
-\begin{empheq}[left = \empheqlbrace]{align}
-	\label{eq:heading-command}
-	\dot{\psi}_i &= \theta_{i,5}\left(\psi_{L_i}+\sin^{-1}\left(\frac{\tilde{v}_{i,y}}{v_i}\right)-\psi_i\right),\\
-	\tilde{v}_{i,y} &= \theta_{i,4} (y_{L_i}-y_i). \nonumber
-\end{empheq}
-We assume that the drivers choose their steering command $\beta_i$ such that \eqref{eq:heading-command} is always achieved: $\beta_i = \tan^{-1}(\frac{l}{v_i}\dot{\psi}_i)$.
-
 \subsubsection{LPV formulation}
 
-The system presented so far is non-linear and must be cast into the LPV form. We approximate the non-linearities induced by the trigonometric operators through equilibrium linearisation around $y_i=y_{L_i}$ and $\psi_i=\psi_{L_i}$.
+The system presented in \Cref{chapter:3} is non-linear and must be cast into the LPV form. We approximate the non-linearities induced by the trigonometric operators through equilibrium linearisation around $y_i=y_{L_i}$ and $\psi_i=\psi_{L_i}$.
 
 This yields the following longitudinal dynamics:
 \begin{align*}
