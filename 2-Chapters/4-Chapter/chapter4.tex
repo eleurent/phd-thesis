@@ -96,7 +96,7 @@ A popular way to address this limitations is to use a \emph{spatial grid} repres
 In an occupancy grid, the $f$ features contains presence information (0-1) and additional channels such as velocity and heading, as in \citep[e.g.][]{Isele2018, Fridman2018, Bansal2018, Rehder2017c}. Another example is the use of top-view RGB images \citep[e.g.][]{Bagnell2010, Rehder2017, Rehder2017c, Liu2018}.
 
 
-This permutation invariance property \eqref{eq:permutation} can also be implemented within the architecture of the policy $\pi$. A general technique to achieve this is to treat each entity similarly in the early stages -- e.g. through weight sharing -- before reducing them with a projection operator that is itself invariant to permutations, for instance a max-pooling as in \citep{Chen2017} or an average as in \citep{Qi2016}. A particular instance of this idea is attention mechanisms.
+This permutation invariance property \eqref{eq:permutation} can also be implemented within the architecture of the policy $\pi$. A general technique to achieve this is to treat each entity similarly in the early stages -- e.g. through weight sharing -- before reducing them with a projection operator that is itself invariant to permutations, for instance a max-pooling as in \citep{Chen2017,Hoel2018} or an average as in \citep{Qi2016}. A particular instance of this idea is attention mechanisms.
 
 
 \paragraph{Attention mechanisms} {The attention architecture was introduced to enable neural networks to discover inter-dependencies within a variable number of inputs.
