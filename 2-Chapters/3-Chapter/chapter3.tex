@@ -22,7 +22,7 @@ Perceived the scene, and foretold the rest —
 Having discussed at length the range of \acl*{AD} modelling perspectives in \Cref{chapter:2}, we now formalize the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \acl*{MDP}, by specifying each element of a $(\cS, \cA, P, R, \gamma)$ tuple suitable for a set of tactical decision-making tasks.
 \minitocStartChapter{}
 
-\section{Perception}
+\section{Perceived states}
 
 As discussed in \Cref{sec:nuts-and-bolts,sec:partial-observability}, information about the world is typically obtained from noisy sensory measurements. The Perception module is responsible for recognizing and tracking the signal from the noise, so as to provide a high-level probabilistic description of the scene. In particular, 
 \begin{enumerate}[label=(\roman*)]
@@ -58,7 +58,7 @@ We can make a few observations: first, the state space is continuous, which mean
 
 We also assume knowledge of the road network, comprising:
 \begin{enumerate}[label=(\roman*)]
-	\item a graph description of the network topology, where the nodes represent intersections and the edges represent road segments
+	\item a graph description of the network topology, where the nodes represent intersections and the edges represent road segments;
 	\item the geometry of every lane $L$ in the network (every edge), described by its centre-line parametric curve
 	$
 	s \rightarrow (x_{L}(s), y_{L}(s))\in \Real^2,
@@ -69,9 +69,9 @@ We also assume knowledge of the road network, comprising:
 
 However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, model-free algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, model-based algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
 
-\section{Behvioural Decisions}
+\section{Behavioural decisions}
 
-We follow the hierarchical architecture of the Decision module discussed in \Cref{sec:nuts-and-bolts, sec:temporal-abstraction}. Since we focus on Behavioural Planning specifically, we are going to assume the availability\footnote{These two modules are described as part of the dynamics.} of
+We follow the hierarchical architecture of the Decision module discussed in \Cref{sec:nuts-and-bolts,sec:temporal-abstraction}. Since we focus on Behavioural Planning specifically, we assume the availability\footnote{These two modules are described as part of the dynamics.} of
 \begin{enumerate}[label=(\roman*)]
 	\item a Route Planning layer, that automatically selects the next road segment to be followed at each intersection, \eg the proper exit on a highway, or the right direction at an intersection;
 	\item a Motion Planning and Control layer, that controls the vehicle by way of low-level throttle and steering actuators to reach any desired position and speed in the selected road segment. 
@@ -85,6 +85,8 @@ Thus, the purpose of the Behavioural Planning layer is to specify short-term ins
 \text{drive faster},\, \text{drive slower},\, \text{maintain speed and lane}
 \end{array}\right\}
 \]
+
+Meta-actions are executed at a frequency of $\SI{1}{\hertz}$. Their influence on the evolution of the state $s\in\cS$ is described next.
 
 \section{Traffic dynamics}
 
@@ -103,7 +105,7 @@ We represent the non-holonomic motion capabilities of every vehicle $i\in[0, N_v
 \end{align}
 where $l$ is the vehicle half-length, $a_i$ is the throttle command and $\beta_i$ is the slip angle at the centre of gravity, used as a steering command.
 
-\subsection{Motion Planning and Control}
+\subsection{Motion planning and control}
 
 We equip the ego-vehicle --and also other vehicles $i\in[0, N_v]$ in the scene-- with a capability to execute the meta actions $\cA$. This requires the ability to follow a lane $L_i$, described by the road information mentioned above through its lateral position $y_{L_i}$ and heading $\psi_{L_i}$ . To that end, vehicles follow a cascade controller of lateral position and heading in the form:
 \begin{align}
@@ -117,40 +119,82 @@ where $K_i^y\in\Real$ and $K_i^\psi\in\Real$ are control gains.
 Note that the corresponding steering command $\beta_i$ can be obtained from \eqref{eq:heading-command} as: $$\beta_i = \sin^{-1}\left(\frac{l}{v_i}\dot{\psi}_i\right).$$
 
 Furthermore, the ego-vehicle needs to be able to control its speed as per the meta actions $\cA$. To that end, a linear longitudinal controller is used:
-\begin{equation}
+\begin{equation*}
 a_0 = K_0^v(v_r - v_0),
-\end{equation}
-where $v_r\in\Real$ is the reference speed, incremented by $\pm 5 \si[per-mode=symbol]{\meter\per\second}$ by the \emph{drive faster} and \emph{drive slower} meta-actions, and $K_0^v\in\Real$ is a control gain.
+\end{equation*}
+where $v_r\in\Real$ is the reference speed, incremented by $\pm \SI[per-mode=symbol]{5}{\meter\per\second}$ by the \emph{drive faster} and \emph{drive slower} meta-actions, and $K_0^v\in\Real$ is a control gain.
 
 \subsection{Behavioural models}
 
-IDM
+Other simulated vehicles follow simple and behavioural models from the traffic simulation literature, that dictate how they accelerate and steer on the road.
 
-Mobil
+\paragraph{Longitudinal behaviour}
 
-State is known but dynamics depend on unknown parameters.
+The acceleration command $a_i$ of a vehicle $i\in[1, N_v]$ is controlled directly by the \ac{IDM} from \citep{Treiber2000}:
+\begin{align}
+\begin{split}
+a_i &= a\left[1-\left(\frac{v}{v_0}\right)^\delta - \left(\frac{d^*_i}{d_i}\right)^2\right], \\
+\text{where }\quad d^*_i &= d_0 + Tv_i + \frac{v_i\Delta v_i}{2\sqrt{ab}},
+\end{split}
+\end{align}
+$v_i$ is the vehicle velocity, $d_i$ is the distance to its front vehicle.
+The dynamics are parametrised by the desired velocity $v_0$ , the time gap $T$, the jam distance $d_0$, the maximum acceleration $a$ and deceleration $b$, and the velocity exponent $\delta$.
 
+\paragraph{Lateral behaviour}
 
-\subsection{Route Planning}
+The discrete lane change decisions are given by the \ac{MOBIL} model from \citep{Kesting2007}.
+According to this model, a vehicle $i\in[1, N_v]$ decides to change lane when:
 
+\begin{enumerate}[label=(\roman*)]
+	\item it is \emph{safe} to cut-in:
+		\begin{equation*}
+			\tilde{a}_n \geq - b_\text{safe};
+		\end{equation*}
+	\item there is an \emph{incentive}, for the ego-vehicle and possibly its followers:
+		\begin{equation*}
+		\underbrace{\tilde{a}_c - a_c}_{\text{the vehicle}} + p\left(\underbrace{\tilde{a}_n - a_n}_{\text{new follower}} + \underbrace{\tilde{a}_o - a_o}_{\text{old follower}}\right) \geq \Delta a_\text{th};
+		\end{equation*}
+\end{enumerate}
+where $c$ is the centre vehicle, $o$ is its old follower \emph{before} the lane change, and $n$ is its new follower \emph{after} the lane change; $a$ and $\tilde{a}$ are the predicted accelerations of the vehicles \emph{before} and \emph{after} the lane change respectively; $p$ is a politeness coefficient, $\Delta a_\text{th}$ is the acceleration gain required to trigger a lane change; and $b_\text{safe}$ is the maximum braking imposed to a vehicle during a cut-in.
+
+A lane change decision modifies the target lane $L_i$ followed by vehicle $i$ on its current road segment. The actual trajectory planning and steering control to track this lane is then performed by the lateral controller of \eqref{eq:heading-command}.
+
+\subsection{Route planning}
+
+So far, we explained how both the ego-vehicle ($i=0$) and the other simulated vehicles ($i\in[1, N_v]$) behave on a multi-lanes road segment, through their Behavioural and Control layers. The Route Planning layer is finally responsible for selecting the sequence of road segments leading to a destination, sampled randomly at initialisation. To that end, the Route Planning performs a Breadth First Search in the graph description of the road network mentioned above, and returns a shortest path of road segments from initial position to destination.
+
+In the end, we make the decision of framing the state space $\cS$ as fully observable but subjected to uncertain transition dynamics $P\parentheses{s' \mid s, a}$, which are parametrised by several unobserved variables including the destinations of agents in the scenes and the parameters of their Behavioural and Control layers.
 
 \section{Rewards}
 
+As discussed in \Cref{sec:irl}, choosing an appropriate reward function that yields realistic optimal driving behaviour is a challenging problem, that we do not address in this thesis. Instead, we will specify a reward function as simple and straightforward as possible, so as to focus solely on the difficulties related to safe decision-making under uncertainty. Thus, we focus on only two features: a vehicle should
+\begin{enumerate*}[label=(\roman*)]
+	\item progress quickly on the road;
+	\item avoid collisions.
+\end{enumerate*}
 
-Rewards are bounded
-By convention, we require them to be normalized in the range $[0, 1]$.
-Note that we prevent negative rewards, since it may incentivize the ego-vehicle to prefer terminating an episode.
+Since the Markov Decision Process formalism requires rewards to be bounded, by convention we normalize them in the $[0, 1]$ range.
+Note that we forbid negative rewards, since they may incentivize the agent to prefer terminating an episode early (by causing a collision) rather than risking suffering a negative return if no satisfying trajectory can be found.
 
-The reward function $R$ is the following:
+Thus, unless otherwise stated, the reward function $R$ is chosen as follows:
 \[
 R(x) = 
 \begin{cases}
-1 & \text{if the ego-vehicle is at full velocity;}\\
+1 & \text{if the ego-vehicle is at full speed;}\\
 0 & \text{if the ego-vehicle has collided with another vehicle;}\\
-0.5 & \text{else.}
 \end{cases}\]
+
+A more realistic reward function should include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
+
+This reward function is \emph{dense}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it its discontinuous at collision states.
 
 \section{Implementation}
 
-Presented in \Cref{chapter:a}.
+This chapter defines a class of \acp*{MDP}.
+
+For better reproducibility, I created the \textsc{highway-env} simulator, written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available online, along with instructions to reproduce every numerical experiments presented throughout this manuscript.
+We mention that, in addition to our own works, several researchers already make use of this environment, such as. 
+Figure 4 shows the current (01/30/2020) activity status of the hosting repository.
+
+We discuss at length its features and architecture in \Cref{chapter:a}.
 
