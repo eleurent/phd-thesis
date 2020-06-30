@@ -29,16 +29,11 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-This chapter\dots
+Having detailed the \acp*{MDP} model in \Cref{part:1}, we now study how model-free \acl*{RL} algorithms can learn an optimal behavioural planning policy. In this chapter, we focus on the design of \emph{sample-efficient} learning architectures, tailored for dense traffic situations with many vehicles interacting. Such architectures should deal with a varying number of nearby vehicles, be invariant to the ordering chosen to describe them, while staying accurate and compact. We observe that the two most popular representations in the literature do not fit these criteria, and perform badly on an complex negotiation task. We propose an attention-based architecture that satisfies all these properties and explicitly accounts for the existing interactions between the traffic participants. We show that this architecture leads to significant performance gains, and is able to capture interactions patterns that can be visualized and qualitatively interpreted. 
 \minitocStartChapter{}
 
-%\section{Introduction}
-
-In the last decades, the problem of \emph{behavioural planning} -- that is, high-level decision-making in the context of autonomous driving -- has arguably received less attention and seen less progress than the other components of the typical robotics pipeline: perception and control \citep{Gonzalez2016}. Indeed, the vast majority of existing systems still rely on hand-crafted rules encoded as Finite State Machines \citep{Paden2016}. As a result, only a narrow set of specified use-cases are addressed and these methods cannot scale to more complex scenes, especially when the decision-making involves interacting with other human drivers whose behaviours are uncertain and difficult to model explicitly.
-
-This observation has led the community to turn to learning-based methods, which bear the promise of leveraging data to automatically learn a complex driving policy. In the imitation learning approach, a policy can be trained in a supervised manner to imitate human driving decisions \citep[e.g.][]{Pomerleau1989, Ross2011, Bojarski2016, Xu2016, Eraqi2017, Codevilla2017, Rehder2017c, Rezagholiradeh2018, Rhinehart2018, Bansal2018, Rhinehart2019}. Because the cost of human driving data collection at large scale can be prohibitive, another promising approach is train a policy in simulation using reinforcement learning \citep[e.g.][]{Cardamone2009, Ross2011, Mukadam2017, Chen2017, Isele2018, Ha2018, Kendall2019}.
-
-Beyond the choice of reinforcement learning algorithm, the formalization of the problem as a Markov Decision Process plays an important part in the design of the system. Indeed, the definition of the state space involves choosing a representation of the driving scene. In this work, we focus in on how the vehicles are represented. In particular, we claim that the two most-widely used representations both suffer from different drawbacks: on the one hand, the \emph{list of features} representation is compact and accurate but has a varying-size and depends on the choice of ordering. On the other hand, the \emph{spatial grid} representation addresses these concerns but in return suffers from an accuracy-size trade-off.
+Value-based \acl*{RL} algorithms such as \ac{DQN} \citep{Mnih2015} and its variants rely on an estimate of the optimal state-action value function $Q^\star$. Since the state space chosen in \Cref{chapter:3} is continuous, we must resort to function approximation. Thus, independently of how the state space $\cS$ was defined, the choice of how a state will be \textit{represented} as an input to the model plays an important part in the design of the system.
+In this chapter, we focus on how the vehicles are represented. In particular, we claim that the two most-widely used representations both suffer from different drawbacks: on the one hand, the \emph{list of features} representation is compact and accurate but has a varying-size and depends on the choice of ordering. On the other hand, the \emph{spatial grid} representation addresses these concerns but in return suffers from an accuracy-size trade-off.
 
 Our contributions are the following: first, we propose an attention-based architecture for decision-making involving social interactions. This architecture allows to satisfy the variable-size and permutation invariance requirements even when using a \emph{list of features} representation. It also naturally accounts for interactions between the ego-vehicle and any other traffic participant.
 Second, we evaluate our model on a challenging intersection-crossing task involving up to 15 vehicles perceived simultaneously. We show that our proposed method provides significant quantitative improvements, and that it enables to capture interaction patterns in a way that is visually interpretable.
@@ -47,13 +42,9 @@ Second, we evaluate our model on a challenging intersection-crossing task involv
 
 \label{sec:background}
 
-\paragraph{Model-free deep reinforcement learning} Reinforcement Learning is a general framework for sequential decision-making under uncertainty. It frames the learning objective as the optimal control of a Markov Decision Process $(S, A, P, R, \gamma)$ with measurable state space $S$, action space $A$, unknown reward function $R\in\Real^{S \times A}$, and unknown dynamics $P\in \cM(S)^{S \times A}$, where $\cM(\mathcal{X})$ denotes the probability measures over a set $\mathcal{X}$. The objective is to find a policy $\pi\in\cM(A)^S$ with maximal expected $\gamma$-discounted cumulative reward, called the value function $V^\pi$. Formally,
+\paragraph{Model-free deep reinforcement learning}
 
-\begin{align*}
-V^\pi(s) &\eqdef \expectedvalue\left[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)\condbar s_0=s, a_t\sim \pi(a_t|s_t), s_{t+1}\sim P(s_{t+1}|s_t, a_t)\right]\\
-Q^\pi(s, a) &\eqdef R(s, a) + \gamma \expectedvalueover{s'\sim P(s'|s, a)} V^\pi(s')
-\end{align*}
-
+\TODO{Value-based algorithms vs policy gradient}
 The optimal action-value function $Q^* =  \max_\pi Q^\pi(s)$ satisfies the Bellman Optimality Equation:
 \begin{equation*}
 Q^*(s, a) = (\cT Q^*) (s, a) \eqdef \expectedvalueover{s'\sim P(s'|s, a)} \max_{a'\in A} \left[R(s, a) + \gamma Q^*(s', a')\right]

@@ -64,15 +64,39 @@ Unless restrained to dedicated infrastructure, Autonomous Vehicles will have to 
 
 The skill of driving a car involves taking a series of decisions, where early stages influence the resulting outcomes and subsequent reasoning at late stages. This aspect is known as sequential (or multistage) decision-making. Let us start by introducing some useful notations. At each time step $t$, the system is described by its \emph{state} $s_t$ that belongs to a measurable state space $\cS$. Then, the agent can take an \emph{action} $a_t$ within a measurable action space $\cA$, before transitioning to a next state $s_{t+1}\in\cS$, drawn from a conditional distribution $P\parentheses{s_{t+1} \mid s_t, a_t}$ that we call the \emph{system dynamics}. The agent actions can themselves be drawn from a distribution $\pi\parentheses{a_t\mid s_t}$, called the \emph{policy}.
 
-\ac{RL} is a general framework for learning-based sequential decision-making. It is formulated as an optimal control problem: the policy $\pi$ is chosen to maximise an objective function. It is generally formalized as a \ac{MDP}, \ie a tuple $(\cS, \cA, P, R, \gamma)$ in which at each step $t$, a bounded reward $r_t\in[0, 1]$ drawn from a reward distribution $R(r_t|s_t,a_t)$. The agent must act so as to optimise in expectation its cumulative discounted reward, also called \emph{return}, where $\gamma\in[0,1)$ is the discount factor:
+\ac{RL} is a general framework for learning-based sequential decision-making. It is formulated as an optimal control problem: the policy $\pi$ is chosen to maximise an objective function. It is generally formalized as a \ac{MDP}, \ie a tuple $(\cS, \cA, P, R, \gamma)$ in which at each step $t$, the agent receives a bounded reward $R(s_t, a_t)$, where $R\in[0, 1]^{\cS\times\cA}$ is a deterministic reward function. RL optimises the long-term behaviour of policies $\pi$ by considering their \emph{return}.
 
-\begin{equation*}
-V^*(s) = \max_{\pi}V^\pi(s),\, \text{ where } V^\pi(s) = \expectedvalue_{\pi, P} \left[\sum_t \gamma^t r_t\condbar s_0 = s\right].
-\end{equation*}
+\begin{definition}[Return]
+	The {return} $G^\pi$ of a policy $\pi$ is a random variable defined as the discounted sum of rewards obtained along a trajectory $\tau = (s_0, a_0, s_1, a_1, \dots)$
+	\begin{equation*}
+	G^\pi = \sum_{t=0}^\infty \gamma^t R(s_t, a_t),
+	\end{equation*}
+	where the trajectory $\tau$ is induced by the policy $a_t\sim \pi(a_t|s_t)$ and system dynamics $s_{t+1}\sim P(s_{t+1} \mid s_t, a_t)$,  and $\gamma\in[0,1)$ is the discount factor.
+\end{definition}
 
-Several performance measures have been introduced to evaluate \ac*{RL} algorithms. In this thesis, we consider the goal of finding a near-optimal policy as fast as possible. The \emph{fixed-confidence} setting evaluates the smallest required sample complexity, \ie number of interactions, required to find a near-optimal policy $\pi^*$ with high probability. Alternatively, in the \emph{fixed-budget} setting, the \emph{simple regret} $r_n$ of an algorithm measures the \emph{expected} sub-optimality of the recommenced policy $\hat{\pi}_n$ after a fixed number $n$ of interactions.
+The performance of a policy $\pi$ is then evaluated through its \emph{value} function. 
+\begin{definition}[Value functions]
+	The state value $V^\pi(s)$ of a policy $\pi$ is the expected return of the policy when starting in a state $s$
+	\begin{align*}
+	V^\pi(s) \eqdef \expectedvalue\left[ G^\pi \mid s_0=s\right].
+	\end{align*}
+	Similarly, the state-action value $Q^\pi(s, a)$ of a policy $\pi$ is the expected return of the policy when starting in the state $s$ and taking the action $a$
+	\begin{align*}
+	Q^\pi(s, a) &\eqdef \expectedvalue\left[ G^\pi \mid s_0=s, a_0 = a)\right].
+	\end{align*}
+\end{definition}
+
+\begin{definition}[Optimality]
+An optimal policy $\pi^\star$ maximises the value functions $V^\pi$ and $Q^\pi$ in every state $s$ and action $a$. We define the optimal state value function $V^\star$ and state-action value function $Q^\star$ as 
+\begin{align*}
+&\forall s\in \cS, & V^\star(s) &\eqdef Q^{\pi^\star}(s) = \max_\pi V^\pi(s);\\
+&\forall (s,a)\in \cS\times\cA,& Q^\star(s, a) &\eqdef Q^{\pi^\star}(s, a) = \max_\pi Q^\pi(s, a).
+\end{align*}
+\end{definition}
+
+Several performance measures have been introduced to evaluate \ac*{RL} algorithms. In this thesis, we consider the goal of finding a near-optimal policy as fast as possible. The \emph{fixed-confidence} setting evaluates the smallest required sample complexity, \ie number of interactions, required to find a near-optimal policy $\pi^*$ with high probability. Alternatively, in the \emph{fixed-budget} setting, the \emph{simple regret} $r_n$ of an algorithm measures the \emph{expected} sub-optimality of the recommended policy $\hat{\pi}_n$ after a fixed number $n$ of interactions
 \begin{equation*}
-r_n(s) = \expectedvalue_{\hat{\pi}_n} \left[ V^\star(s) - V^{\hat{\pi}_n}(s) \right]
+r_n(s) \eqdef \expectedvalue_{\hat{\pi}_n} \left[ V^\star(s) - V^{\hat{\pi}_n}(s) \right].
 \end{equation*}
 
 %Conversely, in real environments where exploration is costly, another objective is to minimise the \textit{cumulative regret}.
