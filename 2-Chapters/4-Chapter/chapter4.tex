@@ -32,29 +32,45 @@
 Having detailed the \acp*{MDP} model in \Cref{part:1}, we now study how model-free \acl*{RL} algorithms can learn an optimal behavioural planning policy. In this chapter, we focus on the design of \emph{sample-efficient} learning architectures, tailored for dense traffic situations with many vehicles interacting. Such architectures should deal with a varying number of nearby vehicles, be invariant to the ordering chosen to describe them, while staying accurate and compact. We observe that the two most popular representations in the literature do not fit these criteria, and perform badly on an complex negotiation task. We propose an attention-based architecture that satisfies all these properties and explicitly accounts for the existing interactions between the traffic participants. We show that this architecture leads to significant performance gains, and is able to capture interactions patterns that can be visualized and qualitatively interpreted. 
 \minitocStartChapter{}
 
-Value-based \acl*{RL} algorithms such as \ac{DQN} \citep{Mnih2015} and its variants rely on an estimate of the optimal state-action value function $Q^\star$. Since the state space chosen in \Cref{chapter:3} is continuous, we must resort to function approximation. Thus, independently of how the state space $\cS$ was defined, the choice of how a state will be \textit{represented} as an input to the model plays an important part in the design of the system.
+Value-based \acl*{RL} algorithms such as Q-Learning \citep{Watkins1992} and its variants rely on an estimate of the optimal state-action value function $Q^\star$. Since the state space chosen in \Cref{chapter:3} is continuous, we must resort to function approximation. Thus, independently of how the state space $\cS$ was defined, the choice of how a state will be \textit{represented} as an input to the model plays an important part in the design of the system.
 In this chapter, we focus on how the vehicles are represented. In particular, we claim that the two most-widely used representations both suffer from different drawbacks: on the one hand, the \emph{list of features} representation is compact and accurate but has a varying-size and depends on the choice of ordering. On the other hand, the \emph{spatial grid} representation addresses these concerns but in return suffers from an accuracy-size trade-off.
 
 Our contributions are the following: first, we propose an attention-based architecture for decision-making involving social interactions. This architecture allows to satisfy the variable-size and permutation invariance requirements even when using a \emph{list of features} representation. It also naturally accounts for interactions between the ego-vehicle and any other traffic participant.
 Second, we evaluate our model on a challenging intersection-crossing task involving up to 15 vehicles perceived simultaneously. We show that our proposed method provides significant quantitative improvements, and that it enables to capture interaction patterns in a way that is visually interpretable.
 
-\section{Common state representations}
+\section{Background}
 
 \label{sec:background}
 
 \paragraph{Model-free deep reinforcement learning}
 
-\TODO{Value-based algorithms vs policy gradient}
-The optimal action-value function $Q^* =  \max_\pi Q^\pi(s)$ satisfies the Bellman Optimality Equation:
+We start by recalling standard model-free learning algorithms, with a focus on value-based methods. Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\pi^\star$ since $Q^\star = Q^{\pi^\star}$. However, the converse that $\pi^\star$ can be obtained from knowing $Q^\star$ is also true since
+\begin{proposition}[Optimality of the greedy policy, \citealt{Bellman56}]
+	\begin{leftbar}[propositionbar]
+	The greedy policy defined as
+	\begin{equation*}
+	\forall s\in\cS, \pi^\star\parentheses{s} \in \argmax_a Q^\star(s, a)
+	\end{equation*}
+	is optimal.
+	\end{leftbar}
+\end{proposition}
+
+Finding an optimal policy thus reduces to computing the optimal value function $Q^\star$. Fortunately,
+\begin{theorem}[Bellman Optimality Equation, \citealt{Bellman56}]
+\begin{leftbar}[theorembar]
+The optimal action-value function $Q^\star$ satisfies the Bellman Optimality Equation:
 \begin{equation*}
-Q^*(s, a) = (\cT Q^*) (s, a) \eqdef \expectedvalueover{s'\sim P(s'|s, a)} \max_{a'\in A} \left[R(s, a) + \gamma Q^*(s', a')\right]
+Q^\star(s, a) = (\cT Q^*) (s, a) \eqdef \expectedvalueover{s'\sim P(s'|s, a)} \max_{a'\in \cA} \left[R(s, a) + \gamma Q^\star(s', a')\right].
 \end{equation*}
+Moreover, $\cT$ is a $\gamma$-contraction.
+\end{leftbar}
+\end{theorem}
 
-As $Q^*$ is a fixed-point of the Bellman Operator $\cT$ \citep{Bellman56} -- which is a contraction --, it can be computed by applying $\cT$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\cT$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The \emph{Deep Q-Network} (DQN) algorithm \citep{Mnih2015} implements this idea by using a neural network model to represent the action-value function $Q$.
+Thus, since $Q^*$ is a fixed-point of a contracting operator, it can be computed by iteratively applying $\cT$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\cT$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The  \ac{DQN} algorithm \citep{Mnih2015} implements this idea by using a neural network model to represent the action-value function $Q$.
 
-\paragraph{State-representation for social interactions}
+\paragraph{Common traffic state representations}
 
-In order to apply a reinforcement learning algorithm such as DQN to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. When social interactions are relevant to the decision, the state should at least contain a description of every nearby vehicle. A vehicle driving on a road can be described in the most general way by it's continuous position, heading and velocity. Then, the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N$ other vehicles can be described by a list of individual vehicle states
+In order to apply a reinforcement learning algorithm such as \ac*{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. When social interactions are relevant to the decision, the state should at least contain a description of every nearby vehicle. A vehicle driving on a road can be described in the most general way by it's continuous position, heading and velocity. Then, the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N$ other vehicles can be described by a list of individual vehicle states
 \begin{equation}
 s = \left( s_i \right)_{i \in [0, N]}\qquad
 \text{where}\qquad

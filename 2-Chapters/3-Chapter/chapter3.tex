@@ -90,7 +90,7 @@ Meta-actions are executed at a frequency of $\SI{1}{\hertz}$. Their influence on
 
 \section{Traffic dynamics}
 
-This section describes how the behavioural decisions influence the evolution of the perceived states, under their above definitions, through the dynamics distribution $P\parentheses{s' \mid s,a}$.
+This section describes how the behavioural decisions influence the evolution of the perceived states, under their above definitions, through the dynamics distribution $P\parentheses{s' \mid s,a}$. As explained in \Cref{chapter:1}, it is crucial that the simulated vehicles in the scene are able to \emph{react} to the actions of the ego-vehicle, so that interaction patterns can be learnt.
 
 \subsection{Kinematics}
 
@@ -167,7 +167,9 @@ In the end, we make the decision of framing the state space $\cS$ as fully obser
 
 \section{Rewards}
 
-As discussed in \Cref{sec:irl}, choosing an appropriate reward function that yields realistic optimal driving behaviour is a challenging problem, that we do not address in this thesis. Instead, we will specify a reward function as simple and straightforward as possible, so as to focus solely on the difficulties related to safe decision-making under uncertainty. Thus, we focus on only two features: a vehicle should
+As discussed in \Cref{sec:irl}, choosing an appropriate reward function that yields realistic optimal driving behaviour is a challenging problem, that we do not address in this thesis. In particular, we do not wish to specify every single aspect of the expected driving behaviour inside the reward function, such as keeping a safe distance to the front vehicle. Instead, we would rather only specify a reward function as simple and straightforward as possible, and focus solely on the difficulties related to safe decision-making under uncertainty, in the hope to see adequate behaviour emerge from learning. In this perspective, keeping a safe distance would be optimal not for being directly rewarded but for robustness against the uncertain behaviour of the leading vehicle, which could brake at any time.
+
+Thus, we focus on only two features: a vehicle should
 \begin{enumerate*}[label=(\roman*)]
 	\item progress quickly on the road;
 	\item avoid collisions.
@@ -182,9 +184,10 @@ R(x) =
 \begin{cases}
 1 & \text{if the ego-vehicle is at full speed;}\\
 0 & \text{if the ego-vehicle has collided with another vehicle;}\\
+0.5 & \text{else.}
 \end{cases}\]
 
-A more realistic reward function should include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
+A more realistic reward function may include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
 
 This reward function is \emph{dense}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it its discontinuous at collision states.
 
