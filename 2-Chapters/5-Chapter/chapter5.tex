@@ -34,7 +34,7 @@ This chapter\dots
 \label{sec:bdp}
 We work in the space of budgeted policies, where a policy $\pi$ both depends on the current budget $\beta$ and also outputs a next budget $\beta_a$. Hence, the budget $\beta$ is neither fixed nor constant as in the CMDP setting but instead evolves as part of the dynamics.
 
-We cast the BMDP problem as a multi-objective MDP problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \cB$ and $\ocA= \cA\times \cB$, and equip them with the augmented dynamics $\ov{P}\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
+We cast the BMDP problem as a multi-objective MDP problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \cB$ and $\ocA= \cA\times \cB$, and equip them with the augmented dynamics $\ov{P}\in \cM(\ocS)^{\ocS \times \ocA}$ defined as
 \begin{equation}
 \label{eq:augmented-dynamics}
 \ov{P}\left(\os' \condbar \os, \oa\right) = \ov{P}\left((s',\beta') \condbar (s,\beta), (a, \beta_a)\right) \eqdef P(s'|s, a)\delta(\beta' - \beta_a),
@@ -44,7 +44,7 @@ where $\delta$ is the Dirac indicator distribution.
 In other words, in these augmented dynamics, the output budget $\beta_a$ returned at time $t$ by a budgeted policy $\pi\in \Pi=\cM(\ocA)^{\ocS}$ will be used to condition the policy at the next timestep $t+1$.
 
 We stack the rewards and cost functions in a single \emph{vectorial} signal $R \in (\Real^2)^{{\ocS \times \ocA}}$.
-Given an augmented transition $(\os, \oa) =((s,\beta), (a, \beta_a))$, we define:
+Given an augmented transition $(\os, \oa) =((s,\beta), (a, \beta_a))$, we define
 \begin{equation}
 R(\os, \oa) \eqdef  \begin{bmatrix}
 R_r(s, a)\\
@@ -53,9 +53,9 @@ R_c(s, a)
 \end{equation}
 
 
-Likewise, the return $G^\pi = (G_r^\pi, G_c^\pi)$ of a budgeted policy $\pi\in\Pi$ refers to:
+Likewise, the return $G^\pi = (G_r^\pi, G_c^\pi)$ of a budgeted policy $\pi\in\Pi$ refers to
 $G^\pi \eqdef \sum_{t=0}^\infty \gamma^t R(\os_t, \oa_t)$,
-and the value functions $V^\pi$, $Q^\pi$ of a budgeted policy $\pi\in\Pi$ are defined as:
+and the value functions $V^\pi$, $Q^\pi$ of a budgeted policy $\pi\in\Pi$ are defined as
 \begin{align}
 \label{eq:value-function}
 V^\pi(\os) &= (V_r^\pi, V_c^\pi) \eqdef \expectedvalue\left[ G^\pi \condbar \ov{s_0} = \os\right]\\ Q^\pi(\os, \oa)&= (Q_r^\pi, Q_c^\pi) \eqdef \expectedvalue\left[ G^\pi \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
@@ -65,15 +65,16 @@ We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\beta)\in\ocS: 
 \begin{proposition}[Budgeted Bellman Expectation]
 	\begin{leftbar}[propositionbar]
 	\label{prop:bellman-expectation}
-	The value functions $V^\pi$ and $ Q^\pi$ verify:
+	The value functions $V^\pi$ and $ Q^\pi$ verify
 	\begin{align}
-	V^\pi(\os) &= \sum_{\oa\in\ocA}\pi(\oa | \os) Q^\pi(\os, \oa) \\ Q^\pi(\os, \oa) &= R(\os, \oa) + \gamma\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar \os, \oa\right) V^\pi(\os') \label{eq:bellman_expectation}
+	V^\pi(\os) &= \sum_{\oa\in\ocA}\pi(\oa | \os) Q^\pi(\os, \oa); \\ Q^\pi(\os, \oa) &= R(\os, \oa) + \gamma\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar \os, \oa\right) V^\pi(\os').
+	\label{eq:bellman_expectation}
 	\end{align}
 	Moreover, consider the Budgeted Bellman Expectation operator $\cT^\pi$:
 	$\forall Q\in(\Real^2)^{\ocS\ocA}, \os\in\ocS, \oa\in\ocA$,
 	\begin{align}
 	\label{eq:bellman_expectation_operator}
-	\cT^\pi Q(\os, \oa) &\eqdef R(\os, \oa) + \gamma \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\ov{P}(\os'|\os, \oa)\pi(\oa'|\os') Q(\os', \oa')
+	\cT^\pi Q(\os, \oa) &\eqdef R(\os, \oa) + \gamma \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\ov{P}(\os'|\os, \oa)\pi(\oa'|\os') Q(\os', \oa').
 	\end{align}
 	Then $\cT^\pi$ is a $\gamma$-contraction and $Q^\pi$ is its unique fixed point.
 	\end{leftbar}
@@ -89,24 +90,24 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 
 \begin{definition}[Budgeted Optimality]
 	\begin{leftbar}[defnbar]
-	To that end, we define for all $\os\in\ocS$:
+	To that end, we define for all $\os\in\ocS$,
 	\begin{enumerate}
-		\item[(i)] Admissible policies $\Pi_a$: 
+		\item[(i)] admissible policies $\Pi_a$ as
 		\begin{equation}
-		\Pi_a(\os) \eqdef \{\pi\in\Pi: V_c^\pi(\os) \leq \beta\}\text{ where }\os = (s, \beta)
+		\Pi_a(\os) \eqdef \{\pi\in\Pi: V_c^\pi(\os) \leq \beta\}\text{ where }\os = (s, \beta);
 		\end{equation}
-		\item[(ii)] Optimal value function for rewards $V_r^*$ and candidate policies $\Pi_r$: 
+		\item[(ii)] the optimal value function for rewards $V_r^*$ and candidate policies $\Pi_r$ as
 		\begin{equation}
-		V_r^*(\os) \eqdef \max_{\pi\in\Pi_a(\os)}  V_r^\pi(\os) \qquad\qquad \Pi_r(\os) \eqdef \argmax_{\pi\in\Pi_a(\os)}  V_r^\pi(\os)
+		V_r^*(\os) \eqdef \max_{\pi\in\Pi_a(\os)}  V_r^\pi(\os), \qquad\qquad \Pi_r(\os) \eqdef \argmax_{\pi\in\Pi_a(\os)}  V_r^\pi(\os);
 		\end{equation}
-		\item[(iii)] Optimal value function for costs $V_c^*$ and optimal policies $\Pi^*$: 
+		\item[(iii)] the optimal value function for costs $V_c^*$ and optimal policies $\Pi^*$ as
 		\begin{equation}
-		V_c^*(\os) \eqdef \min_{\pi\in\Pi_r(\os)}  V_c^\pi(\os), \qquad\qquad \Pi^*(\os) \eqdef \argmin_{\pi\in\Pi_r(\os)}  V_c^\pi(\os)
+		V_c^*(\os) \eqdef \min_{\pi\in\Pi_r(\os)}  V_c^\pi(\os), \qquad\qquad \Pi^*(\os) \eqdef \argmin_{\pi\in\Pi_r(\os)}  V_c^\pi(\os).
 		\end{equation}
 	\end{enumerate}
-	We define the budgeted action-value function $Q^*$ similarly:
+	We define the budgeted action-value function $Q^*$ similarly as
 	\begin{equation}
-	Q_r^*(\os, \oa) \eqdef \max_{\pi\in\Pi_a(\os)}  Q_r^\pi(\os, \oa) \qquad\qquad Q_c^*(\os, \oa) \eqdef \min_{\pi\in\Pi_r(\os)}  Q_c^\pi(\os, \oa) 
+	Q_r^*(\os, \oa) \eqdef \max_{\pi\in\Pi_a(\os)}  Q_r^\pi(\os, \oa), \qquad\qquad Q_c^*(\os, \oa) \eqdef \min_{\pi\in\Pi_r(\os)}  Q_c^\pi(\os, \oa),
 	\end{equation}
 	and denote $V^* = (V_r^*, V_c^*)$, $Q^* = (Q_r^*, Q_c^*)$.
 	\end{leftbar}
@@ -115,7 +116,7 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \begin{theorem}[Budgeted Bellman Optimality]
 	\begin{leftbar}[theorembar]
 	\label{thm:bellman-optimality}
-	The optimal budgeted action-value function $Q^*$ verifies:
+	The optimal budgeted action-value function $Q^*$ verifies
 	\begin{equation}
 	\label{eq:bellman-optimality}
 	Q^{*}(\os, \oa) = \cT Q^{*}(\os, \oa) \eqdef R(\os, \oa) + \gamma \sum_{\os'\in\ocS} \ov{P}(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; Q^*) Q^{*}(\ov{s'}, \ov{a'}),
@@ -158,7 +159,7 @@ The Budgeted Bellman Optimality equation is a fixed-point equation, which motiva
 	\end{leftbar}
 \end{theorem}
 
-Unfortunately, as $\cT$ is not a contraction, we can guarantee neither the convergence of \autoref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\autoref{sec:brl-experiments}). We conjecture a possible explanation:
+Unfortunately, as $\cT$ is not a contraction, we can guarantee neither the convergence of \autoref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\autoref{sec:brl-experiments}). We provide a possible explanation:
 
 \begin{theorem}[Contractivity of $\cT$ on smooth $Q$-functions]
 	\begin{leftbar}[theorembar]
@@ -185,7 +186,7 @@ In this section, we consider BMDPs with unknown parameters that must be solved b
 \subsection{Budgeted Fitted-Q}
 \label{subsec:bftq}
 
-When the BMDP is unknown, we need to adapt \autoref{algo:bvi} to work with a batch of samples $\cD=\{(\os_i,\oa_i,r_i,\os_i')\}_{i\in [1,N]}$ collected by interaction with the environment. Applying $\cT$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \ov{P}}$ over next states $\os'$ and hence an access to the model $\ov{P}$. We instead use $\hat{\cT}$, a sampling operator, in which this expectation is replaced by:
+When the BMDP is unknown, we need to adapt \autoref{algo:bvi} to work with a batch of samples $\cD=\{(\os_i,\oa_i,r_i,\os_i')\}_{i\in [1,N]}$ collected by interaction with the environment. Applying $\cT$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \ov{P}}$ over next states $\os'$ and hence an access to the model $\ov{P}$. We instead use $\hat{\cT}$, a sampling operator, in which this expectation is replaced by
 \begin{equation*}
 \hat{\cT} Q(\os, \oa, r, \os') \eqdef r + \gamma \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; Q) Q(\ov{s'}, \ov{a'}).
 \end{equation*}
@@ -458,7 +459,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 		\item[\eqref{eq:pthm_marg}.] Marginalisation on $\oa'$.
 		\item[\eqref{eq:pthm_max}.] \begin{itemize}
 			\item Trivially $\max_{\pi'\in\Pi_a(\os')} \sum_{\oa'\in\ocA} \cdot \leq \sum_{\oa'\in\ocA} \max_{ \pi'\in\Pi_a(\os)} \cdot$
-			\item Let $\ov{\pi}\in\argmax_{\pi'\in\Pi_a(\os')} Q_r^{\pi'}(\os', \oa')$, then:
+			\item Let $\ov{\pi}\in\argmax_{\pi'\in\Pi_a(\os')} Q_r^{\pi'}(\os', \oa')$, then
 			\begin{align*}
 			\sum_{\oa'\in\ov{A}}\rho(\oa'|\os')\max_{\pi'\in\Pi_a(\os')}Q_r^{\pi'}(\os', \oa') &= \sum_{\oa'\in\ov{A}}\rho(\oa'|\os')Q_r^{\ov{\pi}}(\os', \oa') \\
 			&\leq  \max_{\pi'\in\Pi_a(\os')} \sum_{\oa'\in\ov{A}}\rho(\oa'|\os')Q_r^{\pi'}(\os', \oa')
@@ -472,7 +473,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	\expectedvalueover{\oa'\sim\rho} Q_c^{*}(\os, \oa) = \expectedvalueover{\oa'\sim\rho} Q_c^{\pi'}(\os, \oa) = V_c^{\pi}(\os) \leq \beta
 	\end{equation*}
 	
-	Consequently, $\pi_\text{greedy}(\cdot; Q^*)$ belongs to the $\argmax$ of \eqref{eq:pthm_marg_def2}, and in particular:
+	Consequently, $\pi_\text{greedy}(\cdot; Q^*)$ belongs to the $\argmax$ of \eqref{eq:pthm_marg_def2}, and in particular
 	\begin{equation*}
 	Q_r^*(\os, \oa) = r(\os, \oa) + \gamma \sum_{\os'\in\cS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\pi_\text{greedy}(\os', Q^*)} Q_r^*(\os', \oa')
 	\end{equation*}
@@ -499,10 +500,10 @@ The BMDP framework is a principled framework for safe decision making under unce
 \begin{proof}
 	In the trivial case $|\cA| = 1$, there exits only one policy $\pi$ and $\cT = \cT^\pi$, which is a contraction by \autoref{prop:bellman-expectation}.
 	
-	In the general case $|\cA| \geq 2$, we can build the following counter-example:
+	In the general case $|\cA| \geq 2$, we can build the following counter-example.
 	
 	Let $(\cS, \cA, P, R_r, R_c)$ be a BMDP.
-	For any $\epsilon > 0$, we define $Q_\epsilon^1$ and $Q_\epsilon^2$ as:
+	For any $\epsilon > 0$, we define $Q_\epsilon^1$ and $Q_\epsilon^2$ as
 	
 	\begin{align*}
 	Q_\epsilon^1(\os,\oa) =
@@ -526,7 +527,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 		\label{fig:concavity_example}
 	\end{figure}
 	
-	But for $\oa=(a,\beta_a)$ with $\beta_a = \epsilon$, we have:
+	But for $\oa=(a,\beta_a)$ with $\beta_a = \epsilon$, we have
 	\begin{align*}
 	\|\cT Q_\epsilon^1(\os, \oa) - \cT Q_\epsilon^2(\os, \oa)\|_\infty &= \gamma\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)} \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^1_\epsilon)}Q^1_\epsilon(\os',\oa') - \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^2_\epsilon)}Q^2_\epsilon(\os',\oa')\right\|_\infty \\
 	&= \gamma\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)}\left(\frac{1}{\gamma}, \epsilon\right) - (0, \epsilon)\right\|_\infty \\
@@ -537,7 +538,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	\|\cT Q_\epsilon^1 - \cT Q_\epsilon^2\|_\infty &\geq 1 = \frac{1}{\epsilon} \|Q_1-Q_2\|_\infty
 	\end{align*}
 	
-	In particular, there does not exist $L>0$ such that:
+	In particular, there does not exist $L>0$ such that
 	$$\forall Q_1,Q_2\in(\Real^2)^{\ocS\ocA}, \|\cT Q^1 - \cT Q^2\|_\infty \leq L \|Q^1 - Q^2\|_\infty$$
 	In other words, $\cT$ is not a contraction for $\|\cdot\|_\infty$.
 \end{proof}
@@ -570,7 +571,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	\cB(Q,R) = \{Q'\in(R^2)^{\ocS\ocA}: \|Q-Q'\|_\infty \leq R\}
 	\end{equation*}
 	
-	We give the three main steps required to show that $\cT$ restricted to $\cL_\gamma$ is a contraction. Given $Q^1, Q^2\in\cL_\gamma$, show that:
+	We give the three main steps required to show that $\cT$ restricted to $\cL_\gamma$ is a contraction. Given $Q^1, Q^2\in\cL_\gamma$, show that
 	\begin{enumerate}
 		\item $Q^2\in\cB(Q^1,R)\implies\cF^2\in\cB(\cF^1, R), \forall\os\in\ocS$, where $\cF$ is the top frontier of the convex hull of undominated points, as defined in \autoref{sec:proof_pi_hull}.
 		\item $Q\in\cL_\gamma \implies \cF$ is the graph of a $L$-Lipschitz function, $\forall\os\in\ocS$.
@@ -619,7 +620,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	Let $Q\in\cL_\gamma$ and $\os\in\ocS$, $\cF$ the corresponding top frontier of convex hull.
 	For all $q^1,q^2\in\cF, \exists \lambda,\mu\in[0,1], q^{11},q^{12},q^{21},q^{22}\in Q(\os,\ocA)$ such that $q^1 = (1-\lambda)q^{11} + \lambda q^{12}$ and $q^2 = (1-\mu)q^{21} + \mu q^{22}$.
 	Without loss of generality, we can assume $q_c^{11}\leq q_c^{12}$ and $q_c^{21}\leq q_c^{22}$. We also consider the worst case in terms of maximum $q_r$ deviation: $q_c^{12} \leq q_c^{21}$.
-	Then the maximum increment $q_r^2-q_r^{1}$ is:
+	Then the maximum increment $q_r^2-q_r^{1}$ is
 	\begin{align*}
 	\|q^2_r-q^{1}_r\| &\leq \|q^{12}_r-q^{1}_r\| + \|q^{21}_r-q^{12}_r\| + \|q^{2}_r-q^{21}_r\| \\
 	&= (1-\lambda)\|q^{12}_r-q^{11}_r\| + \|q^{21}_r-q^{12}_r\| + \mu\|q^{22}_r-q^{21}_r\| \\ 
@@ -714,13 +715,13 @@ The BMDP framework is a principled framework for safe decision making under unce
 \label{sec:proof_pi_hull}
 \begin{definition}
 	\begin{leftbar}[defnbar]
-	Let $A$ be a set, and $f$ a function defined on $A$. We define:
+	Let $A$ be a set, and $f$ a function defined on $A$. We define
 	
 	\begin{itemize}
-		\item Convex hull of $A$: $\cC(A) = \{\sum_{i=1}^p \lambda_i a_i: a_i\in A, \lambda_i\in\Real^+, \sum_{i=1}^p \lambda_i = 1, p\in\Natural\}$
-		\item Convex edges of $A$: $\cC^2(A) = \{\lambda a_1 + (1-\lambda)a_2: a_1, a_2\in A, \lambda\in[0, 1]\}$
-		\item Dirac distributions of $A$: $\delta(A) = \{\delta(a-a_0): a_0\in A\}$ 
-		\item Image of $A$ by $f$: $f(A) = \{f(a): a\in A\}$
+		\item the convex hull of $A$: $\cC(A) = \{\sum_{i=1}^p \lambda_i a_i: a_i\in A, \lambda_i\in\Real^+, \sum_{i=1}^p \lambda_i = 1, p\in\Natural\}$;
+		\item the convex edges of $A$: $\cC^2(A) = \{\lambda a_1 + (1-\lambda)a_2: a_1, a_2\in A, \lambda\in[0, 1]\}$;
+		\item Dirac distributions of $A$: $\delta(A) = \{\delta(a-a_0): a_0\in A\}$;
+		\item the image of $A$ by $f$: $f(A) = \{f(a): a\in A\}$.
 	\end{itemize}
 \end{leftbar}
 \end{definition}
@@ -741,14 +742,14 @@ The BMDP framework is a principled framework for safe decision making under unce
 	We first reduce the set of candidate optimal policies.
 	Consider the problem described in \eqref{eq:pi_greedy_reward},\eqref{eq:pi_greedy_constraint}: it can be seen as a single-step CMDP problem with reward $R_r=Q_r$ and cost $R_c=Q_c$. By \citep[Theorem 4.4][]{BEUTLER1985236}, we know that the solutions are mixtures of two deterministic policies. Hence, we can replace $\cM(\cA)$ by $\cC^2(\delta(\ocA))$ in \eqref{eq:pi_greedy_reward}.
 	
-	Moreover, remark that:
+	Moreover, remark that
 	\begin{align*}
 	\{\expectedvalueover{\oa\sim\rho} Q(\os,\oa): \rho\in \cC^2(\delta(\ocA))\} &= \{\expectedvalueover{\oa\sim\rho} Q(\os,\oa): \rho=(1-\lambda)\delta(\oa-\oa_1)+\lambda\delta(\oa-\oa_2), \oa_1,\oa_2\in\ocA, \lambda\in[0,1]\} \\
 	&= \{(1-\lambda)Q(\os, \oa_1)+\lambda Q(\os, \oa_2), \oa_1,\oa_2\in\ocA, \lambda\in[0,1]\} \\
 	&= \cC^2(Q(\os,\ocA))\}
 	\end{align*}
 	
-	Hence, the problem \eqref{eq:pi_greedy_reward}, \eqref{eq:pi_greedy_constraint} has become:
+	Hence, the problem \eqref{eq:pi_greedy_reward}, \eqref{eq:pi_greedy_constraint} has become
 	\begin{equation*}
 	\tilde{\Pi}^Q_r = \argmax_{(q_r, q_c)\in\cC^2(Q(\os, \ocA))} q_r \quad\text{ s.t. }\quad q_c \leq \beta 
 	\end{equation*}
@@ -779,7 +780,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	\end{enumerate}
 	
 	
-	Let us characterise this frontier $\cF$. It is both:
+	Let us characterise this frontier $\cF$. It is both
 	\begin{enumerate}
 		\item the \emph{graph of a non-decreasing function}: $\forall q^1, q^2\in\cF$ such that $q_c^1\leq q_c^2$ then $q_r^1\leq q_r^2$.\\
 		By contradiction, if we had $q_r^1 > q_r^2$, we could define $q^\top = (1-\lambda)q^1 + \lambda q^\pm$ where $q^\pm$ is the dominant point as defined in \eqref{eq:q_minus_undominated}. By choosing $\lambda=(q^2_c-q^1_c)/(q^\pm_c-q^1_c)$ such that $q^\top_c = q_c^2$, then since $q_r^\pm \geq q_r^1 > q_r 2$ we also have $q^\top_r > q_r^2$ which contradicts $q^2\in\cF$.
@@ -812,7 +813,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 % \subsection{Decomposition Lemma}
 
 % \begin{lemma}
-%     For any sequence real valued functions $f_1,\ldots,f_n$ and any real number $c$, we have:
+%     For any sequence real valued functions $f_1,\ldots,f_n$ and any real number $c$, we have
 %     \[
 %         \begin{array}{lcl}
 %             \underbrace{\max\limits_{\sum_i x_i \leq c}\sum_j f_j(x_j)}_{(a)} & \quad{}=\quad{} & \underbrace{\max\limits_{\sum_i c_i \leq c}\left(\sum_j\max\limits_{x\leq c_j} f_j(x)\right)}_{(b)}\\
@@ -822,7 +823,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 
 % \begin{proof}
 %     Let us first show that $(a)\leq(b)$.
-%     By definition of the maximum on a set, for any $f_j$ and any $c_j$ we have:
+%     By definition of the maximum on a set, for any $f_j$ and any $c_j$ we have
 %     $\max\limits_{x\leq c_j} f_j(x) \geq f_j(c_j)$.
 %     Hence, by replacing these terms in $(b)$ we get:
 %       \[

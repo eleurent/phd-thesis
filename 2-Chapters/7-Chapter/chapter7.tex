@@ -35,7 +35,7 @@ To address this issue, we turn to the framework of \emph{robust} decision-making
 The dynamics of the real system are described in continuous time. However, all the sensing and control performed on-board happen in discrete time, with time-step $\dd t>0$. For any variable $z$, we use the subscript notation to refer to these discrete times: $z_n = z(t_n)$ with $t_n = n\dd t$ and $n\in\Natural$. We use bold symbols to denote temporal sequences $\bz = (z_n)_{n\in\Natural}$. We denote $z^+ = \max(z,0)$, $z^- = z^+-z$, $|z| = z^++z^-$ and $[n]=\{1,2,\dots, n\}$.
 
 \paragraph{Structured dynamics}
-We consider a linear system with state $x\in\Real^p$, acted on by controls $u\in\Real^q$ and perturbations $\omega\in\Real^r$, and following dynamics in the form:
+We consider a linear system with state $x\in\Real^p$, acted on by controls $u\in\Real^q$ and perturbations $\omega\in\Real^r$, and following dynamics in the form
 \begin{equation}
 \label{eq:dynamics}
 \dot{x}(t)=A(\theta)x(t) + B u(t) + D \omega(t),\;t\geq0.
@@ -61,7 +61,7 @@ Our goal is to design a robust model predictive control for \eqref{eq:dynamics},
 	\label{fig:prediction}
 \end{figure}
 
-In \autoref{sec:estimation}, having observed history of transitions $\cD_{[N]} = \{(x_n, y_n,u_n)\}_{n\in[N]}$, and given a confidence level $\delta\in(0, 1)$, we wish to find a confidence region $\cC_{[N],\delta} \subset \Theta$ as tight as possible and such that it holds:
+In \autoref{sec:estimation}, having observed history of transitions $\cD_{[N]} = \{(x_n, y_n,u_n)\}_{n\in[N]}$, and given a confidence level $\delta\in(0, 1)$, we wish to find a confidence region $\cC_{[N],\delta} \subset \Theta$ as tight as possible and such that it holds that
 \begin{align}
 \probability{A(\theta)\in \cC_{[N],\delta}} \geq 1-\delta
 \label{eq:confidence}
@@ -70,7 +70,7 @@ Such regions are illustrated in \autoref{fig:estimation}. Our first contribution
 
 \paragraph{Robust objective}
 
-At the time step $n=N$, considering the confidence region $\cC_{[N],\delta}$ obtained in the model estimation phase, we formulate our robust control objective:
+At the time step $n=N$, considering the confidence region $\cC_{[N],\delta}$ obtained in the model estimation phase, we formulate our robust control objective
 \begin{equation}
 \label{eq:robust-control}
 \sup_{\bu\in{(\Real^q)}^\Natural} \underbrace{\inf_{\substack{A(\theta) \in \cC_{[N],\delta} \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right]}_{V^r(\bu)}
@@ -79,7 +79,7 @@ where $\gamma\in(0,1)$ is a discount factor. The rest of the paper tackles the o
 
 \paragraph{State prediction}
 
-Maximin problems such as \eqref{eq:robust-control} are notoriously difficult to solve even in cases such where the reward $R$ has a simple form. With arbitrary functions $R$, we cannot hope to derive a solution in explicit form. Our second contribution is to propose to solve \eqref{eq:robust-control} numerically by adopting a \emph{predict-then-optimise} scheme. In \autoref{sec:prediction}, we aim to derive a \emph{set predictor} $X(t)$ for the system \eqref{eq:dynamics}, illustrated in \autoref{fig:prediction}. This predictor takes the information on the observed current state ${x}_N$, a confidence region $\cC_\delta$ verifying \eqref{eq:confidence}, a planned control sequence $\bu$ and some admissible bounds on the perturbation $[\underline{\omega}(t),\overline{\omega}(t)]$; and outputs a set $X(t)$ that must verify the \emph{inclusion property}:
+Maximin problems such as \eqref{eq:robust-control} are notoriously difficult to solve even in cases such where the reward $R$ has a simple form. With arbitrary functions $R$, we cannot hope to derive a solution in explicit form. Our second contribution is to propose to solve \eqref{eq:robust-control} numerically by adopting a \emph{predict-then-optimise} scheme. In \autoref{sec:prediction}, we aim to derive a \emph{set predictor} $X(t)$ for the system \eqref{eq:dynamics}, illustrated in \autoref{fig:prediction}. This predictor takes the information on the observed current state ${x}_N$, a confidence region $\cC_\delta$ verifying \eqref{eq:confidence}, a planned control sequence $\bu$ and some admissible bounds on the perturbation $[\underline{\omega}(t),\overline{\omega}(t)]$; and outputs a set $X(t)$ that must verify the \emph{inclusion property}
 \begin{equation}
 \label{eq:inclusion-generic}
 x(t)\in X(t),\quad\forall t\geq t_N.
@@ -173,7 +173,7 @@ $
 \end{equation}
 
 
-The solution can be obtained as:
+The solution can be obtained as
 
 \begin{proposition}[Regularised solution]
 	\label{prop:regularized_solution}
@@ -188,7 +188,7 @@ The solution can be obtained as:
 	\end{leftbar}
 \end{proposition}
 
-Substituting $y_n$ into \eqref{eq:vector_rls} yields the regression error:
+Substituting $y_n$ into \eqref{eq:vector_rls} yields the regression error
 \begin{align}
 \theta_{N,\lambda} - \theta = G_{N, \lambda}^{-1}\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n - \lambda G_{N, \lambda}^{-1}\theta.
 \end{align}
@@ -206,7 +206,7 @@ Depending on the assumption we have over the noise $\eta_n$, we can bound this e
 	\end{leftbar}
 \end{assumption}
 
-In particular, we denote the coefficient-wise bounds over perturbations as $\underline{\omega}(t) \leq \omega(t) \leq \overline{\omega}(t)$. This is a deterministic assumption, then by Hölder inequality a confidence region $\cC_{[N],0}$ can be derived based on a $L_1$-ball estimate of $\theta$ at time $N$, i.e. a polytope with $2d$ vertices:
+In particular, we denote the coefficient-wise bounds over perturbations as $\underline{\omega}(t) \leq \omega(t) \leq \overline{\omega}(t)$. This is a deterministic assumption, then by Hölder inequality a confidence region $\cC_{[N],0}$ can be derived based on a $L_1$-ball estimate of $\theta$ at time $N$, i.e. a polytope with $2d$ vertices
 \begin{equation}
 \label{eq:bounded-noise-polytope}
 \|\theta_{N,\lambda}\! -\! \theta\|_1\! \leq \! \|G_{N, \lambda}^{-1}\!\sum_{n=1}^N \!\Phi_n^\transp\! \Sigma_p^{-1}\!\|_1\|\eta\|_\infty\! +\!\lambda\|G_{N, \lambda}^{-1}\!\|_1S
@@ -262,15 +262,15 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 
 \label{sec:prediction}
 
-%To study the inclusion property \eqref{eq:inclusion-generic}, we must start by choosing a set representation $X(t)$. We consider interval prediction, rather than zonotope prediction for instance \citep[e.g.][]{le2012}, for the sake of simplicity of implementation and computational efficiency. We represent an interval as $X(t) = [\underline{x}(t), \overline{x}(t)]\in \Real^p\times \Real^p$, and \eqref{eq:inclusion-generic} becomes:
+%To study the inclusion property \eqref{eq:inclusion-generic}, we must start by choosing a set representation $X(t)$. We consider interval prediction, rather than zonotope prediction for instance \citep[e.g.][]{le2012}, for the sake of simplicity of implementation and computational efficiency. We represent an interval as $X(t) = [\underline{x}(t), \overline{x}(t)]\in \Real^p\times \Real^p$, and \eqref{eq:inclusion-generic} becomes
 %\begin{equation}
 %\label{eq:inclusion-property}
 %\underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq t_N.
 %\end{equation} 
 %
-%A simple solution to \eqref{eq:inclusion-property} is proposed in \citep{Efimov2012}, where, given bounds $\underline{A}\leq A(\theta)\leq\overline{A}$ from $\cC_{[N],\delta}$ they use matrix interval arithmetic to derive the predictor:
+%A simple solution to \eqref{eq:inclusion-property} is proposed in \citep{Efimov2012}, where, given bounds $\underline{A}\leq A(\theta)\leq\overline{A}$ from $\cC_{[N],\delta}$ they use matrix interval arithmetic to derive the predictor
 %\begin{proposition}[Simple predictor of \citealt{Efimov2012}]
-%	Assuming that \eqref{eq:confidence} is satisfied for the system \eqref{eq:dynamics}, then the interval predictor:
+%	Assuming that \eqref{eq:confidence} is satisfied for the system \eqref{eq:dynamics}, then the interval predictor
 %	\begin{eqnarray}
 %	\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t) +\overline{A}^{-}\overline{x}^{-}(t)\nonumber \\
 %	&  &+Bu(t) + D^{+}\underline{\omega}(t)-D^{-}\overline{\omega}(t),\label{eq:predictor-naive}\\
@@ -294,7 +294,7 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 %
 %\begin{proposition}[Enhanced predictor of \citealt{leurent2019interval}]
 %	\label{prop:predictor}
-%	Assuming that \eqref{eq:polytope} and \autoref{assumpt:metzler} are satisfied for the system \eqref{eq:dynamics}, then the interval predictor:
+%	Assuming that \eqref{eq:polytope} and \autoref{assumpt:metzler} are satisfied for the system \eqref{eq:dynamics}, then the interval predictor
 %	\begin{eqnarray}
 %	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)\nonumber \\
 %	&  & +Bu(t)+D^{+}\underline{\omega}(t)-D^{-}\overline{\omega}(t),\nonumber\\
@@ -331,7 +331,7 @@ The paper is organized as follows. An introduction to the theory of interval est
 \subsubsection{Preliminaries}
 \label{sec:Preliminaries}
 
-We denote the real numbers  by $\mathbb{R}$, the integers by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\cap\Real_{+}$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted as $|x|$, and for a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$ the symbol $||u||_{[t_{0},t_{1}]}$ denotes its $L_{\infty}$ norm:
+We denote the real numbers  by $\mathbb{R}$, the integers by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\cap\Real_{+}$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted as $|x|$, and for a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$ the symbol $||u||_{[t_{0},t_{1}]}$ denotes its $L_{\infty}$ norm
 \[
 ||u||_{[t_{0},t_{1}]}=\text{ess}\sup_{t\in[t_{0},t_{1})}|u(t)|,
 \]
@@ -388,7 +388,7 @@ In the last lemma, the existence of similarity transformation is proven for an i
 \subsubsection{Problem statement}
 \label{sec:Problem-statement}
 
-Consider an LPV system:
+Consider an LPV system
 \begin{equation}
 \dot{x}(t)=A(\theta(t))x(t)+Bd(t),\;t\geq0,\label{eq:LPV_syst}
 \end{equation}
@@ -432,11 +432,11 @@ Following the result of Lemma \ref{lem:interval}, there is a straightforward sol
 \end{eqnarray}
 then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
 \begin{example*}
-	[motivating] Consider a scalar system:
+	[motivating] Consider a scalar system
 	\[
 	\dot{x}(t)=-\theta(t)x(t)+d(t),\;t\geq0,
 	\]
-	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $d(t)\in[\underline{d},\overline{d}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:predictor-naive} takes the form:
+	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $d(t)\in[\underline{d},\overline{d}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:predictor-naive} takes the form
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & -\overline{\theta}\overline{x}^{+}(t)+\underline{\theta}\overline{x}^{-}(t)+\underline{d},\\
 		\dot{\overline{x}}(t) & = & -\underline{\theta}\underline{x}^{+}(t)+\overline{\theta}\underline{x}^{-}(t)+\overline{d}.
@@ -541,7 +541,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\end{gather*}
 	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:inclusion-property} holds and due to the calculations above. Note that the relations \eqref{eq:inclusion-property} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \cite{Smith95}, which confirms the relations \eqref{eq:inclusion-property}.
 	
-	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation:
+	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation
 	\[
 	\dot{X}(t)=\mathcal{A}X(t)+R_{+}X^{+}(t)-R_{-}X^{-}(t)+\delta(t),
 	\]
@@ -556,7 +556,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\end{array}\right]
 	\end{gather*}
 	is a bounded input vector, whose norm is proportional to $\underline{d}$,
-	$\overline{d}$. Consider a candidate Lyapunov function:
+	$\overline{d}$. Consider a candidate Lyapunov function
 	\begin{gather*}
 	V(X)=X^{\top}PX+X{}^{\top}Z_{+}X^{+}-X^{\top}Z_{-}X^{-}\\
 	=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}X_{k}X_{k}^{+}-(Z_{-})_{k,k}X_{k}X_{k}^{-}\\
@@ -566,7 +566,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\[
 	P+\min\{Z_{+},Z_{-}\}>0,
 	\]
-	and whose derivative for the system dynamics takes the form:
+	and whose derivative for the system dynamics takes the form
 	\begin{gather*}
 	\dot{V}=2\dot{X}^{\top}PX+2\dot{X}^{\top}Z_{+}X^{+}-2\dot{X}^{\top}Z_{-}X^{-}\\
 	=\left[\begin{array}{c}
@@ -611,7 +611,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	P+\min\{Z_{+},Z_{-}\}>0,\;\Gamma>0,\\
 	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
 	\end{gather*}
-	then some of them can be sign-indefinite or negative-definite ensuring the fulfillment of the last inequality:
+	then some of them can be sign-indefinite or negative-definite ensuring the fulfillment of the last inequality
 	$
 	\Upsilon\preceq0.
 	$
@@ -677,7 +677,7 @@ Assume that there exist two signals $\underline{\omega},\overline{\omega}:\Real_
 &  & +(B-LD)^{+}\overline{\omega}(t)-(B-LD)^{-}\underline{\omega}(t),\nonumber \\
 &  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0},\nonumber 
 \end{eqnarray}
-guaranteeing the desired interval relations:
+guaranteeing the desired interval relations
 \[
 \underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.
 \]
@@ -690,7 +690,7 @@ This solution uses only information about amplitude of the external input $\omeg
 	\[
 	\omega(t)=a_{0}+\sum_{s=s_{1}}^{s_{2}}a_{s}\sin\left(\frac{2\pi s}{T}t+\phi_{s}\right),
 	\]
-	for some $a_{0},a_{s},\phi_{s}\in\Real$ with $s=\overline{s_{1},s_{2}}$ and $||\omega||\leq W$. Then for any $x(0)\in\Real^{n}$ in \eqref{eq:LTI_syst} and any $\epsilon>0$ there exists $\tau>0$ such that:
+	for some $a_{0},a_{s},\phi_{s}\in\Real$ with $s=\overline{s_{1},s_{2}}$ and $||\omega||\leq W$. Then for any $x(0)\in\Real^{n}$ in \eqref{eq:LTI_syst} and any $\epsilon>0$ there exists $\tau>0$ such that
 	\[
 	|x_{i}(t)|\leq\sup_{w\in[\frac{2\pi}{T}s_{1},\frac{2\pi}{T}s_{2}]}|e_{i}(jwI_{n}-A)^{-1}BE_{q}|W+\epsilon\quad\forall t\geq\tau,
 	\]
@@ -750,7 +750,7 @@ This yields the following longitudinal dynamics:
 \end{align*}
 where $\theta_{i,2}$ and $\theta_{i,3}$ are set to $0$ whenever the corresponding features are not active.
 
-It can be rewritten in the form $$\dot{Z} = A(\theta)(Z-Z_c) + d.$$ For example, in the case of two vehicles only:
+It can be rewritten in the form $$\dot{Z} = A(\theta)(Z-Z_c) + d.$$ For example, in the case of two vehicles only,
 \begin{equation*}
 Z = \begin{bmatrix}
 x_i \\
@@ -875,7 +875,7 @@ state and the control, respectively.
 
 Note that both interval predictors, \eqref{eq:predictor-naive} and
 \eqref{eq:interval-predictor}, admit a representation in the form (we use the
-time argument $t=s$ in this subsection):
+time argument $t=s$ in this subsection)
 \begin{equation}
 \dot{\xi}(t)=\cA_{0}\xi(t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\delta(t),\label{eq:predictor}
 \end{equation}
@@ -923,7 +923,7 @@ implies the same property of $x(t)$. Therefore, in order to regulate
 minimizing the asymptotic amplitude of the state $\xi(t)$ for given
 input $\delta(t)$ \cite{Efimov2013a}. In other words, it is necessary
 to design a control $u(t)$ that input-to-state stabilizes \eqref{eq:predictor}.
-It is proposed to look for such a control in the form:
+It is proposed to look for such a control in the form
 \begin{equation}
 u(t)=K_{0}\xi(t)+K_{1}\xi^{+}(t)+K_{2}\xi^{-}(t)+S\delta(t),\label{eq:control_pr}
 \end{equation}
@@ -970,7 +970,7 @@ and \eqref{eq:interval-predictor}), its stability is equivalent to
 existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P\cD_{0}\prec0$
 \cite{Positive}.
 \begin{proof}
-	Consider a candidate Lyapunov function:
+	Consider a candidate Lyapunov function
 	\begin{gather*}
 	V(\xi)=\xi^{\top}P\xi+\xi{}^{\top}Z_{+}\xi^{+}-\xi^{\top}Z_{-}\xi^{-}\\
 	=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
@@ -981,7 +981,7 @@ existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P
 	P+\min\{Z_{+},Z_{-}\}>0
 	\]
 	since all terms in $V$ are quadratic-like, and whose derivative for
-	the system \eqref{eq:closed-loop_pr} dynamics takes the form:
+	the system \eqref{eq:closed-loop_pr} dynamics takes the form
 	\begin{gather*}
 	\dot{V}=2\dot{\xi}^{\top}P\xi+2\dot{\xi}^{\top}Z_{+}\xi^{+}-2\dot{\xi}^{\top}Z_{-}\xi^{-}\\
 	=\left[\begin{array}{c}
@@ -1296,12 +1296,12 @@ experiments.
 \subsection{\label{sec:experiments} Numerical experiment}
 
 We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
-Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
+Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with
 % \begin{align*}
 % \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
 % \dot{r} &= \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{I_z v_x} v_y + \frac{-2(C_{\alpha_f}a^2 + C_{\alpha_r}b^2)}{I_z v_x} r + \frac{a}{I_z} u.
 % \end{align*}
-% We can rewrite them as :
+% We can rewrite them as
 \begin{align*}
 x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\transp,\quad
 \theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp,
@@ -1396,7 +1396,7 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 \begin{theorem}[Planning performance of \citealt{Hren2008}]
 	\label{theorem:opd-regret}
 	\begin{leftbar}[theorembar]
-	The simple regret of the \texttt{OPD} algorithm \eqref{eq:opd} applied to the surrogate objective \eqref{eq:surrogate_objective} after $K$ planning iterations is:
+	The simple regret of the \texttt{OPD} algorithm \eqref{eq:opd} applied to the surrogate objective \eqref{eq:surrogate_objective} after $K$ planning iterations is
 	\begin{align*}
 	\text{if } \kappa>1,\quad& 
 	\hat{V}^r(a^{\star}) - \hat{V}^r({a_K}) = \cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right);\\
@@ -1461,7 +1461,7 @@ We temporarily ignore the parametric uncertainty on $\theta$ to simply consider 
 	\end{equation*}
 	\end{leftbar}
 \end{assumption}
-We want to adapt our planning algorithm in order to balance these concurrent hypotheses in a robust fashion, i.e. maximise a robust objective with discrete ambiguity:
+We want to adapt our planning algorithm in order to balance these concurrent hypotheses in a robust fashion, i.e. maximise a robust objective with discrete ambiguity
 \begin{equation}
 \label{eq:robust-objective-discrete}
 V^r = \sup_{a\in\cA^\Natural}\min_{m\in[M]} \sum_{n=N+1}^\infty \gamma^n R_n^m
@@ -1471,7 +1471,7 @@ This objective could be optimised in the same way as in \autoref{sec:control}, b
 
 \begin{definition}[Robust sequence upper bounds]
 	\begin{leftbar}[defnbar]
-	We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by:
+	We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by
 	\begin{equation}
 	\label{eq:robust-b-values}
 	B_a^r(k)  \eqdef \min_{m\in[M]} \sum_{n=0}^{h-1} \gamma^n R_n^m  + \frac{\gamma^h}{1-\gamma}
@@ -1483,7 +1483,7 @@ Note that it is not equivalent to solving each control problem independently and
 \begin{remark}
 	\label{sec:min-max-order}
 	\begin{leftbar}[remarkbar]
-	In the definition of $B_{a}^{r}(k)$ \eqref{eq:br} and $U_{a}^{r}(k)$ \eqref{eq:ur} it is essential that the minimum over the models is only taken at the end of trajectories, in the same way as for the robust objective \eqref{eq:robust-objective-discrete} in which the worst-case dynamics is only determined after the action sequence has been fully specified. Assume that $U_{a}^{r}(k)$ is instead naively defined as:
+	In the definition of $B_{a}^{r}(k)$ \eqref{eq:br} and $U_{a}^{r}(k)$ \eqref{eq:ur} it is essential that the minimum over the models is only taken at the end of trajectories, in the same way as for the robust objective \eqref{eq:robust-objective-discrete} in which the worst-case dynamics is only determined after the action sequence has been fully specified. Assume that $U_{a}^{r}(k)$ is instead naively defined as
 	
 	\[
 	U_{a}^{r}(k)=\min_{m\in[1,M]}U_{a}^{m}(k),
@@ -1649,7 +1649,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		Let $\{F_n\}_{n=0}$ be a filtration.
 		Let $\{\eta_n\}_{n=1}^\infty$ be a $\Real^p$-valued stochastic process such that $\eta_n$ is $F_n$-measurable and $\expectedvalue\left[\eta_n\condbar F_{n-1}\right]$ is $\Sigma_p$-sub-Gaussian.
 		
-		Let $\{\Phi_n\}_{n=1}^\infty$ be an $\Real^{p\times d}$-valued stochastic process such that $\Phi_n$ is $F_n$-measurable. Assume that $G$ is a $d\times d$ positive definite matrix. For any $n\geq 0$, define:
+		Let $\{\Phi_n\}_{n=1}^\infty$ be an $\Real^{p\times d}$-valued stochastic process such that $\Phi_n$ is $F_n$-measurable. Assume that $G$ is a $d\times d$ positive definite matrix. For any $n\geq 0$, define
 		\begin{equation*}
 		\overline{G}_n = G + \sum_{s=1}^n \Phi_s^\transp \Sigma_p^{-1} \Phi_s \in \Real^{d\times d} \quad S_n = \sum_{s=1}^n \Phi_s^\transp\Sigma_p^{-1}\eta_s \in \Real^{d}.
 		\end{equation*}
@@ -1699,7 +1699,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		Finally, an application of Fatou's lemma show that 
 		$\expectedvalue[M_\tau^z] = \expectedvalue[\liminf_{t\to\infty} M_{\min(\tau,t)}^z] \leq \liminf_{t\to\infty} \expectedvalue[M_{\min(\tau,t)}^z] \leq 1.$
 		
-		This results allows to apply a result from \citep{pena2008self}:
+		This results allows to apply a result from \citep{pena2008self}.
 		\begin{lemma}[Theorem 14.7 of \citep{pena2008self}]
 			\begin{leftbar}[lemmabar]
 			If $Z$ is a random vector and $B$ is a symmetric positive definite matrix such that
@@ -1722,20 +1722,20 @@ We present a framework for the robust estimation, prediction and control of a pa
 	Having shown this preliminary result, we move on to the proof of \autoref{thm:confidence_ellipsoid}.
 	
 	\begin{proof}
-		For all $x\in\Real^d$, \eqref{eq:vector_rls} gives:
+		For all $x\in\Real^d$, \eqref{eq:vector_rls} gives
 		\begin{align*}
 		x^\transp\theta_{N,\lambda}  -x^\transp\theta &= x^\transp G_{N, \lambda}^{-1}\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n
 		- \lambda x^\transp G_{N, \lambda}^{-1}\theta\\
 		&= \inp{x}{\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n}_{G_{N, \lambda}^{-1}} - \lambda\inp{x}{\theta}_{G_{N, \lambda}^{-1}}
 		\end{align*}
 		
-		Using the Cauchy-Schwartz inequality, we get:
+		Using the Cauchy-Schwartz inequality, we get
 		\begin{align*}
 		|x^\transp\theta_{N,\lambda}  -x^\transp\theta| \leq {} & \|x\|_{G_{N, \lambda}^{-1}}\left(\left\|\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n\right\|_{G_{N, \lambda}^{-1}}\right.\\ 
 		&+ \left.\lambda\|\theta\|_{G_{N, \lambda}^{-1}}\right)
 		\end{align*}
 		
-		In particular, for $x = G_{N,\lambda}(\theta_{N,\lambda} - \theta)$, we get after simplifying with $\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}}$:
+		In particular, for $x = G_{N,\lambda}(\theta_{N,\lambda} - \theta)$, we get after simplifying with $\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}}$,
 		\begin{align*}
 		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \left\|\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n\right\|_{G_{N, \lambda}^{-1}} + \lambda\|\theta\|_{G_{N, \lambda}^{-1}}
 		\end{align*}
@@ -1758,7 +1758,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\begin{proof}
 		The predictor designed in \autoref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $A(\theta)\in C_{[N],\delta}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
 		
-		Thus, by taking the min over $C_{[N],\delta}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$:
+		Thus, by taking the min over $C_{[N],\delta}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$,
 		\begin{align*}
 		V^r(\bu) &= \min_{\substack{A(\theta)\in C_{[N],\delta}\\ \underline{\bom} \leq \bom \leq \overline{\bom}}} \sum_{n=N+1}^\infty \gamma^n R(x_n)\\
 		&\geq \sum_{n=N+1}^\infty \gamma^n \underline{R}_n(\bu)\\
@@ -1824,7 +1824,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
-		Let $e = \ox - \ux$. \eqref{eq:interval-predictor} gives the dynamics:
+		Let $e = \ox - \ux$. \eqref{eq:interval-predictor} gives the dynamics
 		\begin{align*}
 		\dot{e} = A_0e + |\Delta A|(\ox^+ + \ux^-) + |D|(\overline{\omega} - \underline{\omega})
 		\end{align*}
@@ -1833,7 +1833,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		We define the Lyapunov function $V = e^\transp P e$, which is non-negative definite provided that
 		$
 		P>0,
-		$ and compute its derivative:
+		$ and compute its derivative
 		\begin{align*}
 		\dot{V} ={}& X^\transp
 		\begin{bmatrix}
@@ -1967,7 +1967,6 @@ We present a framework for the robust estimation, prediction and control of a pa
 		By definition, when starting with sequence $a$, the value $U_a^m(k)$ represents the minimum admissible reward, while $B_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^*$, $U_a^m(k)$ and $U_a^r(k)$ are non-decreasing functions of $k$ and $B_a^m(k)$ and $B_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
 		
 		Moreover, since the reward function $R$ is assumed be bounded in $[0, 1]$, the sum of discounted rewards from a node of depth $d$ is at most $\gamma^d + \gamma^{d+1}+\dots = \frac{\gamma^d}{1-\gamma}$. As a consequence, for all $k \geq 0$ , $a\in\mathcal{L}_k$ of depth $d$, and any sequence of rewards $(R_n)_{n\in\mathbb{N}}$ obtained from following a path in $a\mathcal{A}^\infty$ with any dynamics $m \in [M]$:
-		
 		\begin{equation*}
 		U^m_a(k) = \sum_{n=0}^{d-1} \gamma^n R_n^m \leq \sum_{n=0}^\infty \gamma^n R_n^m \leq \sum_{n=0}^{d-1} \gamma^n R_n^m + \frac{\gamma^d}{1-\gamma} = B^m_a(k) 
 		\end{equation*}
@@ -1976,8 +1975,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\label{eq:min_m_values}
 		\min_{m \in [M]} U^m_a(k) \leq \min_{m \in [M]} \sum_{n=0}^\infty \gamma^n R_n \leq \min_{m \in [M]} B^m_a(k)
 		\end{equation}
-		And as the left-hand and right-hand sides of \eqref{eq:min_m_values} are independent of the particular path that was followed in $a\mathcal{A}^\infty$, it also holds for the robust path:
-		
+		And as the left-hand and right-hand sides of \eqref{eq:min_m_values} are independent of the particular path that was followed in $a\mathcal{A}^\infty$, it also holds for the robust path
 		\begin{equation*}
 		\min_{m \in [M]} U^m_i(k) \leq \max_{a'\in a\mathcal{A}^\infty} \min_{m \in [M]} \sum_{t=0}^\infty \gamma^n R_n^m \leq \min_{m \in [M]} B^m_i(k)
 		\end{equation*}
@@ -1993,7 +1991,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	We now turn to the proof of the theorem.
 	
 	\begin{proof}
-		\citet{Hren2008} first show in Theorem 2 that the simple regret $r_K$ of their optimistic planner is bounded by $\frac{\gamma^{d_K}}{1 - \gamma}$ where $d_K$ is the depth of $\mathcal{T}_K$. This properties relies on the fact that the returned action belongs to the deepest explored branch, which we can show likewise by contradiction using Lemma \ref{lemma:uvb}. This yields directly that the returned action $a = i_0$ where $i$ is some node of maximal depth $d_K$ expanded at round $k\leq K$, which by selection rule verifies $B_a^r(k) = B_i^r(k) = \max_{x\in\mathcal{A}} B_x^r(k)$ and:
+		\citet{Hren2008} first show in Theorem 2 that the simple regret $r_K$ of their optimistic planner is bounded by $\frac{\gamma^{d_K}}{1 - \gamma}$ where $d_K$ is the depth of $\mathcal{T}_K$. This properties relies on the fact that the returned action belongs to the deepest explored branch, which we can show likewise by contradiction using Lemma \ref{lemma:uvb}. This yields directly that the returned action $a = i_0$ where $i$ is some node of maximal depth $d_K$ expanded at round $k\leq K$, which by selection rule verifies $B_a^r(k) = B_i^r(k) = \max_{x\in\mathcal{A}} B_x^r(k)$ and
 		\begin{align*}
 		\label{eq:Rndn}
 		V^r - V_a^r = V_{a^{\star}}^r - V_a^r  \leq B_{a^{\star}}^r(k) - V_a^r &\leq B_{a}^r(k) - U_a^r(k) \\
@@ -2033,7 +2031,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %		\item The pessimistic reward of \eqref{eq:pessimistic-rewards} is implemented in the \texttt{pessimistic\_reward()} method of \url{code/obstacle_env/envs/obstacle.py} and the \texttt{check\_collision()} method of \url{code/highway_env/vehicle/uncertainty/prediction.py}
 %		\item The robust upper-bound of \eqref{eq:robust-b-values} is implemented in the \texttt{RobustNode} class of \url{code/rl_agents/agents/tree_search/robust.py}
 %	\end{enumerate}
-%%	The experiments can be reproduced by running:
+%%	The experiments can be reproduced by running
 %%	\lstset{language=bash}
 %%	\begin{lstlisting}
 %%	cd scripts
@@ -2047,7 +2045,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\begin{lemma}[Confidence polytope]
 		\label{lem:tight_polytope}
 		\begin{leftbar}[lemmabar]
-		We can enclose the confidence ellipsoid obtained in $\eqref{eq:confidence-ellipsoid}$ within a polytope $C_\delta$:
+		We can enclose the confidence ellipsoid obtained in $\eqref{eq:confidence-ellipsoid}$ within a polytope
 		\begin{equation}
 		\cC_\delta = \left\{ A_{1}+\sum_{i=1}^{2^d}\lambda_{i}\Delta A_{i}: \lambda\in[0, 1]^{2^d},  \sum_{i=1}^{2^d}\lambda_{i}=1\right\}.
 		\end{equation}
@@ -2062,7 +2060,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\end{lemma}
 	
 	\begin{proof}
-		The ellipsoid in \eqref{eq:confidence-ellipsoid} is described by:
+		The ellipsoid in \eqref{eq:confidence-ellipsoid} is described by
 		\begin{align*}
 		\theta\in\cC_\delta &\implies
 		(\theta-\theta_{N,\lambda})^\transp G_{N,\lambda}(\theta-\theta_{N,\lambda}) \leq \beta_{N}(\delta)\\
@@ -2119,7 +2117,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	
 %	\paragraph{Lateral control}
 %	
-%	The lane $L_i$ with the lateral position $y_{L_i}$ and heading $\psi_{L_i}$ is tracked by a cascade controller of lateral position and heading $\beta_i$, which is selected in a way the closed-loop dynamics take the form:
+%	The lane $L_i$ with the lateral position $y_{L_i}$ and heading $\psi_{L_i}$ is tracked by a cascade controller of lateral position and heading $\beta_i$, which is selected in a way the closed-loop dynamics take the form
 %	
 %	\begin{align}
 %	\label{eq:heading-command}

@@ -40,9 +40,7 @@ We follow the notations from \citep{Bubeck2010} and use the standard notations o
 
 During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in A^t$ and receives a reward $Y_t^m$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{Y_t^m | s_t, a^m_t} \prod_{k=1}^{t-1} \probability{s_{k+1} | s_{k}, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1$ is the current state.
 
-After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in A^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$:
-
-
+After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in A^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$
 \begin{equation}
 \label{eq:value}
 V(a) = \sup_{b\in aA^\infty} \sum_{t=1}^\infty \gamma^t\mu(b_{1:t}),
@@ -72,9 +70,7 @@ T_a(m) \eqdef \sum_{s=1}^m \mathbbm{1}\{a^s_{1:h} = a\}
 
 
 \noindent
-be the number of times we played an action sequence starting with $a$, and $S_a(m)$ the sum of rewards collected at the last transition of the sequence $a$:
-
-
+be the number of times we played an action sequence starting with $a$, and $S_a(m)$ the sum of rewards collected at the last transition of the sequence $a$
 \begin{equation*}
 S_a(m) \eqdef \sum_{s=1}^m Y^s_h \mathbbm{1}\{a^s_{1:h} = a\}
 \end{equation*}
@@ -100,7 +96,7 @@ U_a(m) \eqdef \sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1
 
 
 \noindent
-where $\frac{\gamma^{h+1}}{1-\gamma}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in A^L$ by taking:
+where $\frac{\gamma^{h+1}}{1-\gamma}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in A^L$ by taking
 
 
 \begin{equation}
@@ -146,7 +142,7 @@ To recover the original \OLOP algorithm of \citet{Bubeck2010} from Algorithm \re
 \dquad(p,q) \eqdef 2(p-q)^2,\qquad
 f_4(m) \eqdef 4 \log M
 \end{equation*}
-Indeed, in this case $U^{\mu}_a(m)$ can then be explicitly computed as:
+Indeed, in this case $U^{\mu}_a(m)$ can then be explicitly computed as
 \begin{align*}
 U^{\mu}_a(m) &= \max \left\{q\in \mathbb{R}: 2(\frac{S_a(m)}{T_a(m)} - q)^2 \leq \frac{4 \log M }{T_a(m)} \right\} = \hat{\mu}_a(m) + \sqrt{\frac{2 \log M}{T_a(m)}}
 \end{align*}
@@ -195,7 +191,7 @@ This consideration motivates us to leverage the recent developments in the Multi
 
 \noindent
 We propose a novel implementation of Algorithm \ref{algo:kl-olop} where we leverage the analysis of the kl-UCB algorithm from \citep{Cappe2013} for multi-armed bandits with general bounded rewards.
-Likewise, we use the Bernoulli Kullback-Leibler divergence defined on the interval $I=[0,1]$ by:
+Likewise, we use the Bernoulli Kullback-Leibler divergence defined on the interval $I=[0,1]$ by
 
 \begin{equation*}
 \dber(p, q) \eqdef p \log \frac{p}{q} + (1-p)\log\frac{1-p}{1-q}
@@ -228,7 +224,7 @@ Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log
 \label{sec:sample-complexity}
 
 We say that $u_n = \tilde{O}(v_n)$ if there exist $\alpha, \beta >0$ such that $u_n \leq \alpha \log(v_n)^\beta v_n$.
-Let us denote the proportion of near-optimal nodes $\kappa_2$ as:
+Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 
 
 \begin{equation*}
@@ -306,7 +302,7 @@ We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which 
 
 \begin{proposition}[Time and memory complexity]
 	\begin{leftbar}[propositionbar]
-	Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of:
+	Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of
 	\begin{equation*}
 	C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
 	\end{equation*}
@@ -331,7 +327,7 @@ We follow step-by step the pyramidal proof of \citep{Bubeck2010}, and adapt it t
 
 We start by recalling their notations.
 Let $1 \leq H \leq L$ and $a^* \in A^L$ such that $V(a^*) = V$.
-Considering sequences of actions of length $1 \leq h \leq H$, we define the subset $\mathcal{I}_h$ of near-optimal sequences and the subset $\mathcal{J}$ of sub-optimal sequences that were near-optimal at depth $h-1$:
+Considering sequences of actions of length $1 \leq h \leq H$, we define the subset $\mathcal{I}_h$ of near-optimal sequences and the subset $\mathcal{J}$ of sub-optimal sequences that were near-optimal at depth $h-1$
 \begin{equation*}
 \mathcal{I}_h = \left\{a \in A^h: V - V(a) \leq 2\frac{\gamma^{h+1}}{1-\gamma}\right\}, \mathcal{J}_h = \left\{a \in A^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
 \end{equation*}
@@ -342,12 +338,12 @@ $|\mathcal{I}_h| \leq C {\kappa'}^h$
 %\end{equation*}
 Hence, we also have $|\mathcal{J}_h| \leq K|\mathcal{I}_{h-1}| = O({\kappa'}^h)$.
 
-Now, for $1\leq m \leq M$, $a \in A^t$ with $t \leq h$, $h'<h$, we define the set $\mathcal{P}^a_{h,h'}(m)$ of suffixes of $a$ in $\mathcal{J}_h$ that have been played at least a certain number of times:
+Now, for $1\leq m \leq M$, $a \in A^t$ with $t \leq h$, $h'<h$, we define the set $\mathcal{P}^a_{h,h'}(m)$ of suffixes of $a$ in $\mathcal{J}_h$ that have been played at least a certain number of times
 \begin{equation*}
 \mathcal{P}^a_{h,h'}(m) = \left\{ b\in a A^{h-t}\cap \mathcal{J}_h : T_b(m) \geq \diff{2f(m)}(h+1)^2\gamma^{2(h'-h+1)} + 1 \right\}
 \end{equation*}
 
-and the random variable:
+and the random variable
 
 \begin{equation*}
 \tau^a_{h,h'}(m) = \mathbbm{1}\{T_a(m-1) < \diff{2f(m)}(h+1)^2\gamma^{2(h'-h+1)} + 1 \leq T_a(m)\}
@@ -392,12 +388,12 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 \begin{proof}
 	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in A^L}  U_a(m)$ and $a^*\in A^L$, so $U_{a^{m+1}}(m) \geq U_{a^*}(m)$ and finally $U_a(m) \geq U_{a^*}(m)$.
 	
-	Assume that \eqref{eq:cond-ukl} is false, then:
+	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
 	\label{eq:ukl-verifie}
 	\sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma} = U_a(m) \geq U_{a^*}(m) \geq V
 	\end{equation}
-	Assume that \eqref{eq:cond-lkl} is false, then:
+	Assume that \eqref{eq:cond-lkl} is false, then
 	\begin{equation}
 	\label{eq:lkl-verifie}
 	\sum_{t=1}^h \gamma^t L^{\mu}_{a_{1:t}}(m) < V(a),
@@ -506,7 +502,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 		= \sqrt{\frac{2f(m)}{T_b(m)}}}
 	\end{align*}
 	
-	Now, assume that \eqref{eq:sampled-enough-h} and \eqref{eq:sampled-enough} are true. Then, we clearly have:
+	Now, assume that \eqref{eq:sampled-enough-h} and \eqref{eq:sampled-enough} are true. Then, we clearly have
 	\begin{align*}
 	\sum_{t=1}^h \gamma^t\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right) &\leq \sum_{t=1}^{h'} \gamma^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} + \sum_{t=h'+1}^h \gamma^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} \\
 	&\leq \frac{1}{(h+1)\gamma^{-h-1}} \sum_{t=1}^{h'} 1 + \frac{1}{(h+1)\gamma^{-h-1}} \sum_{t=h'+1}^h \gamma^{t-h'}  \\
@@ -548,18 +544,18 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 
-Thus by combining Lemma \ref{lemma:expected-regret} and \ref{lemma:expected-plays-count} we obtain:
+Thus by combining Lemma \ref{lemma:expected-regret} and \ref{lemma:expected-plays-count} we obtain
 \begin{equation*}
 \expectedvalue r_n = \tilde{O}\left(\gamma^H + \gamma^{-H}M^{-1} + (\kappa' \gamma)^{H}M^{-1}\diff{(1+M\Delta_M+\Delta_M)} + (\kappa')^H\gamma^{-H}M^{-1}\diff{\Delta_M}\right)
 \end{equation*}
 Finally,
 \begin{itemize}
-	\item if $\kappa'\gamma^2 \leq 1$, we take $H = \floor{\log M / (2\log 1/\gamma)}$ to obtain:
+	\item if $\kappa'\gamma^2 \leq 1$, we take $H = \floor{\log M / (2\log 1/\gamma)}$ to obtain
 	\begin{equation*}
 	\expectedvalue r_n = \tilde{O}\left(M^{-\frac{1}{2}} + M^{-\frac{1}{2}} + M^{-\frac{1}{2}}M^{\frac{\log \kappa'}{2\log 1/\gamma}} \diff{\Delta_M}\right)
 	\end{equation*}
 	For the last term to be of the same order of the others, we need to have $\Delta_M = O(M^{-\frac{\log \kappa'}{2\log 1/\gamma}})$. Since $\kappa'\gamma^2 \leq 1$, we achieve this by taking \diff{$\Delta_M = O(M^{-1})$}.
-	\item if $\kappa'\gamma^2 > 1$, we take $H = \floor{\log M / \log \kappa'}$ to obtain:
+	\item if $\kappa'\gamma^2 > 1$, we take $H = \floor{\log M / \log \kappa'}$ to obtain
 	\begin{equation*}
 	\expectedvalue r_n = \tilde{O}\left(M^{\frac{\log \gamma}{\log \kappa'}} + M^{\frac{\log \gamma}{\log \kappa'}}\diff{(1+M\Delta_M+\Delta_M)} + M^{\frac{\log 1/\gamma}{\log \kappa'}}\diff{\Delta_M}\right)
 	\end{equation*}
@@ -717,7 +713,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 \begin{definition}[Bellman optimality operator]
 	\begin{leftbar}[defnbar]
 	\label{def:bellman}
-	{\textbf{On trees.}} We define the Bellman optimality operator $B_n$ on the tree $\Tau_n$ as:
+	{\textbf{On trees.}} We define the Bellman optimality operator $B_n$ on the tree $\Tau_n$ as
 	\begin{equation}
 	\label{eq:bellman-tree}
 	B_n(f)(a) \eqdef \begin{cases}
@@ -727,7 +723,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 	\end{cases}
 	\end{equation}
 	
-	{\textbf{On graphs.}} Likewise, we define the Bellman optimality operator $\cB_n$ on the graph $\cG_n$ as:
+	{\textbf{On graphs.}} Likewise, we define the Bellman optimality operator $\cB_n$ on the graph $\cG_n$ as
 	\begin{equation}
 	\label{eq:bellman-graph}
 	\cB_n(f)(s) \eqdef \begin{cases}
@@ -785,7 +781,7 @@ This enables \citet{Hren2008optimistic} to define\footnote{We use an iteration o
 L_n \eqdef B_n^{d_n}(0), \qquad U_n \eqdef B_n^{d_n}(V_{\max}),
 \end{align}
 where $0$ is the null function.
-The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewise, we have:
+The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewise, we have
 \begin{lemma}[Properties of $\cB_n$]
 	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-graph}
@@ -861,7 +857,7 @@ First, we recall the analysis of \citet{Hren2008optimistic}. We start by introdu
 
 \begin{definition}[Sequence values]
 	\begin{leftbar}[defnbar]
-	The value of a finite \textbf{sequence} of actions $a\in A^h$ is:
+	The value of a finite \textbf{sequence} of actions $a\in A^h$ is
 	\begin{equation*}
 	\label{eq:state_value}
 	V(a) = R(s_0,a) + \gamma^{h} V(s(a)),
@@ -902,18 +898,18 @@ It is typically small in problems where there is one single optimal trajectory, 
 
 \subsubsection{Motivation for an improved regret bound}
 
-We start by reformulating the sampling rule used for the \texttt{OPD} algorithm. To that end, notice that when some bounds $(L,\,U)$ on the state values $V(s(a))$ are available, they also induce bounds $(\overline{L},\, \overline{U})$ on values $V(a)$ of sequences of actions $a$ of length $h$ defined as:
+We start by reformulating the sampling rule used for the \texttt{OPD} algorithm. To that end, notice that when some bounds $(L,\,U)$ on the state values $V(s(a))$ are available, they also induce bounds $(\overline{L},\, \overline{U})$ on values $V(a)$ of sequences of actions $a$ of length $h$ defined as
 \begin{equation*}
 %\label{eq:sequence_value}
 \underbrace{R(s_0,a) + \gamma^{h} L(a)}_{\overline{L}(a)} \leq V(a) \leq \underbrace{R(s_0,a) + \gamma^{h} U(a)}_{\overline{U}(a)}.
 \end{equation*}
 
-One can easily see that, since the $(L_n,\,U_n)$ used in the optimistic sampling rule described in \Cref{alg:opd} are invariant by $B_n$ by definition, this rule can be equivalently expressed as:
+One can easily see that, since the $(L_n,\,U_n)$ used in the optimistic sampling rule described in \Cref{alg:opd} are invariant by $B_n$ by definition, this rule can be equivalently expressed as
 \begin{equation}
 \label{eq:sampling_rule}
 b_n \in \argmax_{a\in\ext{\Tau}_n} \overline{U}_n(a).
 \end{equation}
-Likewise, the conservative recommendation rule returns the first action of:
+Likewise, the conservative recommendation rule returns the first action of
 \begin{equation}
 \label{eq:recommendation_rule}
 a_n \in \argmax_{a\in\ext{\Tau}_n} \overline{L}_n(a)
@@ -984,7 +980,7 @@ We can define the counterpart of the bounds $(\cL_n, \cU_n)$ in the same way as 
 \label{eq:gbop-t-bounds}
 L_n = B_n^{\infty}(0), \qquad U_n = B_n^{\infty}(V_{\max}).
 \end{align}
-This definition is equivalent to that of \GBOPD in the sense that:
+This definition is equivalent to that of \GBOPD in the sense that
 \begin{lemma}[Bound equivalence]
 	\label{lem:equivalence}
 	For any sequence of action $a\in T(\cG_n)$, we have $L_n(a) = \cL_n(s(a))$ and $U_n(a) = \cU_n(s(a))$.	
@@ -1049,7 +1045,7 @@ We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are describ
 	\begin{leftbar}[propositionbar]
 	\label{prop:illustrative-example}
 	The MDP $\cM$ verifies $\hlrb{\kappa = K-1}$ and $\hlgb{\kappa_\infty = 1}$.
-	% :
+	%
 	% \begin{enumerate}[label=(\roman*)]
 	%     \item $\hlrb{\kappa = K-1}$;
 	%     \item $\hlgb{\kappa_\infty = 1}$.
@@ -1082,7 +1078,7 @@ where $\Sigma_S$ is the probability simplex over $S$, $\beta^p$ is an exploratio
 
 \paragraph{Bellman operator with stochasticity.}
 
-In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, MDPGapE2020}. We modify the \Cref{def:bellman} of the Bellman operator on graphs as:
+In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, MDPGapE2020}. We modify the \Cref{def:bellman} of the Bellman operator on graphs as
 
 \begin{align*}
 \cB_t^+(\cU)(s) &= \max_{a\in A} \left[u_t(s,a) + \gamma \max_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a) \cU(s')\right], \\

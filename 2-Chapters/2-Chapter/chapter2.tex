@@ -220,7 +220,7 @@ This questioning has lead researchers and practitioners to consider alternative 
 
 \subsection{Risk-sensitive Criterion}
 
-Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form:
+Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form
 \begin{equation*}
 \max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R_t\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[\sum_t \gamma^t R_t \right].
 \end{equation*}
