@@ -190,11 +190,18 @@ This reward function is \emph{dense}, since the maximum reward can easily be obt
 
 \section{Implementation}
 
-This chapter defines a class of \acp*{MDP}.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/he-git}\\
+	\includegraphics[height=0.5cm]{img/he-buil.pdf}
+	\includegraphics[height=0.5cm]{img/he-docs.pdf}
+	\includegraphics[height=0.5cm]{img/he-qual.pdf}
+	\includegraphics[height=0.5cm]{img/he-cov.pdf}
+	\includegraphics[height=0.5cm]{img/he-contr.pdf}
+	\includegraphics[height=0.5cm]{img/he-envs.pdf}
+	\caption{\textsc{highway-env} repository status (on 30/06/2020).}
+	\label{fig:highway-env-status}
+\end{figure}
 
-For better reproducibility, I created the \textsc{highway-env} simulator, written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available online, along with instructions to reproduce every numerical experiments presented throughout this manuscript.
-We mention that, in addition to our own works, several researchers already make use of this environment, such as. 
-Figure 4 shows the current (01/30/2020) activity status of the hosting repository.
-
-We discuss at length its features and architecture in \Cref{chapter:a}.
+I created the \href{https://github.com/eleurent/highway-env}{\textsc{highway-env}} environment: a minimalist driving simulator tailored for behavioural planning tasks, following the \ac*{MDP} formalization presented in this chapter. It is written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available, along with instructions to reproduce every numerical experiments presented throughout this manuscript. We discuss at length the features and architecture of this project in \Cref{chapter:a}. We mention that in addition to our own works, several students and researchers already make use of this environment, as shown in \Cref{fig:highway-env-status}.
 
