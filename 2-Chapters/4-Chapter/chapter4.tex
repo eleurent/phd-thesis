@@ -29,11 +29,12 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-Having detailed the \acp*{MDP} model in \Cref{part:1}, we now study how model-free \acl*{RL} algorithms can learn an optimal behavioural planning policy. In this chapter, we focus on the design of \emph{sample-efficient} learning architectures, tailored for dense traffic situations with many vehicles interacting. Such architectures should deal with a varying number of nearby vehicles, be invariant to the ordering chosen to describe them, while staying accurate and compact. We observe that the two most popular representations in the literature do not fit these criteria, and perform badly on an complex negotiation task. We propose an attention-based architecture that satisfies all these properties and explicitly accounts for the existing interactions between the traffic participants. We show that this architecture leads to significant performance gains, and is able to capture interactions patterns that can be visualized and qualitatively interpreted. 
+Having detailed the \acp*{MDP} model in \Cref{part:1}, we now study how model-free \acl*{RL} algorithms can learn an optimal behavioural planning policy. In this chapter, we focus on the design of \emph{sample-efficient} learning architectures, tailored for dense traffic situations. Such architectures should deal with a varying number of nearby vehicles, be invariant to the ordering chosen to describe them, while staying accurate and compact. We observe that the two most popular representations in the literature do not fit these criteria, and perform badly on an complex negotiation task. We propose an attention-based architecture that satisfies all these properties and explicitly accounts for the existing interactions between the traffic participants. We show that this architecture leads to significant performance gains, and is able to capture interactions patterns that can be visualized and qualitatively interpreted. 
 \minitocStartChapter{}
 
-Value-based \acl*{RL} algorithms such as Q-Learning \citep{Watkins1992} and its variants rely on an estimate of the optimal state-action value function $Q^\star$. Since the state space chosen in \Cref{chapter:3} is continuous, we must resort to function approximation. Thus, independently of how the state space $\cS$ was defined, the choice of how a state will be \textit{represented} as an input to the model plays an important part in the design of the system.
-In this chapter, we focus on how the vehicles are represented. In particular, we claim that the two most-widely used representations both suffer from different drawbacks: on the one hand, the \emph{list of features} representation is compact and accurate but has a varying-size and depends on the choice of ordering. On the other hand, the \emph{spatial grid} representation addresses these concerns but in return suffers from an accuracy-size trade-off.
+\section{Motivation}
+
+Value-based \acl*{RL} algorithms such as Q-Learning \citep{Watkins1992} and its variants rely on an estimate of the optimal state-action value function $Q^\star$. Since the state space chosen in \Cref{chapter:3} is continuous, we must resort to function approximation. Thus, independently of how the state space $\cS$ was defined, the choice of how a state will be \textit{represented} as an input to the model plays an important part in the design of the system. In particular, we claim that the two most-widely used representations both suffer from different drawbacks: on the one hand, the \emph{list of features} representation is compact and accurate but has a varying-size and depends on the choice of ordering. On the other hand, the \emph{spatial grid} representation addresses these concerns but in return suffers from an accuracy-size trade-off.
 
 Our contributions are the following: first, we propose an attention-based architecture for decision-making involving social interactions. This architecture allows to satisfy the variable-size and permutation invariance requirements even when using a \emph{list of features} representation. It also naturally accounts for interactions between the ego-vehicle and any other traffic participant.
 Second, we evaluate our model on a challenging intersection-crossing task involving up to 15 vehicles perceived simultaneously. We show that our proposed method provides significant quantitative improvements, and that it enables to capture interaction patterns in a way that is visually interpretable.
@@ -42,16 +43,16 @@ Second, we evaluate our model on a challenging intersection-crossing task involv
 
 \label{sec:background}
 
-\paragraph{Model-free deep reinforcement learning}
+\subsection{Value-based deep \acl*{RL}}
 
 We start by recalling standard model-free learning algorithms, with a focus on value-based methods. Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\pi^\star$ since $Q^\star = Q^{\pi^\star}$. However, the converse that $\pi^\star$ can be obtained from knowing $Q^\star$ is also true since
 \begin{proposition}[Optimality of the greedy policy, \citealt{Bellman56}]
 	\begin{leftbar}[propositionbar]
-	The greedy policy defined as
+	A greedy policy defined as
 	\begin{equation*}
-	\forall s\in\cS, \pi^\star\parentheses{s} \in \argmax_a Q^\star(s, a)
+	\forall s\in\cS, \pi^\star\parentheses{\cdot \mid s} = \delta_{a^\star},\,\text{where } {a^\star}\in \argmax_a Q^\star(s, a),
 	\end{equation*}
-	is optimal.
+	and $\delta_x = \delta(x-\cdot)$ denotes the Dirac distribution in $x$, is optimal.
 	\end{leftbar}
 \end{proposition}
 
@@ -68,7 +69,7 @@ Moreover, $\cT$ is a $\gamma$-contraction.
 
 Thus, since $Q^*$ is a fixed-point of a contracting operator, it can be computed by iteratively applying $\cT$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\cT$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The  \ac{DQN} algorithm \citep{Mnih2015} implements this idea by using a neural network model to represent the action-value function $Q$.
 
-\paragraph{Common traffic state representations}
+\subsection{Common traffic state representations}
 
 In order to apply a reinforcement learning algorithm such as \ac*{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. When social interactions are relevant to the decision, the state should at least contain a description of every nearby vehicle. A vehicle driving on a road can be described in the most general way by it's continuous position, heading and velocity. Then, the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N$ other vehicles can be described by a list of individual vehicle states
 \begin{equation}
@@ -105,8 +106,10 @@ In an occupancy grid, the $f$ features contains presence information (0-1) and a
 This permutation invariance property \eqref{eq:permutation} can also be implemented within the architecture of the policy $\pi$. A general technique to achieve this is to treat each entity similarly in the early stages -- e.g. through weight sharing -- before reducing them with a projection operator that is itself invariant to permutations, for instance a max-pooling as in \citep{Chen2017,Hoel2018} or an average as in \citep{Qi2016}. A particular instance of this idea is attention mechanisms.
 
 
-\paragraph{Attention mechanisms} {The attention architecture was introduced to enable neural networks to discover inter-dependencies within a variable number of inputs.
-	It has been used for pedestrian trajectory forecasting in~\cite{Vemula2018} with spatiotemporal graphs and in~\cite{Sadeghian2019CVPR} with spatial and social attention using a generative neural network. In~\cite{Sadeghian2018ECCV}, attention over top-view road scene images for car trajectory forecasting is used. Multi-head attention mechanism has been developed in~\cite{Vaswani2017} for sentence translation. In~\cite{Messaoud2019} a mechanism called non-local multi-head attention is developed. However, this is a spatial attention that does not allow vehicle-to-vehicle attention. In the present work, we use a multi-head social attention mechanism to capture vehicle-to-ego dependencies and build varying input size and permutation invariance into the policy model.}
+\subsection{Attention mechanisms} 
+
+The attention architecture was introduced to enable neural networks to discover interdepen\-dencies within a variable number of inputs.
+It has been used for pedestrian trajectory forecasting in~\cite{Vemula2018} with spatiotemporal graphs and in~\cite{Sadeghian2019CVPR} with spatial and social attention using a generative neural network. In~\cite{Sadeghian2018ECCV}, attention over top-view road scene images for car trajectory forecasting is used. Multi-head attention mechanism has been developed in~\cite{Vaswani2017} for sentence translation. In~\cite{Messaoud2019} a mechanism called non-local multi-head attention is developed. However, this is a spatial attention that does not allow vehicle-to-vehicle attention. In the present chapter, we use a multi-head social attention mechanism to capture vehicle-to-ego dependencies and build varying input size and permutation invariance into the policy model.
 
 \section{A social attention architecture}
 \label{sec:architecture}
@@ -378,6 +381,6 @@ The agent decisions regarding right of way are not enforced through rewards but 
 
 In the previous examples, we trained a policy tailored for left-turns only because it is the hardest direction with the most conflict points and the lowest priority level. Two individual policies tailored for right turns and driving straight can be trained as well, with similar results. Training a generic intersection policy would be less efficient without any prior information on where the ego-vehicle is headed. To remedy this problem, the destination could be added as additional features in \eqref{eq:coordinates}, for instance encoded as a desired direction $(d_x, d_y)$. This destination feature could also be used for other traffic participants to encode blinker information when available. This should result in a more efficient and generic policy.
 
-\section{Conclusion}
+\section{Chapter conclusion}
 
-In this work, we showed that the \emph{list of features} representation, commonly used to describe vehicles in autonomous driving literature, is not tailored for use in a function approximation setting, in particular with neural networks. These concerns can be addressed by the \emph{spatial grid} representation, but it comes at the price of an increased input size and loss of accuracy. In contrast, we proposed an attention-based neural network architecture to tackle the aforementioned issues of the \emph{list of features} representation without compromising either size or accuracy. This architecture enjoys a better performance on a simulated negotiation and intersection crossing task, and is also more interpretable thanks to the visualisation of the attention matrix. The resulting policy successfully learns to recognise and exploit the interaction patterns that govern the nearby traffic.
+In this chapter, we showed that the \emph{list of features} representation, commonly used to describe vehicles in autonomous driving literature, is not tailored for use in a function approximation setting, in particular with neural networks. These concerns can be addressed by the \emph{spatial grid} representation, but it comes at the price of an increased input size and loss of accuracy. In contrast, we proposed an attention-based neural network architecture to tackle the aforementioned issues of the \emph{list of features} representation without compromising either size or accuracy. This architecture enjoys a better performance on a simulated negotiation and intersection crossing task, and is also more interpretable thanks to the visualisation of the attention matrix. The resulting policy successfully learns to recognise and exploit the interaction patterns that govern the nearby traffic.
