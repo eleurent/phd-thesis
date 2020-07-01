@@ -1,6 +1,7 @@
 name: latexdiff
 on:
-  branches-ignore:
+  push:
+    branches-ignore:
       - '**'
 jobs:
   test:
