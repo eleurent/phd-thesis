@@ -1,0 +1,38 @@
+name: latexdiff
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout new version
+        uses: actions/checkout@v2
+        with:
+          path: new
+      - name: Checkout old version
+        uses: actions/checkout@v2
+        with:
+          path: old
+          ref: v1
+      - name: Install latexdiff
+        run: sudo apt-get install latexdiff
+      - name: Run latexdiff
+        run: latexdiff --flatten old/PhD_thesis__Edouard_Leurent.tex new/PhD_thesis__Edouard_Leurent.tex > new/difference.tex
+      - name: Compile LaTeX difference document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: difference.tex
+          working_directory: new/
+          args: -pdf -file-line-error -interaction=nonstopmode -shell-escape
+          extra_system_packages: "py-pygments"
+      - name: Check pdf files
+        run: |
+          file new/difference.pdf | grep -q ' PDF '
+      - name: Upload as an artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: latexdiff
+          path: new/difference.pdf
