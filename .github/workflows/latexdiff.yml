@@ -1,9 +1,7 @@
 name: latexdiff
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  branches-ignore:
+      - '**'
 jobs:
   test:
     runs-on: ubuntu-latest
