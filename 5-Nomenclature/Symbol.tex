@@ -1,0 +1,153 @@
+\definecolor{symbolcolor}{rgb}{0.5,0.,0}
+\newcommand{\var}[1]{\ensuremath{#1}}
+
+
+% --- MDP
+
+\newglossaryentry{state}{name={\var{s}},description={State},type=symbols}
+\newcommand{\s}{\gls{state}}
+
+\newglossaryentry{cS}{name={\var{\mathcal{S}}},description={Set of states},type=symbols}
+\newcommand{\cS}{\gls{cS}}
+
+\newglossaryentry{cA}{name={\var{\mathcal{A}}},description={Set of actions},type=symbols}
+\newcommand{\cA}{\gls{cA}}
+
+\newglossaryentry{reward}{name={\var{R}},description={Reward function},type=symbols}
+\newcommand{\R}{\gls{reward}}
+
+\newglossaryentry{transition}{name={\var{P}},description={Transition function},type=symbols}
+\newcommand{\Ps}{\gls{transition}}
+
+\newglossaryentry{discountfactor}{name={\var{\gamma}},description={Discount factor},type=symbols}
+\newcommand{\discount}{\gls{discountfactor}}
+
+% --- RL
+
+\newglossaryentry{policy}{name={\var{\pi}},description={Policy},type=symbols}
+\newcommand{\policy}{{\gls{policy}}}
+
+\newglossaryentry{optimalpolicy}{name={\var{\pi^\star}},description={Optimal policy},type=symbols}
+\newcommand{\optimalpolicy}{\gls{optimalpolicy}}
+
+\newglossaryentry{return}{name={\var{G^\pi}},description={Discounted return for the reward signal},type=symbols}
+\newcommand{\return}{\gls{return}}
+
+\newglossaryentry{V}{name={\var{V}},description={State value function},type=symbols}
+\newcommand{\V}{\gls{V}}
+
+\newglossaryentry{Q}{name={\var{Q}},description={State-action value function},type=symbols}
+\newcommand{\Q}{\gls{Q}}
+
+\newglossaryentry{params}{name={\var{\theta}},description={Parameters to learn},type=symbols}
+\newcommand{\params}{\gls{params}}
+
+
+% Probas
+\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac function},type=symbols}
+\newcommand{\dirac}{\gls{dirac}}
+
+\newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols}
+\newcommand{\normal}{\gls{normald}}
+
+\newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols}
+\newcommand{\binomial}{\gls{binomiald}}
+
+\newglossaryentry{features}{name={\var{\phi}},description={Features},type=symbols}
+\newcommand{\features}{\gls{features}}
+
+\newglossaryentry{maxit}{name={\var{K}},description={Number maximum of iterations},type=symbols}
+\newcommand{\maxiteration}{\gls{maxit}}
+
+\newglossaryentry{Tt}{name={\var{N}},description={Number of transitions},type=symbols}
+\newcommand{\T}{\gls{Tt}}
+
+\newglossaryentry{transpose}{name={\var{\top}},description={Matrix transposition},type=symbols}
+\newcommand{\transpose}{\gls{transpose}}
+
+\newglossaryentry{ttt}{name={\var{t}},description={Time index},type=symbols}
+\newcommand{\indextransition}{\gls{ttt}}
+
+
+\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={Augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols}
+\newcommand{\abo}{\gls{abo}}
+
+\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols}
+\newcommand{\bo}{\gls{bo}}
+
+
+\newglossaryentry{oQ}{name={\var{\overline{Q}}},description={Augmented Q-function},type=symbols}
+\newcommand{\oQ}{\gls{oQ}}
+
+\newglossaryentry{Qr}{name={\var{Q_r}},description={Reward Q-function},type=symbols}
+\newcommand{\Qr}{\gls{Qr}}
+
+\newglossaryentry{Qc}{name={\var{Q_c}},description={Constraint Q-function},type=symbols}
+\newcommand{\Qc}{\gls{Qc}}
+
+\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward},type=symbols}
+\newcommand{\oR}{\gls{oR}}
+
+\newglossaryentry{oV}{name={\var{\overline{V}}},description={Augmented value function},type=symbols}
+\newcommand{\oV}{\gls{oV}}
+
+\newglossaryentry{Vr}{name={\var{V_r}},description={Reward value function},type=symbols}
+\newcommand{\Vr}{\gls{Vr}}
+
+\newglossaryentry{Vc}{name={\var{V_c}},description={Constraint value function},type=symbols}
+\newcommand{\Vc}{\gls{Vc}}
+
+\newglossaryentry{ocS}{name={\var{\overline{\mathcal{S}}}},description={Set of augmented states},type=symbols}
+\newcommand{\ocS}{\gls{ocS}}
+
+\newglossaryentry{ocA}{name={\var{\overline{\mathcal{A}}}},description={Set of augmented actions},type=symbols}
+\newcommand{\ocA}{\gls{ocA}}
+
+\newglossaryentry{cBB}{name={\var{\mathscr{B}}},description={Set of admissible budgets},type=symbols}
+\newcommand{\budgetspace}{\gls{cBB}}
+
+\newglossaryentry{piii}{name={\var{\overline{\Pi}}},description={Set of budgeted policies},type=symbols}
+\newcommand{\policies}{\gls{piii}}
+
+\newglossaryentry{cU}{name={\var{\mathcal{U}}},description={Constrained action space},type=symbols}
+\newcommand{\cU}{\gls{cU}}
+
+\newglossaryentry{augmentedtransition}{name={\var{\overline{P}}},description={Augmented transition function},type=symbols}
+\newcommand{\augmentedtransition}{\gls{augmentedtransition}}
+
+\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={Dataset},type=symbols}
+\newcommand{\cD}{\gls{cD}}
+
+\newglossaryentry{constraintx}{name={\var{C}},description={Constraint function},type=symbols}
+\newcommand{\constraint}{\gls{constraintx}}
+
+\newglossaryentry{constraintreturn}{name={\var{G_c}},description={Discounted return for the constraint signal},type=symbols}
+\newcommand{\constraintreturn}{\gls{constraintreturn}}
+
+\newglossaryentry{augmentedreturn}{name={\var{\overline{G}}},description={Augmented return},type=symbols}
+\newcommand{\augmentedreturn}{\gls{augmentedreturn}}
+
+\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={Set of probability measures},type=symbols}
+\newcommand{\cM}{\gls{cM}}
+
+\newglossaryentry{budgetedpolicyy}{name={\var{\overline{\pi}}},description={Budgeted policy},type=symbols}
+\newcommand{\budgetedpolicy}{\gls{budgetedpolicyy}}
+
+\newglossaryentry{optimalbudgetedpolicy}{name={\var{\overline{\pi}^\star}},description={Optimal budgeted policy},type=symbols}
+\newcommand{\optimalbudgetedpolicy}{\gls{optimalbudgetedpolicy}}
+
+\newglossaryentry{budgetaction}{name={\var{\beta_a}},description={Budget allocated to an action},type=symbols}
+\newcommand{\budgetaction}{\gls{budgetaction}}
+
+\newglossaryentry{nextbudget}{name={\var{\beta'}},description={Next budget},type=symbols}
+\newcommand{\nextbudget}{\gls{nextbudget}}
+
+\newglossaryentry{budget}{name={\var{\beta}},description={Budget},type=symbols}
+\newcommand{\budget}{\gls{budget}}
+
+\newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator},type=symbols}
+\newcommand{\projection}{\gls{projection}}
+
+\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols}
+\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
+

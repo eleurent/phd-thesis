@@ -1091,37 +1091,38 @@ wish to left align your text}
 }
 
 
-% ******************************* Nomenclature *********************************
-\RequirePackage[intoc]{nomencl}
-\makenomenclature
-\renewcommand{\nomgroup}[1]{%
-\ifthenelse{\equal{#1}{L}}{\item[\textbf{Roman symbols}]}{%
-\ifthenelse{\equal{#1}{G}}{\item[\textbf{Greek symbols}]}{%
-\ifthenelse{\equal{#1}{A}}{\item[\textbf{Acronyms and Abbreviations}]}{%
-\ifthenelse{\equal{#1}{E}}{\item[\textbf{Exponents}]}{%
-\ifthenelse{\equal{#1}{I}}{\item[\textbf{Indices}]}{%
-\ifthenelse{\equal{#1}{O}}{\item[\textbf{Mathematical notations}]}
-{}
-}% matches mathematical symbols > O
-}% matches Subscripts           > I
-}% matches Superscripts         > E
-}% matches Abbreviations        > A
-}% matches Greek Symbols        > G
-}% matches Roman Symbols        > L
+% % ******************************* Nomenclature *********************************
+% \RequirePackage[intoc]{nomencl}
+% \makenomenclature
+% \renewcommand{\nomgroup}[1]{%
+% \ifthenelse{\equal{#1}{L}}{\item[\textbf{Roman symbols}]}{%
+% \ifthenelse{\equal{#1}{G}}{\item[\textbf{Greek symbols}]}{%
+% \ifthenelse{\equal{#1}{A}}{\item[\textbf{Acronyms and Abbreviations}]}{%
+% \ifthenelse{\equal{#1}{E}}{\item[\textbf{Exponents}]}{%
+% \ifthenelse{\equal{#1}{I}}{\item[\textbf{Indices}]}{%
+% \ifthenelse{\equal{#1}{O}}{\item[\textbf{Mathematical notations}]}
+% {}
+% }% matches mathematical symbols > O
+% }% matches Subscripts           > I
+% }% matches Superscripts         > E
+% }% matches Abbreviations        > A
+% }% matches Greek Symbols        > G
+% }% matches Roman Symbols        > L
 
-% To add nomenclature in the header
-\renewcommand{\nompreamble}{\markboth{\nomname}{\nomname}}
+% % To add nomenclature in the header
+% \renewcommand{\nompreamble}{\markboth{\nomname}{\nomname}}
 
-% Add nomenclature to contents and print out nomenclature
-\newcommand{\printnomencl}[1][]{
-\ifthenelse{\equal {#1}{}}
-{\printnomenclature}
-{\printnomenclature[#1]}
-%\addcontentsline{toc}{chapter}{\nomname}
-}
+% % Add nomenclature to contents and print out nomenclature
+% \newcommand{\printnomencl}[1][]{
+% \ifthenelse{\equal {#1}{}}
+% {\printnomenclature}
+% {\printnomenclature[#1]}
+% %\addcontentsline{toc}{chapter}{\nomname}
+% }
+\newcommand{\printnomencl}{}
 
 
-% ***************************** Create the index *******************************
+% % ***************************** Create the index *******************************
 \ifPHD@index
     \RequirePackage{makeidx}
     \makeindex
