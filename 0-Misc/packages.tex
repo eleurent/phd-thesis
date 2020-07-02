@@ -91,55 +91,27 @@
 % --- Glossaries
 \usepackage[acronym,toc,symbols]{glossaries-extra}
 \makeglossaries
-\GlsXtrEnableLinkCounting{general,abbreviation} % Link first occurence
-\GlsXtrEnableLinkCounting[chapter]{acronym}  % Link first occurence in each chapter
+\setabbreviationstyle{long-short}
+\setabbreviationstyle[algorithm]{long-short-sc}
+\GlsXtrEnableInitialTagging{acronym,abbreviation}{\itag}
+\glssetcategoryattribute{abbreviation}{glossname}{uc}
 
+\GlsXtrEnableLinkCounting{abbreviation} % Link first occurence
+\GlsXtrEnableLinkCounting[chapter]{acronym,general}  % Link first occurence in each chapter
 \renewcommand*{\glslinkpresetkeys}{% % disable hyperlink if link count is greater than 1:
 	\ifnum\GlsXtrLinkCounterValue{\glslabel}>1
 	\setkeys{glslink}{hyper=false}%
 	\fi
 }
 
-\GlsXtrEnableInitialTagging{acronym,abbreviation}{\itag}
-\glssetcategoryattribute{abbreviation}{glossname}{uc}
-%\setabbreviationstyle[acronym]{long-short}
-\setabbreviationstyle{long-short}
+
 
 
 \usepackage{makeidx} % Required to make an index
 \makeindex
-
-
-
-
-
 \input{5-Nomenclature/Nomenclature}
 \input{5-Nomenclature/Symbol}
 
-%
-%\usepackage{nomencl}
-%\renewcommand\nomname{List of Symbols}
-%\makenomenclature
-
-% --- Acronyms
-%\usepackage[printonlyused,withpage]{acronym}
-%\makeatletter % starred version = no hyperlink
-
-\newcommand*{\ac}{}
-
-\newcommand*{\acp}{}
-
-\newcommand*{\acl}{}
-%\AtBeginDocument{%
-%	\renewcommand*\AC@hyperlink{%
-%		\ifAC@starred
-%		\expandafter\@secondoftwo
-%		\else
-%		\expandafter\hyperlink
-%		\fi
-%	}%
-%}
-%\makeatother
 
 % --- Bibliography
 % Add `custombib' in the document class option to use this section

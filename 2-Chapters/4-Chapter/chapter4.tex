@@ -45,12 +45,12 @@ Second, we evaluate our model on a challenging intersection-crossing task involv
 
 \subsection{Value-based deep \glsxtrlong{RL}}
 
-We start by recalling standard model-free learning algorithms, with a focus on value-based methods. Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\pi^\star$ since $Q^\star = Q^{\pi^\star}$. However, the converse that $\pi^\star$ can be obtained from knowing $Q^\star$ is also true since
+We start by recalling standard model-free learning algorithms, with a focus on value-based methods. Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\optimalpolicy$ since $Q^\star = Q^{\optimalpolicy}$. However, the converse that $\optimalpolicy$ can be obtained from knowing $Q^\star$ is also true since
 \begin{proposition}[Optimality of the greedy policy, \citealt{Bellman56}]
 	\begin{leftbar}[propositionbar]
 	A greedy policy defined as
 	\begin{equation*}
-	\forall s\in\cS, \pi^\star\parentheses{\cdot \mid s} = \delta_{a^\star},\,\text{where } {a^\star}\in \argmax_a Q^\star(s, a),
+	\forall s\in\cS, \optimalpolicy\parentheses{\cdot \mid s} = \delta_{a^\star},\,\text{where } {a^\star}\in \argmax_a Q^\star(s, a),
 	\end{equation*}
 	and $\delta_x = \delta(x-\cdot)$ denotes the Dirac distribution in $x$, is optimal.
 	\end{leftbar}
