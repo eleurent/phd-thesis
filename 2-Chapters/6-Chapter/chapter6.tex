@@ -17,7 +17,7 @@
 
 \abstractStartChapter{}%
 
-In a \emph{Markov Decision Process} (MDP), an agent observes its current state $s$ from a state space $S$ and picks an action $a$ from an action space $A$, before transitioning to a next state $s'$ drawn from a transition kernel $\probability{s'|s,a}$ and receiving a bounded reward $r\in[0, 1]$ drawn from a reward kernel $\probability{r|s, a}$. The agent must act so as to optimise its expected cumulative discounted reward $\expectedvalue \sum_t \gamma^t r_t$, also called expected \emph{return}, where $\gamma\in[0,1)$ is the discount factor. In \emph{Online Planning} \cite{Munos2014}, we do not consider that these transition and reward kernels are known as in \emph{Dynamic Programming} \citep{Bellman1957}, but rather only assume access to the MDP through a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \probability{s'|s,a}$ and reward $r\sim\probability{r|s, a}$ when queried. Finally, we consider a \emph{fixed-budget} setting where the generative model can only be called a maximum number of times, called the budget $n$. 
+In a \emph{Markov Decision Process} (MDP), an agent observes its current state $s$ from a state space $S$ and picks an action $a$ from an action space $A$, before transitioning to a next state $s'$ drawn from a transition kernel $\probability{s'|s,a}$ and receiving a bounded reward $r\in[0, 1]$ drawn from a reward kernel $\probability{r|s, a}$. The agent must act so as to optimise its expected cumulative discounted reward $\expectedvalue \sum_t \discount^t r_t$, also called expected \emph{return}, where $\discount\in[0,1)$ is the discount factor. In \emph{Online Planning} \cite{Munos2014}, we do not consider that these transition and reward kernels are known as in \emph{Dynamic Programming} \citep{Bellman1957}, but rather only assume access to the MDP through a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \probability{s'|s,a}$ and reward $r\sim\probability{r|s, a}$ when queried. Finally, we consider a \emph{fixed-budget} setting where the generative model can only be called a maximum number of times, called the budget $n$. 
 
 \minitocStartChapter{}
 
@@ -43,7 +43,7 @@ During the planning process, the agent iteratively selects sequences of actions 
 After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in A^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$
 \begin{equation}
 \label{eq:value}
-V(a) = \sup_{b\in aA^\infty} \sum_{t=1}^\infty \gamma^t\mu(b_{1:t}),
+V(a) = \sup_{b\in aA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}),
 \end{equation}
 
 
@@ -56,8 +56,8 @@ In this section we present \KLOLOP, a combination of the \OLOP algorithm of \cit
 
 First, following \OLOP, the total sample budget $n$ is split in $M$ trajectories of length $L$ in the following way: 
 \begin{align*}
-&M\text{ is the largest integer such that } M \ceil{\log M/(2 \log 1/\gamma)} \leq n;\\
-&L= \ceil{\log M / (2 \log 1/\gamma)}.
+&M\text{ is the largest integer such that } M \ceil{\log M/(2 \log 1/\discount)} \leq n;\\
+&L= \ceil{\log M / (2 \log 1/\discount)}.
 \end{align*}
 The look-ahead tree of depth $L$ is denoted $\Tau = \sum_{h=0}^L A^h$.
 
@@ -91,12 +91,12 @@ These upper-bounds $U^{\mu}_a$ for intermediate rewards finally enable us to def
 
 \begin{equation}
 \label{eq:Ua}
-U_a(m) \eqdef \sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma}
+U_a(m) \eqdef \sum_{t=1}^h \discount^t U^{\mu}_{a_{1:t}}(m) + \frac{\discount^{h+1}}{1-\discount}
 \end{equation}
 
 
 \noindent
-where $\frac{\gamma^{h+1}}{1-\gamma}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in A^L$ by taking
+where $\frac{\discount^{h+1}}{1-\discount}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in A^L$ by taking
 
 
 \begin{equation}
@@ -168,8 +168,8 @@ However, this property is only true if the upper-bound defined in \eqref{eq:u_mu
 	
 	
 	\begin{align*}
-	U_{a_{1:h+1}}(m) - U_{a_{1:h}}(m) &= \gamma^{h+1}U^{\mu}_{a_{1:h+1}}(m) + \frac{\gamma^{h+2}}{1-\gamma} - \frac{\gamma^{h+1}}{1-\gamma}\\
-	&= \gamma^{h+1}(\underbrace{U^{\mu}_{a_{1:h+1}}(m)}_{\in [0, 1]} - 1) \leq 0
+	U_{a_{1:h+1}}(m) - U_{a_{1:h}}(m) &= \discount^{h+1}U^{\mu}_{a_{1:h+1}}(m) + \frac{\discount^{h+2}}{1-\discount} - \frac{\discount^{h+1}}{1-\discount}\\
+	&= \discount^{h+1}(\underbrace{U^{\mu}_{a_{1:h+1}}(m)}_{\in [0, 1]} - 1) \leq 0
 	%&\leq 0
 	\end{align*}
 	
@@ -229,7 +229,7 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 
 \begin{equation*}
 \label{eq:kappa}
-\kappa_2 \eqdef \limsup_{h\rightarrow\infty}{\left|\left\{a\in a^H:V(a) \geq V - 2\frac{\gamma^{h+1}}{1-\gamma}\right\}\right|^{1/h}}
+\kappa_2 \eqdef \limsup_{h\rightarrow\infty}{\left|\left\{a\in a^H:V(a) \geq V - 2\frac{\discount^{h+1}}{1-\discount}\right\}\right|^{1/h}}
 \end{equation*}
 
 \begin{theorem}[Sample complexity]
@@ -240,8 +240,8 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 	
 	\begin{equation*}
 	\expectedvalue r_n = \begin{cases}
-	\tilde{0}\left(n^{-\frac{\log 1/\gamma}{\log \kappa'}}\right), & \text{if}\ \gamma\sqrt{\kappa'} > 1 \\
-	\tilde{0}\left(n^{-\frac{1}{2}}\right), & \text{if}\ \gamma\sqrt{\kappa'} \leq 1
+	\tilde{0}\left(n^{-\frac{\log 1/\discount}{\log \kappa'}}\right), & \text{if}\ \discount\sqrt{\kappa'} > 1 \\
+	\tilde{0}\left(n^{-\frac{1}{2}}\right), & \text{if}\ \discount\sqrt{\kappa'} \leq 1
 	\end{cases}
 	\end{equation*}
 	\end{leftbar}
@@ -271,8 +271,8 @@ We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which 
 
 \begin{algorithm}[tp]
 	\DontPrintSemicolon
-	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\gamma) \leq n$\;
-	Let $L = \log M / (2 \log 1/\gamma)$\;
+	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\discount) \leq n$\;
+	Let $L = \log M / (2 \log 1/\discount)$\;
 	Let $\Tau_0^+ = \LL_0^+ = \{\emptyset\}$\;
 	\For{each episode $m = 1, \cdots, M$}{
 		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau_{m-1}^+$\;
@@ -329,7 +329,7 @@ We start by recalling their notations.
 Let $1 \leq H \leq L$ and $a^* \in A^L$ such that $V(a^*) = V$.
 Considering sequences of actions of length $1 \leq h \leq H$, we define the subset $\mathcal{I}_h$ of near-optimal sequences and the subset $\mathcal{J}$ of sub-optimal sequences that were near-optimal at depth $h-1$
 \begin{equation*}
-\mathcal{I}_h = \left\{a \in A^h: V - V(a) \leq 2\frac{\gamma^{h+1}}{1-\gamma}\right\}, \mathcal{J}_h = \left\{a \in A^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
+\mathcal{I}_h = \left\{a \in A^h: V - V(a) \leq 2\frac{\discount^{h+1}}{1-\discount}\right\}, \mathcal{J}_h = \left\{a \in A^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
 \end{equation*}
 
 By convention, $\mathcal{I}_0 = \{\emptyset\}$. From the definition of $\kappa_2$, we have that for any $\kappa'>\kappa_2$, there exists a constant C such that for any $h \geq 1$,
@@ -340,13 +340,13 @@ Hence, we also have $|\mathcal{J}_h| \leq K|\mathcal{I}_{h-1}| = O({\kappa'}^h)$
 
 Now, for $1\leq m \leq M$, $a \in A^t$ with $t \leq h$, $h'<h$, we define the set $\mathcal{P}^a_{h,h'}(m)$ of suffixes of $a$ in $\mathcal{J}_h$ that have been played at least a certain number of times
 \begin{equation*}
-\mathcal{P}^a_{h,h'}(m) = \left\{ b\in a A^{h-t}\cap \mathcal{J}_h : T_b(m) \geq \diff{2f(m)}(h+1)^2\gamma^{2(h'-h+1)} + 1 \right\}
+\mathcal{P}^a_{h,h'}(m) = \left\{ b\in a A^{h-t}\cap \mathcal{J}_h : T_b(m) \geq \diff{2f(m)}(h+1)^2\discount^{2(h'-h+1)} + 1 \right\}
 \end{equation*}
 
 and the random variable
 
 \begin{equation*}
-\tau^a_{h,h'}(m) = \mathbbm{1}\{T_a(m-1) < \diff{2f(m)}(h+1)^2\gamma^{2(h'-h+1)} + 1 \leq T_a(m)\}
+\tau^a_{h,h'}(m) = \mathbbm{1}\{T_a(m-1) < \diff{2f(m)}(h+1)^2\discount^{2(h'-h+1)} + 1 \leq T_a(m)\}
 \end{equation*}
 
 \begin{lemma}[Regret and sub-optimal pulls]
@@ -354,7 +354,7 @@ and the random variable
 	\begin{leftbar}[lemmabar]
 	The following holds true:
 	\begin{equation*}
-	r_n \leq \frac{2K \gamma^{H+1}}{1-\gamma} +\frac{3K}{M}\sum_{h=1}^H\sum_{a\in\mathcal{J}_h}\frac{\gamma^h}{1-\gamma}T_a(M)
+	r_n \leq \frac{2K \discount^{H+1}}{1-\discount} +\frac{3K}{M}\sum_{h=1}^H\sum_{a\in\mathcal{J}_h}\frac{\discount^h}{1-\discount}T_a(M)
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
@@ -375,13 +375,13 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\begin{equation}
 	\tag{LCB violation}
 	\label{eq:cond-lkl}
-	\sum_{t=1}^h \gamma^t \diff{L^{\mu}_{a_{1:t}}(m)} \geq V(a),
+	\sum_{t=1}^h \discount^t \diff{L^{\mu}_{a_{1:t}}(m)} \geq V(a),
 	\end{equation}
 	or
 	\begin{equation}
 	\tag{Large CI}
 	\label{eq:cond-dkl}
-	\sum_{t=1}^h \gamma^t\diff{\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right)} > \frac{\gamma^{h+1}}{1-\gamma}
+	\sum_{t=1}^h \discount^t\diff{\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right)} > \frac{\discount^{h+1}}{1-\discount}
 	\end{equation}
 	\end{leftbar}
 \end{lemma}
@@ -391,18 +391,18 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
 	\label{eq:ukl-verifie}
-	\sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma} = U_a(m) \geq U_{a^*}(m) \geq V
+	\sum_{t=1}^h \discount^t U^{\mu}_{a_{1:t}}(m) + \frac{\discount^{h+1}}{1-\discount} = U_a(m) \geq U_{a^*}(m) \geq V
 	\end{equation}
 	Assume that \eqref{eq:cond-lkl} is false, then
 	\begin{equation}
 	\label{eq:lkl-verifie}
-	\sum_{t=1}^h \gamma^t L^{\mu}_{a_{1:t}}(m) < V(a),
+	\sum_{t=1}^h \discount^t L^{\mu}_{a_{1:t}}(m) < V(a),
 	\end{equation}
 	By taking the difference \eqref{eq:ukl-verifie} - \eqref{eq:lkl-verifie}, 
 	\begin{equation*}
-	\sum_{t=1}^h \gamma^t \left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right) + \frac{\gamma^{h+1}}{1-\gamma} > V - V(a)
+	\sum_{t=1}^h \discount^t \left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right) + \frac{\discount^{h+1}}{1-\discount} > V - V(a)
 	\end{equation*}
-	But $a \in \mathcal{J}_h$, so $V - V(a) \geq \frac{2\gamma^{h+1}}{1-\gamma}$, which yields \eqref{eq:cond-dkl} and concludes the proof.
+	But $a \in \mathcal{J}_h$, so $V - V(a) \geq \frac{2\discount^{h+1}}{1-\discount}$, which yields \eqref{eq:cond-dkl} and concludes the proof.
 \end{proof}
 
 \diff{In the following lemma, for each episode $m$ we bound the probability of \eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} by a desired confidence level $\delta_m$, whose choice we postpone until the end of this proof. For now, we simply assume that we picked a function $f$ that satisfies $f(m)\log (m) e^{-f(m)} = O(\delta_m)$. We also denote $\Delta_M = \sum_{m=1}^{M}\delta_m$.}
@@ -417,10 +417,10 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	Since $V \leq \sum_{t=1}^h \gamma^t \mu(a^*_{1:t}) + \frac{\gamma^{h+1}}{1-\gamma}$, we have,
+	Since $V \leq \sum_{t=1}^h \discount^t \mu(a^*_{1:t}) + \frac{\discount^{h+1}}{1-\discount}$, we have,
 	\begin{align*}
 	\probability{\eqref{eq:cond-ukl}} &=  \probability{U_{a^*}(m) \leq V}\\
-	&= \probability{\sum_{t=1}^L \gamma^t U^{\mu}_{a^*_{1:t}}(m) \leq \sum_{t=1}^L \gamma^t \mu(a^*_{1:t})}\\
+	&= \probability{\sum_{t=1}^L \discount^t U^{\mu}_{a^*_{1:t}}(m) \leq \sum_{t=1}^L \discount^t \mu(a^*_{1:t})}\\
 	&\leq \probability{\exists 1\leq t \leq L : U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})} \\
 	&\leq \sum_{t=1}^L\probability{U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})}
 	\end{align*}
@@ -476,12 +476,12 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	Let $1 \leq h \leq L$, $a\in \mathcal{J}_h$ and $0 \leq h' < h$. Then  \eqref{eq:cond-dkl} is not satisfied if the following propositions are true:
 	\begin{equation}
 	\label{eq:sampled-enough-h}
-	\forall 0\leq t\leq h', T_{a_{1:t}}(m) \geq \diff{2f(m)}(h+1)^2\gamma^{2(t-h-1)}
+	\forall 0\leq t\leq h', T_{a_{1:t}}(m) \geq \diff{2f(m)}(h+1)^2\discount^{2(t-h-1)}
 	\end{equation}
 	and
 	\begin{equation}
 	\label{eq:sampled-enough}
-	T_{a}(m) \geq \diff{2f(m)}(h+1)^2\gamma^{2(h'-h-1)}
+	T_{a}(m) \geq \diff{2f(m)}(h+1)^2\discount^{2(h'-h-1)}
 	\end{equation}
 	\end{leftbar}
 \end{lemma}
@@ -504,9 +504,9 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	
 	Now, assume that \eqref{eq:sampled-enough-h} and \eqref{eq:sampled-enough} are true. Then, we clearly have
 	\begin{align*}
-	\sum_{t=1}^h \gamma^t\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right) &\leq \sum_{t=1}^{h'} \gamma^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} + \sum_{t=h'+1}^h \gamma^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} \\
-	&\leq \frac{1}{(h+1)\gamma^{-h-1}} \sum_{t=1}^{h'} 1 + \frac{1}{(h+1)\gamma^{-h-1}} \sum_{t=h'+1}^h \gamma^{t-h'}  \\
-	&\leq \frac{\gamma^{h+1}}{h+1} \left( h' + \frac{\gamma}{1-\gamma} \right)\leq \frac{\gamma^{h+1}}{1-\gamma}\,.
+	\sum_{t=1}^h \discount^t\left(U^{\mu}_{a_{1:t}}(m) - L^{\mu}_{a_{1:t}}(m)\right) &\leq \sum_{t=1}^{h'} \discount^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} + \sum_{t=h'+1}^h \discount^t \sqrt{\frac{2f(m)}{T_{a_{1:t}}(m)}} \\
+	&\leq \frac{1}{(h+1)\discount^{-h-1}} \sum_{t=1}^{h'} 1 + \frac{1}{(h+1)\discount^{-h-1}} \sum_{t=h'+1}^h \discount^{t-h'}  \\
+	&\leq \frac{\discount^{h+1}}{h+1} \left( h' + \frac{\discount}{1-\discount} \right)\leq \frac{\discount^{h+1}}{1-\discount}\,.
 	\end{align*}
 \end{proof}
 
@@ -518,7 +518,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	
 	\begin{equation}
 	\label{eq:P-min-size}
-	\exists 1\leq t \leq h': |\mathcal{P}_{h,h'}^{a_{1:t}}(m)| < \gamma^{2(t-h')}
+	\exists 1\leq t \leq h': |\mathcal{P}_{h,h'}^{a_{1:t}}(m)| < \discount^{2(t-h')}
 	\end{equation}
 	\end{leftbar}
 \end{lemma}
@@ -529,7 +529,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	Let $1\leq h\leq L$ and $0 \leq h' < h$. Then the following holds true,
 	
 	\begin{equation*}
-	\expectedvalue |\mathcal{P}^\emptyset_{h,h'}(M)| = \tilde{O}\left(\gamma^{-2h'}\mathbbm{1}_{h'>0}\sum_{t=0}^{h'}(\gamma^2 \kappa')^t + (\kappa')^h\diff{\Delta_M} \right).
+	\expectedvalue |\mathcal{P}^\emptyset_{h,h'}(M)| = \tilde{O}\left(\discount^{-2h'}\mathbbm{1}_{h'>0}\sum_{t=0}^{h'}(\discount^2 \kappa')^t + (\kappa')^h\diff{\Delta_M} \right).
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
@@ -539,27 +539,27 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\begin{leftbar}[lemmabar]
 	Let $1\leq h\leq L$. The following holds true,
 	\begin{equation*}
-	\expectedvalue \sum_{a\in \mathcal{J}_h} T_a(M) = \tilde{O}\left(\gamma^{-2h} + \diff{(\kappa')^h(1+M\Delta_M+\Delta_M) + (\kappa'\gamma^{-2})^h\Delta_M}\right)
+	\expectedvalue \sum_{a\in \mathcal{J}_h} T_a(M) = \tilde{O}\left(\discount^{-2h} + \diff{(\kappa')^h(1+M\Delta_M+\Delta_M) + (\kappa'\discount^{-2})^h\Delta_M}\right)
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
 
 Thus by combining Lemma \ref{lemma:expected-regret} and \ref{lemma:expected-plays-count} we obtain
 \begin{equation*}
-\expectedvalue r_n = \tilde{O}\left(\gamma^H + \gamma^{-H}M^{-1} + (\kappa' \gamma)^{H}M^{-1}\diff{(1+M\Delta_M+\Delta_M)} + (\kappa')^H\gamma^{-H}M^{-1}\diff{\Delta_M}\right)
+\expectedvalue r_n = \tilde{O}\left(\discount^H + \discount^{-H}M^{-1} + (\kappa' \discount)^{H}M^{-1}\diff{(1+M\Delta_M+\Delta_M)} + (\kappa')^H\discount^{-H}M^{-1}\diff{\Delta_M}\right)
 \end{equation*}
 Finally,
 \begin{itemize}
-	\item if $\kappa'\gamma^2 \leq 1$, we take $H = \floor{\log M / (2\log 1/\gamma)}$ to obtain
+	\item if $\kappa'\discount^2 \leq 1$, we take $H = \floor{\log M / (2\log 1/\discount)}$ to obtain
 	\begin{equation*}
-	\expectedvalue r_n = \tilde{O}\left(M^{-\frac{1}{2}} + M^{-\frac{1}{2}} + M^{-\frac{1}{2}}M^{\frac{\log \kappa'}{2\log 1/\gamma}} \diff{\Delta_M}\right)
+	\expectedvalue r_n = \tilde{O}\left(M^{-\frac{1}{2}} + M^{-\frac{1}{2}} + M^{-\frac{1}{2}}M^{\frac{\log \kappa'}{2\log 1/\discount}} \diff{\Delta_M}\right)
 	\end{equation*}
-	For the last term to be of the same order of the others, we need to have $\Delta_M = O(M^{-\frac{\log \kappa'}{2\log 1/\gamma}})$. Since $\kappa'\gamma^2 \leq 1$, we achieve this by taking \diff{$\Delta_M = O(M^{-1})$}.
-	\item if $\kappa'\gamma^2 > 1$, we take $H = \floor{\log M / \log \kappa'}$ to obtain
+	For the last term to be of the same order of the others, we need to have $\Delta_M = O(M^{-\frac{\log \kappa'}{2\log 1/\discount}})$. Since $\kappa'\discount^2 \leq 1$, we achieve this by taking \diff{$\Delta_M = O(M^{-1})$}.
+	\item if $\kappa'\discount^2 > 1$, we take $H = \floor{\log M / \log \kappa'}$ to obtain
 	\begin{equation*}
-	\expectedvalue r_n = \tilde{O}\left(M^{\frac{\log \gamma}{\log \kappa'}} + M^{\frac{\log \gamma}{\log \kappa'}}\diff{(1+M\Delta_M+\Delta_M)} + M^{\frac{\log 1/\gamma}{\log \kappa'}}\diff{\Delta_M}\right)
+	\expectedvalue r_n = \tilde{O}\left(M^{\frac{\log \discount}{\log \kappa'}} + M^{\frac{\log \discount}{\log \kappa'}}\diff{(1+M\Delta_M+\Delta_M)} + M^{\frac{\log 1/\discount}{\log \kappa'}}\diff{\Delta_M}\right)
 	\end{equation*}
-	Since $\kappa'\gamma^2 > 1$, the dominant term in this sum is $M^{\frac{\log \gamma}{\log \kappa'}}M\Delta_M$. Again, taking \diff{$\Delta_M = O(M^{-1})$} yields the claimed bounds.
+	Since $\kappa'\discount^2 > 1$, the dominant term in this sum is $M^{\frac{\log \discount}{\log \kappa'}}M\Delta_M$. Again, taking \diff{$\Delta_M = O(M^{-1})$} yields the claimed bounds.
 \end{itemize}
 Thus, the claimed bounds are obtained in both cases as long as we can impose $\Delta_M = O(M^{-1})$, that is, find a sequence $(\delta_m)_{1\leq m\leq M}$ and a function $f$ verifying:
 \begin{equation}
@@ -581,7 +581,7 @@ We have performed some numerical experiments to evaluate and compare the followi
 	\item \texttt{KL-OLOP}(1): an aggressive version of \KLOLOP where we used $f_1(m) = \log M$ instead of $f_2(m)$. This threshold function makes the upper bounds even tighter, at the cost of an increased probability of violation. Hence, we expect this solution to be more efficient in close-to-deterministic environments. However, since we have no theoretical guarantee concerning its regret as we do with $\KLOLOP$, it might not be conservative enough and converge too early to a suboptimal sequence, especially in highly stochastic environments.
 \end{itemize}
 
-They are evaluated on the following tasks, using a discount factor of $\gamma=0.8$:
+They are evaluated on the following tasks, using a discount factor of $\discount=0.8$:
 \begin{itemize}
 	\item A \href{https://github.com/eleurent/highway-env/}{highway driving} environment \citep{highway-env}: a vehicle is driving on a road randomly populated with other slower drivers, and must make their way as fast as possible while avoiding collisions by choosing on the the following actions: \texttt{change-lane-left}, \texttt{change-lane-right}, \texttt{no-op}, \texttt{faster}, \texttt{slower}.
 	\item A \href{https://github.com/maximecb/gym-minigrid}{gridworld} environment \citep{gym_minigrid}: the agent navigates in a randomly-generated gridworld composed of either empty cells, terminal lava cells, and goal cells where a reward of $1$ is collected at the first visit.
@@ -636,8 +636,8 @@ $$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \l
 
 and forming recursive upper and lower confidence bounds in the form
 \begin{align*}
-U_{h}(s) &= \max_{a\in A} \left[u_t(s,a) + \gamma \max_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a) U_{h+1}(s')\right], \\
-L_{h}(s) &= \max_{a\in A} \left[\ell_t(s,a) + \gamma \min_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a)L_{h+1}(s')\right].
+U_{h}(s) &= \max_{a\in A} \left[u_t(s,a) + \discount \max_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a) U_{h+1}(s')\right], \\
+L_{h}(s) &= \max_{a\in A} \left[\ell_t(s,a) + \discount \min_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a)L_{h+1}(s')\right].
 \end{align*}
 
 \section{Graph-based optimistic planning}
@@ -708,7 +708,7 @@ A popular approach is to follow the principle of \emph{Optimism in the Face of U
 Following the OFU principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010open, Busoniu2012optimistic}.
 
 For instance, since we assume that the rewards are bounded in [0, 1], trivial bounds on $V(s)$ are
-$0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
+$0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
 
 \begin{definition}[Bellman optimality operator]
 	\begin{leftbar}[defnbar]
@@ -717,7 +717,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 	\begin{equation}
 	\label{eq:bellman-tree}
 	B_n(f)(a) \eqdef \begin{cases}
-	\max_{b\in A} r(s(a), b) + \gamma f({ab})
+	\max_{b\in A} r(s(a), b) + \discount f({ab})
 	& \text{if $a\in\inte{\Tau}_n$.} \\
 	f(a) & \text{if $a\in\ext{\Tau}_n$;}
 	\end{cases}
@@ -727,7 +727,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\gamma})$. But these trivial bounds ar
 	\begin{equation}
 	\label{eq:bellman-graph}
 	\cB_n(f)(s) \eqdef \begin{cases}
-	\max_{b\in A} r(s, b) + \gamma f(P(s,b))
+	\max_{b\in A} r(s, b) + \discount f(P(s,b))
 	& \text{if $s\in\inte{\cG}_n$.} \\
 	f(s) & \text{if $s\in\ext{\cG}_n$;}
 	\end{cases}
@@ -789,7 +789,7 @@ The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewis
 		\item $\cB_n$ preserves monotonicity and tightens monotonic bounds: $$
 		\text{if } \cL\leq V\leq \cU \text{, then } \cL \leq \cB_n(\cL) \leq V \leq \cB_n(\cU) \leq \cU;
 		$$
-		\item $\cB$ is a $\gamma$-contraction, and we denote $\cB_n^{\infty} \eqdef \lim_{k\rightarrow \infty} \cB_n^k$.
+		\item $\cB$ is a $\discount$-contraction, and we denote $\cB_n^{\infty} \eqdef \lim_{k\rightarrow \infty} \cB_n^k$.
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
@@ -804,14 +804,14 @@ which motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref
 		
 		$b_n$ = $\emptyset$\;
 		\While{$b_n\in\inte{\Tau}_n$}{
-			$b_n\gets \displaystyle\argmax_{a'\in b_n A} r(a') + \gamma U(a')$ \Comment*[r]{Optimistic sampling rule}
+			$b_n\gets \displaystyle\argmax_{a'\in b_n A} r(a') + \discount U(a')$ \Comment*[r]{Optimistic sampling rule}
 		}
 		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
 			Simulate $r, s' \sim P\left(r, s' \condbar s(b_n), a\right)$.\;
 			Add a new leaf $b_n a$ to $\Tau_{n+1}$, with associated reward $r$.
 		}
 	}
-	\Return $\displaystyle\argmax_{a\in A} r(s, a) + \gamma L_n(a)$. \Comment*[r]{Conservative recommendation rule}\;
+	\Return $\displaystyle\argmax_{a\in A} r(s, a) + \discount L_n(a)$. \Comment*[r]{Conservative recommendation rule}\;
 \end{algorithm}
 
 \begin{algorithm}[th]
@@ -823,14 +823,14 @@ which motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref
 		
 		$\hat{s}_n$ = $s_0$\;
 		\nl \While{$s_n\in\inte{\cG}_n$}{
-			$s_n\gets \displaystyle\argmax_{s'} r(s_n, a) + \gamma \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
+			$s_n\gets \displaystyle\argmax_{s'} r(s_n, a) + \discount \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
 		}
 		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
 			Simulate $r, s' \sim P\left(r, s' \condbar s_n, a\right)$.\;
 			Get or create the node $s'$ in $\cG_{n+1}$, and add the transition $(s_n,a) \rightarrow s', r$.
 		}
 	}
-	\Return $\displaystyle\argmax_{a\in A} r(s,a) + \gamma \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
+	\Return $\displaystyle\argmax_{a\in A} r(s,a) + \discount \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
 \end{algorithm}
 
 \begin{remark}[Termination and complexity]
@@ -860,9 +860,9 @@ First, we recall the analysis of \citet{Hren2008optimistic}. We start by introdu
 	The value of a finite \textbf{sequence} of actions $a\in A^h$ is
 	\begin{equation*}
 	\label{eq:state_value}
-	V(a) = R(s_0,a) + \gamma^{h} V(s(a)),
+	V(a) = R(s_0,a) + \discount^{h} V(s(a)),
 	\end{equation*}
-	where $R(s, a) = \sum_{t=0}^{h-1} \gamma^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
+	where $R(s, a) = \sum_{t=0}^{h-1} \discount^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
 	\end{leftbar}
 \end{definition}
 
@@ -874,7 +874,7 @@ This enables to define a measure of the difficulty of a planning problem.
 	\begin{equation}
 	\hlrb{\kappa = \limsup_{h\rightarrow\infty} |\hlrb{\Tau_h^\infty}|^{1/h}} \in [1, K]
 	\end{equation}
-	where $\Tau^\infty_h = \displaystyle \left\{a\in A^h: V^\star-V(a) \leq \frac{\gamma^h}{1-\gamma}\right\}$ is the set of near-optimal nodes at depth $h$.
+	where $\Tau^\infty_h = \displaystyle \left\{a\in A^h: V^\star-V(a) \leq \frac{\discount^h}{1-\discount}\right\}$ is the set of near-optimal nodes at depth $h$.
 	\end{leftbar}
 \end{definition}
 
@@ -886,7 +886,7 @@ This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the su
 	\label{thm:regret-opd}
 	The \Cref{alg:opd} enjoys the following regret bound:
 	\begin{align*}
-	\quad r_n = \tilde{\cO}\left( n^{-\log \frac{1}{\gamma}/\hlrb{\log\kappa}}\right),
+	\quad r_n = \tilde{\cO}\left( n^{-\log \frac{1}{\discount}/\hlrb{\log\kappa}}\right),
 	\end{align*}
 	where $f_n = \tilde{\cO}(n^{-\alpha})$ means that for any $\alpha'<\alpha$, $f_n = \cO(n^{-\alpha'}).$
 	\end{leftbar}
@@ -901,7 +901,7 @@ It is typically small in problems where there is one single optimal trajectory, 
 We start by reformulating the sampling rule used for the \texttt{OPD} algorithm. To that end, notice that when some bounds $(L,\,U)$ on the state values $V(s(a))$ are available, they also induce bounds $(\overline{L},\, \overline{U})$ on values $V(a)$ of sequences of actions $a$ of length $h$ defined as
 \begin{equation*}
 %\label{eq:sequence_value}
-\underbrace{R(s_0,a) + \gamma^{h} L(a)}_{\overline{L}(a)} \leq V(a) \leq \underbrace{R(s_0,a) + \gamma^{h} U(a)}_{\overline{U}(a)}.
+\underbrace{R(s_0,a) + \discount^{h} L(a)}_{\overline{L}(a)} \leq V(a) \leq \underbrace{R(s_0,a) + \discount^{h} U(a)}_{\overline{U}(a)}.
 \end{equation*}
 
 One can easily see that, since the $(L_n,\,U_n)$ used in the optimistic sampling rule described in \Cref{alg:opd} are invariant by $B_n$ by definition, this rule can be equivalently expressed as
@@ -929,7 +929,7 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	\end{equation}
 	where
 	$ \displaystyle
-	{\Tau_h^\infty(L,U)}=\left\{a\in A^h: V^\star - V(a)\leq \gamma^{h}(U(a)-L(a))\right\}.
+	{\Tau_h^\infty(L,U)}=\left\{a\in A^h: V^\star - V(a)\leq \discount^{h}(U(a)-L(a))\right\}.
 	$
 	\end{leftbar}
 \end{definition}
@@ -948,7 +948,7 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	\label{thm:regret-bound-U}
 	Let $L \leq V\leq U$ monotonic bounds, then planning with $L$ and $U$ in \eqref{eq:sampling_rule} and \eqref{eq:recommendation_rule} yields the following simple regret bound:
 	\begin{equation*}
-	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlbb{\log \kappa(L,U)}}\right).
+	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\discount}/\hlbb{\log \kappa(L,U)}}\right).
 	\end{equation*}
 	\end{leftbar}
 \end{theorem}
@@ -996,7 +996,7 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 	Any node $a$ of depth $h$ traversed by the optimistic sampling rule of \GBOPD at iteration $n$ belongs to $T_h^\infty(L_n, U_n)$: 
 	\begin{equation}
 	\label{eq:expansion-regret}
-	V^\star-V(a) \leq \gamma^h(U_n(a)-L_n(a)).
+	V^\star-V(a) \leq \discount^h(U_n(a)-L_n(a)).
 	\end{equation}
 	
 	In particular, if the sampling rule samples an infinite sequence $a\in A^\infty$, it is an optimal sequence, and we write that \eqref{alg:gbop-d} also holds for $a$ with $h=\infty$.
@@ -1007,7 +1007,7 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 \begin{lemma}[Recommendation]
 	\begin{leftbar}[lemmabar]
 	\label{lem:recommendation-bound}
-	The action $a_n$ recommended by \GBOPD has a simple regret $r_n \leq \frac{\gamma^{d_n}}{1-\gamma}$, where $d_n\in\Real\cup\{\infty\}$ is the maximal depth of expanded nodes in $T(\cG_n)$.
+	The action $a_n$ recommended by \GBOPD has a simple regret $r_n \leq \frac{\discount^{d_n}}{1-\discount}$, where $d_n\in\Real\cup\{\infty\}$ is the maximal depth of expanded nodes in $T(\cG_n)$.
 	\end{leftbar}
 \end{lemma}
 Note that even though $T(\cG_n)$ can be infinite, there is only one node $b_t$ that is selected for expansion at each iteration $t\leq n$.
@@ -1023,7 +1023,7 @@ We can consider the sequence $\kappa_n = \kappa(L_n, U_n)$. It is non-increasing
 	\label{thm:regret-gbop}
 	\GBOPD enjoys the following regret bound, with $\hlgb{\kappa_\infty} \leq \hlrb{\kappa}$: 
 	\begin{align*}
-	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlgb{\log \kappa_\infty}}\right).
+	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\discount}/\hlgb{\log \kappa_\infty}}\right).
 	\end{align*}
 	\end{leftbar}
 \end{theorem}
@@ -1032,7 +1032,7 @@ Intuitively, $\kappa_\infty$ should be much lower than $\kappa$ in problems wher
 
 \subsubsection{Illustrative example}
 
-We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \gamma$, and $ r^- = r^\star - \frac{\gamma}{1-\gamma} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\gamma} - 1\right).$ Note that the choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
+We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \discount$, and $ r^- = r^\star - \frac{\discount}{1-\discount} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\discount} - 1\right).$ Note that the choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
 
 \begin{figure}[htp]
 	\centering
@@ -1081,8 +1081,8 @@ where $\Sigma_S$ is the probability simplex over $S$, $\beta^p$ is an exploratio
 In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, MDPGapE2020}. We modify the \Cref{def:bellman} of the Bellman operator on graphs as
 
 \begin{align*}
-\cB_t^+(\cU)(s) &= \max_{a\in A} \left[u_t(s,a) + \gamma \max_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a) \cU(s')\right], \\
-\cB_t^-(\cL)(s) &= \max_{a\in A} \left[\ell_t(s,a) + \gamma \min_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a)\cL(s')\right],
+\cB_t^+(\cU)(s) &= \max_{a\in A} \left[u_t(s,a) + \discount \max_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a) \cU(s')\right], \\
+\cB_t^-(\cL)(s) &= \max_{a\in A} \left[\ell_t(s,a) + \discount \min_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a)\cL(s')\right],
 \end{align*}
 for all $s\in\inte{\cG_n}$, where the maximum and minimum over these Kullback-Leibler confidence regions $\cC_t(s,a)$ can be computed as explained in \citep[Appendix A of][]{Filippi2010optimism}. Under the event that every confidence regions $[\ell_t(s,a), u_t(s,a)]$ and $\cC_t(s,a)$ are valid at time $t$, the \Cref{lem:properties-b-graph} still holds for $\cB_t^-, \cB_t^+$.
 
@@ -1098,12 +1098,12 @@ In the deterministic setting, once a transition has been observed, it is known w
 		\For{time $t$ in $[1, H]$}{
 			$n \gets (m - 1)H + h$.\;
 			Compute the bounds $\cL_n = (\cB_n^-)^{\infty}(0)$ and $\cU_n = (\cB_n^+)^\infty(V_{\max})$.\; 
-			$b_t\gets \displaystyle\argmax_{a\in A} r(s_t, a) + \gamma \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
+			$b_t\gets \displaystyle\argmax_{a\in A} r(s_t, a) + \discount \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
 			Simulate $r_t, s_{t+1} \sim P\left(r, s_{t+1} \condbar s_t, b_t\right)$.\;
 			Get or create the node $s_{t+1}$ in $\cG_{n+1}$, and add an occurence of the transition $(s_t,b_t, r_t, s_{t+1})$.
 		}
 	}
-	\Return $\displaystyle\argmax_{a\in A} r(s,a) + \gamma \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
+	\Return $\displaystyle\argmax_{a\in A} r(s,a) + \discount \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
 \end{algorithm}
 
 \subsection{Numerical Experiments}
@@ -1113,7 +1113,7 @@ To evaluate the practical benefits of our approach, we compare graph-based and t
 
 \paragraph{Gridworld domain.}
 We consider a grid in which the agent can move in $K=4$ directions. The reward function is $0$ everywhere, except in the vicinity of a goal located at $(10, 10)$, around which the reward decreases quadratically from $1$ to $0$ in a ball of radius $5$. %: $r(x, y) = \max(1 - \frac{1}{5^2}((x-10)^2 + (y-10)^2), 0)$. 
-The \Cref{fig:deterministic-gridworld} shows number of times a state is sampled by \OPD and \GBOPD, both run with a budget $n = 5460$ and discount $\gamma=0.95$. In the absence of rewards, \OPD samples sequences of actions uniformly (in a breadth-first search manner), which --because of the dynamics structure-- results in a non-uniform occupancy of the state space $S$, where the trajectories concentrate near the starting state. In contrast, \GBOPD explores uniformly in $S$, sampling each state up to four times (from its four  neighbours), until it finds the goal vicinity and finally samples the goal location indefinitely. We reproduce the experiment in the stochastic setting by adding noise on the transitions with probability $p=10\%$, and comparing \GBOP to \texttt{UCT} as we show in \Cref{fig:stochastic-gridworld}. To quantify these qualitative differences, we define an exploration score: the average distance $d(s_t, s_0)$ of sampled states to the initial state (exploration) minus the distance $d(s_t, s_g)$ to the goal state (exploitation), that we show in \Cref{fig:exploration-score}.
+The \Cref{fig:deterministic-gridworld} shows number of times a state is sampled by \OPD and \GBOPD, both run with a budget $n = 5460$ and discount $\discount=0.95$. In the absence of rewards, \OPD samples sequences of actions uniformly (in a breadth-first search manner), which --because of the dynamics structure-- results in a non-uniform occupancy of the state space $S$, where the trajectories concentrate near the starting state. In contrast, \GBOPD explores uniformly in $S$, sampling each state up to four times (from its four  neighbours), until it finds the goal vicinity and finally samples the goal location indefinitely. We reproduce the experiment in the stochastic setting by adding noise on the transitions with probability $p=10\%$, and comparing \GBOP to \texttt{UCT} as we show in \Cref{fig:stochastic-gridworld}. To quantify these qualitative differences, we define an exploration score: the average distance $d(s_t, s_0)$ of sampled states to the initial state (exploration) minus the distance $d(s_t, s_g)$ to the goal state (exploitation), that we show in \Cref{fig:exploration-score}.
 
 \begin{figure}[ht]
 	\centering
@@ -1131,7 +1131,7 @@ The \Cref{fig:deterministic-gridworld} shows number of times a state is sampled 
 \end{figure}
 
 \paragraph{Sailing domain \citep{Vanderbei1996}.}
-In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, and suffers a cost (move duration) that depends on the direction of the wind which follows stochastic dynamics. \Cref{fig:sailing} shows the evolution of the simple regret $r_n$ of stochastic planning algorithms with respect to the number $n$ of oracle calls. We show the mean regret and its 95\% confidence interval computed over 500 simulations. The asymptotic log-log slope $\sigma$ provides an empirical measurement of the effective branching factor $\kappa_e = \exp(-\log(1/\gamma)/\sigma)$ for each algorithm. We measure that for $n>10^{3.5}$, $\sigma \approx-0.04$ and $\kappa_e \approx 3.6$ for \texttt{BRUE}, \texttt{KL-OLOP}, \texttt{MDP-GapE}, \texttt{UCT}. In contrast, we measure $\sigma \approx-0.3$ and $\kappa_e \approx 1.2$ for \GBOP, which suggests that our result of \Cref{thm:regret-gbop} might generalize to the stochastic setting. Additional results and experimental details are provided in the Supplementary Material.
+In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, and suffers a cost (move duration) that depends on the direction of the wind which follows stochastic dynamics. \Cref{fig:sailing} shows the evolution of the simple regret $r_n$ of stochastic planning algorithms with respect to the number $n$ of oracle calls. We show the mean regret and its 95\% confidence interval computed over 500 simulations. The asymptotic log-log slope $\sigma$ provides an empirical measurement of the effective branching factor $\kappa_e = \exp(-\log(1/\discount)/\sigma)$ for each algorithm. We measure that for $n>10^{3.5}$, $\sigma \approx-0.04$ and $\kappa_e \approx 3.6$ for \texttt{BRUE}, \texttt{KL-OLOP}, \texttt{MDP-GapE}, \texttt{UCT}. In contrast, we measure $\sigma \approx-0.3$ and $\kappa_e \approx 1.2$ for \GBOP, which suggests that our result of \Cref{thm:regret-gbop} might generalize to the stochastic setting. Additional results and experimental details are provided in the Supplementary Material.
 
 \begin{figure}[ht]
 	\centering

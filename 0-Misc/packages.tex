@@ -89,7 +89,7 @@
 \usepackage[binary-units,detect-all]{siunitx}
 
 % --- Glossaries
-\usepackage[acronym,toc,symbols]{glossaries-extra}
+\usepackage[acronym,toc,symbols,sort=use]{glossaries-extra}
 \makeglossaries
 \setabbreviationstyle{long-short}
 \setabbreviationstyle[algorithm]{long-short-sc}
@@ -97,7 +97,7 @@
 \glssetcategoryattribute{abbreviation}{glossname}{uc}
 
 \GlsXtrEnableLinkCounting{abbreviation} % Link first occurence
-\GlsXtrEnableLinkCounting[chapter]{acronym,general}  % Link first occurence in each chapter
+\GlsXtrEnableLinkCounting[chapter]{acronym,general,symbol}  % Link first occurence in each chapter
 \renewcommand*{\glslinkpresetkeys}{% % disable hyperlink if link count is greater than 1:
 	\ifnum\GlsXtrLinkCounterValue{\glslabel}>1
 	\setkeys{glslink}{hyper=false}%

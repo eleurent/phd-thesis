@@ -1,45 +1,4 @@
-%% --------------------------------
-%% matches Abbreviations        > A
-%%\nomenclature[A]{wrt}{\textit{with respect to}}
-%%\nomenclature[A]{wlog}{\textit{with loss of generality}}
-%%\nomenclature[A]{i.i.d.}{\textit{identically and independently distributed} (variables, observations or samples)}
-%%\nomenclature[A]{ADAS}{\textit{Advanced Driver-Assistance Systems}}
-%%\nomenclature[A]{ACC}{\textit{Adaptive Cruise Control}}
-%%\nomenclature[A]{LKA}{\textit{Lane-Keeping Assist}}
-%% Algorithms or tools
-%%\nomenclature[A]{ML}{\textit{Machine Learning}}
-%%\nomenclature[A]{RL}{\textit{Reinforcement Learning}}
-%%\nomenclature[A]{MDP}{\textit{Markov Decision Process}}
-%%\nomenclature[A]{POMDP}{\textit{Partially Observable Markov Decision Process}}
-%%\nomenclature[A]{LQR}{\textit{Linear-Quadratic Regulator}}
-%%\nomenclature[A]{LQG}{\textit{Linear-Quadratic-Gaussian}}
-%% --------------------------------
-%% matches Greek Symbols        > G
-%\nomenclature[G]{$\gamma$}{Discount factor, $\gamma\in[0, 1)$]}
-%
-%% --------------------------------
-%% matches Roman Symbols        > L
-%\nomenclature[L]{$t$}{Time step $t\in\Natural$ in \Cref{chapter:1,chapter:2,chapter:3,chapter:4,chapter:5,chapter:6} and $t\in\Real$ in \Cref{chapter:7}}
-%\nomenclature[L]{$s\in\cS$}{State $s$ from a state space $\cS$}
-%\nomenclature[L]{$a\in\cA$}{Action $a$ from an action space $\cA$}
-%\nomenclature[L]{$P$}{Transition dynamics, $s_{t+1}\sim P\parentheses{s_{t+1}\mid s_t, a_t}$}
-%
-%% --------------------------------
-%% matches mathematical symbols > O
-%\nomenclature[O]{$\Pr$}{Probability measure under a probabilistic model}
-%\nomenclature[O]{$\E$}{Expectation under a probabilistic model}
-%
-%% --------------------------------
-%% matches Subscripts           > I
-%\nomenclature[I]{$x_t$}{Usually denotes a variable depending on a discrete time, for $t\in\Natural$}
-%\nomenclature[I]{$x(t)$}{Usually denotes a variable depending on a continuous time, for $t\in\Real$}
-%
-%% --------------------------------
-%% matches Superscripts         > E
-%\nomenclature[E]{$y^j$}{Usually denotes ...}
-
-
-
+% --- RL
 \newabbreviation{ML}{ML}{\itag{M}achine \itag{L}earning}
 \newabbreviation{MAB}{MAB}{\itag{M}ulti-\itag{A}rmed \itag{B}andits}
 \newabbreviation{RL}{RL}{\itag{R}einforcement \itag{L}earning}
@@ -47,10 +6,12 @@
 \newabbreviation{MDP}{MDP}{\itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{CMDP}{CMDP}{\itag{C}onstrained \itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{BMDP}{BMDP}{\itag{B}udgeted \itag{M}arkov \itag{D}ecision \itag{P}rocess}
+\newabbreviation{MOMDP}{BMDP}{\itag{M}ulti-\itag{O}bjective \itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{DP}{DP}{\itag{D}ynamic \itag{P}rogramming}
 \newabbreviation{MPC}{MPC}{\itag{M}odel \itag{P}redictive \itag{C}ontrol}
 \newabbreviation{PAC}{PAC}{\itag{P}robably \itag{A}pproximately \itag{C}orrect}
 \newabbreviation{MLE}{MLE}{\itag{M}aximum \itag{L}ikelihood \itag{E}stimation}
+\newabbreviation{NN}{NN}{\itag{N}eural \itag{N}etwork}
 \newabbreviation{MCTS}{MCTS}{\itag{M}onte-\itag{C}arlo \itag{T}ree Search}
 \newabbreviation{DQN}{DQN}{\itag{D}eep \itag{Q}-\itag{N}etwork}
 \newabbreviation{PRM}{PRM}{\itag{P}robabilistic \itag{R}oadmap}
@@ -59,6 +20,8 @@
 \newabbreviation{CVaR}{CVaR}{\itag{C}onditional \itag{V}alue-\itag{a}t-\itag{R}isk}
 \newabbreviation{LQ}{LQ}{\itag{L}inear-\itag{Q}uadratic}
 \newabbreviation{HJI}{HJI}{\itag{H}amilton-\itag{J}acobi-\itag{I}saacs}
+
+% --- Driving
 \newabbreviation{AD}{AD}{\itag{A}utonomous \itag{D}riving}
 \newabbreviation{ADAS}{ADAS}{\itag{A}dvanced \itag{D}river-\itag{A}ssistance \itag{S}ystems}
 \newabbreviation{ACC}{ACC}{\itag{A}daptive \itag{C}ruise \itag{C}ontrol}
@@ -72,6 +35,8 @@
 \newabbreviation[category=algorithm]{OLOP}{olop}{Open-Loop Optimistic Planning}
 \newabbreviation[category=algorithm]{OPD}{opd}{Optimistic Planning of Determinisitc Systems}
 \newabbreviation[category=algorithm]{KLOLOP}{kl-olop}{Kullback-Leibler OLOP}
+\newabbreviation[category=algorithm]{FTQ}{ftq}{Fit\itag{t}ed Q-Learning}
+\newabbreviation[category=algorithm]{BFTQ}{bftq}{Budgeted Fit\itag{t}ed Q-Learning}
 
 \newcommand{\OLOP}{\gls{OLOP}}
 \newcommand{\OPD}{\gls{OPD}}

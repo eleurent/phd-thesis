@@ -32,103 +32,116 @@ This chapter\dots
 
 \section{Budgeted dynamic programming}
 \label{sec:bdp}
-We work in the space of budgeted policies, where a policy $\pi$ both depends on the current budget $\beta$ and also outputs a next budget $\beta_a$. Hence, the budget $\beta$ is neither fixed nor constant as in the CMDP setting but instead evolves as part of the dynamics.
+We work in the space of budgeted policies\index{budgeted policy}, where $\policy$ both depends on $\budget$ and also outputs a next \idx{budget} $\budgetaction$. Hence, the \idx{budget} $\budget$ is neither fixed nor constant as in the \gls{CMDP} setting but instead evolves as part of the dynamics.
 
-We cast the BMDP problem as a multi-objective MDP problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \cB$ and $\ocA= \cA\times \cB$, and equip them with the augmented dynamics $\ov{P}\in \cM(\ocS)^{\ocS \times \ocA}$ defined as
+We cast the \gls{BMDP} problem as a \gls{MOMDP} problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \budgetspace$ and $\ocA= \cA\times \budgetspace$, and equip them with the augmented dynamics $\augmentedtransition\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
 \begin{equation}
-\label{eq:augmented-dynamics}
-\ov{P}\left(\os' \condbar \os, \oa\right) = \ov{P}\left((s',\beta') \condbar (s,\beta), (a, \beta_a)\right) \eqdef P(s'|s, a)\delta(\beta' - \beta_a),
+\label{eq:dynamics}
+\augmentedtransition\left(\os' \condbar \os, \oa\right) = \augmentedtransition\left((s',\nextbudget) \condbar (s,\budget), (a, \budgetaction)\right) \eqdef \Ps(s'|s, a)\dirac(\nextbudget - \budgetaction),
 \end{equation}
-where $\delta$ is the Dirac indicator distribution.
+where $\dirac$ is the Dirac indicator distribution.
 
-In other words, in these augmented dynamics, the output budget $\beta_a$ returned at time $t$ by a budgeted policy $\pi\in \Pi=\cM(\ocA)^{\ocS}$ will be used to condition the policy at the next timestep $t+1$.
+In other words, in these augmented dynamics, the output \idx{budget} $\budgetaction$ returned at time $t$ by a \idx{budgeted policy} $\budgetedpolicy\in \policies=\cM(\ocA)^{\ocS}$ will be used to condition the policy at the next timestep $t+1$.
 
-We stack the rewards and cost functions in a single \emph{vectorial} signal $R \in (\Real^2)^{{\ocS \times \ocA}}$.
-Given an augmented transition $(\os, \oa) =((s,\beta), (a, \beta_a))$, we define
-\begin{equation}
-R(\os, \oa) \eqdef  \begin{bmatrix}
-R_r(s, a)\\
-R_c(s, a)
-\end{bmatrix}\in\Real^2.
-\end{equation}
+We stack the rewards and cost functions in a single \emph{vectorial} signal $\oR \in (\Real^2)^{{\ocS \times \ocA}}$:
 
+\begin{definition}
+	Given an augmented \idx{transition} $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define:
+	\begin{equation}
+	\gls+{oR}(\os, \oa) \eqdef  \begin{bmatrix}
+	\R(s, a)\\
+	\constraint(s, a)
+	\end{bmatrix}\in\Real^2.
+	\end{equation}
+\end{definition}
 
-Likewise, the return $G^\pi = (G_r^\pi, G_c^\pi)$ of a budgeted policy $\pi\in\Pi$ refers to
-$$G^\pi \eqdef \sum_{t=0}^\infty \gamma^t R(\os_t, \oa_t),$$
-and the value functions $V^\pi$, $Q^\pi$ of a budgeted policy $\pi\in\Pi$ are defined as
-\begin{align}
-\label{eq:value-function}
-V^\pi(\os) &= (V_r^\pi, V_c^\pi) \eqdef \expectedvalue\left[ G^\pi \condbar \ov{s_0} = \os\right]\\ Q^\pi(\os, \oa)&= (Q_r^\pi, Q_c^\pi) \eqdef \expectedvalue\left[ G^\pi \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
-\end{align}
-We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\beta)\in\ocS: \exists \pi\in\Pi, V_c^\pi(s) \leq \beta\}$ that we assume is non-empty for the BMDP to admit a solution. We still write $\ocS$ in place of $\ocS_f$ for brevity of notations.
+Likewise, we augment the return:
+
+\begin{definition}
+	The return $\augmentedreturn^{\budgetedpolicy} = (\return^{\budgetedpolicy}, \constraintreturn^{\budgetedpolicy})$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ refers to:
+	\begin{equation}
+	\gls+{augmentedreturn}^{\budgetedpolicy} \eqdef \sum_{t=0}^\infty \discountfactor^t \oR(\os_t, \oa_t).
+	\end{equation}
+\end{definition}
+
+We also augment the value functions:
+
+\begin{definition}
+	The value functions $\oV^{\budgetedpolicy}$, $\oQ^{\budgetedpolicy}$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ are defined as:
+	\begin{equation}
+	\label{eq:value-function}
+	\oV^{\budgetedpolicy}(\os) = (\Vr^{\budgetedpolicy}, \Vc^{\budgetedpolicy}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
+	\oQ^{\budgetedpolicy}(\os, \oa)= (\Qr^{\budgetedpolicy}, \Qc^{\budgetedpolicy}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
+	\end{equation}
+\end{definition}
+
+We restrict $\ocS$ to feasible budgets\index{budget} only: $\ocS_f \eqdef \{(s,\budget)\in\ocS: \exists \budgetedpolicy\in\policies, \Vc^{\budgetedpolicy}(s) \leq \budget\}$ that we assume is non-empty for the \gls{BMDP} to admit a solution. We still write $\ocS$ in place of $\ocS_f$ for brevity of notations.
 
 \begin{proposition}[Budgeted Bellman Expectation]
 	\begin{leftbar}[propositionbar]
 	\label{prop:bellman-expectation}
-	The value functions $V^\pi$ and $ Q^\pi$ verify
+	The value functions $\oV^{\budgetedpolicy}$ and $ \oQ^{\budgetedpolicy}$ verify:
 	\begin{align}
-	V^\pi(\os) &= \sum_{\oa\in\ocA}\pi(\oa | \os) Q^\pi(\os, \oa); \\ Q^\pi(\os, \oa) &= R(\os, \oa) + \gamma\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar \os, \oa\right) V^\pi(\os').
-	\label{eq:bellman_expectation}
+	\oV^{\budgetedpolicy}(\os) = \sum_{\oa\in\ocA}\budgetedpolicy(\oa | \os) \oQ^{\budgetedpolicy}(\os, \oa) \qquad \oQ^{\budgetedpolicy}(\os, \oa) = \gls{oR}(\os, \oa) + \discountfactor\sum_{\os'\in\ocS}\augmentedtransition\left(\os' \condbar \os, \oa\right) \oV^{\budgetedpolicy}(\os'). \label{eq:bellman_expectation}
 	\end{align}
-	Moreover, consider the Budgeted Bellman Expectation operator $\cT^\pi$:
-	$\forall Q\in(\Real^2)^{\ocS\ocA}, \os\in\ocS, \oa\in\ocA$,
+	Moreover, consider the Budgeted\index{budget} Bellman Evaluation\index{Bellman Evaluation} operator $\abo^{\budgetedpolicy}$:
+	$\forall \oQ\in(\Real^2)^{\ocS\ocA}, \os\in\ocS, \oa\in\ocA$,
 	\begin{align}
 	\label{eq:bellman_expectation_operator}
-	\cT^\pi Q(\os, \oa) &\eqdef R(\os, \oa) + \gamma \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\ov{P}(\os'|\os, \oa)\pi(\oa'|\os') Q(\os', \oa').
+	\abo^{\budgetedpolicy} \oQ(\os, \oa) &\eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\augmentedtransition(\os'|\os, \oa)\budgetedpolicy(\oa'|\os') \oQ(\os', \oa').
 	\end{align}
-	Then $\cT^\pi$ is a $\gamma$-contraction and $Q^\pi$ is its unique fixed point.
+	Then $\abo^{\budgetedpolicy}$ is a $\discountfactor$-contraction and $\oQ^{\budgetedpolicy}$ is its unique fixed point.
 	\end{leftbar}
 \end{proposition}
 
-\begin{remark}
-	\begin{leftbar}[remarkbar]
-	Because of the budget dynamics $\beta' = \beta_a$ in \eqref{eq:augmented-dynamics}, we can see in \eqref{eq:bellman_expectation} that for all $\os=(s, \beta)$ and $\oa=(a, \beta_a)$, $Q^\pi(\os, \oa)$ only depends on $s, a, \beta_a$ and not on $\beta$. We will slightly abuse notations and sometimes denote in the following $Q^\pi(s, a, \beta_a) \eqdef Q^\pi(\os, \oa)$.
-	\end{leftbar}
-\end{remark}
-
-We now come to the definition of budgeted optimality. We want an optimal budgeted policy to: (i)~respect the cost budget $\beta$, (ii)~maximise the $\gamma$-discounted return of rewards $G_r$, (iii)~in case of tie, minimise the $\gamma$-discounted return of costs $G_c$.
+We now come to the definition of budgeted optimality. We want an optimal budgeted policy to: 
+\begin{enumerate*}[label=(\roman*)]
+	\item respect the cost budget $\budget$;
+	\item maximise the $\discount$-discounted return of rewards $\return$;
+	\item in case of tie, minimise the $\discount$-discounted return of costs $\constraintreturn$.
+\end{enumerate*}
 
 \begin{definition}[Budgeted Optimality]
 	\begin{leftbar}[defnbar]
 	To that end, we define for all $\os\in\ocS$,
-	\begin{enumerate}
-		\item[(i)] admissible policies $\Pi_a$ as
+	\begin{enumerate}[label=(\roman*)]
+		\item admissible policies $\policies_a$ as
 		\begin{equation}
-		\Pi_a(\os) \eqdef \{\pi\in\Pi: V_c^\pi(\os) \leq \beta\}\text{ where }\os = (s, \beta);
+		\policies_a(\os) \eqdef \{\budgetedpolicy\in\policies: \Vc^{\budgetedpolicy}(\os) \leq \budget\}\text{ where }\os = (s, \budget);
 		\end{equation}
-		\item[(ii)] the optimal value function for rewards $V_r^*$ and candidate policies $\Pi_r$ as
+		\item the optimal value function for rewards $\Vr^*$ and candidate policies $\policies_r$ as
 		\begin{equation}
-		V_r^*(\os) \eqdef \max_{\pi\in\Pi_a(\os)}  V_r^\pi(\os), \qquad\qquad \Pi_r(\os) \eqdef \argmax_{\pi\in\Pi_a(\os)}  V_r^\pi(\os);
+		\Vr^*(\os) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Vr^{\budgetedpolicy}(\os) \qquad\qquad \policies_r(\os) \eqdef \argmax_{\budgetedpolicy\in\policies_a(\os)}  \Vr^{\budgetedpolicy}(\os);
 		\end{equation}
-		\item[(iii)] the optimal value function for costs $V_c^*$ and optimal policies $\Pi^*$ as
+		\item the optimal value function for costs $\Vc^*$ and optimal policies $\policies^\star$ as
 		\begin{equation}
-		V_c^*(\os) \eqdef \min_{\pi\in\Pi_r(\os)}  V_c^\pi(\os), \qquad\qquad \Pi^*(\os) \eqdef \argmin_{\pi\in\Pi_r(\os)}  V_c^\pi(\os).
+		\Vc^*(\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc^{\budgetedpolicy}(\os), \qquad\qquad \policies^*(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc^{\budgetedpolicy}(\os).
 		\end{equation}
 	\end{enumerate}
-	We define the budgeted action-value function $Q^*$ similarly as
+	We define the budgeted action-value function $\oQ^*$ similarly as
 	\begin{equation}
-	Q_r^*(\os, \oa) \eqdef \max_{\pi\in\Pi_a(\os)}  Q_r^\pi(\os, \oa), \qquad\qquad Q_c^*(\os, \oa) \eqdef \min_{\pi\in\Pi_r(\os)}  Q_c^\pi(\os, \oa),
+	\Qr^*(\os, \oa) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr^{\budgetedpolicy}(\os, \oa) \qquad\qquad \Qc^*(\os, \oa) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc^{\budgetedpolicy}(\os, \oa),
 	\end{equation}
-	and denote $V^* = (V_r^*, V_c^*)$, $Q^* = (Q_r^*, Q_c^*)$.
+	and denote $\oV^* = (\Vr^*, \Vc^*)$, $\oQ^* = (\Qr^*, \Qc^*)$.
 	\end{leftbar}
 \end{definition}
 
 \begin{theorem}[Budgeted Bellman Optimality]
 	\begin{leftbar}[theorembar]
 	\label{thm:bellman-optimality}
-	The optimal budgeted action-value function $Q^*$ verifies
+	The optimal budgeted action-value function $\oQ^*$ verifies
 	\begin{equation}
 	\label{eq:bellman-optimality}
-	Q^{*}(\os, \oa) = \cT Q^{*}(\os, \oa) \eqdef R(\os, \oa) + \gamma \sum_{\os'\in\ocS} \ov{P}(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; Q^*) Q^{*}(\ov{s'}, \ov{a'}),
+	\oQ^{*}(\os, \oa) = \abo^{*}\oQ^{*}(\os, \oa) \eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \budgetedpolicy_\text{greedy}(\ov{a'}|\ov{s'}; \oQ^*) \oQ^{*}(\ov{s'}, \ov{a'}),
 	\end{equation}
-	where the greedy policy $\pi_\text{greedy}$ is defined by: $\forall \os=(s,\beta)\in \ocS, \oa\in 
-	\ocA, \forall Q\in(\Real^2)^{\ocA\times\ocS},$
+	where the greedy policy $\budgetedpolicy_\text{greedy}$ is defined by: $\forall \os=(s,\budget)\in \ocS, \oa\in
+	\ocA, \forall \oQ\in(\Real^2)^{\ocA\times\ocS},$
 	\begin{subequations}
 		\label{eq:pi_greedy}
 		\begin{align}
-		\pi_\text{greedy}(\oa|\os; Q) \in &\argmin_{\rho\in\Pi_r^Q} \expectedvalueover{\oa\sim\rho}Q_c(\os, \oa), \label{eq:pi_greedy_cost}\\
-		\text{where }\quad\Pi_r^Q \eqdef &\argmax_{\rho\in\cM(\ocA)} \expectedvalueover{\oa\sim\rho} Q_r(\os, \oa) \label{eq:pi_greedy_reward}\\
-		& \text{ s.t. }  \expectedvalueover{\oa\sim\rho} Q_c(\os, \oa) \leq \beta. \label{eq:pi_greedy_constraint}
+		\budgetedpolicy_\text{greedy}(\oa|\os; \oQ) \in &\argmin_{\rho\in\policies_r^{\oQ}} \expectedvalueover{\oa\sim\rho}\Qc(\os, \oa), \label{eq:pi_greedy_cost}\\
+		\text{where }\quad\policies_r^{\oQ} \eqdef &\argmax_{\rho\in\cM(\ocA)} \expectedvalueover{\oa\sim\rho} \Qr(\os, \oa) \label{eq:pi_greedy_reward}\\
+		& \text{ s.t. }  \expectedvalueover{\oa\sim\rho} \Qc(\os, \oa) \leq \budget. \label{eq:pi_greedy_constraint}
 		\end{align}
 	\end{subequations}
 	\end{leftbar}
@@ -137,106 +150,95 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \begin{remark}[Appearance of the greedy policy]
 	\begin{leftbar}[remarkbar]
 	\label{rmk:greedy}
-	In classical Reinforcement Learning, the greedy policy takes a simple form $\pi_\text{greedy}(s; Q^*) = \argmax_{a\in\cA} Q^*(s, a)$, and the term $\pi_\text{greedy}(a'|s';Q^*) Q^{*}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} Q^*(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
+	In classical \acrlong{RL}, the greedy policy takes a simple form $\policy_\text{greedy}(s; \Q^*) = \argmax_{a\in\cA} \Q^*(s, a)$, and the term $\policy_\text{greedy}(a'|s';\Q^*) \Q^{*}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} \Q^*(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
 	\end{leftbar}
 \end{remark}
 
 \begin{proposition}[Optimality of the greedy policy]
 	\begin{leftbar}[propositionbar]
 	\label{prop:greedy_optimal}
-	The greedy policy $\pi_\text{greedy}(\cdot~; Q^*)$ is \emph{uniformly} optimal: $\forall\os\in\ocS$, $\pi_\text{greedy}(\cdot~; Q^*)\in\Pi^*(\os)$. In particular, $V^{\pi_\text{greedy}(\cdot; Q^*)} = V^*$ and $Q^{\pi_\text{greedy}(\cdot; Q^*)}= Q^*$.
+	The greedy policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)$ is \emph{uniformly} optimal: for all $\os\in\ocS$, $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)\in\policies^*(\os)$. In particular, $\oV^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^*)} = \oV^*$ and $\oQ^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^*)}= \oQ^*$.
 	\end{leftbar}
 \end{proposition}
 
 \paragraph{Budgeted Value Iteration}
 
-The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \autoref{algo:bvi}, a Dynamic Programming algorithm for solving known BMDPs. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $Q^*$ and recover the associated optimal budgeted policy $\pi_\text{greedy}(\cdot~; Q^*)$.
 
-\begin{theorem}[Non-contractivity of $\cT$]
+\begin{algorithm}
+	\DontPrintSemicolon
+	\KwData{$P, R_r, R_c$}
+	\KwResult{$Q^*$}
+	$Q_{0} \leftarrow 0$\;
+	\Repeat{convergence}{
+		$Q_{k+1} \leftarrow \cT Q_k$\;
+	}
+	\caption{Budgeted Value Iteration}
+	\label{algo:bvi}
+\end{algorithm}
+
+The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \Cref{algo:bvi}, a \acrlong{DP} algorithm for solving known \glspl{BMDP}. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $\oQ^*$ and recover the associated optimal budgeted policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)$.
+
+\begin{theorem}[Non-contractivity of $\abo^{*}$]
 	\begin{leftbar}[theorembar]
 	\label{thm:contraction}
-	For any BMDP ($\cS,\cA,P,R_r,R_c,\gamma$) with $|\cA| \geq 2$, $\cT$ is not a contraction. Precisely: $\forall\epsilon>0, \exists Q^1,Q^2\in(\Real^2)^{\ocS\ocA}:\|\cT Q^1-\cT Q^2\|_\infty \geq \frac{1}{\epsilon}\|Q^1-Q^2\|_\infty$.
+	For any \gls{BMDP} ($\cS,\cA,\Ps,\R,\constraint,\discountfactor$) with $|\cA| \geq 2$, $\abo^{*}$ is not a contraction. Precisely: $\forall\epsilon>0, \exists Q^1,Q^2\in(\Real^2)^{\ocS\ocA}:\|\cT Q^1-\cT Q^2\|_\infty \geq \frac{1}{\epsilon}\|Q^1-Q^2\|_\infty$.
 	\end{leftbar}
 \end{theorem}
 
-Unfortunately, as $\cT$ is not a contraction, we can guarantee neither the convergence of \autoref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\autoref{sec:brl-experiments}). We provide a possible explanation:
+Unfortunately, as $\abo^{*}$ is not a contraction, we can guarantee neither the convergence of \Cref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\Cref{sec:brl-experiments}). We provide a possible explanation:
 
 \begin{theorem}[Contractivity of $\cT$ on smooth $Q$-functions]
 	\begin{leftbar}[theorembar]
 	\label{rmk:contractivity-smooth}
-	The operator $\cT$ is a contraction when restricted to the subset $\cL_\gamma$ of $Q$-functions such that "$Q_r$ is Lipschitz with respect to $Q_c$":
+	The operator $\abo^{*}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that "$\Qr$ is Lipschitz with respect to $\Qc$":
 	\begin{equation}
-	\cL_\gamma = \left\{\begin{array}{cc}
-	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\gamma}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
+	\cL_\discount = \left\{\begin{array}{cc}
+	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
 	|Q_r(\os,\oa_1) - Q_r(\os,\oa_2)| \leq L|Q_c(\os,\oa_1) - Q_c(\os,\oa_2)|
 	\end{array}\right\}
 	\end{equation}
 	\end{leftbar}
 \end{theorem}
 
-Thus, we expect that \autoref{algo:bvi} is likely to converge when $Q^*$ is smooth, but could diverge if the slope of $Q^*$ is too high.  $L^2$-regularisation can be used to encourage smoothness and mitigate risk of divergence.
+Thus, we expect that \Cref{algo:bvi} is likely to converge when $\oQ^*$ is smooth, but could diverge if the slope of $\oQ^*$ is too high.  $L^2$-regularisation can be used to encourage smoothness and mitigate risk of divergence.
 
 
 \section{Budgeted reinforcement learning}
 
 \label{sec:brl}
 
-In this section, we consider BMDPs with unknown parameters that must be solved by interaction with an environment. 
+In this section, we consider \glspl{BMDP} with unknown parameters that must be solved by interaction with an environment. 
 
 \subsection{Budgeted Fitted-Q}
 \label{subsec:bftq}
 
-When the BMDP is unknown, we need to adapt \autoref{algo:bvi} to work with a batch of samples $\cD=\{(\os_i,\oa_i,r_i,\os_i')\}_{i\in [1,N]}$ collected by interaction with the environment. Applying $\cT$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \ov{P}}$ over next states $\os'$ and hence an access to the model $\ov{P}$. We instead use $\hat{\cT}$, a sampling operator, in which this expectation is replaced by
+When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a batch of samples $\cD=\{(\os_t,\oa_t,\overline{r}_t,\os_t')\}_{t\in [1,N]}$ collected by interaction with the environment. Applying $\abo^{*}$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \augmentedtransition}$ over next states $\os'$ and hence an access to the \idx{model} $\augmentedtransition$. We instead use $\hat{\abo^{*}}$, a sampling operator, in which this expectation is replaced by
 \begin{equation*}
-\hat{\cT} Q(\os, \oa, r, \os') \eqdef r + \gamma \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; Q) Q(\ov{s'}, \ov{a'}).
+\hat{\abo^{*}} \oQ(\os, \oa, \overline{r}, \os') \eqdef \overline{r} + \discount \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; \oQ) \oQ(\ov{s'}, \ov{a'}).
 \end{equation*}
-We introduce in \autoref{algo:bftq} the \emph{Budgeted-Fitted-Q} (\BFTQ) algorithm, an extension of the \emph{Fitted-Q} (\FTQ) algorithm \citep{Ernst2005,Riedmiller2005} adapted to solve unknown BMDPs. Because we work with continuous state space $\cS$ and budget space $\cB$, we need to employ function-approximation in order to generalise to nearby states and budgets. Precisely, given a parametrized model $Q_\theta$, we seek to minimise a regression loss $\cL(Q_\theta, Q_\text{target};\cD) = \sum_{\cD} ||Q_\theta(\os, \oa) - Q_\text{target}(\os, \oa, r, \os')||_2^2$.
-Any model can be used, such as linear models, regression trees, or neural networks.
+We introduce in \Cref{algo:bftq} the \gls{BFTQ} algorithm, an extension of the \gls{FTQ} algorithm adapted to solve unknown \glspl{BMDP}. Because we work with continuous state space $\cS$ and budget space $\budgetspace$, we need to employ function-approximation in order to generalise to nearby states and budgets. Precisely, given a parametrized model $\oQ_\params$, we seek to minimise a regression loss $\cL(\oQ_\params, \oQ_\text{target};\cD) = \sum_{\cD} \|\oQ_\params(\os, \oa) - \oQ_\text{target}(\os, \oa, r, \os')\|_2^2$.
+Any model can be used, such as linear models, regression trees, or \acrlong{NN}.
 
-\begin{minipage}[t]{0.47\textwidth}
-	\vspace{0pt}  
-	
-	\begin{algorithm}[H]
-		\DontPrintSemicolon
-		\KwData{$P, R_r, R_c$}
-		\KwResult{$Q^*$}
-		$Q_{0} \leftarrow 0$\;
-		\Repeat{convergence}{
-			$Q_{k+1} \leftarrow \cT Q_k$\;
-		}
-		\caption{Budgeted Value Iteration}
-		\label{algo:bvi}
-		
-	\end{algorithm}
-	
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.47\textwidth}
-	\vspace{0pt}
-	
-	\begin{algorithm}[H]
-		\DontPrintSemicolon
-		\KwData{$\cD$}
-		\KwResult{$Q^*$}
-		$Q_{\theta_0} \leftarrow 0$\;
-		\Repeat{convergence}{
-			$\theta_{k+1} \leftarrow \argmin_\theta \cL(Q_\theta, \hat{\cT} Q_{\theta_{k}}; \cD)$\;
-		}
-		\caption{Budgeted Fitted-Q}
-		\label{algo:bftq}
-		
-	\end{algorithm}
-	
-\end{minipage}
+\begin{algorithm}[ht]
+	\DontPrintSemicolon
+	\KwData{$\cD$}
+	\KwResult{$Q^*$}
+	$\oQ_{\params_0} \leftarrow 0$\;
+	\Repeat{convergence}{
+		$\params_{k+1} \leftarrow \argmin_\params \cL(\oQ_\params, \hat{\cT} \oQ_{\params_{k}}; \cD)$\;
+	}
+	\caption{Budgeted Fitted-Q}
+	\label{algo:bftq}
+\end{algorithm}
 
 \subsection{Risk-sensitive exploration}
 \label{sec:exploration}
 
-In order to run \autoref{algo:bftq}, we must first gather a batch of samples $\mathcal{D}$. The following strategy is motivated by the intuition that a wide variety of risk levels needs to be experienced during training, which can be achieved by enforcing the risk constraints during data collection. Ideally we would need samples from the asymptotic state-budget distribution $\lim_{t\rightarrow\infty}\probability{\os_t}$ induced by an optimal policy $\optimalpolicy$ given an initial distribution $\probability{\os_0}$, but as we are actually building this policy, it is not possible. Following the same idea of $\epsilon$-greedy exploration for \FTQ \citep{Ernst2005,Riedmiller2005}, we introduce an algorithm for risk-sensitive exploration. We follow an exploration policy: a mixture between a random budgeted policy $\pi_\text{rand}$ and the current greedy policy $\pi_\text{greedy}$. The batch $\cD$ is split into several mini-batches generated sequentially, and $\pi_\text{greedy}$ is updated by running \autoref{algo:bftq} on $\cD$ upon mini-batch completion. $\pi_\text{rand}$ should only pick augmented actions that are admissible candidates for $\pi_\text{greedy}$. To that extent $\pi_\text{rand}$ is designed to obtain trajectories that only explore feasible budgets: we impose that the joint distribution $\probability{a, \beta_a|s, \beta}$ verifies $\expectedvalue[\beta_a]\leq\beta$. This condition defines a probability simplex $\Delta_{\ocA}$ from which we sample uniformly. Finally, when interacting with an environment the initial state $s_0$ is usually sampled from a starting distribution $\probability{s_0}$. In the budgeted setting, we also need to sample the initial budget $\beta_0$. Importantly, we pick a uniform distribution $\probability{\beta_0} = \cU(\cB)$ so that the entire range of risk-level is explored, and not only reward-seeking behaviours as would be the case with a traditional risk-neutral $\epsilon$-greedy strategy. The pseudo-code of our exploration procedure is shown in \autoref{algo:risk-sensitive-exploration}.% in \autoref{sec:risk-sensitive-supp}.
+In order to run \Cref{algo:bftq}, we must first gather a batch of samples $\mathcal{D}$. The following strategy is motivated by the intuition that a wide variety of risk levels needs to be experienced during training, which can be achieved by enforcing the risk constraints during data collection. Ideally we would need samples from the asymptotic state-budget distribution $\lim_{t\rightarrow\infty}\probability{\os_t}$ induced by an optimal policy $\optimalbudgetedpolicy$ given an initial distribution $\probability{\os_0}$, but as we are actually building this policy, it is not possible. Following the same idea of $\epsilon$-greedy exploration for \FTQ, we introduce an algorithm for risk-sensitive exploration. We follow an exploration policy: a mixture between a random \idx{budgeted policy} $\budgetedpolicy_\text{rand}$ and the current \idx{greedy} policy $\budgetedpolicy_\text{greedy}$. The \idx{batch} $\cD$ is split into several minibatches\index{batch} generated sequentially, and $\budgetedpolicy_\text{greedy}$ is updated by running \Cref{algo:bftq} on $\cD$ upon mini-batch\index{batch} completion. $\budgetedpolicy_\text{rand}$ is designed to obtain trajectories\index{trajectory} that only explore feasible budgets: we impose that the joint distribution $\probability{a, \budgetaction|s, \budget}$ verifies $\expectedvalue[\budgetaction]\leq\budget$. This condition defines a probability simplex $\Delta_{\ocA}$ from which we \idx{transition} uniformly. Finally, when interacting with an \idx{environment} the initial state $s_0$ is usually sampled from a starting distribution $\probability{s_0}$. In the budgeted setting, we also need to \idx{transition} the initial budget $\budget_0$. Importantly, we pick a uniform distribution $\probability{\budget_0} = \cU(\budgetspace)$ so that the entire range of risk-level is explored, and not only reward-seeking behaviours as would be the case with a traditional \idx{risk-neutral} $\epsilon$-greedy strategy. The pseudo-code of our exploration procedure is shown in \Cref{algo:risk-sensitive-exploration}.% in \Cref{sec:risk-sensitive-supp}.
 
 %\section{Risk-Sensitive Exploration}
 %\label{sec:risk-sensitive-supp}
-%We recall the Risk-Sensitive Exploration in \autoref{algo:risk-sensitive-exploration}:
+%We recall the Risk-Sensitive Exploration in \Cref{algo:risk-sensitive-exploration}:
 
 
 \input{2-Chapters/5-Chapter/src/risk-sensitive-explo-pseudo-code.tex}
@@ -244,34 +246,35 @@ In order to run \autoref{algo:bftq}, we must first gather a batch of samples $\m
 
 %\section{A scalable implementation}
 %\label{sec:scalable-bftq}
-In the following, we introduce an implementation of the \BFTQ algorithm designed to operate efficiently and handle large batches of experiences $\mathcal{D}$.
+In the following, we introduce an implementation of the \BFTQ algorithm designed to operate efficiently and handle large batches of experiences $\cD$.
 
 \subsection{How to compute the greedy policy?}
 \label{subsec:compute-greedy-policy}
-As stated in \autoref{rmk:greedy}, computing the greedy policy $\pi_\text{greedy}$ in \eqref{eq:bellman-optimality} is not trivial since it requires solving the nested constrained optimisation program \eqref{eq:pi_greedy}. However, it can be solved efficiently by exploiting the \emph{structure} of the set of solutions with respect to $\beta$, that is, concave and increasing. 
+As stated in \Cref{rmk:greedy}, computing the \idx{greedy} policy $\budgetedpolicy_\text{greedy}$ in \eqref{eq:bellman-optimality} is not trivial since it requires solving the nested constrained optimisation program \eqref{eq:pi_greedy}.
+However, it can be solved efficiently by exploiting the \emph{structure} of the set of solutions with respect to $\budget$, that is, concave and increasing.
 
-\begin{proposition}[Equality of $\pi_\text{greedy}$ and $\pi_\text{hull}$]
+\begin{proposition}[Equality of $\budgetedpolicy_\text{greedy}$ and $\budgetedpolicy_\text{hull}$]
 	\label{prop:bftq_pi_hull}
-	\autoref{algo:bvi} and \autoref{algo:bftq} can be run by replacing $\pi_\text{greedy}$ in the equation \eqref{eq:bellman-optimality} of $\cT$ with $\pi_\text{hull}$ as described in \autoref{algo:pi_hull}.
-	\begin{equation*}
-	\pi_\text{greedy}(\oa|\os; Q) = \pi_\text{hull}(\oa|\os; Q)
-	\end{equation*}
+	\Cref{algo:bvi} and \Cref{algo:bftq} can be run by replacing $\budgetedpolicy_\text{greedy}$ in the equation \eqref{eq:bellman-optimality} of $\abo$ with $\budgetedpolicy_\text{hull}$ as described in \Cref{algo:pi_hull}.
+    \begin{equation*}
+        \budgetedpolicy_\text{greedy}(\oa|\os; \oQ) = \budgetedpolicy_\text{hull}(\oa|\os; \oQ)
+    \end{equation*}
 \end{proposition}
 
 \begin{algorithm}
 	\DontPrintSemicolon
-	\KwData{$\os=(s,\beta)$, $Q$}
-	$Q^+\leftarrow \{Q_c > \min \{Q_c(\os,\oa) \text{ s.t. }\oa\in\argmax_{\oa} Q_r(\os,\oa)\} \}$\tcp*[f]{dominated points}\;
-	$\cF \leftarrow \text{top frontier of }\texttt{convex\_hull}(Q(\os,\ocA) \setminus Q^+)$\tcp*[f]{candidate mixtures}\;
-	$\cF_Q \leftarrow \cF\cap Q(\os,\ocA)$\;
-	\For{points $q = Q(\os,\oa)\in\cF_Q$ in clockwise order}{
-		\uIf{find two successive points $((q_c^1, q_r^1), (q_c^2, q_r^2))$ of $\cF_Q$ such that $q_c^1 \leq \beta < q_c^2$}{
-			$p \leftarrow (\beta - q_c^1) / (q_c^2 - q_c^1)$\;
-			\Return the mixture $(1-p)\delta(\oa-\oa^1) + p\delta(\oa-\oa^2)$\;
-	}}
-	\Return $\delta(\oa - \argmax_{\oa} Q_r(\os,\oa))$\tcp*[f]{budget $\beta$ always respected}
-	\caption{Convex hull policy $\pi_\text{hull}(\oa|\os; Q)$}
-	\label{algo:pi_hull}
+    \KwData{$\os=(s,\budget)$, $\oQ$}
+    $\oQ^+\leftarrow \{\Qc > \min \{\Qc(\os,\oa) \text{ s.t. }\oa\in\argmax_{\oa} \Qr(\os,\oa)\} \}$\tcp*[f]{dominated points}\;
+    $\cF \leftarrow \text{top frontier of }\texttt{convex\_hull}(\oQ(\os,\ocA) \setminus \oQ^+)$\tcp*[f]{candidate mixtures}\;
+    $\cF_{\oQ} \leftarrow \cF\cap \oQ(\os,\ocA)$\;
+    \For{points $q = \oQ(\os,\oa)\in\cF_{\oQ}$ in clockwise order}{
+    \uIf{find two successive points $((q_c^1, q_r^1), (q_c^2, q_r^2))$ of $\cF_{\oQ}$ such that $q_c^1 \leq \budget < q_c^2$}{
+    $p \leftarrow (\budget - q_c^1) / (q_c^2 - q_c^1)$\;
+    \Return the mixture $(1-p)\dirac(\oa-\oa^1) + p\dirac(\oa-\oa^2)$\;
+    }}
+    \lElse{\Return $\dirac(\oa - \argmax_{\oa} \Qr(\os,\oa))$\tcp*[f]{Budget $\budget$ always respected}}
+    \caption{Convex hull policy $\budgetedpolicy_\text{hull}(\oa|\os; \oQ)$}
+    \label{algo:pi_hull}
 \end{algorithm}
 
 \begin{figure}[ht]
@@ -281,20 +284,20 @@ As stated in \autoref{rmk:greedy}, computing the greedy policy $\pi_\text{greedy
 	\label{fig:hull}
 \end{figure}
 
-The computation of $\pi_\text{hull}$ in \autoref{algo:pi_hull} is illustrated in \autoref{fig:hull}: first we get rid of dominated points. Then we compute the top frontier of the convex hull of the $Q$-function. Next, we find the two closest augmented actions $\ov{a}_1$ and $\ov{a}_2$ with cost-value $Q_c$ surrounding $\beta$:  $Q_c(\os,\oa_1)\leq\beta<Q_c(\os,\oa_2)$. Finally, we mix the two actions such that the expected spent budget is equal to $\beta$. Because of the concavity of the convex hull top frontier, any other combination of augmented actions would lead to a lower expected reward $Q_r$. 
+The computation of $\pi_\text{hull}$ in \Cref{algo:pi_hull} is illustrated in \Cref{fig:hull}: first we get rid of dominated points. Then we compute the top frontier of the convex hull of the $Q$-function. Next, we find the two closest augmented actions $\ov{a}_1$ and $\ov{a}_2$ with cost-value $Q_c$ surrounding $\beta$:  $Q_c(\os,\oa_1)\leq\beta<Q_c(\os,\oa_2)$. Finally, we mix the two actions such that the expected spent budget is equal to $\beta$. Because of the concavity of the convex hull top frontier, any other combination of augmented actions would lead to a lower expected reward $Q_r$. 
 
 
 
 
 \subsection{Function approximation}
 
-Neural networks are well suited to model Q-functions in Reinforcement Learning algorithms \citep{Riedmiller2005,Mnih2015}.  We approximate $Q = (Q_r, Q_c)$ using one single neural network. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $Q$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $Q$-function:~the budget $\beta_a$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of $\beta$ compared to $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state. 
-%TODO %The overall architecture is shown in \autoref{fig:bftq-architecture} in \autoref{sec:bftq-full}.
+\acrlongpl{NN} are well suited to \idx{model} $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
+%TODO %The overall architecture is shown in \Cref{fig:bftq-architecture} in \Cref{sec:bftq-full}.
 
 \subsection{Parallel computing}
 \label{subsec:parallel-computing}
-In a simulated environment, a first process that can be distributed is the collection of samples in the exploration procedure of \autoref{algo:risk-sensitive-exploration}, as $\pi_\text{greedy}$ stays constant within each mini-batch which avoids the need of synchronisation between workers. Second, the main bottleneck of \BFTQ is the computation of the target $\cT Q$. Indeed, when computing $\pi_\text{hull}$ we must perform at each epoch a Graham-scan of complexity $\cO(|\cA||\tilde{\cB}| \log |\cA\tilde{\cB}|)$ per sample in $\mathcal{D}$ to compute the convex hulls of $Q$ (where $\tilde{\cB}$ is a finite discretisation of $\cB$). The resulting total time-complexity is $\cO(\frac{|\mathcal{D}||\cA||\tilde{\cB}|}{1-\gamma} \log |\cA||\tilde{\cB}|)$. This operation can easily be distributed over several CPUs provided that we first evaluate the model $Q(s',\cA\tilde{\cB})$ for each sample $s'\in\cD$, which can be done in a single forward pass. By using multiprocessing in the computations of $\pi_\text{hull}$, we enjoy a linear speedup.
-The full description of our scalable implementation of \BFTQ is recalled in \autoref{algo:bftq_full}, and the architecture of the neural network in  \autoref{fig:bftq-architecture}.
+In a simulated \idx{environment}, a first process that can be distributed is the collection of \idx{transition}s in the exploration procedure of \Cref{algo:risk-sensitive-exploration}, as $\budgetedpolicy_\text{greedy}$ stays constant within each minibatch\index{batch} which avoids the need of synchronisation between workers. Second, the main bottleneck of \gls{BFTQ} is the computation of the target $\abo \oQ$. Indeed, when computing $\budgetedpolicy_\text{hull}$ we must perform at each epoch a Graham-scan of complexity $\cO(|\cA||\tilde{\budgetspace}| \log |\cA||\tilde{\budgetspace}|)$ per \idx{transition} in $\cD$ to compute the convex hulls of $\oQ$ (where $\tilde{\budgetspace}$ is a finite discretisation of $\budgetspace$). The resulting total time-complexity is $\cO(\frac{|\cD||\cA||\tilde{\budgetspace}|}{1-\discountfactor} \log |\cA||\tilde{\budgetspace}|)$. This operation can easily be distributed over several CPUs provided that we first evaluate the \idx{model} $\oQ(\os',\cA \times \tilde{\budgetspace})$ for each state $\os$ extracted from the dataset $\cD$, which can be done in a single forward pass. By using multiprocessing in the computations of $\budgetedpolicy_\text{hull}$, we enjoy a linear speedup.
+The full description of our scalable implementation of \gls{BFTQ} is recalled in \Cref{algo:bftq_full}.
 
 
 \begin{figure}[tp]
@@ -311,18 +314,18 @@ The full description of our scalable implementation of \BFTQ is recalled in \aut
 \label{sec:brl-experiments}
 There are two hypotheses we want to validate.
 
-\paragraph{Exploration strategies} We claimed in \autoref{sec:exploration} that a risk-sensitive exploration was required in the setting of BMDPs. We test this hypotheses by confronting our strategy to a classical risk-neutral strategy. The latter is chosen to be a $\epsilon$-greedy policy slowly transitioning from a random to a greedy policy\footnote{We train this greedy policy using \FTQ.} that aims to maximise $\expectedvalue_{\pi} G_r^\pi$ regardless of $\expectedvalue_{\pi} G_c^\pi$. The quality of the resulting batches $\cD$ is assessed by training a \BFTQ policy and comparing the resulting performance.
+\paragraph{Exploration strategies} We claimed in \Cref{sec:exploration} that a \idx{risk-sensitive} exploration was required in the setting of \glspl{BMDP}. We test this hypotheses by confronting our strategy to a classical \idx{risk-neutral} strategy. The latter is chosen to be a \idx{$\epsilon$-greedy} \idx{policy} slowly transitioning from a random to a \idx{greedy} \idx{policy}\footnote{We train this \idx{greedy} policy using \FTQ.} that aims to maximise $\expectedvalue_{\policy} \return^{\policy}$ regardless of $\expectedvalue_{\policy} \constraintreturn^{\policy}$. The quality of the resulting batches\index{batch} $\cD$ is assessed by training a \gls{BFTQ} \idx{policy} and comparing the resulting performance.
 
-\paragraph{Budgeted algorithms} We compare our \BFTQ algorithm to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\pi} \expectedvalue_{\pi}[G_r^\pi - \lambda G_c^\pi]$.
-As shown in \autoref{fig:Lagrangian}, the optimal deterministic policy can be obtained by a line-search on the Lagrange multiplier values $\lambda$.
+\paragraph{Budgeted algorithms} We compare our \BFTQ algorithm to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\policy} \expectedvalue_{\policy}[\return^{\policy} - \lambda \constraintreturn^{\policy}]$.
+As shown in \Cref{fig:Lagrangian}, the optimal deterministic policy can be obtained by a line-search on the Lagrange multiplier values $\lambda$.
 Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies: the safest deterministic policy that violates the constraint $\pi_{\lambda-}$ and the riskier of the feasible ones $\pi_{\lambda+}$.
-The resulting MDPs can be solved by any RL algorithm, and we chose \FTQ for being closest to \BFTQ.
+The resulting \glspl{MDP} can be solved by any RL algorithm, and we chose \FTQ for being closest to \BFTQ.
 In our experiments, a single training of \BFTQ corresponds to 10 trainings of \FTQl policies. Each run was repeated $N_{\text{seeds}}$ times. Given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our purpose is to avoid this calibration phase.
 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.5\textwidth]{img/CalibrationExample}
-	\caption{Calibration of a penalty multiplier according to the budget $\beta$. The optimal multiplier $\lambda^*_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
+	\caption{Calibration of a penalty multiplier according to the budget $\budget$. The optimal multiplier $\lambda^*_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
 	% TODO: penalization -> penalty
 	\label{fig:Lagrangian}
 \end{figure}
@@ -330,30 +333,79 @@ In our experiments, a single training of \BFTQ corresponds to 10 trainings of \F
 
 \subsection{Environments}
 \label{subsec:environments}
-We evaluate our method on three different environments involving reward-cost trade-offs. % TODO: Their parameters can be found in \autoref{sec:env-parameters}
+We evaluate our method on three different environments involving reward-cost trade-offs. % TODO: Their parameters can be found in \Cref{sec:env-parameters}
 
 \paragraph{Corridors}
 This simple environment is only meant to highlight clearly the specificity of exploration in a budgeted setting. It is a continuous gridworld with Gaussian perturbations, consisting in a maze composed of two corridors: a risky one with high rewards and costs, and a safe one with low rewards and no cost. In both corridors the outermost cell is the one yielding the most reward, which motivates a deep exploration.
 
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Parameter & Description & Value\tabularnewline
+        \midrule
+        - & Size of the \idx{environment} & 7 x 6\tabularnewline
+        - & \makecell[l]{Standard deviation of the Gaussian \\noise applied to actions} & (0.25,0.25)\tabularnewline
+        H & Trajectory\index{trajectory} duration & 9\tabularnewline
+        \bottomrule
+    \end{tabular}
+    \caption{Parameters of \texttt{Corridors}}
+    \label{tab:param-corridors}
+\end{table}
+
 \paragraph{Spoken dialogue system}
 Our second application is a dialogue-based slot-filling simulation that has already benefited from batch RL optimisation in the past~\citep{Li2009ReinforcementLF,chandramohan2010optimizing,pietquin2011sample}. The system fills in a form of slot-values by interacting a user through speech, before sending them a response. For example, in a restaurant reservation domain, it may ask for three slots: the area of the restaurant, the price-range and the food type. The user could respectively provide those three slot-values : \texttt{Cambridge}, \texttt{Cheap} and \texttt{Indian-food}. In this application, we do not focus on how to extract such information from the user utterances, we rather focus on decision-making for filling in the form. To that end, the system can choose among a set of generic actions. As in \citep{carrara2018safe}, there are two ways of asking for a slot value: a slot value can be either be provided with an utterance, which may cause speech recognition errors with some probability, or by requiring the user to fill-in the slots by using a numeric pad. In this case, there are no recognition errors but a counterpart risk of hang-up: we assume that manually filling a key-value form is time-consuming and annoying. The environment yields a reward if all slots are filled without errors, and a constraint if the user hang-ups. Thus, there is a clear trade-off between using utterances and potentially committing a mistake, or using the numeric pad and risking a premature hang-up.
 
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Parameter & Description & Value\tabularnewline
+        \midrule
+        $\xi$ & Sentence Error Rate & 0.6\tabularnewline
+        $\mu_{\bot}$& Gaussian mean for misunderstanding & -0.25\tabularnewline
+        $\mu_{\top}$& Gaussian mean for understanding & 0.25\tabularnewline
+        $\sigma$& Gaussian standard deviation & 0.6\tabularnewline
+        $p$& Probability of \idx{hangup} & 0.25\tabularnewline
+        H & Trajectory\index{trajectory} duration & 10\tabularnewline
+        - & Number of slots & 3\tabularnewline
+        \bottomrule
+    \end{tabular}
+    \caption{Parameters of \texttt{Slot-Filling}}
+    \label{tab:param-slot-filling}
+\end{table}
+
 \paragraph{Autonomous driving}
-In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated highway driving and behavioural decision-making.
-We define a task that displays a clear trade-off between safety and efficiency. The agent controls a vehicle with a finite set of manoeuvres implemented by low-lever controllers: $\mathcal{A}$ = \{\text{no-op}, \text{right-lane}, \text{left-lane}, \text{faster}, \text{slower}\}. It is driving on a two-lane road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. Their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
-The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $R_r(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $R_c(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the episode horizon. Thus, the constrained signal $G_c^\pi$ is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
+In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} \idx{environment} \citep{highway-env} for simulated highway driving and behavioural decision-making.
+We define a task that displays a clear trade-off between safety and efficiency. The \idx{agent} controls a vehicle with a finite set of manoeuvres implemented by low-lever controllers: $\mathcal{A}$ = \{\text{no-op}, \text{right-lane}, \text{left-lane}, \text{faster}, \text{slower}\}. It is driving on a two-lane road populated with other traffic participants: the vehicles in front of the \idx{agent} drive slowly, and there are incoming vehicles on the opposite lane. Their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories\index{trajectory}.
+The task consists in driving as fast as possible, which is \idx{model}led by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the \idx{agent} to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory\index{trajectory} horizon. Thus, the constrained signal is the maximum proportion of time that the \idx{agent} is allowed to drive on the wrong side of the road.
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Parameter & Description & Value\tabularnewline
+        \midrule
+        $N_v$& Number of vehicles & 2 - 6\tabularnewline
+        $\sigma_p$& Standard deviation of vehicles initial positions & 100 m\tabularnewline
+        $\sigma_v$& Standard deviation of vehicles initial velocities & 3 m/s\tabularnewline
+        H & Trajectory\index{trajectory} duration & 15 s\tabularnewline
+        \bottomrule
+    \end{tabular}
+
+    \caption{Parameters of \texttt{highway-env}}
+    \label{tab:param-highway-env}
+\end{table}
 
 \subsection{Results}
 \label{subsec:results}
-In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(G_r^\pi,G_c^\pi)$ over $N_\text{trajs}$ trajectories. That way, we display the variation related to learning (and batches) rather than the variation in the execution of the policies.
+In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(\return^{\policy},\constraintreturn^{\policy})$ ($(\return^{\budgetedpolicy},\constraintreturn^{\budgetedpolicy})$ for \gls{BFTQ}) over $N_\text{trajs}$ trajectories\index{trajectory}. That way, we display the variation related to learning (and batches\index{batch}) rather than the variation in the execution of the policies.
 
-We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment: \autoref{fig:exploration} shows the set of trajectories collected by each exploration strategy.
+We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment: \Cref{fig:exploration} shows the set of trajectories collected by each exploration strategy.
 and the resulting performance of a budgeted policy trained on each batch. The trajectories (orange) in the risk-neutral batch are concentrated along the risky corridor (right) and ignore the safe corridor (left), which results in bad performances in the low-risk regime. Conversely, trajectories in the risk-sensitive batch (blue) are well distributed among both corridors and the corresponding budgeted policy achieves good performance across the whole spectrum of risk budgets. 
 % TODO: redaction
 The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/} display the trajectories collected in each intermediate sub-batch.
 Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/}: When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
-
-
 
 \begin{figure}[tp]
 	\centering
@@ -374,32 +426,29 @@ Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budge
 	\end{center}
 \end{figure}
 
-In a second experiment displayed in \autoref{sec:brl-results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
-Qualitatively, the budgeted agents display a variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\beta = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\beta = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\beta = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
-For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[G_c|\beta=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\cT}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $Q_\theta$ instead of $Q$. 
+In a second experiment displayed in \Cref{sec:brl-results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
+Qualitatively, the budgeted agents display a variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\budget = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\budget = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\budget = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
+For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[\constraintreturn|\budget=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\abo}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $\oQ_\params$ instead of $\oQ$.
 
-
-% This is probably due to \text{highway-env} being actually infeasible for $\beta=0$, since we noticed that about $8\%$ of bad initialisations occur with the front vehicle driving slower than the minimum velocity of the controlled vehicle, leading to either a front collision or a forced change to the opposite lane, both yielding costs.
 Still, \BFTQ provides a better control on the expected cost of the policy, than \FTQl. In addition, \BFTQ behaves more consistently than \FTQl overall, as shown by its lower extra-seed variance.
 
 
 \section{Discussion}
 \label{subsec:discussions}
-\autoref{algo:bftq} is an algorithm for solving large unknown BMDPs with continuous states. To the best of our knowledge, there is no algorithm in the current literature that combines all those features.
+\Cref{algo:bftq} is an algorithm for solving large unknown \glspl{BMDP} with continuous states. To the best of our knowledge, there is no algorithm in the current literature that combines all those features.
 
-%As a side note , utiliser Survey ~\citep{Roijers2013ASO} et  reformuler ça qui vient du papier  \citep{Le2019} : Multi-objective Reinforcement Learning. Another related area is multi-objective reinforcement learning (MORL)(Van Moffaert & Nowe´, 2014; Roijers et al., 2013). Generally, research in MORL has largely focused on approximating the Pareto frontier that trades-off competing objectives (Van Moffaert & Nowe´, 2014; Roijers et al., 2013).The underlying approach to MORL frequently relies on linear or non-linear scalarization of rewards to heuristically turns the problem into a standard RL problem. Our proposed approach represents another systematic paradigm to solve MORL, whether in batch or online settings.}
-%The literature of Multi-objective Reinforcement Learning mainly focuses on recovering the Pareto-optimal frontier,  
+Algorithms have been proposed for \glspl{CMDP}, which are less flexible sub-problems of the more general \gls{BMDP}. When the \idx{environment} parameters ($\Ps$, $\R$, $\constraint$) are known but not tractable, solutions relying on function approximation~\citep{Undurti} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown \idx{environment}s, \idx{Online} algorithms \citep{Geibel2005, Abe2010,AchiamHTA17,ChowGJP15} and a \idx{batch} algorithm \citep{Thomas2015, Petrik2016, Laroche2019,Le2019} can solve large unknown \glspl{CMDP}. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
 
-Algorithms have been proposed for CMDPs, which are less flexible sub-problems of the more general BMDP. When the environment parameters ($P$, $R_r$, $R_c$) are known but not tractable, solutions relying on function approximation~\citep{Undurti} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown environments, online algorithms \citep{Geibel2005, Abe2010,ChowGJP15,AchiamHTA17} and a batch algorithm \citep{Thomas2015, Petrik2016, Laroche2019,Le2019} can solve large unknown CMDPs. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
+\paragraph{Budgeted Markov Decision Processes algorithms}
+To our knowledge, there were only two ways of solving a \gls{BMDP}. The first one is to approximate it with a finite set of \glspl{CMDP} (e.g. see our \FTQl baseline). As explained on \Cref{fig:Lagrangian}, the optimal \idx{deterministic policy} can be obtained by a line-search on the Lagrange multiplier values $\lambda$. Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies\index{deterministic policy}: the safest \idx{deterministic policy} that violates the constraint $\policy_{\lambda-}$ and the riskier of the feasible ones $\policy_{\lambda+}$. So \gls{FTQ} can be easily adapted for continuous states \gls{CMDP} and \gls{BMDP} through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our solution not only requires one single \idx{model} but also avoids any supplementary interaction.
+%TODO: relire ce paragraphe, repetition potentielle avec celui qui introduit \Cref{fig:Lagrangian}
 
-To our knowledge, there were only two ways of solving a BMDP. The first one is to approximate it with a finite set of CMDPs (e.g. see our \FTQl baseline). The solutions of these CMDPs take the form of mixtures between two deterministic policies \citep[Theorem 4.4,][]{BEUTLER1985236}. To obtain these policies, one needs to evaluate their expected cost by interacting with the environment. Our solution not only requires one single model but also avoids any supplementary interaction.
-% TODO: More details are provided in \autoref{sec:lagragian}
+The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \gls{DP} algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the \idx{model} ($\Ps$, $\R$, $\constraint$), and do not address the question of learning from interaction data.
 
-The only other existing BMDP algorithm, and closest work to ours, is the Dynamic Programming algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the model ($P$, $R_r$, $R_c$), and do not address the question of learning from interaction data.
 
 \section*{Conclusion}
 \label{sec:conclusion}
-The BMDP framework is a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, BMDPs could so far only be solved in finite state spaces which limits their interest in many use-cases. We extend their definition to continuous states by introducing of a novel Dynamic Programming operator, that we build upon to propose a Reinforcement Learning algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed Reinforcement Learning. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\beta$ instead of the tedious tuning of the penalty $\lambda$.
+\aclongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest when dealing with continuous variables such as vehicle positions. We extend their definition to continuous states by introducing of a novel \acrlong{DP} operator, that we build upon to propose a \acrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \acrlong{RL}. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\budget$ instead of the tedious tuning of the penalty $\lambda$.
 
 
 
@@ -408,7 +457,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 
 \section{Proofs}
 \label{sec:proofs}
-\subsection{\autoref{prop:bellman-expectation}}
+\subsection{\Cref{prop:bellman-expectation}}
 
 \begin{proof}
 	Thanks to the introduction of the augmented spaces $\ocS, \ocA$ and dynamics $\ov{P}$, this proof is the same as that in classical multi-objective MDPs.
@@ -419,43 +468,43 @@ The BMDP framework is a principled framework for safe decision making under unce
 	&= \sum_{\oa\in\ocA} \pi(\oa | \os) Q^\pi(\os,\oa)
 	\end{align*}
 	\begin{align*}
-	Q^\pi(\os, \oa) &\eqdef \expectedvalue\left[\sum_{t=0}^\infty \gamma^t R(\os_t, \oa_t)\condbar \ov{s_0} = \os, \ov{a_0} = \oa\right] \\
-	&= R(\os, \oa) + \sum_{\os'\in\ocS}\probability{\os_1 = \os' \condbar\ov{s_0} = \os, \ov{a_0} = \oa}\cdot \expectedvalue\left[\sum_{t=1}^\infty \gamma^t R(\os_t, \oa_t)\condbar \ov{s_1} = \os'\right] \\
-	&= R(\os, \oa) + \gamma\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar\os, \oa\right) \expectedvalue\left[\sum_{t=0}^\infty \gamma^t R(\os_t, \oa_t) \condbar \ov{s_0} = \os'\right] \\
-	&=  R(\os, \oa) + \gamma\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar\os, \oa\right) V^\pi(\os')
+	Q^\pi(\os, \oa) &\eqdef \expectedvalue\left[\sum_{t=0}^\infty \discount^t R(\os_t, \oa_t)\condbar \ov{s_0} = \os, \ov{a_0} = \oa\right] \\
+	&= R(\os, \oa) + \sum_{\os'\in\ocS}\probability{\os_1 = \os' \condbar\ov{s_0} = \os, \ov{a_0} = \oa}\cdot \expectedvalue\left[\sum_{t=1}^\infty \discount^t R(\os_t, \oa_t)\condbar \ov{s_1} = \os'\right] \\
+	&= R(\os, \oa) + \discount\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar\os, \oa\right) \expectedvalue\left[\sum_{t=0}^\infty \discount^t R(\os_t, \oa_t) \condbar \ov{s_0} = \os'\right] \\
+	&=  R(\os, \oa) + \discount\sum_{\os'\in\ocS}\ov{P}\left(\os' \condbar\os, \oa\right) V^\pi(\os')
 	\end{align*}
 	
 	\textbf{Contraction of $\cT^\pi$:}
 	Let $\pi\in\Pi, Q_1, Q_2\in(\Real^2)^{\ocS\ocA}$.
 	\begin{align*}
-	\forall \os\in\ocS, \oa\in\ocA,\quad \left|\cT^\pi Q_1(\os,\oa) - \cT^\pi Q_2(\os,\oa)\right| &= \left|\gamma\expectedvalueover{\substack{\os'\sim\ov{P}(\os'|\os,\oa) \\ \oa'\sim\pi(\oa'|\os')}} Q_1(\os',\oa') - Q_2(\os',\oa')\right|\\
-	&\leq \gamma\left\|Q_1-Q_2\right\|_\infty
+	\forall \os\in\ocS, \oa\in\ocA,\quad \left|\cT^\pi Q_1(\os,\oa) - \cT^\pi Q_2(\os,\oa)\right| &= \left|\discount\expectedvalueover{\substack{\os'\sim\ov{P}(\os'|\os,\oa) \\ \oa'\sim\pi(\oa'|\os')}} Q_1(\os',\oa') - Q_2(\os',\oa')\right|\\
+	&\leq \discount\left\|Q_1-Q_2\right\|_\infty
 	\end{align*}
-	Hence, $\left\|\cT^\pi Q_1  - \cT^\pi Q_2 \right\|_\infty \leq \gamma\left\|Q_1-Q_2\right\|_\infty$
+	Hence, $\left\|\cT^\pi Q_1  - \cT^\pi Q_2 \right\|_\infty \leq \discount\left\|Q_1-Q_2\right\|_\infty$
 	
 	According to the Banach fixed point theorem, $\cT^\pi$ admits a unique fixed point.
 	It can be easily verified that $Q^\pi$ is indeed this fixed point by combining the two Bellman Expectation equations \eqref{eq:bellman_expectation}.
 	
 \end{proof}
 
-\subsection{\autoref{thm:bellman-optimality}}
+\subsection{\Cref{thm:bellman-optimality}}
 
 \begin{proof}
 	Let $\os, \oa \in \ocA\times\ocS$. For this proof, we consider  potentially non-stationary policies $\pi=(\rho, \pi')$, with $\rho\in\cM(\ocA)$, $\pi'\in\cM(\ocA)^\Natural$. The results will apply to the particular case of stationary optimal policies, when they exist.
 	
 	\begin{align}
 	Q_r^*(\os, \oa) &=  \max_{\rho, \pi'} Q_r^{\rho, \pi'}(\os', \oa') \label{eq:pthm_def}\\
-	&= \max_{\rho, \pi'} R_r(s, a) + \gamma \sum_{\os'\in\ocS} P(\os' | \os, \oa) V_r^{\rho, \pi'}(\os') \label{eq:pthm_exp}\\
-	&= R_r(s, a) + \gamma \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_{\rho, \pi'} \sum_{\oa'\in\ocA} \rho(\oa' | \os')Q_r^{\pi'}(\os', \oa') \label{eq:pthm_marg}\\
-	&= R_r(s, a) + \gamma \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_\rho\sum_{\oa'\in\ocA}\rho(\oa' | \os')\max_{\pi'\in\Pi_a(\os')}Q_r^{\pi'}(\os', \oa') \label{eq:pthm_max}\\
-	&= R_r(s, a) + \gamma \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_\rho\expectedvalueover{\oa'\sim\rho}Q_r^*(\os', \oa') \label{eq:pthm_marg_def2}
+	&= \max_{\rho, \pi'} R_r(s, a) + \discount \sum_{\os'\in\ocS} P(\os' | \os, \oa) V_r^{\rho, \pi'}(\os') \label{eq:pthm_exp}\\
+	&= R_r(s, a) + \discount \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_{\rho, \pi'} \sum_{\oa'\in\ocA} \rho(\oa' | \os')Q_r^{\pi'}(\os', \oa') \label{eq:pthm_marg}\\
+	&= R_r(s, a) + \discount \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_\rho\sum_{\oa'\in\ocA}\rho(\oa' | \os')\max_{\pi'\in\Pi_a(\os')}Q_r^{\pi'}(\os', \oa') \label{eq:pthm_max}\\
+	&= R_r(s, a) + \discount \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \max_\rho\expectedvalueover{\oa'\sim\rho}Q_r^*(\os', \oa') \label{eq:pthm_marg_def2}
 	\end{align}
 	where $\pi = (\rho, \pi')\in\Pi_a(\os)$ and $\pi'\in\Pi_a(\os')$.
 	
 	This follows from:
 	\begin{enumerate}
 		\item[\eqref{eq:pthm_def}.] Definition of $Q^*$. 
-		\item[\eqref{eq:pthm_exp}.] Bellman Expectation expansion from \autoref{prop:bellman-expectation}.
+		\item[\eqref{eq:pthm_exp}.] Bellman Expectation expansion from \Cref{prop:bellman-expectation}.
 		\item[\eqref{eq:pthm_marg}.] Marginalisation on $\oa'$.
 		\item[\eqref{eq:pthm_max}.] \begin{itemize}
 			\item Trivially $\max_{\pi'\in\Pi_a(\os')} \sum_{\oa'\in\ocA} \cdot \leq \sum_{\oa'\in\ocA} \max_{ \pi'\in\Pi_a(\os)} \cdot$
@@ -475,18 +524,18 @@ The BMDP framework is a principled framework for safe decision making under unce
 	
 	Consequently, $\pi_\text{greedy}(\cdot; Q^*)$ belongs to the $\argmax$ of \eqref{eq:pthm_marg_def2}, and in particular
 	\begin{equation*}
-	Q_r^*(\os, \oa) = r(\os, \oa) + \gamma \sum_{\os'\in\cS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\pi_\text{greedy}(\os', Q^*)} Q_r^*(\os', \oa')
+	Q_r^*(\os, \oa) = r(\os, \oa) + \discount \sum_{\os'\in\cS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\pi_\text{greedy}(\os', Q^*)} Q_r^*(\os', \oa')
 	\end{equation*}
 	
 	The same reasoning can be made for $Q_c^*$ by replacing $\max$ operators by $\min$, and $\Pi_a$ by $\Pi_r$.
 \end{proof}
 
 
-\subsection{\autoref{prop:greedy_optimal}}
+\subsection{\Cref{prop:greedy_optimal}}
 \begin{proof}
-	Notice from the definitions of $\cT$ and $\cT^\pi$ in \eqref{eq:bellman-optimality} and \eqref{eq:bellman_expectation_operator} that $\cT$ and $\cT^{\pi_\text{greedy}(\cdot;Q^*)}$ coincide on $Q^*$. Moreover, since $Q^* = \cT Q^*$ by \autoref{thm:bellman-optimality}, we have: $    \cT^{\pi_\text{greedy}(\cdot;Q^*)} Q^* = \cT Q^* = Q^*
+	Notice from the definitions of $\cT$ and $\cT^\pi$ in \eqref{eq:bellman-optimality} and \eqref{eq:bellman_expectation_operator} that $\cT$ and $\cT^{\pi_\text{greedy}(\cdot;Q^*)}$ coincide on $Q^*$. Moreover, since $Q^* = \cT Q^*$ by \Cref{thm:bellman-optimality}, we have: $    \cT^{\pi_\text{greedy}(\cdot;Q^*)} Q^* = \cT Q^* = Q^*
 	$.
-	Hence, $Q^*$ is a fixed point of $\cT^{\pi_\text{greedy}(\cdot;Q^*)}$, and by \autoref{prop:bellman-expectation} it must be equal to $Q^{\pi_\text{greedy}(\cdot;Q^*)}$
+	Hence, $Q^*$ is a fixed point of $\cT^{\pi_\text{greedy}(\cdot;Q^*)}$, and by \Cref{prop:bellman-expectation} it must be equal to $Q^{\pi_\text{greedy}(\cdot;Q^*)}$
 	
 	To show the same result for $V^*$, notice that 
 	\begin{equation*}
@@ -495,10 +544,10 @@ The BMDP framework is a principled framework for safe decision making under unce
 	By applying the definitions of $Q^*$ and $\pi_\text{greedy}$, we recover the definition of $V^*$.
 \end{proof}
 
-\subsection{\autoref{thm:contraction}}
+\subsection{\Cref{thm:contraction}}
 \label{sec:proof_contraction}
 \begin{proof}
-	In the trivial case $|\cA| = 1$, there exits only one policy $\pi$ and $\cT = \cT^\pi$, which is a contraction by \autoref{prop:bellman-expectation}.
+	In the trivial case $|\cA| = 1$, there exits only one policy $\pi$ and $\cT = \cT^\pi$, which is a contraction by \Cref{prop:bellman-expectation}.
 	
 	In the general case $|\cA| \geq 2$, we can build the following counter-example.
 	
@@ -509,16 +558,16 @@ The BMDP framework is a principled framework for safe decision making under unce
 	Q_\epsilon^1(\os,\oa) =
 	\begin{cases}
 	(0, 0), & \text{if } a = a_0 \\
-	\left(\frac{1}{\gamma}, \epsilon\right), & \text{if } a \neq a_0
+	\left(\frac{1}{\discount}, \epsilon\right), & \text{if } a \neq a_0
 	\end{cases}\\
 	Q_\epsilon^2(\os,\oa) =
 	\begin{cases}
 	(0, \epsilon), & \text{if } a = a_0 \\
-	\left(\frac{1}{\gamma}, 2\epsilon\right), & \text{if } a \neq a_0
+	\left(\frac{1}{\discount}, 2\epsilon\right), & \text{if } a \neq a_0
 	\end{cases}
 	\end{align*}
 	Then, $\|Q_1-Q_2\|_\infty = \epsilon$.
-	$Q_\epsilon^1$ and $Q_\epsilon^2$ are represented in \autoref{fig:concavity_example}.
+	$Q_\epsilon^1$ and $Q_\epsilon^2$ are represented in \Cref{fig:concavity_example}.
 	
 	\begin{figure}[tp]
 		\centering
@@ -529,9 +578,9 @@ The BMDP framework is a principled framework for safe decision making under unce
 	
 	But for $\oa=(a,\beta_a)$ with $\beta_a = \epsilon$, we have
 	\begin{align*}
-	\|\cT Q_\epsilon^1(\os, \oa) - \cT Q_\epsilon^2(\os, \oa)\|_\infty &= \gamma\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)} \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^1_\epsilon)}Q^1_\epsilon(\os',\oa') - \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^2_\epsilon)}Q^2_\epsilon(\os',\oa')\right\|_\infty \\
-	&= \gamma\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)}\left(\frac{1}{\gamma}, \epsilon\right) - (0, \epsilon)\right\|_\infty \\
-	&= \gamma\frac{1}{\gamma} = 1
+	\|\cT Q_\epsilon^1(\os, \oa) - \cT Q_\epsilon^2(\os, \oa)\|_\infty &= \discount\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)} \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^1_\epsilon)}Q^1_\epsilon(\os',\oa') - \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^2_\epsilon)}Q^2_\epsilon(\os',\oa')\right\|_\infty \\
+	&= \discount\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)}\left(\frac{1}{\discount}, \epsilon\right) - (0, \epsilon)\right\|_\infty \\
+	&= \discount\frac{1}{\discount} = 1
 	\end{align*}
 	Hence, 
 	\begin{align*}
@@ -543,38 +592,38 @@ The BMDP framework is a principled framework for safe decision making under unce
 	In other words, $\cT$ is not a contraction for $\|\cdot\|_\infty$.
 \end{proof}
 
-\subsection{\autoref{rmk:contractivity-smooth}}
+\subsection{\Cref{rmk:contractivity-smooth}}
 \label{proof:contraction-with-smooth}
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-	This proof makes use of insights detailed in the proof of \autoref{prop:bftq_pi_hull} (\autoref{sec:proof_pi_hull}), which we recommend the reader to consult first.
+	This proof makes use of insights detailed in the proof of \Cref{prop:bftq_pi_hull} (\Cref{sec:proof_pi_hull}), which we recommend the reader to consult first.
 	\end{leftbar}
 \end{remark}
 
 \begin{proof}
-	We now study the contractivity of $\cT$ when restricted to the functions of $\cL_\gamma$ defined as follows:
+	We now study the contractivity of $\cT$ when restricted to the functions of $\cL_\discount$ defined as follows:
 	\begin{equation}
-	\cL_\gamma = \left\{\begin{array}{cc}
-	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\gamma}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
+	\cL_\discount = \left\{\begin{array}{cc}
+	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
 	|Q_r(\os,\oa_1) - Q_r(\os,\oa_2)| \leq L|Q_c(\os,\oa_1) - Q_c(\os,\oa_2)|
 	\end{array}\right\}
 	\end{equation}
-	That is, for all state $\os$, the set $Q(\os, \ocA)$ plot in the $(Q_c,Q_r)$ plane must be the \emph{graph} of a $L$-Lipschitz function, with $L<1/\gamma-1$.
+	That is, for all state $\os$, the set $Q(\os, \ocA)$ plot in the $(Q_c,Q_r)$ plane must be the \emph{graph} of a $L$-Lipschitz function, with $L<1/\discount-1$.
 	
 	We impose such structure for the following reason: the counter-example presented above prevented contraction because it was a pathological case in which the slope of $Q$ can be arbitrary large. As a consequence, when solving $Q_r^*$ such that $Q_c^*=\beta$, a vertical slice of a $\|\cdot\|_\infty$ ball around $Q_1$ (which must contain $Q_2$) can be arbitrary large as well.
 	
-	This proof makes use of insights detailed in the proof of \autoref{prop:bftq_pi_hull}, which we recommend the reader to consult first.
+	This proof makes use of insights detailed in the proof of \Cref{prop:bftq_pi_hull}, which we recommend the reader to consult first.
 	
 	We denote $\cB(Q,R)$ the ball of centre $Q$ and radius $R$ for the $\|\cdot\|_\infty$-norm:
 	\begin{equation*}
 	\cB(Q,R) = \{Q'\in(R^2)^{\ocS\ocA}: \|Q-Q'\|_\infty \leq R\}
 	\end{equation*}
 	
-	We give the three main steps required to show that $\cT$ restricted to $\cL_\gamma$ is a contraction. Given $Q^1, Q^2\in\cL_\gamma$, show that
+	We give the three main steps required to show that $\cT$ restricted to $\cL_\discount$ is a contraction. Given $Q^1, Q^2\in\cL_\discount$, show that
 	\begin{enumerate}
-		\item $Q^2\in\cB(Q^1,R)\implies\cF^2\in\cB(\cF^1, R), \forall\os\in\ocS$, where $\cF$ is the top frontier of the convex hull of undominated points, as defined in \autoref{sec:proof_pi_hull}.
-		\item $Q\in\cL_\gamma \implies \cF$ is the graph of a $L$-Lipschitz function, $\forall\os\in\ocS$.
+		\item $Q^2\in\cB(Q^1,R)\implies\cF^2\in\cB(\cF^1, R), \forall\os\in\ocS$, where $\cF$ is the top frontier of the convex hull of undominated points, as defined in \Cref{sec:proof_pi_hull}.
+		\item $Q\in\cL_\discount \implies \cF$ is the graph of a $L$-Lipschitz function, $\forall\os\in\ocS$.
 		\item taking the slice $Q_c=\beta$ of a ball $\cB(\cF,R)$ with $\cF$ $L$-Lipschitz results in an interval on $Q_r$ of range at most $(L+1)R$
 	\end{enumerate}
 	
@@ -591,7 +640,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 		\item $q^2_r < q^1_r$: then the same reasoning can be applied by simply swapping the indexes 1 and 2.
 	\end{itemize}
 	
-	% We start by showing this result for $\cC^2(Q^{1-})$ and $\cC^2(Q^{2-})$ as defined in \autoref{sec:proof_pi_hull}:
+	% We start by showing this result for $\cC^2(Q^{1-})$ and $\cC^2(Q^{2-})$ as defined in \Cref{sec:proof_pi_hull}:
 	% Let $\os\in\ocS$ and $q^2\in\cC^2(Q^{2-})$, $\exists\lambda\in[0,1], \oa_1,\oa_2\in\ocA: q^2 = (1-\lambda)Q^2(\os,\oa_1) + \lambda Q^2(\os,\oa_2)$. Define $q^1 = (1-\lambda)Q^1(\os,\oa_1) + \lambda Q^1(\os,\oa_2)$. Then 
 	% \begin{align*}
 	%     \|q^2-q^1\|_\infty &= \|(1-\lambda)(Q^2(\os,\oa_1) - Q^1(\os,\oa_1)) + \lambda (Q^2(\os,\oa_2) - Q^1(\os,\oa_2))\|_\infty\\
@@ -602,7 +651,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 	% It remains to show that when taking the top frontiers of the convex sets $\cC^2(Q^{1-})$ and $\cC^2(Q^{2-})$, they remain at a distance of at most $R$.
 	
 	We have shown that $\cF^2 \in B(\cF^1, R)$.
-	This is illustrated in \autoref{fig:contraction_lips_hull}: given a function $Q^1$, we show the locus $\cB(Q_1,R)$ of $Q^2$. We then draw $\cF^1$ the top frontier of the convex hull of $Q^1$ and alongside the locus of all possible $\cF^2$, which belong to a ball $\cB(\cF^1, R)$. 
+	This is illustrated in \Cref{fig:contraction_lips_hull}: given a function $Q^1$, we show the locus $\cB(Q_1,R)$ of $Q^2$. We then draw $\cF^1$ the top frontier of the convex hull of $Q^1$ and alongside the locus of all possible $\cF^2$, which belong to a ball $\cB(\cF^1, R)$. 
 	
 	\begin{figure}[ht]
 		\centering
@@ -611,13 +660,13 @@ The BMDP framework is a principled framework for safe decision making under unce
 		\label{fig:contraction_lips_hull}
 	\end{figure}
 	
-	\textbf{Step 2:} We want to show that if $Q\in\cL_\gamma$, $\cF$ is the graph of an $L$-Lipschitz function:
+	\textbf{Step 2:} We want to show that if $Q\in\cL_\discount$, $\cF$ is the graph of an $L$-Lipschitz function:
 	\begin{equation}
 	\label{eq:L-lip-set}
 	\forall q^1,q^2\in\cF, |q_r^2-q_r^1| \leq |q_c^2-q_c^1|
 	\end{equation}
 	
-	Let $Q\in\cL_\gamma$ and $\os\in\ocS$, $\cF$ the corresponding top frontier of convex hull.
+	Let $Q\in\cL_\discount$ and $\os\in\ocS$, $\cF$ the corresponding top frontier of convex hull.
 	For all $q^1,q^2\in\cF, \exists \lambda,\mu\in[0,1], q^{11},q^{12},q^{21},q^{22}\in Q(\os,\ocA)$ such that $q^1 = (1-\lambda)q^{11} + \lambda q^{12}$ and $q^2 = (1-\mu)q^{21} + \mu q^{22}$.
 	Without loss of generality, we can assume $q_c^{11}\leq q_c^{12}$ and $q_c^{21}\leq q_c^{22}$. We also consider the worst case in terms of maximum $q_r$ deviation: $q_c^{12} \leq q_c^{21}$.
 	Then the maximum increment $q_r^2-q_r^{1}$ is
@@ -629,13 +678,13 @@ The BMDP framework is a principled framework for safe decision making under unce
 	&= L\|q^{2}_c-q^{1}_c\|
 	\end{align*}
 	
-	This can also be seen in \autoref{fig:contraction_lips_hull}: the maximum slope of the $\cF^1$ is lower than the maximum slope between two points of $Q^1$.
+	This can also be seen in \Cref{fig:contraction_lips_hull}: the maximum slope of the $\cF^1$ is lower than the maximum slope between two points of $Q^1$.
 	
 	\textbf{Step 3:} Let $\cF_1$ be a L-Lipschitz set as defined in \eqref{eq:L-lip-set}, and consider a ball $\cB(\cF_1,R)$ around it as defined in \eqref{eq:ball-set}.
 	
-	We want to bound the optimal reward value $Q_r^{2*}$ under constraint $Q_c^{2*} = \beta$ (regular case in \autoref{sec:proof_pi_hull} where the constraint is saturated), for any $\cF^2\in\cB(\cF_1,R)$. This quantity is represented as a red double-ended arrow in \autoref{fig:contraction_lips_hull}.
+	We want to bound the optimal reward value $Q_r^{2*}$ under constraint $Q_c^{2*} = \beta$ (regular case in \Cref{sec:proof_pi_hull} where the constraint is saturated), for any $\cF^2\in\cB(\cF_1,R)$. This quantity is represented as a red double-ended arrow in \Cref{fig:contraction_lips_hull}.
 	
-	Because we are only interested in what happens locally at $Q_c=\beta$, we can zoom in on \autoref{fig:contraction_lips_hull} and only consider a thin $\epsilon$-section around $\beta$. In the limit $\epsilon\rightarrow 0$, this section becomes the tangent to $\cF^1$ at $Q_c^1=\beta$. It is represented in \autoref{fig:contraction_lips_hull_slope}, from which we derive a geometrical proof:
+	Because we are only interested in what happens locally at $Q_c=\beta$, we can zoom in on \Cref{fig:contraction_lips_hull} and only consider a thin $\epsilon$-section around $\beta$. In the limit $\epsilon\rightarrow 0$, this section becomes the tangent to $\cF^1$ at $Q_c^1=\beta$. It is represented in \Cref{fig:contraction_lips_hull_slope}, from which we derive a geometrical proof:
 	\begin{figure}[ht]
 		\centering
 		\includegraphics[trim=2cm 1cm 2cm 1cm, clip, width=0.7\textwidth]{img/contraction_lipschitz_slope.pdf}
@@ -656,25 +705,25 @@ The BMDP framework is a principled framework for safe decision making under unce
 	and $Q_c^{1*} = Q_c^{2*} = \beta$.
 	Consequently, $ \|Q^{2*} - Q^{1*}\|_\infty \leq (L+1)R$
 	
-	Finally, consider the edge case in \autoref{sec:proof_pi_hull}: the constraint is not active, and the optimal value is simply $\argmax_{q\in\cF} q^r$. In particular, since we showed that $\cF^2\in B(\cF^1, R)$, and since $Q^{2*}\in \cF^2$, there exist $q^1\in \cF^1: \|Q^{2*}-q^1\|_\infty\leq R$ and in particular $Q^{1*}_r \geq q^1_r \geq Q^{2*}_r - R$. Reciprocally, by the same reasoning, $Q^{2*}_r \geq Q^{1*}_r - R$. Hence, we have that $| Q_r^{2*} - Q_r^{1*}| \leq R \leq R(L+1).$
+	Finally, consider the edge case in \Cref{sec:proof_pi_hull}: the constraint is not active, and the optimal value is simply $\argmax_{q\in\cF} q^r$. In particular, since we showed that $\cF^2\in B(\cF^1, R)$, and since $Q^{2*}\in \cF^2$, there exist $q^1\in \cF^1: \|Q^{2*}-q^1\|_\infty\leq R$ and in particular $Q^{1*}_r \geq q^1_r \geq Q^{2*}_r - R$. Reciprocally, by the same reasoning, $Q^{2*}_r \geq Q^{1*}_r - R$. Hence, we have that $| Q_r^{2*} - Q_r^{1*}| \leq R \leq R(L+1).$
 	
 	\textbf{Wrapping it up:}
 	
-	We've shown that for any $Q^1,Q^2\in\cL_\gamma$, and all $\os\in\ocS$, $\cF^2\in\cB(\cF^1,\|Q^2-Q^1\|_\infty)$ and $\cF^1$ is the graph of a $L$-Lipschitz function with $L<1/\gamma - 1$. Moreover, the solutions of $\pi_\text{greedy}(Q^1)$ and $\pi_\text{greedy}(Q^2)$ at $\os$ are such that $ \|Q^{2*} - Q^{1*}\|_\infty \leq (L+1)\|Q^2-Q^1\|_\infty$.
+	We've shown that for any $Q^1,Q^2\in\cL_\discount$, and all $\os\in\ocS$, $\cF^2\in\cB(\cF^1,\|Q^2-Q^1\|_\infty)$ and $\cF^1$ is the graph of a $L$-Lipschitz function with $L<1/\discount - 1$. Moreover, the solutions of $\pi_\text{greedy}(Q^1)$ and $\pi_\text{greedy}(Q^2)$ at $\os$ are such that $ \|Q^{2*} - Q^{1*}\|_\infty \leq (L+1)\|Q^2-Q^1\|_\infty$.
 	
 	Hence, for all $\oa$,
 	\begin{align*}
-	\|\cT Q^1(\os, \oa) - \cT Q^2(\os, \oa)\|_\infty &= \gamma\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)} \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^1)}Q^1(\os',\oa') - \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^2)}Q^2(\os',\oa')\right\|_\infty \\
-	&= \gamma\left\|Q^{2*} - Q^{1*}\right\|_\infty \\
-	&\leq \gamma(L+1)\|Q^2-Q^1\|_\infty
+	\|\cT Q^1(\os, \oa) - \cT Q^2(\os, \oa)\|_\infty &= \discount\left\|\expectedvalueover{\os'\sim\ov{P}(\os'|\os,\oa)} \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^1)}Q^1(\os',\oa') - \expectedvalueover{\oa'\sim\pi_\text{greedy}(Q^2)}Q^2(\os',\oa')\right\|_\infty \\
+	&= \discount\left\|Q^{2*} - Q^{1*}\right\|_\infty \\
+	&\leq \discount(L+1)\|Q^2-Q^1\|_\infty
 	\end{align*}
 	Taking the sup on $\ocS\ocA$,
 	
 	\begin{equation*}
-	\|\cT Q^1 - \cT Q^2\|_\infty \leq \gamma(L+1)\|Q^1-Q^2\|_\infty
+	\|\cT Q^1 - \cT Q^2\|_\infty \leq \discount(L+1)\|Q^1-Q^2\|_\infty
 	\end{equation*}
-	with $\gamma(L+1) < 1$.
-	As a conclusion, $\cT$ is a $\gamma(L+1)$-contraction on $\cL_\gamma$.
+	with $\discount(L+1) < 1$.
+	As a conclusion, $\cT$ is a $\discount(L+1)$-contraction on $\cL_\discount$.
 \end{proof}
 
 %\subsection{Lemma \ref{lemma:concavity}}
@@ -694,7 +743,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 
 %Define $\pi = (1-p)(\pi_1(\cdot, \beta^1), \pi_1) + p(\pi_2(\cdot, \beta^2), \pi_2)$. By linearity of $V^\pi$ with respect to $\pi$, we have that $V_c^\pi(s', \beta^3) = (1-p)V_c^{\pi_1}(s', \beta^1) + pV_c^{\pi_2}(s', \beta^2) \leq (1-p)\beta^1 + p\beta^2 = \beta^3$ since $\pi_1, \pi_2\in\Pi^*(s')\subset\Pi_a(s')$, so $\pi$ respects the budget $\beta^3$. Moreover, we also have $V_r^\pi(s', \beta^3) = (1-p)V_r^{\pi_1}(s', \beta^1) + pV_r^{\pi_2}(s', \beta^2) > V_r^*(s', \beta^3)$, which contradicts the definition of $V_r^*$.
 
-%Consequently, $V_r^*(s', \cdot)$ is non-decreasing and concave. By \eqref{eq:bellman_expectation_Q} we see that $Q_r^*(s,a,\cdot) = R_r(s,a) + \gamma\expectedvalueover{s'}V_r^*(s', \cdot)$  is too.
+%Consequently, $V_r^*(s', \cdot)$ is non-decreasing and concave. By \eqref{eq:bellman_expectation_Q} we see that $Q_r^*(s,a,\cdot) = R_r(s,a) + \discount\expectedvalueover{s'}V_r^*(s', \cdot)$  is too.
 
 
 %\end{proof}
@@ -711,7 +760,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 %\end{proof}
 
 
-\subsection{\autoref{prop:bftq_pi_hull}}
+\subsection{\Cref{prop:bftq_pi_hull}}
 \label{sec:proof_pi_hull}
 \begin{definition}
 	\begin{leftbar}[defnbar]
@@ -841,7 +890,7 @@ The BMDP framework is a principled framework for safe decision making under unce
 
 %\section{Risk-Sensitive Exploration}
 %\label{sec:risk-sensitive-supp}
-%We recall the Risk-Sensitive Exploration in %\autoref{algo:risk-sensitive-exploration}:
+%We recall the Risk-Sensitive Exploration in %\Cref{algo:risk-sensitive-exploration}:
 %\input{source/risk-sensitive-explo-pseudo-code.tex}
 
 

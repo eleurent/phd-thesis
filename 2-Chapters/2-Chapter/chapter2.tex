@@ -210,7 +210,7 @@ A second decision is to leverage \emph{simulation}. The vast majority of \glsxtr
 
 Once the \glsxtrlong{MDP} is fully specified, a policy $\pi$ is said to be optimal if it maximises the \emph{expected} return
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R_t \right].
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t \right].
 \end{equation*}
 
 But is this an appropriate performance measure? Consider a driving decision --say merging into a roundabout as illustrated in \Cref{fig:risky-problem}-- that, given the uncertainty on the behaviour of other agents, can lead to a collision with a certain probability $\delta$. When maximising the return in expectation, the agent is allowed balance the rare accident penalty with the more likely perspective of a successful merge. As observed by \citet{ShalevShwartz2017}, assuming that rewards are normalized in $[0, 1]$ for standard behaviours, for the agent to care about avoiding accidents with probability $1-\delta$ requires the penalty associated with a collision to be in order of $1/\delta$, as we illustrate in \Cref{tab:risky-problem}. This leads to a high variance in the observed rewards, which is likely to impede learning. 
@@ -222,7 +222,7 @@ This questioning has lead researchers and practitioners to consider alternative 
 
 Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R_t\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[\sum_t \gamma^t R_t \right].
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[\sum_t \discount^t R_t \right].
 \end{equation*}
 
 Many other risk measures have been investigated such as the \gls{VaR}, the \gls{CVaR} and percentile performance, in both the \glsxtrlong{MAB} setting \citet{Torossian19a} and the \glsxtrlong{RL} setting \citep{Moody2001,Tamar2012,Prashanth2013,Delage2010}. In their seminal paper, \citet{Artzner1999} identified a set of properties deemed necessary for a risk measure to be \emph{coherent}, and policy gradient methods have been designed to optimise this class of measures \citep{Tamar2015}.
@@ -233,7 +233,7 @@ In the context of \glsxtrlong{AD}, the variance-penalised objective has been app
 In model-based \glsxtrlong{RL}, the model parameters are typically estimated from noisy interaction data, which can lead to modelling errors that may have fatal consequences in real, physical systems. To address this issue, robust control community has formulated to optimise the outcome of a policy $\pi$ with respect to an \emph{ambiguity set} $\cP$ of likely dynamics:
 
 \begin{equation*}
-\max_\pi \min_{P\in\cP} \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R_t\right]
+\max_\pi \min_{P\in\cP} \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t\right]
 \end{equation*}
 
 This problem was first studied by the control community, who focused on the minimax control of the $\cH_\infty$-norm \citep[][]{Basar1996} and $\cH_2$-norm \citep{Berkenkamp2015} of linear systems. Minimax-control of quadratic costs --the so-called robust \gls{LQ} problem-- was later considered in \citep{abbasi-yadkori11a,Ibrahimi2013,Faradonbeh2017,Ouyang2017,abeille18a,Dean2017,Dean2018}.
@@ -247,7 +247,7 @@ The case of finite \glspl{MDP} with uncertain parameters was studied by \citet{I
 Another approach is to formulate safety as constrained optimisation: the task is to maximise a target function $f(x)$ while satisfying an inequality constraint $g(x)\leq \beta$. For instance, \citet{Berkenkamp2016} apply this principle to safe blackbox optimisation using Gaussian Process regression. This idea is extended to a sequential decision-making in the \gls{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \glspl{MDP} augmented with a cost function $C$, and such that the return maximisation objective is subjected to a constraint on the maximum expected cumulative discounted cost:
 
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \gamma^t R_t \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \gamma^t C_t \right] \leq \beta.
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \discount^t C_t \right] \leq \beta.
 \end{equation*}
 
 Extensions have also been proposed to this framework: in \citep{Tessler2019}, more general constraints than discounted sums are considered, while in \citep{Geibel2005,Chow2018} the constraint does concern the expectation of the discounted total cost, but rather its percentile or \gls{CVaR}. 

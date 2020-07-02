@@ -1,6 +1,6 @@
 \begin{algorithm}[tp]
 \DontPrintSemicolon
-\KwData{$\mathcal{D}$, $\tilde{\mathcal{B}}$ a finite subset of $\mathcal{B}$, $\gamma$, a model $Q\in (\Real^2)^{S \ocA}$, a regression algorithm \texttt{fit}, a set of CPU workers $W$}
+\KwData{$\mathcal{D}$, $\tilde{\mathcal{B}}$ a finite subset of $\mathcal{B}$, $\discount$, a model $Q\in (\Real^2)^{S \ocA}$, a regression algorithm \texttt{fit}, a set of CPU workers $W$}
 \KwResult{$Q^*$}
 $Q \leftarrow 0$\;
 $X \leftarrow \{s_i,a_i,\beta_{a_i}\}_{i\in[0, |\cD|]}$\;
@@ -16,8 +16,8 @@ $S' \leftarrow \{s_i'\}_{i\in[0, |\cD|]}$\;
            $k \leftarrow \min\{k: \beta_i \geq q_c$ with $\left(q_c,q_r\right) = \cH[k]\}$\;
            $q_c^2,q_r^2,q_c^1,q_r^1 \leftarrow \cH[k],\cH[k-1]$\;
            $p \leftarrow (\beta_{a_i} - q_a^1) / (q_c^2 - q_c^1)$\;
-           $Y_c^{w,i} \leftarrow {R_c}_i + \gamma ((1-p) q_c^1+ p q_c^2)$\;
-           $Y_r^{w,i} \leftarrow {R_r}_i + \gamma ((1-p) q_r^1+ p q_r^2)$\;
+           $Y_c^{w,i} \leftarrow {R_c}_i + \discount ((1-p) q_c^1+ p q_c^2)$\;
+           $Y_r^{w,i} \leftarrow {R_r}_i + \discount ((1-p) q_r^1+ p q_r^2)$\;
        }
    }
    Join the results: $Y \leftarrow \cup_{w\in W} (Y_c^w, Y_r^w)$\;

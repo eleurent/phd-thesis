@@ -61,9 +61,9 @@ Finding an optimal policy thus reduces to computing the optimal value function $
 \begin{leftbar}[theorembar]
 The optimal action-value function $Q^\star$ satisfies the Bellman Optimality Equation:
 \begin{equation*}
-Q^\star(s, a) = (\cT Q^*) (s, a) \eqdef \expectedvalueover{s'\sim P(s'|s, a)} \max_{a'\in \cA} \left[R(s, a) + \gamma Q^\star(s', a')\right].
+Q^\star(s, a) = (\cT Q^*) (s, a) \eqdef \expectedvalueover{s'\sim P(s'|s, a)} \max_{a'\in \cA} \left[R(s, a) + \discount Q^\star(s', a')\right].
 \end{equation*}
-Moreover, $\cT$ is a $\gamma$-contraction.
+Moreover, $\cT$ is a $\discount$-contraction.
 \end{leftbar}
 \end{theorem}
 
