@@ -3,6 +3,7 @@
 
 \newcommand{\idx}[1]{#1\index{#1}}
 \newcommand{\discountfactor}{\discount}
+\newcommand{\augmentedreward}{\oR}
 
 % --- MDP
 
@@ -41,15 +42,25 @@
 \newglossaryentry{Q}{name={\var{Q}},description={State-action value function},type=symbols, category=symbol, sort=use}
 \newcommand{\Q}{\gls{Q}}
 
+\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
+\newcommand{\bo}{\gls{bo}}
+
 \newglossaryentry{params}{name={\var{\theta}},description={Parameters for a model},type=symbols, category=symbol, sort=use}
 \newcommand{\params}{{\gls{params}}}
 
 \newglossaryentry{regret}{name={\var{r_n}},description={Simple regret of an algorithm},type=symbols, category=symbol, sort=use}
 \newcommand{\regret}{\gls{regret}}
 
-
+\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={Dataset},type=symbols, category=symbol, sort=use}
+\newcommand{\cD}{\gls{cD}}
 
 % Probas
+\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={Set of probability measures},type=symbols, category=symbol, sort=use}
+\newcommand{\cM}{\gls{cM}}
+
+\newglossaryentry{uniform}{name={\var{\mathcal{U}}},description={Uniform distribution},type=symbols}
+\newcommand{\uniform}{\gls{uniform}}
+
 \newglossaryentry{dirac}{name={\var{\delta}},description={Dirac function},type=symbols, category=symbol, sort=use}
 \newcommand{\dirac}{\gls{dirac}}
 
@@ -77,34 +88,6 @@
 
 % --- Chapter 5
 
-\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={Augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
-\newcommand{\abo}{\gls{abo}}
-
-\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
-\newcommand{\bo}{\gls{bo}}
-
-
-\newglossaryentry{oQ}{name={\var{\overline{Q}}},description={Augmented Q-function},type=symbols, category=symbol, sort=use}
-\newcommand{\oQ}{\gls{oQ}}
-
-\newglossaryentry{Qr}{name={\var{Q_r}},description={Reward Q-function},type=symbols, category=symbol, sort=use}
-\newcommand{\Qr}{\gls{Qr}}
-
-\newglossaryentry{Qc}{name={\var{Q_c}},description={Constraint Q-function},type=symbols, category=symbol, sort=use}
-\newcommand{\Qc}{\gls{Qc}}
-
-\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward function},type=symbols}
-\newcommand{\oR}{\gls{oR}}
-
-\newglossaryentry{oV}{name={\var{\overline{V}}},description={Augmented value function},type=symbols, category=symbol, sort=use}
-\newcommand{\oV}{\gls{oV}}
-
-\newglossaryentry{Vr}{name={\var{V_r}},description={Reward value function},type=symbols, category=symbol, sort=use}
-\newcommand{\Vr}{\gls{Vr}}
-
-\newglossaryentry{Vc}{name={\var{V_c}},description={Constraint value function},type=symbols, category=symbol, sort=use}
-\newcommand{\Vc}{\gls{Vc}}
-
 \newglossaryentry{ocS}{name={\var{\overline{\mathcal{S}}}},description={Set of augmented states},type=symbols, category=symbol, sort=use}
 \newcommand{\ocS}{\gls{ocS}}
 
@@ -117,26 +100,23 @@
 \newglossaryentry{piii}{name={\var{\overline{\Pi}}},description={Set of budgeted policies},type=symbols, category=symbol, sort=use}
 \newcommand{\policies}{\gls{piii}}
 
-\newglossaryentry{cU}{name={\var{\mathcal{U}}},description={Constrained action space},type=symbols, category=symbol, sort=use}
-\newcommand{\cU}{\gls{cU}}
+\newglossaryentry{constraintx}{name={\var{C}},description={Constraint function},type=symbols, category=symbol, sort=use}
+\newcommand{\constraint}{\gls{constraintx}}
+
+\newglossaryentry{budget}{name={\var{\beta}},description={Budget},type=symbols, category=symbol, sort=use}
+\newcommand{\budget}{\gls{budget}}
+
+\newglossaryentry{nextbudget}{name={\var{\beta'}},description={Next budget},type=symbols, category=symbol, sort=use}
+\newcommand{\nextbudget}{\gls{nextbudget}}
+
+\newglossaryentry{budgetaction}{name={\var{\beta_a}},description={Budget allocated to an action},type=symbols, category=symbol, sort=use}
+\newcommand{\budgetaction}{\gls{budgetaction}}
 
 \newglossaryentry{augmentedtransition}{name={\var{\overline{P}}},description={Augmented transition function},type=symbols, category=symbol, sort=use}
 \newcommand{\augmentedtransition}{\gls{augmentedtransition}}
 
-\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={Dataset},type=symbols, category=symbol, sort=use}
-\newcommand{\cD}{\gls{cD}}
-
-\newglossaryentry{constraintx}{name={\var{C}},description={Constraint function},type=symbols, category=symbol, sort=use}
-\newcommand{\constraint}{\gls{constraintx}}
-
-\newglossaryentry{constraintreturn}{name={\var{G_c}},description={Discounted return for the constraint signal},type=symbols, category=symbol, sort=use}
-\newcommand{\constraintreturn}{\gls{constraintreturn}}
-
-\newglossaryentry{augmentedreturn}{name={\var{\overline{G}}},description={Augmented return},type=symbols, category=symbol, sort=use}
-\newcommand{\augmentedreturn}{\gls{augmentedreturn}}
-
-\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={Set of probability measures},type=symbols, category=symbol, sort=use}
-\newcommand{\cM}{\gls{cM}}
+\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward function},type=symbols}
+\newcommand{\oR}{\gls{oR}}
 
 \newglossaryentry{budgetedpolicyy}{name={\var{\overline{\pi}}},description={Budgeted policy},type=symbols, category=symbol, sort=use}
 \newcommand{\budgetedpolicy}{\gls{budgetedpolicyy}}
@@ -144,14 +124,32 @@
 \newglossaryentry{optimalbudgetedpolicy}{name={\var{\overline{\pi}^\star}},description={Optimal budgeted policy},type=symbols, category=symbol, sort=use}
 \newcommand{\optimalbudgetedpolicy}{\gls{optimalbudgetedpolicy}}
 
-\newglossaryentry{budgetaction}{name={\var{\beta_a}},description={Budget allocated to an action},type=symbols, category=symbol, sort=use}
-\newcommand{\budgetaction}{\gls{budgetaction}}
+\newglossaryentry{constraintreturn}{name={\var{G_c}},description={Discounted return for the constraint signal},type=symbols, category=symbol, sort=use}
+\newcommand{\constraintreturn}{\gls{constraintreturn}}
 
-\newglossaryentry{nextbudget}{name={\var{\beta'}},description={Next budget},type=symbols, category=symbol, sort=use}
-\newcommand{\nextbudget}{\gls{nextbudget}}
+\newglossaryentry{augmentedreturn}{name={\var{\overline{G}}},description={Augmented return},type=symbols, category=symbol, sort=use}
+\newcommand{\augmentedreturn}{\gls{augmentedreturn}}
 
-\newglossaryentry{budget}{name={\var{\beta}},description={Budget},type=symbols, category=symbol, sort=use}
-\newcommand{\budget}{\gls{budget}}
+\newglossaryentry{oV}{name={\var{\overline{V}}},description={Augmented value function},type=symbols, category=symbol, sort=use}
+\newcommand{\oV}{\gls{oV}}
+
+\newglossaryentry{Vr}{name={\var{V_r}},description={Reward value function},type=symbols, category=symbol, sort=use}
+\newcommand{\Vr}{\gls{Vr}}
+
+\newglossaryentry{Vc}{name={\var{V_c}},description={Constraint value function},type=symbols, category=symbol, sort=use}
+\newcommand{\Vc}{\gls{Vc}}
+
+\newglossaryentry{oQ}{name={\var{\overline{Q}}},description={Augmented Q-function},type=symbols, category=symbol, sort=use}
+\newcommand{\oQ}{\gls{oQ}}
+
+\newglossaryentry{Qr}{name={\var{Q_r}},description={Reward Q-function},type=symbols, category=symbol, sort=use}
+\newcommand{\Qr}{\gls{Qr}}
+
+\newglossaryentry{Qc}{name={\var{Q_c}},description={Constraint Q-function},type=symbols, category=symbol, sort=use}
+\newcommand{\Qc}{\gls{Qc}}
+
+\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={Augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
+\newcommand{\abo}{\gls{abo}}
 
 \newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator},type=symbols, category=symbol, sort=use}
 \newcommand{\projection}{\gls{projection}}
