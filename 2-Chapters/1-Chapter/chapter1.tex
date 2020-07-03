@@ -68,9 +68,9 @@ The skill of driving a car involves taking a series of decisions, where early st
 
 \begin{definition}[Policy return]
 	\begin{leftbar}[defnbar]
-	The {return} $\return$ of a policy $\policy$ is a random variable defined as the discounted sum of rewards 
+	The {return} $\return^{\gls+{policy}}$ of a policy $\policy$ is a random variable defined as the discounted sum of rewards 
 	\begin{equation*}
-	\gls+{return} = \sum_{t=0}^\infty \discount^t \R(s_t, a_t)
+	\gls+{return}^{\gls+{policy}} = \sum_{t=0}^\infty \discount^t \R(s_t, a_t)
 	\end{equation*}
 	accumulated along a trajectory $\tau = (s_0, a_0, s_1, a_1, \dots)$ induced by the policy $a_t\sim \policy(a_t|s_t)$ and system dynamics $s_{t+1}\sim \Ps(s_{t+1} \mid s_t, a_t)$.
 	\end{leftbar}
@@ -82,11 +82,11 @@ The performance of a policy $\policy$ is then evaluated through its \emph{value}
 	\label{def:value-functions}
 	The state value $\V^\policy(s)$ of a policy $\policy$ is the expected return of the policy when starting in a state $s$
 	\begin{align*}
-	\gls+{V}^\policy(s) \eqdef \expectedvalue\left[ \return \mid s_0=s\right].
+	\gls+{V}^\policy(s) \eqdef \expectedvalue\left[ \return^\policy \mid s_0=s\right].
 	\end{align*}
 	Similarly, the state-action value $\Q^\policy(s, a)$ of a policy $\policy$ is the expected return of the policy when starting in the state $s$ and taking the action $a$
 	\begin{align*}
-	\gls+{Q}^\policy(s, a) &\eqdef \expectedvalue\left[ \return \mid s_0=s, a_0 = a)\right].
+	\gls+{Q}^\policy(s, a) &\eqdef \expectedvalue\left[ \return^\policy \mid s_0=s, a_0 = a)\right].
 	\end{align*}
 	\end{leftbar}
 \end{definition}

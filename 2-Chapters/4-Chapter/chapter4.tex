@@ -50,9 +50,9 @@ We start by recalling standard model-free learning algorithms, with a focus on v
 	\begin{leftbar}[propositionbar]
 	A greedy policy defined as
 	\begin{equation*}
-	\forall s\in\cS, \optimalpolicy\parentheses{\cdot \mid s} = \delta_{a^\star},\,\text{where } {a^\star}\in \argmax_a Q^\star(s, a),
+	\forall s\in\cS, \optimalpolicy\parentheses{\cdot \mid s} = \dirac_{a^\star},\,\text{where } {a^\star}\in \argmax_a Q^\star(s, a),
 	\end{equation*}
-	and $\delta_x = \delta(x-\cdot)$ denotes the Dirac distribution in $x$, is optimal.
+	and $\dirac_x = \dirac(x-\cdot)$ denotes the Dirac distribution in $x$, is optimal.
 	\end{leftbar}
 \end{proposition}
 

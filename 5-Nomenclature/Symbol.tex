@@ -1,9 +1,12 @@
 \definecolor{symbolcolor}{rgb}{0.5,0.,0}
 \newcommand{\var}[1]{\ensuremath{#1}}
 
+% TODO: Aliases, to be removed
 \newcommand{\idx}[1]{#1\index{#1}}
 \newcommand{\discountfactor}{\discount}
 \newcommand{\augmentedreward}{\oR}
+\newcommand{\reward}{\R}
+\newcommand{\transition}{\Ps}
 
 % --- MDP
 
@@ -33,13 +36,13 @@
 \newglossaryentry{optimalpolicy}{name={\var{\pi^\star}},description={Optimal policy},type=symbols, category=symbol, sort=use}
 \newcommand{\optimalpolicy}{\gls{optimalpolicy}}
 
-\newglossaryentry{return}{name={\var{G^\pi}},description={Discounted return for the reward signal},type=symbols, category=symbol, sort=use}
+\newglossaryentry{return}{name={\var{G}},description={Discounted return for the reward signal},type=symbols, category=symbol, sort=use}
 \newcommand{\return}{\gls{return}}
 
-\newglossaryentry{V}{name={\var{V}},description={State value function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{V}{name={\var{V}},description={State value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort=use}
 \newcommand{\V}{\gls{V}}
 
-\newglossaryentry{Q}{name={\var{Q}},description={State-action value function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Q}{name={\var{Q}},description={State-action value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort=use}
 \newcommand{\Q}{\gls{Q}}
 
 \newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
@@ -61,7 +64,7 @@
 \newglossaryentry{uniform}{name={\var{\mathcal{U}}},description={Uniform distribution},type=symbols}
 \newcommand{\uniform}{\gls{uniform}}
 
-\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac distribution},type=symbols, category=symbol, sort=use}
 \newcommand{\dirac}{\gls{dirac}}
 
 \newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols, category=symbol, sort=use}
@@ -115,11 +118,11 @@
 \newglossaryentry{augmentedtransition}{name={\var{\overline{P}}},description={Augmented transition function},type=symbols, category=symbol, sort=use}
 \newcommand{\augmentedtransition}{\gls{augmentedtransition}}
 
-\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward function},type=symbols}
+\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward function},type=symbols,category=symbol, sort=use}
 \newcommand{\oR}{\gls{oR}}
 
 \newglossaryentry{budgetedpolicyy}{name={\var{\overline{\pi}}},description={Budgeted policy},type=symbols, category=symbol, sort=use}
-\newcommand{\budgetedpolicy}{\gls{budgetedpolicyy}}
+\newcommand{\budgetedpolicy}{{\gls{budgetedpolicyy}}}
 
 \newglossaryentry{optimalbudgetedpolicy}{name={\var{\overline{\pi}^\star}},description={Optimal budgeted policy},type=symbols, category=symbol, sort=use}
 \newcommand{\optimalbudgetedpolicy}{\gls{optimalbudgetedpolicy}}
@@ -149,7 +152,7 @@
 \newcommand{\Qc}{\gls{Qc}}
 
 \newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={Augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
-\newcommand{\abo}{\gls{abo}}
+\newcommand{\abo}{{\gls{abo}}}
 
 \newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator},type=symbols, category=symbol, sort=use}
 \newcommand{\projection}{\gls{projection}}
