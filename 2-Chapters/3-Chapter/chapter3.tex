@@ -133,8 +133,8 @@ Other simulated vehicles follow simple and behavioural models from the traffic s
 The acceleration command $a_i$ of a vehicle $i\in[1, N_v]$ is controlled directly by the \gls{IDM} from \citep{Treiber2000}:
 \begin{align}
 \begin{split}
-a_i &= a\left[1-\left(\frac{v}{v_0}\right)^\delta - \left(\frac{d^*_i}{d_i}\right)^2\right], \\
-\text{where }\quad d^*_i &= d_0 + Tv_i + \frac{v_i\Delta v_i}{2\sqrt{ab}},
+a_i &= a\left[1-\left(\frac{v}{v_0}\right)^\delta - \left(\frac{d^{\star}_i}{d_i}\right)^2\right], \\
+\text{where }\quad d^{\star}_i &= d_0 + Tv_i + \frac{v_i\Delta v_i}{2\sqrt{ab}},
 \end{split}
 \end{align}
 $v_i$ is the vehicle velocity, $d_i$ is the distance to its front vehicle.

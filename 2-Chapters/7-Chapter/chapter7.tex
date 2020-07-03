@@ -1964,7 +1964,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
-		By definition, when starting with sequence $a$, the value $U_a^m(k)$ represents the minimum admissible reward, while $B_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^*$, $U_a^m(k)$ and $U_a^r(k)$ are non-decreasing functions of $k$ and $B_a^m(k)$ and $B_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
+		By definition, when starting with sequence $a$, the value $U_a^m(k)$ represents the minimum admissible reward, while $B_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^{\star}$, $U_a^m(k)$ and $U_a^r(k)$ are non-decreasing functions of $k$ and $B_a^m(k)$ and $B_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
 		
 		Moreover, since the reward function $R$ is assumed be bounded in $[0, 1]$, the sum of discounted rewards from a node of depth $d$ is at most $\discount^d + \discount^{d+1}+\dots = \frac{\discount^d}{1-\discount}$. As a consequence, for all $k \geq 0$ , $a\in\mathcal{L}_k$ of depth $d$, and any sequence of rewards $(R_n)_{n\in\mathbb{N}}$ obtained from following a path in $a\mathcal{A}^\infty$ with any dynamics $m \in [M]$:
 		\begin{equation*}

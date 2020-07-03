@@ -11,12 +11,12 @@ sample initial budget $\beta\sim\mathcal{U}(\mathcal{B})$.\;
 update $\epsilon$ from schedule.\;
 sample $z\sim\mathcal{U}([0, 1])$.\;
 \lIf{$z < \epsilon$}{sample $(a, \beta_a)\sim\mathcal{U}(\Delta_{\cA\cB})$.\tcp*[f]{Explore}}
-\lElse{sample $(a, \beta_a)\sim\pi_\text{greedy}(a, \beta_a|s, \beta; Q^*)$.\tcp*[f]{Exploit}}
+\lElse{sample $(a, \beta_a)\sim\pi_\text{greedy}(a, \beta_a|s, \beta; Q^{\star})$.\tcp*[f]{Exploit}}
 append transition $(s, \beta, a, \beta_a, R, C, s')$ to batch $\mathcal{D}$.\;
 step episode budget $\beta \leftarrow \beta_a$
 }
 }
-$\pi_\text{greedy}(\cdot\sim; ~Q^*) \leftarrow\texttt{BFTQ}(\cD)$.
+$\pi_\text{greedy}(\cdot\sim; ~Q^{\star}) \leftarrow\texttt{BFTQ}(\cD)$.
 }
 \Return{the batch of transitions $\cD$}
 \caption{Risk-sensitive exploration}

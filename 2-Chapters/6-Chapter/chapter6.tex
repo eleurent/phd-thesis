@@ -36,7 +36,7 @@ In a \emph{Markov Decision Process} (MDP), an agent observes its current state $
 The paper is structured as follows: in section \ref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in section \ref{sec:sample-complexity}. In section \ref{sec:time-complexity}, we propose an efficient implementation of the two algorithms. Finally in section \ref{sec:planning-experiments}, we evaluate them in several numerical experiments.
 
 \paragraph{Notations}
-We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in A^*$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in A^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in A^t$. $A^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in A^*$ and $b\in A^*$ can be concatenated as $ab\in A^*$, the set of finite and infinite suffixes of $a$ are respectively $a A^* = \{c\in\mathcal{A}^*: \exists b\in A^*$ such that $c=ab\}$ and $aA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
+We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in A^{\ast}$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in A^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in A^t$. $A^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in A^{\ast}$ and $b\in A^{\ast}$ can be concatenated as $ab\in A^{\ast}$, the set of finite and infinite suffixes of $a$ are respectively $a A^{\ast} = \{c\in\mathcal{A}^{\star}: \exists b\in A^{\ast}$ such that $c=ab\}$ and $aA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
 
 During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in A^t$ and receives a reward $Y_t^m$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{Y_t^m | s_t, a^m_t} \prod_{k=1}^{t-1} \probability{s_{k+1} | s_{k}, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1$ is the current state.
 
@@ -137,7 +137,7 @@ We now discuss two specific implementations that differ in their choice of diver
 
 \subsubsection{OLOP}
 \label{sec:kl-olop-olop}
-To recover the original \OLOP algorithm of \citet{Bubeck2010} from Algorithm \ref{algo:kl-olop}, we can use a quadratic divergence $\dquad$ on $I=\mathbb{R}$ and a constant function $f_4$ defined as follows:
+To recover the original \OLOP algorithm of \citet{Bubeck2010} from \Cref{algo:kl-olop}, we can use a quadratic divergence $\dquad$ on $I=\mathbb{R}$ and a constant function $f_4$ defined as follows:
 \begin{equation*}
 \dquad(p,q) \eqdef 2(p-q)^2,\qquad
 f_4(m) \eqdef 4 \log M
@@ -153,26 +153,24 @@ which is the Chernoff-Hoeffding bound used originally in section 3.1 of \cite{Bu
 From the definition of $U_a(m)$ as an upper-bound of the value of the sequence $a$, we expect increasing sequences $(a_{1:t})_t$ to have non-increasing upper-bounds. Indeed, every new action $a_t$ encountered along the sequence is a potential loss of optimality.
 However, this property is only true if the upper-bound defined in \eqref{eq:u_mu_a_m} belongs to the reward interval $[0,1]$.
 
-\begin{lemma}(Monotony of $U_a(m)$ along a sequence)
+\begin{lemma}[Monotony of $U_a(m)$ along a sequence]
 	\label{lemma:seq_values}
 	\begin{leftbar}[lemmabar]
+	We have that:
 	\begin{itemize}
-		\item If it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in A^*$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
-		\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in A^*$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
+	\item if it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in A^{\ast}$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
+	\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in A^{\ast}$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
 	\end{itemize}
 	\end{leftbar}
 \end{lemma}
 
 \begin{proof}
 	We prove the first proposition, and the same reasoning applies to the second. For $a\in A^L$ and $1 \leq h \leq L - 1$, we have by \eqref{eq:Ua}:
-	
-	
 	\begin{align*}
 	U_{a_{1:h+1}}(m) - U_{a_{1:h}}(m) &= \discount^{h+1}U^{\mu}_{a_{1:h+1}}(m) + \frac{\discount^{h+2}}{1-\discount} - \frac{\discount^{h+1}}{1-\discount}\\
 	&= \discount^{h+1}(\underbrace{U^{\mu}_{a_{1:h+1}}(m)}_{\in [0, 1]} - 1) \leq 0
 	%&\leq 0
 	\end{align*}
-	
 	
 	\noindent
 	We can conclude that $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing and that $B_a(m) = \inf_{1 \leq h \leq L} U_{a_{1:h}}(m) = U_{a_{1:L}}(m) = U_a(m)$.
@@ -326,7 +324,7 @@ We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which 
 We follow step-by step the pyramidal proof of \citep{Bubeck2010}, and adapt it to the Kullback-Leibler upper confidence bound. The adjustments resulting from the change of confidence bounds are \diff{highlighted}. The proofs of lemmas which are not significantly altered are listed in the Supplementary Material. 
 
 We start by recalling their notations.
-Let $1 \leq H \leq L$ and $a^* \in A^L$ such that $V(a^*) = V$.
+Let $1 \leq H \leq L$ and $a^{\star} \in A^L$ such that $V(a^{\star}) = V$.
 Considering sequences of actions of length $1 \leq h \leq H$, we define the subset $\mathcal{I}_h$ of near-optimal sequences and the subset $\mathcal{J}$ of sub-optimal sequences that were near-optimal at depth $h-1$
 \begin{equation*}
 \mathcal{I}_h = \left\{a \in A^h: V - V(a) \leq 2\frac{\discount^{h+1}}{1-\discount}\right\}, \mathcal{J}_h = \left\{a \in A^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
@@ -365,11 +363,11 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 \begin{lemma}[Conditions for sub-optimal pull]
 	\label{lemma:sub-optimal-pull}
 	\begin{leftbar}[lemmabar]
-	Assume that at step $m+1$ we select a sub-optimal sequence $a^{m+1}$: there exist $0 \leq h \leq L,  a\in \mathcal{J}_h$ such that $a^{m+1} \in aA^*$. Then, it implies that one of the following propositions is true:
+	Assume that at step $m+1$ we select a sub-optimal sequence $a^{m+1}$: there exist $0 \leq h \leq L,  a\in \mathcal{J}_h$ such that $a^{m+1} \in aA^{\ast}$. Then, it implies that one of the following propositions is true:
 	\begin{equation}
 	\label{eq:cond-ukl}
 	\tag{UCB violation}
-	\diff{U_{a^*}(m)} < V,
+	\diff{U_{a^{\star}}(m)} < V,
 	\end{equation}
 	or
 	\begin{equation}
@@ -386,12 +384,12 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in A^L}  U_a(m)$ and $a^*\in A^L$, so $U_{a^{m+1}}(m) \geq U_{a^*}(m)$ and finally $U_a(m) \geq U_{a^*}(m)$.
+	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in A^L}  U_a(m)$ and $a^{\star}\in A^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
 	
 	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
 	\label{eq:ukl-verifie}
-	\sum_{t=1}^h \discount^t U^{\mu}_{a_{1:t}}(m) + \frac{\discount^{h+1}}{1-\discount} = U_a(m) \geq U_{a^*}(m) \geq V
+	\sum_{t=1}^h \discount^t U^{\mu}_{a_{1:t}}(m) + \frac{\discount^{h+1}}{1-\discount} = U_a(m) \geq U_{a^{\star}}(m) \geq V
 	\end{equation}
 	Assume that \eqref{eq:cond-lkl} is false, then
 	\begin{equation}
@@ -417,48 +415,48 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	Since $V \leq \sum_{t=1}^h \discount^t \mu(a^*_{1:t}) + \frac{\discount^{h+1}}{1-\discount}$, we have,
+	Since $V \leq \sum_{t=1}^h \discount^t \mu(a^{\star}_{1:t}) + \frac{\discount^{h+1}}{1-\discount}$, we have,
 	\begin{align*}
-	\probability{\eqref{eq:cond-ukl}} &=  \probability{U_{a^*}(m) \leq V}\\
-	&= \probability{\sum_{t=1}^L \discount^t U^{\mu}_{a^*_{1:t}}(m) \leq \sum_{t=1}^L \discount^t \mu(a^*_{1:t})}\\
-	&\leq \probability{\exists 1\leq t \leq L : U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})} \\
-	&\leq \sum_{t=1}^L\probability{U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})}
+	\probability{\eqref{eq:cond-ukl}} &=  \probability{U_{a^{\star}}(m) \leq V}\\
+	&= \probability{\sum_{t=1}^L \discount^t U^{\mu}_{a^{\star}_{1:t}}(m) \leq \sum_{t=1}^L \discount^t \mu(a^{\star}_{1:t})}\\
+	&\leq \probability{\exists 1\leq t \leq L : U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t})} \\
+	&\leq \sum_{t=1}^L\probability{U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t})}
 	\end{align*}
 	
-	\diff{In order to bound this quantity, we reduce the question to the application of a deviation inequality. For all $1\leq t\leq L$, we have on the event $\{U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})\}$ that $\hat{\mu}_{a^*_{1:t}}(m) \leq U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t}) < 1$. Therefore, for all $0 < \delta < 1 - \mu(a^*_{1:t})$, by definition of $U^{\mu}_{a^*_{1:t}}(m)$:}
+	\diff{In order to bound this quantity, we reduce the question to the application of a deviation inequality. For all $1\leq t\leq L$, we have on the event $\{U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t})\}$ that $\hat{\mu}_{a^{\star}_{1:t}}(m) \leq U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t}) < 1$. Therefore, for all $0 < \delta < 1 - \mu(a^{\star}_{1:t})$, by definition of $U^{\mu}_{a^{\star}_{1:t}}(m)$:}
 	
 	\begin{equation*}
-	\diff{d(\hat{\mu}_{a^*_{1:t}}(m), U^{\mu}_{a^*_{1:t}}(m)+\delta) > \frac{f(m)}{T_{a^*_{1:t}}(m)}}
+	\diff{d(\hat{\mu}_{a^{\star}_{1:t}}(m), U^{\mu}_{a^{\star}_{1:t}}(m)+\delta) > \frac{f(m)}{T_{a^{\star}_{1:t}}(m)}}
 	\end{equation*}
 	
 	\diff{As $d$ is continuous on $(0,1)\times[0, 1]$, we have by letting $\delta \rightarrow 0$ that:}
 	
 	\begin{equation*}
-	\diff{d(\hat{\mu}_{a^*_{1:t}}(m), U^{\mu}_{a^*_{1:t}}(m)) \geq \frac{f(m)}{T_{a^*_{1:t}}(m)}}
+	\diff{d(\hat{\mu}_{a^{\star}_{1:t}}(m), U^{\mu}_{a^{\star}_{1:t}}(m)) \geq \frac{f(m)}{T_{a^{\star}_{1:t}}(m)}}
 	\end{equation*}
 	
-	\diff{Since d is non-decreasing on $[\hat{\mu}_{a^*_{1:t}}(m), \mu(a^*_{1:t})]$,}
+	\diff{Since d is non-decreasing on $[\hat{\mu}_{a^{\star}_{1:t}}(m), \mu(a^{\star}_{1:t})]$,}
 	
 	\begin{equation*}
-	\diff{d(\hat{\mu}_{a^*_{1:t}}(m), \mu(a^*_{1:t})) \geq d(\hat{\mu}_{a^*_{1:t}}(m), U^{\mu}_{a^*_{1:t}}(m)) \geq \frac{f(m)}{T_{a^*_{1:t}}(m)}}
+	\diff{d(\hat{\mu}_{a^{\star}_{1:t}}(m), \mu(a^{\star}_{1:t})) \geq d(\hat{\mu}_{a^{\star}_{1:t}}(m), U^{\mu}_{a^{\star}_{1:t}}(m)) \geq \frac{f(m)}{T_{a^{\star}_{1:t}}(m)}}
 	\end{equation*}
 	
 	\diff{We have thus shown the following inclusion:}
 	
 	\begin{equation*}
-	\diff{\{U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})\} \subseteq \left\{ \mu(a^*_{1:t}) > \hat{\mu}_{a^*_{1:t}}(m) \text{ and } d(\hat{\mu}_{a^*_{1:t}}(m), \mu(a^*_{1:t})) \geq \frac{f(m)}{T_{a^*_{1:t}}(m)} \right\}}
+	\diff{\{U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t})\} \subseteq \left\{ \mu(a^{\star}_{1:t}) > \hat{\mu}_{a^{\star}_{1:t}}(m) \text{ and } d(\hat{\mu}_{a^{\star}_{1:t}}(m), \mu(a^{\star}_{1:t})) \geq \frac{f(m)}{T_{a^{\star}_{1:t}}(m)} \right\}}
 	\end{equation*}
 	
-	\diff{Decomposing according to the values of $T_{a^*_{1:t}}(m)$ yields:}
+	\diff{Decomposing according to the values of $T_{a^{\star}_{1:t}}(m)$ yields:}
 	
 	\begin{equation*}
-	\diff{\{U^{\mu}_{a^*_{1:t}}(m) \leq \mu(a^*_{1:t})\} \subseteq \bigcup_{n=1}^m \left\{ \mu(a^*_{1:t}) > \hat{\mu}_{a^*_{1:t}, n} \text{ and } d(\hat{\mu}_{a^*_{1:t}, n}, \mu(a^*_{1:t})) \geq \frac{f(m)}{n} \right\}}
+	\diff{\{U^{\mu}_{a^{\star}_{1:t}}(m) \leq \mu(a^{\star}_{1:t})\} \subseteq \bigcup_{n=1}^m \left\{ \mu(a^{\star}_{1:t}) > \hat{\mu}_{a^{\star}_{1:t}, n} \text{ and } d(\hat{\mu}_{a^{\star}_{1:t}, n}, \mu(a^{\star}_{1:t})) \geq \frac{f(m)}{n} \right\}}
 	\end{equation*}
 	
-	\diff{We now apply the deviation inequality provided in Lemma 2 of Appendix A in \citep{Cappe2013}: $\forall \epsilon > 1$, provided that $0 < \mu(a^*_{1:t}) < 1$,}
+	\diff{We now apply the deviation inequality provided in Lemma 2 of Appendix A in \citep{Cappe2013}: $\forall \epsilon > 1$, provided that $0 < \mu(a^{\star}_{1:t}) < 1$,}
 	
 	\begin{equation*}
-	\diff{\probability{\bigcup_{n=1}^m \left\{ \mu(a^*_{1:t}) > \hat{\mu}_{a^*_{1:t}, n} \text{ and } n \dber(\hat{\mu}_{a^*_{1:t}, n}, \mu(a^*_{1:t})) \geq \epsilon \right\}} \leq e\ceil{\epsilon \log m}e^{-\epsilon}\,.}
+	\diff{\probability{\bigcup_{n=1}^m \left\{ \mu(a^{\star}_{1:t}) > \hat{\mu}_{a^{\star}_{1:t}, n} \text{ and } n \dber(\hat{\mu}_{a^{\star}_{1:t}, n}, \mu(a^{\star}_{1:t})) \geq \epsilon \right\}} \leq e\ceil{\epsilon \log m}e^{-\epsilon}\,.}
 	\end{equation*}
 	
 	\diff{By choosing $\epsilon = f(m)$, it comes}
@@ -496,7 +494,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\begin{equation*}
 	\diff{\dber(p, q) \leq C   \implies 2(q - p)^2 < C  \implies p - \sqrt{C/2} < q < p + \sqrt{C/2}}
 	\end{equation*}
-	\diff{And thus, for all $b\in A^*$, by definition of $U^{\mu}$ and $L^{\mu}$:}
+	\diff{And thus, for all $b\in A^{\ast}$, by definition of $U^{\mu}$ and $L^{\mu}$:}
 	\begin{align*}
 	\diff{U^{\mu}_{b}(m) - L^{\mu}_{b}(m) \leq \frac{S_b(m)}{T_b(m)} + \sqrt{\frac{f(m)}{2T_b(m)}} -  \left(\frac{S_b(m)}{T_b(m)} - \sqrt{\frac{f(m)}{2T_b(m)}}\right) 
 		= \sqrt{\frac{2f(m)}{T_b(m)}}}

@@ -115,24 +115,24 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 		\end{equation}
 		\item the optimal value function for costs $\Vc[^\star]$ and optimal policies $\policies^\star$ as
 		\begin{equation}
-		\Vc[^\star](\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os), \qquad\qquad \policies^*(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os).
+		\Vc[^\star](\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os), \qquad\qquad \policies^{\star}(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os).
 		\end{equation}
 	\end{enumerate}
-	We define the budgeted action-value function $\oQ^*$ similarly as
+	We define the budgeted action-value function $\oQ^{\star}$ similarly as
 	\begin{equation}
 	\Qr[^\star](\os, \oa) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr[^\budgetedpolicy](\os, \oa) \qquad\qquad \Qc[^\star](\os, \oa) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc[^\budgetedpolicy](\os, \oa),
 	\end{equation}
-	and denote $\oV^* = (\Vr[^\star], \Vc[^\star])$, $\oQ^* = (\Qr[^\star], \Qc[^\star])$.
+	and denote $\oV^{\star} = (\Vr[^\star], \Vc[^\star])$, $\oQ^{\star} = (\Qr[^\star], \Qc[^\star])$.
 	\end{leftbar}
 \end{definition}
 
 \begin{theorem}[Budgeted Bellman Optimality]
 	\begin{leftbar}[theorembar]
 	\label{thm:bellman-optimality}
-	The optimal budgeted action-value function $\oQ^*$ verifies
+	The optimal budgeted action-value function $\oQ^{\star}$ verifies
 	\begin{equation}
 	\label{eq:bellman-optimality}
-	\oQ^{*}(\os, \oa) = \abo^{*}\oQ^{*}(\os, \oa) \eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \budgetedpolicy_\text{greedy}(\ov{a'}|\ov{s'}; \oQ^*) \oQ^{*}(\ov{s'}, \ov{a'}),
+	\oQ^{\star}(\os, \oa) = \abo^{\star}\oQ^{\star}(\os, \oa) \eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \budgetedpolicy_\text{greedy}(\ov{a'}|\ov{s'}; \oQ^{\star}) \oQ^{\star}(\ov{s'}, \ov{a'}),
 	\end{equation}
 	where the greedy policy $\budgetedpolicy_\text{greedy}$ is defined by: $\forall \os=(s,\budget)\in \ocS, \oa\in
 	\ocA, \forall \oQ\in(\Real^2)^{\ocA\times\ocS},$
@@ -150,14 +150,14 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \begin{remark}[Appearance of the greedy policy]
 	\begin{leftbar}[remarkbar]
 	\label{rmk:greedy}
-	In classical \acrlong{RL}, the greedy policy takes a simple form $\policy_\text{greedy}(s; \Q^*) = \argmax_{a\in\cA} \Q^*(s, a)$, and the term $\policy_\text{greedy}(a'|s';\Q^*) \Q^{*}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} \Q^*(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
+	In classical \acrlong{RL}, the greedy policy takes a simple form $\policy_\text{greedy}(s; \Q^{\star}) = \argmax_{a\in\cA} \Q^{\star}(s, a)$, and the term $\policy_\text{greedy}(a'|s';\Q^{\star}) \Q^{\star}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} \Q^{\star}(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
 	\end{leftbar}
 \end{remark}
 
 \begin{proposition}[Optimality of the greedy policy]
 	\begin{leftbar}[propositionbar]
 	\label{prop:greedy_optimal}
-	The greedy policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)$ is \emph{uniformly} optimal: for all $\os\in\ocS$, $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)\in\policies^*(\os)$. In particular, $\oV^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^*)} = \oV^*$ and $\oQ^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^*)}= \oQ^*$.
+	The greedy policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$ is \emph{uniformly} optimal: for all $\os\in\ocS$, $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})\in\policies^{\star}(\os)$. In particular, $\oV^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})} = \oV^{\star}$ and $\oQ^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})}= \oQ^{\star}$.
 	\end{leftbar}
 \end{proposition}
 
@@ -167,7 +167,7 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \begin{algorithm}
 	\DontPrintSemicolon
 	\KwData{$P, R_r, R_c$}
-	\KwResult{$Q^*$}
+	\KwResult{$Q^{\star}$}
 	$Q_{0} \leftarrow 0$\;
 	\Repeat{convergence}{
 		$Q_{k+1} \leftarrow \cT Q_k$\;
@@ -176,21 +176,21 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	\label{algo:bvi}
 \end{algorithm}
 
-The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \Cref{algo:bvi}, a \acrlong{DP} algorithm for solving known \glspl{BMDP}. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $\oQ^*$ and recover the associated optimal budgeted policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^*)$.
+The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \Cref{algo:bvi}, a \acrlong{DP} algorithm for solving known \glspl{BMDP}. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $\oQ^{\star}$ and recover the associated optimal budgeted policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$.
 
-\begin{theorem}[Non-contractivity of $\abo^{*}$]
+\begin{theorem}[Non-contractivity of $\abo^{\star}$]
 	\begin{leftbar}[theorembar]
 	\label{thm:contraction}
-	For any \gls{BMDP} ($\cS,\cA,\Ps,\R,\constraint,\discountfactor$) with $|\cA| \geq 2$, $\abo^{*}$ is not a contraction. Precisely: $\forall\epsilon>0, \exists Q^1,Q^2\in(\Real^2)^{\ocS\ocA}:\|\cT Q^1-\cT Q^2\|_\infty \geq \frac{1}{\epsilon}\|Q^1-Q^2\|_\infty$.
+	For any \gls{BMDP} ($\cS,\cA,\Ps,\R,\constraint,\discountfactor$) with $|\cA| \geq 2$, $\abo^{\star}$ is not a contraction. Precisely: $\forall\epsilon>0, \exists Q^1,Q^2\in(\Real^2)^{\ocS\ocA}:\|\cT Q^1-\cT Q^2\|_\infty \geq \frac{1}{\epsilon}\|Q^1-Q^2\|_\infty$.
 	\end{leftbar}
 \end{theorem}
 
-Unfortunately, as $\abo^{*}$ is not a contraction, we can guarantee neither the convergence of \Cref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\Cref{sec:brl-experiments}). We provide a possible explanation:
+Unfortunately, as $\abo^{\star}$ is not a contraction, we can guarantee neither the convergence of \Cref{algo:bvi} nor the unicity of its fixed points. Despite those theoretical limitations, we empirically observed the convergence to a fixed point in our experiments (\Cref{sec:brl-experiments}). We provide a possible explanation:
 
 \begin{theorem}[Contractivity of $\cT$ on smooth $Q$-functions]
 	\begin{leftbar}[theorembar]
 	\label{rmk:contractivity-smooth}
-	The operator $\abo^{*}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that "$\Qr$ is Lipschitz with respect to $\Qc$":
+	The operator $\abo^{\star}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that "$\Qr$ is Lipschitz with respect to $\Qc$":
 	\begin{equation}
 	\cL_\discount = \left\{\begin{array}{cc}
 	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
@@ -200,7 +200,7 @@ Unfortunately, as $\abo^{*}$ is not a contraction, we can guarantee neither the 
 	\end{leftbar}
 \end{theorem}
 
-Thus, we expect that \Cref{algo:bvi} is likely to converge when $\oQ^*$ is smooth, but could diverge if the slope of $\oQ^*$ is too high.  $L^2$-regularisation can be used to encourage smoothness and mitigate risk of divergence.
+Thus, we expect that \Cref{algo:bvi} is likely to converge when $\oQ^{\star}$ is smooth, but could diverge if the slope of $\oQ^{\star}$ is too high.  $L^2$-regularisation can be used to encourage smoothness and mitigate risk of divergence.
 
 
 \section{Budgeted reinforcement learning}
@@ -212,17 +212,17 @@ In this section, we consider \glspl{BMDP} with unknown parameters that must be s
 \subsection{Budgeted Fitted-Q}
 \label{subsec:bftq}
 
-When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a batch of samples $\cD=\{(\os_t,\oa_t,\overline{r}_t,\os_t')\}_{t\in [1,N]}$ collected by interaction with the environment. Applying $\abo^{*}$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \augmentedtransition}$ over next states $\os'$ and hence an access to the model $\augmentedtransition$. We instead use $\hat{\abo^{*}}$, a sampling operator, in which this expectation is replaced by
+When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a batch of samples $\cD=\{(\os_t,\oa_t,\overline{r}_t,\os_t')\}_{t\in [1,N]}$ collected by interaction with the environment. Applying $\abo^{\star}$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \augmentedtransition}$ over next states $\os'$ and hence an access to the model $\augmentedtransition$. We instead use $\hat{\abo^{\star}}$, a sampling operator, in which this expectation is replaced by
 \begin{equation*}
-\hat{\abo^{*}} \oQ(\os, \oa, \overline{r}, \os') \eqdef \overline{r} + \discount \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; \oQ) \oQ(\ov{s'}, \ov{a'}).
+\hat{\abo^{\star}} \oQ(\os, \oa, \overline{r}, \os') \eqdef \overline{r} + \discount \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; \oQ) \oQ(\ov{s'}, \ov{a'}).
 \end{equation*}
 We introduce in \Cref{algo:bftq} the \gls{BFTQ} algorithm, an extension of the \gls{FTQ} algorithm adapted to solve unknown \glspl{BMDP}. Because we work with continuous state space $\cS$ and budget space $\budgetspace$, we need to employ function-approximation in order to generalise to nearby states and budgets. Precisely, given a parametrized model $\oQ_\params$, we seek to minimise a regression loss $\cL(\oQ_\params, \oQ_\text{target};\cD) = \sum_{\cD} \|\oQ_\params(\os, \oa) - \oQ_\text{target}(\os, \oa, r, \os')\|_2^2$.
-Any model can be used, such as linear models, regression trees, or \acrlong{NN}.
+Any model can be used, such as linear models, regression trees, or \acrlongpl{NN}.
 
 \begin{algorithm}[ht]
 	\DontPrintSemicolon
 	\KwData{$\cD$}
-	\KwResult{$Q^*$}
+	\KwResult{$Q^{\star}$}
 	$\oQ_{\params_0} \leftarrow 0$\;
 	\Repeat{convergence}{
 		$\params_{k+1} \leftarrow \argmin_\params \cL(\oQ_\params, \hat{\cT} \oQ_{\params_{k}}; \cD)$\;
@@ -325,7 +325,7 @@ In our experiments, a single training of \BFTQ corresponds to 10 trainings of \F
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.5\textwidth]{img/CalibrationExample}
-	\caption{Calibration of a penalty multiplier according to the budget $\budget$. The optimal multiplier $\lambda^*_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
+	\caption{Calibration of a penalty multiplier according to the budget $\budget$. The optimal multiplier $\lambda^{\star}_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
 	% TODO: penalization -> penalty
 	\label{fig:Lagrangian}
 \end{figure}
@@ -489,7 +489,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \subsection{\Cref{thm:bellman-optimality}}
 
-% TODO: \Qr[^\star] must be replaced by \Qr[^*], same for Qc
+% TODO: \Qr[^\star] must be replaced by \Qr[^{\star}], same for Qc
 
 \begin{proof}
     Let $\os, \oa \in \ocA\times\ocS$. For this proof, we consider potentially non-stationary policies $\budgetedpolicy=(\rho, \budgetedpolicy')$, with $\rho\in\cM(\ocA)$, $\budgetedpolicy'\in\cM(\ocA)^\Natural$. The results will apply to the particular case of stationary optimal policies, when they exist.
@@ -504,7 +504,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
     This follows from:
     \begin{enumerate}
-        \item[\eqref{eq:pthm_def}.] Definition of $\oQ^*$.
+        \item[\eqref{eq:pthm_def}.] Definition of $\oQ^{\star}$.
         \item[\eqref{eq:pthm_exp}.] Bellman Expectation expansion from \Cref{prop:bellman-expectation}.
         \item[\eqref{eq:pthm_marg}.] Marginalisation on $\oa'$.
         \item[\eqref{eq:pthm_max}.] \begin{itemize}
@@ -515,17 +515,17 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
                 &\leq  \max_{\budgetedpolicy'\in\policies_a(\os')} \sum_{\oa'\in\ocA}\rho(\oa'|\os')\Qr[^{\budgetedpolicy'}](\os', \oa').
             \end{align*}
         \end{itemize}
-        \item[\eqref{eq:pthm_marg_def2}.] Definition of $\oQ^*$.
+        \item[\eqref{eq:pthm_marg_def2}.] Definition of $\oQ^{\star}$.
     \end{enumerate}
 
     Moreover, the condition $\budgetedpolicy=(\rho, \budgetedpolicy')\in\policies_a(\os)$ gives
     \begin{equation*}
-        \expectedvalueover{\oa'\sim\rho} \Qc[^{*}](\os, \oa) = \expectedvalueover{\oa'\sim\rho} \Qc[^{\budgetedpolicy'}](\os, \oa) = \Vc[^{\budgetedpolicy}](\os) \leq \budget.
+        \expectedvalueover{\oa'\sim\rho} \Qc[^{\star}](\os, \oa) = \expectedvalueover{\oa'\sim\rho} \Qc[^{\budgetedpolicy'}](\os, \oa) = \Vc[^{\budgetedpolicy}](\os) \leq \budget.
     \end{equation*}
 
-    Consequently, $\budgetedpolicy_\text{greedy}(\cdot; \oQ^*)$ belongs to the $\argmax$ of \eqref{eq:pthm_marg_def2}, and in particular:
+    Consequently, $\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})$ belongs to the $\argmax$ of \eqref{eq:pthm_marg_def2}, and in particular:
     \begin{equation*}
-        \Qr[^*](\os, \oa) = r(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\os', \oQ^*)} \Qr[^*](\os', \oa').
+        \Qr[^{\star}](\os, \oa) = r(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\os', \oQ^{\star})} \Qr[^{\star}](\os', \oa').
     \end{equation*}
 
     The same reasoning can be made for $\Qc[^\star]$ by replacing $\max$ operators by $\min$, and $\policies_a$ by $\policies_r$.
@@ -534,14 +534,14 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \subsection{\Cref{prop:greedy_optimal}}
 \begin{proof}
-    Notice from the definitions of $\abo^{*}$ and $\abo^{\budgetedpolicy}$ in \eqref{eq:bellman-optimality} and \eqref{eq:bellman_expectation_operator} that $\abo^{*}$ and $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^*)}$ coincide on $\oQ^*$. Moreover, since $\oQ^* = \abo^{*}\oQ^*$ by \Cref{thm:bellman-optimality}, we have: $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^*)} \oQ^* = \abo^{*} \oQ^* = \oQ^*$.
-    Hence, $\oQ^*$ is a fixed point of $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^*)}$, and by \Cref{prop:bellman-expectation} it must be equal to $\oQ^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^*)}$
+    Notice from the definitions of $\abo^{\star}$ and $\abo^{\budgetedpolicy}$ in \eqref{eq:bellman-optimality} and \eqref{eq:bellman_expectation_operator} that $\abo^{\star}$ and $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$ coincide on $\oQ^{\star}$. Moreover, since $\oQ^{\star} = \abo^{\star}\oQ^{\star}$ by \Cref{thm:bellman-optimality}, we have: $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})} \oQ^{\star} = \abo^{\star} \oQ^{\star} = \oQ^{\star}$.
+    Hence, $\oQ^{\star}$ is a fixed point of $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$, and by \Cref{prop:bellman-expectation} it must be equal to $\oQ^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$
 
-    To show the same result for $\oV^*$, notice that
+    To show the same result for $\oV^{\star}$, notice that
     \begin{equation*}
-        \oV^{\budgetedpolicy_\text{greedy}(\oQ^*)}(\os) = \expectedvalueover{\oa\sim\budgetedpolicy_\text{greedy}(\oQ^*)}\oQ^{\budgetedpolicy_\text{greedy}(\oQ^*)}(\os,\oa) = \expectedvalueover{\oa\sim\budgetedpolicy_\text{greedy}(\oQ^*)}\oQ^*(\os,\oa).
+        \oV^{\budgetedpolicy_\text{greedy}(\oQ^{\star})}(\os) = \expectedvalueover{\oa\sim\budgetedpolicy_\text{greedy}(\oQ^{\star})}\oQ^{\budgetedpolicy_\text{greedy}(\oQ^{\star})}(\os,\oa) = \expectedvalueover{\oa\sim\budgetedpolicy_\text{greedy}(\oQ^{\star})}\oQ^{\star}(\os,\oa).
     \end{equation*}
-    By applying the definitions of $\oQ^*$ and $\budgetedpolicy_\text{greedy}$, we recover the definition of $\oV^*$.
+    By applying the definitions of $\oQ^{\star}$ and $\budgetedpolicy_\text{greedy}$, we recover the definition of $\oV^{\star}$.
 \end{proof}
 
 \subsection{\Cref{thm:contraction}}
@@ -601,7 +601,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 \end{remark}
 
 \begin{proof}
-	We now study the contractivity of $\abo^{*}$ when restricted to the functions of $\cL_{\discountfactor}$ defined as follows:
+	We now study the contractivity of $\abo^{\star}$ when restricted to the functions of $\cL_{\discountfactor}$ defined as follows:
     \begin{equation}
     \cL_{\discountfactor} = \left\{\begin{array}{cc}
    \oQ\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discountfactor}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
@@ -618,7 +618,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
         \text{Ball}(\oQ,R) = \{\oQ'\in(R^2)^{\ocS\ocA}: \|\oQ-\oQ'\|_\infty \leq R\}.
     \end{equation*}
 
-    We give the three main steps required to show that $\abo^{*}$ restricted to $\cL_{\discountfactor}$ is a contraction. Given $\oQ^1, \oQ^2\in\cL_{\discountfactor}$, show that:
+    We give the three main steps required to show that $\abo^{\star}$ restricted to $\cL_{\discountfactor}$ is a contraction. Given $\oQ^1, \oQ^2\in\cL_{\discountfactor}$, show that:
 
     \begin{enumerate}
         \item $\oQ^2\in\text{Ball}(\oQ^1,R)\implies\cF^2\in\text{Ball}(\cF^1, R), \forall\os\in\ocS$, where $\cF$ is the top frontier of the convex hull of undominated points, as defined in~\Cref{sec:proof_pi_hull}.
@@ -721,7 +721,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
     Hence, for all $\oa$,
     \begin{align*}
-        \|\abo^{*}\oQ^1(\os, \oa) - &\abo^{*}\oQ^2(\os, \oa)\|_\infty \\
+        \|\abo^{\star}\oQ^1(\os, \oa) - &\abo^{\star}\oQ^2(\os, \oa)\|_\infty \\
         &= \discountfactor\left\|\expectedvalueover{\os'\sim\augmentedtransition(\os'|\os,\oa)}
         \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\oQ^1)}\oQ^1(\os',\oa') -
         \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\oQ^2)}\oQ^2(\os',\oa')\right\|_\infty \\
@@ -730,30 +730,30 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     \end{align*}
     Taking the sup on $\ocS\ocA$,
     \begin{equation*}
-        \|\abo^{*}\oQ^1 - \abo^{*}\oQ^2\|_\infty \leq \discountfactor(L+1)\|\oQ^1-\oQ^2\|_\infty
+        \|\abo^{\star}\oQ^1 - \abo^{\star}\oQ^2\|_\infty \leq \discountfactor(L+1)\|\oQ^1-\oQ^2\|_\infty
     \end{equation*}
     with $\discountfactor(L+1) < 1$.
-    As a conclusion, $\abo^{*}$ is a $\discountfactor(L+1)$-contraction on $\cL_{\discountfactor}$.
+    As a conclusion, $\abo^{\star}$ is a $\discountfactor(L+1)$-contraction on $\cL_{\discountfactor}$.
 \end{proof}
 
 %\subsection{Lemma \ref{lemma:concavity}}
 
 %\begin{proof}. Let $s,s'\in\cS, a\in\cA$.
-%We first prove those results for $V_r^*(s', \cdot)$
+%We first prove those results for $V_r^{\star}(s', \cdot)$
 
 %\textbf{Non-decreasing}
 
 %Consider $\beta_a^1 \leq \beta_a^2 \in \cB$.
-%Any policy that satisfies the budget $\beta_a^1$ in $s'$ also satisfies $\beta_a^2$, so $\Pi_c(s', \beta_a^1) \subset \Pi_c(s', \beta_a^2)$. Hence, by taking the max over policies, $V_r^*(s', \beta_a^1) \leq V_r^*(s', \beta_a^2)$.
-%Hence, $V_r^*(s', \cdot)$ is non-decreasing.
+%Any policy that satisfies the budget $\beta_a^1$ in $s'$ also satisfies $\beta_a^2$, so $\Pi_c(s', \beta_a^1) \subset \Pi_c(s', \beta_a^2)$. Hence, by taking the max over policies, $V_r^{\star}(s', \beta_a^1) \leq V_r^{\star}(s', \beta_a^2)$.
+%Hence, $V_r^{\star}(s', \cdot)$ is non-decreasing.
 
 %\textbf{Concave}
 
-%By contradiction: assume that $V_r^*(s', \cdot)$ is not concave, i.e. there exist $\beta^1 < \beta^2\in \cB$ and $p\in(0, 1)$ such that $\beta^3 = (1-p)\beta^1 + p\beta^2$ verifies: $V_r^*(s', \beta^3) < (1-p)V_r^*(s', \beta^1) + pV_r^*(s',\beta^2)$. By definition of $V^*$, there must be $\pi_1,\pi_2\in\Pi^*$ such that $V^*(s', \beta^1) = V^{\pi_1}(s', \beta^1)$ and $V^*(s', \beta^2) = V^{\pi_2}(s', \beta^2)$. 
+%By contradiction: assume that $V_r^{\star}(s', \cdot)$ is not concave, i.e. there exist $\beta^1 < \beta^2\in \cB$ and $p\in(0, 1)$ such that $\beta^3 = (1-p)\beta^1 + p\beta^2$ verifies: $V_r^{\star}(s', \beta^3) < (1-p)V_r^{\star}(s', \beta^1) + pV_r^{\star}(s',\beta^2)$. By definition of $V^{\star}$, there must be $\pi_1,\pi_2\in\Pi^{\star}$ such that $V^{\star}(s', \beta^1) = V^{\pi_1}(s', \beta^1)$ and $V^{\star}(s', \beta^2) = V^{\pi_2}(s', \beta^2)$. 
 
-%Define $\pi = (1-p)(\pi_1(\cdot, \beta^1), \pi_1) + p(\pi_2(\cdot, \beta^2), \pi_2)$. By linearity of $V^\pi$ with respect to $\pi$, we have that $V_c^\pi(s', \beta^3) = (1-p)V_c^{\pi_1}(s', \beta^1) + pV_c^{\pi_2}(s', \beta^2) \leq (1-p)\beta^1 + p\beta^2 = \beta^3$ since $\pi_1, \pi_2\in\Pi^*(s')\subset\Pi_a(s')$, so $\pi$ respects the budget $\beta^3$. Moreover, we also have $V_r^\pi(s', \beta^3) = (1-p)V_r^{\pi_1}(s', \beta^1) + pV_r^{\pi_2}(s', \beta^2) > V_r^*(s', \beta^3)$, which contradicts the definition of $V_r^*$.
+%Define $\pi = (1-p)(\pi_1(\cdot, \beta^1), \pi_1) + p(\pi_2(\cdot, \beta^2), \pi_2)$. By linearity of $V^\pi$ with respect to $\pi$, we have that $V_c^\pi(s', \beta^3) = (1-p)V_c^{\pi_1}(s', \beta^1) + pV_c^{\pi_2}(s', \beta^2) \leq (1-p)\beta^1 + p\beta^2 = \beta^3$ since $\pi_1, \pi_2\in\Pi^{\star}(s')\subset\Pi_a(s')$, so $\pi$ respects the budget $\beta^3$. Moreover, we also have $V_r^\pi(s', \beta^3) = (1-p)V_r^{\pi_1}(s', \beta^1) + pV_r^{\pi_2}(s', \beta^2) > V_r^{\star}(s', \beta^3)$, which contradicts the definition of $V_r^{\star}$.
 
-%Consequently, $V_r^*(s', \cdot)$ is non-decreasing and concave. By \eqref{eq:bellman_expectation_Q} we see that $Q_r^*(s,a,\cdot) = R_r(s,a) + \discount\expectedvalueover{s'}V_r^*(s', \cdot)$  is too.
+%Consequently, $V_r^{\star}(s', \cdot)$ is non-decreasing and concave. By \eqref{eq:bellman_expectation_Q} we see that $Q_r^{\star}(s,a,\cdot) = R_r(s,a) + \discount\expectedvalueover{s'}V_r^{\star}(s', \cdot)$  is too.
 
 
 %\end{proof}
@@ -795,7 +795,7 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
         \end{align}
     \end{subequations}
 
-    Note that any policy in the $\argmin$ in \eqref{eq:pi_greedy_cost} is suitable to compute $\abo^{*}$.
+    Note that any policy in the $\argmin$ in \eqref{eq:pi_greedy_cost} is suitable to compute $\abo^{\star}$.
     We first reduce the set of candidate optimal policies.
     Consider the problem described in \eqref{eq:pi_greedy_reward},\eqref{eq:pi_greedy_constraint}: it can be seen as a single-step \gls{CMDP} problem with reward $\reward=\Qr$ and cost $\constraint=\Qc$. By \citep[Theorem 4.4][]{BEUTLER1985236}, we know that the solutions are mixtures of two deterministic policies. Hence, we can replace $\cM(\cA)$ by $\cC^2(\dirac(\ocA))$ in \eqref{eq:pi_greedy_reward}.
 
@@ -811,30 +811,30 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
     \begin{equation*}
         \tilde{\policies}^{\Qr} = \argmax_{(q_r, q_c)\in\cC^2(\oQ(\os, \ocA))} q_r \quad\text{ s.t. }\quad q_c \leq \budget
     \end{equation*}
-    and the solution of $\budgetedpolicy_\text{greedy}$ is $q^*=\argmin_{q\in\tilde{\policies}^{\Qr}} q_c$.
+    and the solution of $\budgetedpolicy_\text{greedy}$ is $q^{\star}=\argmin_{q\in\tilde{\policies}^{\Qr}} q_c$.
 
     The original problem in the space of actions $\ocA$ is now expressed in the space of values $\oQ(\os, \ocA)$ (which is why we use $=$ instead of $\in$ before $\argmin$ here).
 
-    We further restrict the search space of $q^*$ following two observations:
+    We further restrict the search space of $q^{\star}$ following two observations:
     \begin{enumerate}
-        \item $q^*$ belongs to the \emph{undominated} points $\cC^2(\oQ^-)$:
+        \item $q^{\star}$ belongs to the \emph{undominated} points $\cC^2(\oQ^-)$:
         \begin{align}
             \label{eq:q_minus_undominated}
             \oQ^+ &= \{(q_c, q_r): q_c > q_c^{\pm} = \min_{q^+} q_c^+\text{ s.t. }q^+\in\argmax_{q\in \oQ(\os,\ocA)} q_r\}\\
             \oQ^- &= \oQ(\os,\ocA) \setminus \oQ^+.
         \end{align}
-        Denote $q^*$ = $(1-\lambda) q^1 + \lambda q^2$, with $q^1, q^2\in \oQ(\os,\ocA)$. There are three possible cases:
+        Denote $q^{\star}$ = $(1-\lambda) q^1 + \lambda q^2$, with $q^1, q^2\in \oQ(\os,\ocA)$. There are three possible cases:
         \begin{enumerate}
-            \item $q^1, q^2 \not\in \oQ^-$. Then $q_c^* = (1-\lambda) q^1_c + \lambda q^2_c > q_c^{\pm}$. But then $q_c^{\pm} < q_c^* \leq \budget$ so $q^{\pm}\in\tilde{\policies}^{\Qr}$ with a strictly lower $q_c$ than $q^*$, which contradicts the $\argmin$.
-            \item $q^1\in \oQ^-, q^2 \not\in \oQ^-$. But then consider the mixture $q^\top = (1-\lambda) q^1 + \lambda q^\pm$. Since $q_r^{\pm} \geq q_r^{2}$ and $q_r^{\pm} < q_r^{2}$, we also have $q^\top_r \geq q_r^*$ and $q^\top_c < q_c^*$, which also contradicts the $\argmin$.
+            \item $q^1, q^2 \not\in \oQ^-$. Then $q_c^{\star} = (1-\lambda) q^1_c + \lambda q^2_c > q_c^{\pm}$. But then $q_c^{\pm} < q_c^{\star} \leq \budget$ so $q^{\pm}\in\tilde{\policies}^{\Qr}$ with a strictly lower $q_c$ than $q^{\star}$, which contradicts the $\argmin$.
+            \item $q^1\in \oQ^-, q^2 \not\in \oQ^-$. But then consider the mixture $q^\top = (1-\lambda) q^1 + \lambda q^\pm$. Since $q_r^{\pm} \geq q_r^{2}$ and $q_r^{\pm} < q_r^{2}$, we also have $q^\top_r \geq q_r^{\star}$ and $q^\top_c < q_c^{\star}$, which also contradicts the $\argmin$.
             \item $q^1,q^2\in \oQ^-$ is the only remaining possibility.
         \end{enumerate}
-        \item $q^*$ belongs to the \emph{top frontier} $\cF$:
+        \item $q^{\star}$ belongs to the \emph{top frontier} $\cF$:
         \begin{equation}
             \label{eq:top-frontier}
             \cF_{\oQ} = \{q\in \cC^2(\oQ^-): \not\exists q'\in \cC^2(\oQ^-): q_c=q_c'\text{ and }q_r<q_r'\}.
         \end{equation}
-        Trivially, otherwise q' would be a better candidate than $q^*$.
+        Trivially, otherwise q' would be a better candidate than $q^{\star}$.
     \end{enumerate}
 
 
@@ -846,21 +846,21 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
         Trivially, otherwise the point $q^\top = (1-\lambda)q^1 + \lambda q^3$ would verify $q^\top_c=q^2_c$ and $q^\top_r > q^2_r$, which would contradict $q^2 \in\cF$.
     \end{enumerate}
 
-    We denote $\cF_{\oQ} = \cF \cap \oQ$. Clearly, $q^*\in\cC^2(\cF_{\oQ})$: let $q^1, q^2\in \oQ^-$ such that $q^* = (1-\lambda)q^1 + \lambda q^2$. First, $q^1, q^2\in \oQ^-\subset\cC^2(\oQ^-)$. Then, by contradiction, if there existed $q^{1'}$ or $q^{2'}$ with equal $q_c$ and strictly higher $q_r$, again we could build an admissible mixture $q^{\top}=(1-\lambda)q^{1'}  + \lambda q^{2'}$ strictly better than $q^*$.
+    We denote $\cF_{\oQ} = \cF \cap \oQ$. Clearly, $q^{\star}\in\cC^2(\cF_{\oQ})$: let $q^1, q^2\in \oQ^-$ such that $q^{\star} = (1-\lambda)q^1 + \lambda q^2$. First, $q^1, q^2\in \oQ^-\subset\cC^2(\oQ^-)$. Then, by contradiction, if there existed $q^{1'}$ or $q^{2'}$ with equal $q_c$ and strictly higher $q_r$, again we could build an admissible mixture $q^{\top}=(1-\lambda)q^{1'}  + \lambda q^{2'}$ strictly better than $q^{\star}$.
 
-    $q^*$ can be written as $q^* = (1-\lambda)q^1 + \lambda q^2$ with $q^1, q^2\in\cF_{\oQ}$ and, without loss of generality, $q^1_c \leq q^2_c$.
+    $q^{\star}$ can be written as $q^{\star} = (1-\lambda)q^1 + \lambda q^2$ with $q^1, q^2\in\cF_{\oQ}$ and, without loss of generality, $q^1_c \leq q^2_c$.
 
     \paragraph{Regular case}
 
-    There exists $q^0\in\cF_{\oQ}$ such that $q^0_c \geq \budget$. Then $q^1$ and $q^2$ must flank the budget: $q_c^1 \leq \budget \leq q_c^2$. Indeed, by contradiction, if $q_c^2 \geq q_c^1 > \budget$ then $q_c^* > \budget$ which contradicts $\policies_r^{\oQ}$. Conversely, if $q_c^1 \leq q_c^2 < \budget$ then $q^* < \budget \leq q^0_c$, which would make $q^*$ a worse candidate than $q^\top=(1-\lambda)q^* + \lambda q^0$ when $\lambda$ is chosen such that $q_c^\top=\budget$, and contradict $\policies_r^{\oQ}$ again.
+    There exists $q^0\in\cF_{\oQ}$ such that $q^0_c \geq \budget$. Then $q^1$ and $q^2$ must flank the budget: $q_c^1 \leq \budget \leq q_c^2$. Indeed, by contradiction, if $q_c^2 \geq q_c^1 > \budget$ then $q_c^{\star} > \budget$ which contradicts $\policies_r^{\oQ}$. Conversely, if $q_c^1 \leq q_c^2 < \budget$ then $q^{\star} < \budget \leq q^0_c$, which would make $q^{\star}$ a worse candidate than $q^\top=(1-\lambda)q^{\star} + \lambda q^0$ when $\lambda$ is chosen such that $q_c^\top=\budget$, and contradict $\policies_r^{\oQ}$ again.
 
-    Because $\cF$ is the graph of a non-decreasing function, $\lambda$ should be as high as possible, as long as the budget $q^*\leq\budget$ is respected. We reach the highest $q_r^*$ when $q^*_c=\budget$, that is: $\lambda=(\budget-q_c^1)/(q_c^2-q_c^1)$.
+    Because $\cF$ is the graph of a non-decreasing function, $\lambda$ should be as high as possible, as long as the budget $q^{\star}\leq\budget$ is respected. We reach the highest $q_r^{\star}$ when $q^{\star}_c=\budget$, that is: $\lambda=(\budget-q_c^1)/(q_c^2-q_c^1)$.
 
-    It remains to show that $q^1$ and $q^2$ are two successive points in $\cF_{\oQ}$: $\not\exists q\in\cF_{\oQ}\setminus\{q^1, q^2\}: q^1_c \leq q_c \leq q^2_c$. Otherwise, as $\cF$ is the graph of a concave function, we would have $q_r \geq (1-\mu)q_r^1 + \mu q_r^2$. $q_r$ cannot be strictly greater than $(1-\mu)q_r^1 + \mu q_r^2$ which would contradict $q^*$, but it can still be equal, which means the tree points $q, q^1, q^2$ are aligned. In fact, every points aligned with $q^1$ and $q^2$ can also be used to construct mixtures resulting in $q^*$, but among these solutions we can still choose $q^1$ and $q^2$ as the two points in $\cF_{\oQ}$ closest to $q^*$.
+    It remains to show that $q^1$ and $q^2$ are two successive points in $\cF_{\oQ}$: $\not\exists q\in\cF_{\oQ}\setminus\{q^1, q^2\}: q^1_c \leq q_c \leq q^2_c$. Otherwise, as $\cF$ is the graph of a concave function, we would have $q_r \geq (1-\mu)q_r^1 + \mu q_r^2$. $q_r$ cannot be strictly greater than $(1-\mu)q_r^1 + \mu q_r^2$ which would contradict $q^{\star}$, but it can still be equal, which means the tree points $q, q^1, q^2$ are aligned. In fact, every points aligned with $q^1$ and $q^2$ can also be used to construct mixtures resulting in $q^{\star}$, but among these solutions we can still choose $q^1$ and $q^2$ as the two points in $\cF_{\oQ}$ closest to $q^{\star}$.
 
     \paragraph{Edge case}
 
-    $\forall q\in\cF_{\oQ}, q_c < \budget$. Then  $q^* =  \argmax_{q\in\cF} q_r = q^\pm =  \argmax_{q\in \oQ^-} q_r$.
+    $\forall q\in\cF_{\oQ}, q_c < \budget$. Then  $q^{\star} =  \argmax_{q\in\cF} q_r = q^\pm =  \argmax_{q\in \oQ^-} q_r$.
 \end{proof}
 
 
