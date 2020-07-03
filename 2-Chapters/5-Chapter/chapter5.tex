@@ -32,7 +32,7 @@ This chapter\dots
 
 \section{Budgeted dynamic programming}
 \label{sec:bdp}
-We work in the space of budgeted policies\index{budgeted policy}, where $\policy$ both depends on $\budget$ and also outputs a next \idx{budget} $\budgetaction$. Hence, the \idx{budget} $\budget$ is neither fixed nor constant as in the \gls{CMDP} setting but instead evolves as part of the dynamics.
+We work in the space of budgeted policies\index{budgeted policy}, where $\policy$ both depends on $\budget$ and also outputs a next budget $\budgetaction$. Hence, the budget $\budget$ is neither fixed nor constant as in the \gls{CMDP} setting but instead evolves as part of the dynamics.
 
 We cast the \gls{BMDP} problem as a \gls{MOMDP} problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \budgetspace$ and $\ocA= \cA\times \budgetspace$, and equip them with the augmented dynamics $\augmentedtransition\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
 \begin{equation}
@@ -41,12 +41,12 @@ We cast the \gls{BMDP} problem as a \gls{MOMDP} problem \citep{Roijers2013ASO} b
 \end{equation}
 where $\dirac$ is the Dirac indicator distribution.
 
-In other words, in these augmented dynamics, the output \idx{budget} $\budgetaction$ returned at time $t$ by a \idx{budgeted policy} $\budgetedpolicy\in \policies=\cM(\ocA)^{\ocS}$ will be used to condition the policy at the next timestep $t+1$.
+In other words, in these augmented dynamics, the output budget $\budgetaction$ returned at time $t$ by a \idx{budgeted policy} $\budgetedpolicy\in \policies=\cM(\ocA)^{\ocS}$ will be used to condition the policy at the next timestep $t+1$.
 
 We stack the rewards and cost functions in a single \emph{vectorial} signal $\oR \in (\Real^2)^{{\ocS \times \ocA}}$:
 
 \begin{definition}
-	Given an augmented \idx{transition} $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define:
+	Given an augmented transition $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define:
 	\begin{equation}
 	\gls+{oR}(\os, \oa) \eqdef  \begin{bmatrix}
 	\R(s, a)\\
@@ -58,7 +58,7 @@ We stack the rewards and cost functions in a single \emph{vectorial} signal $\oR
 Likewise, we augment the return:
 
 \begin{definition}
-	The return $\augmentedreturn^{\budgetedpolicy} = (\return^{\budgetedpolicy}, \constraintreturn^{\budgetedpolicy})$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ refers to:
+	The return $\augmentedreturn^{\budgetedpolicy} = (\return^{\budgetedpolicy}, \constraintreturn[^{\budgetedpolicy}])$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ refers to:
 	\begin{equation}
 	\gls+{augmentedreturn}^{\budgetedpolicy} \eqdef \sum_{t=0}^\infty \discountfactor^t \oR(\os_t, \oa_t).
 	\end{equation}
@@ -70,12 +70,12 @@ We also augment the value functions:
 	The value functions $\oV^{\budgetedpolicy}$, $\oQ^{\budgetedpolicy}$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ are defined as:
 	\begin{equation}
 	\label{eq:value-function}
-	\oV^{\budgetedpolicy}(\os) = (\Vr^{\budgetedpolicy}, \Vc^{\budgetedpolicy}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
-	\oQ^{\budgetedpolicy}(\os, \oa)= (\Qr^{\budgetedpolicy}, \Qc^{\budgetedpolicy}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
+	\oV^{\budgetedpolicy}(\os) = (\Vr[^\budgetedpolicy], \Vc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
+	\oQ^{\budgetedpolicy}(\os, \oa)= (\Qr[^\budgetedpolicy], \Qc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
 	\end{equation}
 \end{definition}
 
-We restrict $\ocS$ to feasible budgets\index{budget} only: $\ocS_f \eqdef \{(s,\budget)\in\ocS: \exists \budgetedpolicy\in\policies, \Vc^{\budgetedpolicy}(s) \leq \budget\}$ that we assume is non-empty for the \gls{BMDP} to admit a solution. We still write $\ocS$ in place of $\ocS_f$ for brevity of notations.
+We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\budget)\in\ocS: \exists \budgetedpolicy\in\policies, \Vc[^\budgetedpolicy](s) \leq \budget\}$ that we assume is non-empty for the \gls{BMDP} to admit a solution. We still write $\ocS$ in place of $\ocS_f$ for brevity of notations.
 
 \begin{proposition}[Budgeted Bellman Expectation]
 	\begin{leftbar}[propositionbar]
@@ -84,7 +84,7 @@ We restrict $\ocS$ to feasible budgets\index{budget} only: $\ocS_f \eqdef \{(s,\
 	\begin{align}
 	\oV^{\budgetedpolicy}(\os) = \sum_{\oa\in\ocA}\budgetedpolicy(\oa | \os) \oQ^{\budgetedpolicy}(\os, \oa) \qquad \oQ^{\budgetedpolicy}(\os, \oa) = \gls{oR}(\os, \oa) + \discountfactor\sum_{\os'\in\ocS}\augmentedtransition\left(\os' \condbar \os, \oa\right) \oV^{\budgetedpolicy}(\os'). \label{eq:bellman_expectation}
 	\end{align}
-	Moreover, consider the Budgeted\index{budget} Bellman Evaluation\index{Bellman Evaluation} operator $\abo^{\budgetedpolicy}$:
+	Moreover, consider the Budgeted Bellman Evaluation\index{Bellman Evaluation} operator $\abo^{\budgetedpolicy}$:
 	$\forall \oQ\in(\Real^2)^{\ocS\ocA}, \os\in\ocS, \oa\in\ocA$,
 	\begin{align}
 	\label{eq:bellman_expectation_operator}
@@ -107,22 +107,22 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	\begin{enumerate}[label=(\roman*)]
 		\item admissible policies $\policies_a$ as
 		\begin{equation}
-		\policies_a(\os) \eqdef \{\budgetedpolicy\in\policies: \Vc^{\budgetedpolicy}(\os) \leq \budget\}\text{ where }\os = (s, \budget);
+		\policies_a(\os) \eqdef \{\budgetedpolicy\in\policies: \Vc[^\budgetedpolicy](\os) \leq \budget\}\text{ where }\os = (s, \budget);
 		\end{equation}
-		\item the optimal value function for rewards $\Vr^*$ and candidate policies $\policies_r$ as
+		\item the optimal value function for rewards $\Vr[^\star]$ and candidate policies $\policies_r$ as
 		\begin{equation}
-		\Vr^*(\os) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Vr^{\budgetedpolicy}(\os) \qquad\qquad \policies_r(\os) \eqdef \argmax_{\budgetedpolicy\in\policies_a(\os)}  \Vr^{\budgetedpolicy}(\os);
+		\Vr[^\star](\os) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Vr[^\budgetedpolicy](\os) \qquad\qquad \policies_r(\os) \eqdef \argmax_{\budgetedpolicy\in\policies_a(\os)}  \Vr[^\budgetedpolicy](\os);
 		\end{equation}
-		\item the optimal value function for costs $\Vc^*$ and optimal policies $\policies^\star$ as
+		\item the optimal value function for costs $\Vc[^\star]$ and optimal policies $\policies^\star$ as
 		\begin{equation}
-		\Vc^*(\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc^{\budgetedpolicy}(\os), \qquad\qquad \policies^*(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc^{\budgetedpolicy}(\os).
+		\Vc[^\star](\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os), \qquad\qquad \policies^*(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os).
 		\end{equation}
 	\end{enumerate}
 	We define the budgeted action-value function $\oQ^*$ similarly as
 	\begin{equation}
-	\Qr^*(\os, \oa) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr^{\budgetedpolicy}(\os, \oa) \qquad\qquad \Qc^*(\os, \oa) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc^{\budgetedpolicy}(\os, \oa),
+	\Qr[^\star](\os, \oa) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr[^\budgetedpolicy](\os, \oa) \qquad\qquad \Qc[^\star](\os, \oa) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc[^\budgetedpolicy](\os, \oa),
 	\end{equation}
-	and denote $\oV^* = (\Vr^*, \Vc^*)$, $\oQ^* = (\Qr^*, \Qc^*)$.
+	and denote $\oV^* = (\Vr[^\star], \Vc[^\star])$, $\oQ^* = (\Qr[^\star], \Qc[^\star])$.
 	\end{leftbar}
 \end{definition}
 
@@ -212,7 +212,7 @@ In this section, we consider \glspl{BMDP} with unknown parameters that must be s
 \subsection{Budgeted Fitted-Q}
 \label{subsec:bftq}
 
-When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a batch of samples $\cD=\{(\os_t,\oa_t,\overline{r}_t,\os_t')\}_{t\in [1,N]}$ collected by interaction with the environment. Applying $\abo^{*}$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \augmentedtransition}$ over next states $\os'$ and hence an access to the \idx{model} $\augmentedtransition$. We instead use $\hat{\abo^{*}}$, a sampling operator, in which this expectation is replaced by
+When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a batch of samples $\cD=\{(\os_t,\oa_t,\overline{r}_t,\os_t')\}_{t\in [1,N]}$ collected by interaction with the environment. Applying $\abo^{*}$ in \eqref{eq:bellman-optimality} would require computing an expectation $\expectedvalue_{\os'\sim \augmentedtransition}$ over next states $\os'$ and hence an access to the model $\augmentedtransition$. We instead use $\hat{\abo^{*}}$, a sampling operator, in which this expectation is replaced by
 \begin{equation*}
 \hat{\abo^{*}} \oQ(\os, \oa, \overline{r}, \os') \eqdef \overline{r} + \discount \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; \oQ) \oQ(\ov{s'}, \ov{a'}).
 \end{equation*}
@@ -234,7 +234,7 @@ Any model can be used, such as linear models, regression trees, or \acrlong{NN}.
 \subsection{Risk-sensitive exploration}
 \label{sec:exploration}
 
-In order to run \Cref{algo:bftq}, we must first gather a batch of samples $\mathcal{D}$. The following strategy is motivated by the intuition that a wide variety of risk levels needs to be experienced during training, which can be achieved by enforcing the risk constraints during data collection. Ideally we would need samples from the asymptotic state-budget distribution $\lim_{t\rightarrow\infty}\probability{\os_t}$ induced by an optimal policy $\optimalbudgetedpolicy$ given an initial distribution $\probability{\os_0}$, but as we are actually building this policy, it is not possible. Following the same idea of $\epsilon$-greedy exploration for \FTQ, we introduce an algorithm for risk-sensitive exploration. We follow an exploration policy: a mixture between a random \idx{budgeted policy} $\budgetedpolicy_\text{rand}$ and the current \idx{greedy} policy $\budgetedpolicy_\text{greedy}$. The \idx{batch} $\cD$ is split into several minibatches\index{batch} generated sequentially, and $\budgetedpolicy_\text{greedy}$ is updated by running \Cref{algo:bftq} on $\cD$ upon mini-batch\index{batch} completion. $\budgetedpolicy_\text{rand}$ is designed to obtain trajectories\index{trajectory} that only explore feasible budgets: we impose that the joint distribution $\probability{a, \budgetaction|s, \budget}$ verifies $\expectedvalue[\budgetaction]\leq\budget$. This condition defines a probability simplex $\Delta_{\ocA}$ from which we \idx{transition} uniformly. Finally, when interacting with an \idx{environment} the initial state $s_0$ is usually sampled from a starting distribution $\probability{s_0}$. In the budgeted setting, we also need to \idx{transition} the initial budget $\budget_0$. Importantly, we pick a uniform distribution $\probability{\budget_0} = \uniform(\budgetspace)$ so that the entire range of risk-level is explored, and not only reward-seeking behaviours as would be the case with a traditional \idx{risk-neutral} $\epsilon$-greedy strategy. The pseudo-code of our exploration procedure is shown in \Cref{algo:risk-sensitive-exploration}.% in \Cref{sec:risk-sensitive-supp}.
+In order to run \Cref{algo:bftq}, we must first gather a batch of samples $\mathcal{D}$. The following strategy is motivated by the intuition that a wide variety of risk levels needs to be experienced during training, which can be achieved by enforcing the risk constraints during data collection. Ideally we would need samples from the asymptotic state-budget distribution $\lim_{t\rightarrow\infty}\probability{\os_t}$ induced by an optimal policy $\optimalbudgetedpolicy$ given an initial distribution $\probability{\os_0}$, but as we are actually building this policy, it is not possible. Following the same idea of $\epsilon$-greedy exploration for \FTQ, we introduce an algorithm for risk-sensitive exploration. We follow an exploration policy: a mixture between a random \idx{budgeted policy} $\budgetedpolicy_\text{rand}$ and the current greedy policy $\budgetedpolicy_\text{greedy}$. The batch $\cD$ is split into several minibatches generated sequentially, and $\budgetedpolicy_\text{greedy}$ is updated by running \Cref{algo:bftq} on $\cD$ upon mini-batch completion. $\budgetedpolicy_\text{rand}$ is designed to obtain trajectories that only explore feasible budgets: we impose that the joint distribution $\probability{a, \budgetaction|s, \budget}$ verifies $\expectedvalue[\budgetaction]\leq\budget$. This condition defines a probability simplex $\Delta_{\ocA}$ from which we sample uniformly. Finally, when interacting with an environment the initial state $s_0$ is usually sampled from a starting distribution $\probability{s_0}$. In the budgeted setting, we also need to sample the initial budget $\budget_0$. Importantly, we pick a uniform distribution $\probability{\budget_0} = \uniform(\budgetspace)$ so that the entire range of risk-level is explored, and not only reward-seeking behaviours as would be the case with a traditional \idx{risk-neutral} $\epsilon$-greedy strategy. The pseudo-code of our exploration procedure is shown in \Cref{algo:risk-sensitive-exploration}.% in \Cref{sec:risk-sensitive-supp}.
 
 %\section{Risk-Sensitive Exploration}
 %\label{sec:risk-sensitive-supp}
@@ -250,7 +250,7 @@ In the following, we introduce an implementation of the \BFTQ algorithm designed
 
 \subsection{How to compute the greedy policy?}
 \label{subsec:compute-greedy-policy}
-As stated in \Cref{rmk:greedy}, computing the \idx{greedy} policy $\budgetedpolicy_\text{greedy}$ in \eqref{eq:bellman-optimality} is not trivial since it requires solving the nested constrained optimisation program \eqref{eq:pi_greedy}.
+As stated in \Cref{rmk:greedy}, computing the greedy policy $\budgetedpolicy_\text{greedy}$ in \eqref{eq:bellman-optimality} is not trivial since it requires solving the nested constrained optimisation program \eqref{eq:pi_greedy}.
 However, it can be solved efficiently by exploiting the \emph{structure} of the set of solutions with respect to $\budget$, that is, concave and increasing.
 
 \begin{proposition}[Equality of $\budgetedpolicy_\text{greedy}$ and $\budgetedpolicy_\text{hull}$]
@@ -291,12 +291,12 @@ The computation of $\pi_\text{hull}$ in \Cref{algo:pi_hull} is illustrated in \C
 
 \subsection{Function approximation}
 
-\acrlongpl{NN} are well suited to \idx{model} $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
+\acrlongpl{NN} are well suited to model $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
 %TODO %The overall architecture is shown in \Cref{fig:bftq-architecture} in \Cref{sec:bftq-full}.
 
 \subsection{Parallel computing}
 \label{subsec:parallel-computing}
-In a simulated \idx{environment}, a first process that can be distributed is the collection of \idx{transition}s in the exploration procedure of \Cref{algo:risk-sensitive-exploration}, as $\budgetedpolicy_\text{greedy}$ stays constant within each minibatch\index{batch} which avoids the need of synchronisation between workers. Second, the main bottleneck of \gls{BFTQ} is the computation of the target $\abo \oQ$. Indeed, when computing $\budgetedpolicy_\text{hull}$ we must perform at each epoch a Graham-scan of complexity $\cO(|\cA||\tilde{\budgetspace}| \log |\cA||\tilde{\budgetspace}|)$ per \idx{transition} in $\cD$ to compute the convex hulls of $\oQ$ (where $\tilde{\budgetspace}$ is a finite discretisation of $\budgetspace$). The resulting total time-complexity is $\cO(\frac{|\cD||\cA||\tilde{\budgetspace}|}{1-\discountfactor} \log |\cA||\tilde{\budgetspace}|)$. This operation can easily be distributed over several CPUs provided that we first evaluate the \idx{model} $\oQ(\os',\cA \times \tilde{\budgetspace})$ for each state $\os$ extracted from the dataset $\cD$, which can be done in a single forward pass. By using multiprocessing in the computations of $\budgetedpolicy_\text{hull}$, we enjoy a linear speedup.
+In a simulated environment, a first process that can be distributed is the collection of transitions in the exploration procedure of \Cref{algo:risk-sensitive-exploration}, as $\budgetedpolicy_\text{greedy}$ stays constant within each minibatch which avoids the need of synchronisation between workers. Second, the main bottleneck of \gls{BFTQ} is the computation of the target $\abo \oQ$. Indeed, when computing $\budgetedpolicy_\text{hull}$ we must perform at each epoch a Graham-scan of complexity $\cO(|\cA||\tilde{\budgetspace}| \log |\cA||\tilde{\budgetspace}|)$ per transition in $\cD$ to compute the convex hulls of $\oQ$ (where $\tilde{\budgetspace}$ is a finite discretisation of $\budgetspace$). The resulting total time-complexity is $\cO(\frac{|\cD||\cA||\tilde{\budgetspace}|}{1-\discountfactor} \log |\cA||\tilde{\budgetspace}|)$. This operation can easily be distributed over several CPUs provided that we first evaluate the model $\oQ(\os',\cA \times \tilde{\budgetspace})$ for each state $\os$ extracted from the dataset $\cD$, which can be done in a single forward pass. By using multiprocessing in the computations of $\budgetedpolicy_\text{hull}$, we enjoy a linear speedup.
 The full description of our scalable implementation of \gls{BFTQ} is recalled in \Cref{algo:bftq_full}.
 
 
@@ -314,9 +314,9 @@ The full description of our scalable implementation of \gls{BFTQ} is recalled in
 \label{sec:brl-experiments}
 There are two hypotheses we want to validate.
 
-\paragraph{Exploration strategies} We claimed in \Cref{sec:exploration} that a \idx{risk-sensitive} exploration was required in the setting of \glspl{BMDP}. We test this hypotheses by confronting our strategy to a classical \idx{risk-neutral} strategy. The latter is chosen to be a \idx{$\epsilon$-greedy} \idx{policy} slowly transitioning from a random to a \idx{greedy} \idx{policy}\footnote{We train this \idx{greedy} policy using \FTQ.} that aims to maximise $\expectedvalue_{\policy} \return^{\policy}$ regardless of $\expectedvalue_{\policy} \constraintreturn^{\policy}$. The quality of the resulting batches\index{batch} $\cD$ is assessed by training a \gls{BFTQ} \idx{policy} and comparing the resulting performance.
+\paragraph{Exploration strategies} We claimed in \Cref{sec:exploration} that a \idx{risk-sensitive} exploration was required in the setting of \glspl{BMDP}. We test this hypotheses by confronting our strategy to a classical \idx{risk-neutral} strategy. The latter is chosen to be a \idx{$\epsilon$-greedy} policy slowly transitioning from a random to a greedy policy\footnote{We train this greedy policy using \FTQ.} that aims to maximise $\expectedvalue_{\policy} \return^{\policy}$ regardless of $\expectedvalue_{\policy} \constraintreturn[^{\policy}]$. The quality of the resulting batches $\cD$ is assessed by training a \gls{BFTQ} policy and comparing the resulting performance.
 
-\paragraph{Budgeted algorithms} We compare our \BFTQ algorithm to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\policy} \expectedvalue_{\policy}[\return^{\policy} - \lambda \constraintreturn^{\policy}]$.
+\paragraph{Budgeted algorithms} We compare our \BFTQ algorithm to an \FTQl baseline. This baseline consists in approximating the BMDP by a finite set of CMDPs problems. We solve each of these CMDP using the standard technique of Lagrangian Relaxation: the cost constraint is converted to a soft penalty weighted by a Lagrangian multiplier $\lambda$ in a surrogate reward function: $\max_{\policy} \expectedvalue_{\policy}[\return^{\policy} - \lambda \constraintreturn[^{\policy}]]$.
 As shown in \Cref{fig:Lagrangian}, the optimal deterministic policy can be obtained by a line-search on the Lagrange multiplier values $\lambda$.
 Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies: the safest deterministic policy that violates the constraint $\pi_{\lambda-}$ and the riskier of the feasible ones $\pi_{\lambda+}$.
 The resulting \glspl{MDP} can be solved by any RL algorithm, and we chose \FTQ for being closest to \BFTQ.
@@ -344,9 +344,9 @@ This simple environment is only meant to highlight clearly the specificity of ex
         \toprule
         Parameter & Description & Value\tabularnewline
         \midrule
-        - & Size of the \idx{environment} & 7 x 6\tabularnewline
+        - & Size of the environment & 7 x 6\tabularnewline
         - & \makecell[l]{Standard deviation of the Gaussian \\noise applied to actions} & (0.25,0.25)\tabularnewline
-        H & Trajectory\index{trajectory} duration & 9\tabularnewline
+        H & Trajectory duration & 9\tabularnewline
         \bottomrule
     \end{tabular}
     \caption{Parameters of \texttt{Corridors}}
@@ -366,8 +366,8 @@ Our second application is a dialogue-based slot-filling simulation that has alre
         $\mu_{\bot}$& Gaussian mean for misunderstanding & -0.25\tabularnewline
         $\mu_{\top}$& Gaussian mean for understanding & 0.25\tabularnewline
         $\sigma$& Gaussian standard deviation & 0.6\tabularnewline
-        $p$& Probability of \idx{hangup} & 0.25\tabularnewline
-        H & Trajectory\index{trajectory} duration & 10\tabularnewline
+        $p$& Probability of hangup & 0.25\tabularnewline
+        H & Trajectory duration & 10\tabularnewline
         - & Number of slots & 3\tabularnewline
         \bottomrule
     \end{tabular}
@@ -376,9 +376,9 @@ Our second application is a dialogue-based slot-filling simulation that has alre
 \end{table}
 
 \paragraph{Autonomous driving}
-In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} \idx{environment} \citep{highway-env} for simulated highway driving and behavioural decision-making.
-We define a task that displays a clear trade-off between safety and efficiency. The \idx{agent} controls a vehicle with a finite set of manoeuvres implemented by low-lever controllers: $\mathcal{A}$ = \{\text{no-op}, \text{right-lane}, \text{left-lane}, \text{faster}, \text{slower}\}. It is driving on a two-lane road populated with other traffic participants: the vehicles in front of the \idx{agent} drive slowly, and there are incoming vehicles on the opposite lane. Their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories\index{trajectory}.
-The task consists in driving as fast as possible, which is \idx{model}led by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the \idx{agent} to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory\index{trajectory} horizon. Thus, the constrained signal is the maximum proportion of time that the \idx{agent} is allowed to drive on the wrong side of the road.
+In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated highway driving and behavioural decision-making.
+We define a task that displays a clear trade-off between safety and efficiency. The agent controls a vehicle with a finite set of manoeuvres implemented by low-lever controllers: $\mathcal{A}$ = \{\text{no-op}, \text{right-lane}, \text{left-lane}, \text{faster}, \text{slower}\}. It is driving on a two-lane road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. Their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
+The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory horizon. Thus, the constrained signal is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
 
 \begin{table}[ht!]
     \centering
@@ -387,9 +387,9 @@ The task consists in driving as fast as possible, which is \idx{model}led by a r
         Parameter & Description & Value\tabularnewline
         \midrule
         $N_v$& Number of vehicles & 2 - 6\tabularnewline
-        $\sigma_p$& Standard deviation of vehicles initial positions & 100 m\tabularnewline
-        $\sigma_v$& Standard deviation of vehicles initial velocities & 3 m/s\tabularnewline
-        H & Trajectory\index{trajectory} duration & 15 s\tabularnewline
+        $\sigma_p$& Standard deviation of vehicles initial positions & \SI{100}{\meter}\tabularnewline
+        $\sigma_v$& Standard deviation of vehicles initial velocities & \SI{3}{\meter\per\second}\tabularnewline
+        H & Trajectory duration & \SI{15}{\second}\tabularnewline
         \bottomrule
     \end{tabular}
 
@@ -399,7 +399,7 @@ The task consists in driving as fast as possible, which is \idx{model}led by a r
 
 \subsection{Results}
 \label{subsec:results}
-In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(\return^{\policy},\constraintreturn^{\policy})$ ($(\return^{\budgetedpolicy},\constraintreturn^{\budgetedpolicy})$ for \gls{BFTQ}) over $N_\text{trajs}$ trajectories\index{trajectory}. That way, we display the variation related to learning (and batches\index{batch}) rather than the variation in the execution of the policies.
+In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(\return^{\policy},\constraintreturn[^{\policy}])$ ($(\return^{\budgetedpolicy},\constraintreturn[^{\budgetedpolicy}])$ for \BFTQ) over $N_\text{trajs}$ trajectories. That way, we display the variation related to learning (and batches) rather than the variation in the execution of the policies.
 
 We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment: \Cref{fig:exploration} shows the set of trajectories collected by each exploration strategy.
 and the resulting performance of a budgeted policy trained on each batch. The trajectories (orange) in the risk-neutral batch are concentrated along the risky corridor (right) and ignore the safe corridor (left), which results in bad performances in the low-risk regime. Conversely, trajectories in the risk-sensitive batch (blue) are well distributed among both corridors and the corresponding budgeted policy achieves good performance across the whole spectrum of risk budgets. 
@@ -437,13 +437,13 @@ Still, \BFTQ provides a better control on the expected cost of the policy, than 
 \label{subsec:discussions}
 \Cref{algo:bftq} is an algorithm for solving large unknown \glspl{BMDP} with continuous states. To the best of our knowledge, there is no algorithm in the current literature that combines all those features.
 
-Algorithms have been proposed for \glspl{CMDP}, which are less flexible sub-problems of the more general \gls{BMDP}. When the \idx{environment} parameters ($\Ps$, $\R$, $\constraint$) are known but not tractable, solutions relying on function approximation~\citep{Undurti} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown \idx{environment}s, \idx{Online} algorithms \citep{Geibel2005, Abe2010,AchiamHTA17,ChowGJP15} and a \idx{batch} algorithm \citep{Thomas2015, Petrik2016, Laroche2019,Le2019} can solve large unknown \glspl{CMDP}. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
+Algorithms have been proposed for \glspl{CMDP}, which are less flexible sub-problems of the more general \gls{BMDP}. When the environment parameters ($\Ps$, $\R$, $\constraint$) are known but not tractable, solutions relying on function approximation~\citep{Undurti} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown environments, Online algorithms \citep{Geibel2005, Abe2010,AchiamHTA17,ChowGJP15} and a batch algorithm \citep{Thomas2015, Petrik2016, Laroche2019,Le2019} can solve large unknown \glspl{CMDP}. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
 
 \paragraph{Budgeted Markov Decision Processes algorithms}
-To our knowledge, there were only two ways of solving a \gls{BMDP}. The first one is to approximate it with a finite set of \glspl{CMDP} (e.g. see our \FTQl baseline). As explained on \Cref{fig:Lagrangian}, the optimal \idx{deterministic policy} can be obtained by a line-search on the Lagrange multiplier values $\lambda$. Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies\index{deterministic policy}: the safest \idx{deterministic policy} that violates the constraint $\policy_{\lambda-}$ and the riskier of the feasible ones $\policy_{\lambda+}$. So \gls{FTQ} can be easily adapted for continuous states \gls{CMDP} and \gls{BMDP} through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our solution not only requires one single \idx{model} but also avoids any supplementary interaction.
+To our knowledge, there were only two ways of solving a \gls{BMDP}. The first one is to approximate it with a finite set of \glspl{CMDP} (e.g. see our \FTQl baseline). As explained on \Cref{fig:Lagrangian}, the optimal \idx{deterministic policy} can be obtained by a line-search on the Lagrange multiplier values $\lambda$. Then, according to \citet[Theorem 4.4]{BEUTLER1985236}, the optimal policy is a randomised mixture of two deterministic policies\index{deterministic policy}: the safest \idx{deterministic policy} that violates the constraint $\policy_{\lambda-}$ and the riskier of the feasible ones $\policy_{\lambda+}$. So \gls{FTQ} can be easily adapted for continuous states \gls{CMDP} and \gls{BMDP} through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our solution not only requires one single model but also avoids any supplementary interaction.
 %TODO: relire ce paragraphe, repetition potentielle avec celui qui introduit \Cref{fig:Lagrangian}
 
-The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \gls{DP} algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the \idx{model} ($\Ps$, $\R$, $\constraint$), and do not address the question of learning from interaction data.
+The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \gls{DP} algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the model ($\Ps$, $\R$, $\constraint$), and do not address the question of learning from interaction data.
 
 
 \section*{Conclusion}
@@ -461,7 +461,6 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \begin{proof}
 	Thanks to the introduction of the augmented spaces $\ocS, \ocA$ and dynamics $\augmentedtransition$, this proof is the same as that in classical \glspl{MOMDP}.
-	
 	\begin{align*}
 	\oV^{\budgetedpolicy}(\os) &\eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
 	&=\sum_{\oa\in\ocA} \probability{\oa_0 = \oa \condbar\ov{s_0} = \os} \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \oa_0 = \oa\right]\\
@@ -490,31 +489,30 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \subsection{\Cref{thm:bellman-optimality}}
 
-% TODO: \Qr^* must be replaced by \Qr[^*], same for Qc
+% TODO: \Qr[^\star] must be replaced by \Qr[^*], same for Qc
 
 \begin{proof}
     Let $\os, \oa \in \ocA\times\ocS$. For this proof, we consider potentially non-stationary policies $\budgetedpolicy=(\rho, \budgetedpolicy')$, with $\rho\in\cM(\ocA)$, $\budgetedpolicy'\in\cM(\ocA)^\Natural$. The results will apply to the particular case of stationary optimal policies, when they exist.
-
     \begin{align}
-        \Qr^*(\os, \oa) &=  \max_{\rho, \budgetedpolicy'} \Qr^{\rho, \budgetedpolicy'}(\os', \oa') \label{eq:pthm_def}\\
-        &= \max_{\rho, \budgetedpolicy'} \reward(s, a) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\os' | \os, \oa) \Vr^{\rho, \budgetedpolicy'}(\os') \label{eq:pthm_exp}\\
-        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_{\rho, \budgetedpolicy'} \sum_{\oa'\in\ocA} \rho(\oa' | \os')\Qr^{\budgetedpolicy'}(\os', \oa') \label{eq:pthm_marg}\\
-        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_\rho\sum_{\oa'\in\ocA}\rho(\oa' | \os')\max_{\budgetedpolicy'\in\policies_a(\os')}\Qr^{\budgetedpolicy'}(\os', \oa') \label{eq:pthm_max}\\
-        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_\rho\expectedvalueover{\oa'\sim\rho}\Qr^*(\os', \oa') \label{eq:pthm_marg_def2}
+        \Qr[^\star](\os, \oa) &=  \max_{\rho, \budgetedpolicy'} \Qr[^{\rho, \budgetedpolicy'}](\os', \oa') \label{eq:pthm_def}\\
+        &= \max_{\rho, \budgetedpolicy'} \reward(s, a) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\os' | \os, \oa) \Vr[^{\rho, \budgetedpolicy'}](\os') \label{eq:pthm_exp}\\
+        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_{\rho, \budgetedpolicy'} \sum_{\oa'\in\ocA} \rho(\oa' | \os')\Qr[^{\budgetedpolicy'}](\os', \oa') \label{eq:pthm_marg}\\
+        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_\rho\sum_{\oa'\in\ocA}\rho(\oa' | \os')\max_{\budgetedpolicy'\in\policies_a(\os')}\Qr[^{\budgetedpolicy'}](\os', \oa') \label{eq:pthm_max}\\
+        &= \reward(s, a) + \discountfactor \sum_{\os'\in\ocS}  \augmentedtransition(\os' | \os, \oa) \max_\rho\expectedvalueover{\oa'\sim\rho}\Qr[^\star](\os', \oa') \label{eq:pthm_marg_def2}
     \end{align}
     where $\budgetedpolicy = (\rho, \budgetedpolicy')\in\policies_a(\os)$ and $\budgetedpolicy'\in\policies_a(\os')$.
 
     This follows from:
-    \begin{enumerate}[label=(\roman*)]
+    \begin{enumerate}
         \item[\eqref{eq:pthm_def}.] Definition of $\oQ^*$.
         \item[\eqref{eq:pthm_exp}.] Bellman Expectation expansion from \Cref{prop:bellman-expectation}.
         \item[\eqref{eq:pthm_marg}.] Marginalisation on $\oa'$.
         \item[\eqref{eq:pthm_max}.] \begin{itemize}
             \item Trivially $\max_{\budgetedpolicy'\in\policies_a(\os')} \sum_{\oa'\in\ocA} \cdot \leq \sum_{\oa'\in\ocA} \max_{ \budgetedpolicy'\in\policies_a(\os)} \cdot$.
-            \item Let $\ov{\budgetedpolicy}\in\argmax_{\budgetedpolicy'\in\policies_a(\os')} \Qr^{\budgetedpolicy'}(\os', \oa')$, then:
+            \item Let $\ov{\budgetedpolicy}\in\argmax_{\budgetedpolicy'\in\policies_a(\os')} \Qr[^{\budgetedpolicy'}](\os', \oa')$, then:
             \begin{align*}
-                \sum_{\oa'\in\ocA}\rho(\oa'|\os')\max_{\budgetedpolicy'\in\policies_a(\os')}\Qr^{\budgetedpolicy'}(\os', \oa') &= \sum_{\oa'\in\ocA}\rho(\oa'|\os')\Qr^{\ov{\budgetedpolicy}}(\os', \oa') \\
-                &\leq  \max_{\budgetedpolicy'\in\policies_a(\os')} \sum_{\oa'\in\ocA}\rho(\oa'|\os')\Qr^{\budgetedpolicy'}(\os', \oa').
+                \sum_{\oa'\in\ocA}\rho(\oa'|\os')\max_{\budgetedpolicy'\in\policies_a(\os')}\Qr[^{\budgetedpolicy'}](\os', \oa') &= \sum_{\oa'\in\ocA}\rho(\oa'|\os')\Qr[^{\budgetedpolicy'}](\os', \oa') \\
+                &\leq  \max_{\budgetedpolicy'\in\policies_a(\os')} \sum_{\oa'\in\ocA}\rho(\oa'|\os')\Qr[^{\budgetedpolicy'}](\os', \oa').
             \end{align*}
         \end{itemize}
         \item[\eqref{eq:pthm_marg_def2}.] Definition of $\oQ^*$.
@@ -530,7 +528,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
         \Qr[^*](\os, \oa) = r(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}  P(\os' | \os, \oa) \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\os', \oQ^*)} \Qr[^*](\os', \oa').
     \end{equation*}
 
-    The same reasoning can be made for $\Qc^*$ by replacing $\max$ operators by $\min$, and $\policies_a$ by $\policies_r$.
+    The same reasoning can be made for $\Qc[^\star]$ by replacing $\max$ operators by $\min$, and $\policies_a$ by $\policies_r$.
 \end{proof}
 
 
@@ -604,7 +602,6 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \begin{proof}
 	We now study the contractivity of $\abo^{*}$ when restricted to the functions of $\cL_{\discountfactor}$ defined as follows:
-
     \begin{equation}
     \cL_{\discountfactor} = \left\{\begin{array}{cc}
    \oQ\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discountfactor}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
@@ -613,7 +610,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     \end{equation}
     That is, for all state $\os$, the set $\oQ(\os, \ocA)$ plot in the $(\Qc,\Qr)$ plane must be the \emph{graph} of a $L$-Lipschitz function, with $L<1/\discountfactor-1$.
 
-    We impose such structure for the following reason: the counter-example presented above prevented contraction because it was a pathological case in which the slope of $\oQ$ can be arbitrary large. As a consequence, when solving $\Qr^*$ such that $\Qc^*=\budget$, a vertical slice of a $\|\cdot\|_\infty$ ball around $\oQ_1$ (which must contain $\oQ_2$) can be arbitrary large as well.
+    We impose such structure for the following reason: the counter-example presented above prevented contraction because it was a pathological case in which the slope of $\oQ$ can be arbitrary large. As a consequence, when solving $\Qr[^\star]$ such that $\Qc[^\star]=\budget$, a vertical slice of a $\|\cdot\|_\infty$ ball around $\oQ_1$ (which must contain $\oQ_2$) can be arbitrary large as well.
 
 
     We denote $\text{Ball}(\oQ,R)$ the ball of centre $\oQ$ and radius $R$ for the $\|\cdot\|_\infty$-norm:
@@ -629,12 +626,11 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
         \item taking the slice $\Qc=\budget$ of a ball $\text{Ball}(\cF,R)$ with $\cF$ $L$-Lipschitz results in an interval on $\Qr$ of range at most $(L+1)R$
     \end{enumerate}
 	
-	These three steps will allow us to control $\Qr^{2*} - \Qr^{1*}$ as a function of $R = \|\oQ^2-\oQ^1\|_\infty$.
+	These three steps will allow us to control $\Qr[^{2\star}] - \Qr[^{1\star}]$ as a function of $R = \|\oQ^2-\oQ^1\|_\infty$.
 
     \paragraph{Step 1}
 
     We want to show that if $\oQ^1$ and $\oQ^2$ are close, then $\cF^1$ are $\cF^2$ are close as well in the following sense:
-
     \begin{align}
         \cF^2\in\text{Ball}(\cF^1, R) &\iff d(\cF^1, \cF^2) \leq R \iff \max_{q^2\in\cF^2}\min_{q^1\in\cF^1}\|q^2-q^1\|_\infty \leq R.
         \label{eq:ball-set}
@@ -662,14 +658,13 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     \begin{figure}[ht]
         \centering
         \includegraphics[trim=7cm 4cm 7cm 4cm, clip, width=0.7\textwidth]{img/contraction_lipschitz.pdf}
-        \caption{We represent the range of possible solutions $\Qr^{2,*}$ for any $\oQ^2\in\text{Ball}(\oQ^1)$, given $\oQ_1\in\cL_\lambda$}
+        \caption{We represent the range of possible solutions $\Qr[^{2\star}]$ for any $\oQ^2\in\text{Ball}(\oQ^1)$, given $\oQ_1\in\cL_\lambda$}
         \label{fig:contraction_lips_hull}
     \end{figure}
 
     \paragraph{Step 2}
 
     We want to show that if $\oQ\in\cL_{\discountfactor}$, $\cF$ is the graph of an $L$-Lipschitz function:
-
     \begin{equation}
         \label{eq:L-lip-set}
         \forall q^1,q^2\in\cF, |q_r^2-q_r^1| \leq |q_c^2-q_c^1|.
@@ -679,7 +674,6 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     For all $q^1,q^2\in\cF, \exists \lambda,\mu\in[0,1], q^{11},q^{12},q^{21},q^{22}\in \oQ(\os,\ocA)$ such that $q^1 = (1-\lambda)q^{11} + \lambda q^{12}$ and $q^2 = (1-\mu)q^{21} + \mu q^{22}$.
     Without loss of generality, we can assume $q_c^{11}\leq q_c^{12}$ and $q_c^{21}\leq q_c^{22}$. We also consider the worst case in terms of maximum $q_r$ deviation: $q_c^{12} \leq q_c^{21}$.
     Then the maximum increment $q_r^2-q_r^{1}$ is:
-
     \begin{align*}
         \|q^2_r-q^{1}_r\| &\leq \|q^{12}_r-q^{1}_r\| + \|q^{21}_r-q^{12}_r\| + \|q^{2}_r-q^{21}_r\| \\
         &= (1-\lambda)\|q^{12}_r-q^{11}_r\| + \|q^{21}_r-q^{12}_r\| + \mu\|q^{22}_r-q^{21}_r\| \\
@@ -694,31 +688,28 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
     Let $\cF_1$ be a L-Lipschitz set as defined in \eqref{eq:L-lip-set}, and consider a ball $\text{Ball}(\cF_1,R)$ around it as defined in \eqref{eq:ball-set}.
 
-    We want to bound the optimal reward value $\Qr^{2*}$ under constraint $\Qc^{2*} = \budget$ (regular case in \Cref{sec:proof_pi_hull} where the constraint is saturated), for any $\cF^2\in\text{Ball}(\cF_1,R)$. This quantity is represented as a red double-ended arrow in \Cref{fig:contraction_lips_hull}.
+    We want to bound the optimal reward value $\Qr[^{2\star}]$ under constraint $\Qc[^{2\star}] = \budget$ (regular case in \Cref{sec:proof_pi_hull} where the constraint is saturated), for any $\cF^2\in\text{Ball}(\cF_1,R)$. This quantity is represented as a red double-ended arrow in \Cref{fig:contraction_lips_hull}.
 
-    Because we are only interested in what happens locally at $\Qc=\budget$, we can zoom in on \Cref{fig:contraction_lips_hull} and only consider a thin $\epsilon$-section around $\budget$. In the limit $\epsilon\rightarrow 0$, this section becomes the tangent to $\cF^1$ at $\Qc^1=\budget$. It is represented in \Cref{fig:contraction_lips_hull_slope}, from which we derive a geometrical proof:
-
+    Because we are only interested in what happens locally at $\Qc=\budget$, we can zoom in on \Cref{fig:contraction_lips_hull} and only consider a thin $\epsilon$-section around $\budget$. In the limit $\epsilon\rightarrow 0$, this section becomes the tangent to $\cF^1$ at $\Qc[^1]=\budget$. It is represented in \Cref{fig:contraction_lips_hull_slope}, from which we derive a geometrical proof:
     \begin{figure}[ht]
         \centering
         \includegraphics[trim=2cm 1cm 2cm 1cm, clip, width=0.7\textwidth]{img/contraction_lipschitz_slope.pdf}
-        \caption{We represent a section $[\budget-\epsilon, \budget+\epsilon]$ of $\cF^1$ and $\text{Ball}(\cF^1, R)$. We want to bound the range of $\Qr^{2*}.$}
+        \caption{We represent a section $[\budget-\epsilon, \budget+\epsilon]$ of $\cF^1$ and $\text{Ball}(\cF^1, R)$. We want to bound the range of $\Qr[^{2\star}].$}
         \label{fig:contraction_lips_hull_slope}
     \end{figure}
-
     \begin{align*}
-        \Delta \Qr^{2*} &= b + c &\\
+        \Delta \Qr[^{2\star}] &= b + c &\\
         & \leq La + c & \text{($\cF^1$ $L$-Lipschitz)}\\
         &= 2LR+2R = 2R(L+1).
     \end{align*}
     Hence,
     \begin{equation*}
-        | \Qr^{2*} - \Qr^{1*}| \leq \frac{\Delta \Qr^{2*}}{2} = R(L+1)
+        | \Qr[^{2\star}] - \Qr[^{1\star}]| \leq \frac{\Delta \Qr[^{2\star}]}{2} = R(L+1)
     \end{equation*}
+    and $\Qc[^{1\star}] = \Qc[^{2\star}] = \budget$.
+    Consequently, $ \|\oQ[^{2\star}] - \oQ[^{1\star}]\|_\infty \leq (L+1)R$.
 
-    and $\Qc^{1*} = \Qc^{2*} = \budget$.
-    Consequently, $ \|\oQ^{2*} - \oQ^{1*}\|_\infty \leq (L+1)R$.
-
-    Finally, consider the edge case in \Cref{sec:proof_pi_hull}: the constraint is not active, and the optimal value is simply $\argmax_{q\in\cF} q^r$. In particular, since we showed that $\cF^2\in \text{Ball}(\cF^1, R)$, and since $\oQ^{2*}\in \cF^2$, there exist $q^1\in \cF^1: \|\oQ^{2*}-q^1\|_\infty\leq R$ and in particular $\oQ^{1*}_r \geq q^1_r \geq \oQ^{2*}_r - R$. Reciprocally, by the same reasoning, $\Qr^{2*} \geq \Qr^{1*} - R$. Hence, we have that $| \Qr^{2*} - \Qr^{1*}| \leq R \leq R(L+1).$
+    Finally, consider the edge case in \Cref{sec:proof_pi_hull}: the constraint is not active, and the optimal value is simply $\argmax_{q\in\cF} q^r$. In particular, since we showed that $\cF^2\in \text{Ball}(\cF^1, R)$, and since $\oQ[^{2\star}]\in \cF^2$, there exist $q^1\in \cF^1: \|\oQ[^{2\star}]-q^1\|_\infty\leq R$ and in particular $\oQ[^{1\star}]_r \geq q^1_r \geq \oQ[^{2\star}]_r - R$. Reciprocally, by the same reasoning, $\Qr[^{2\star}] \geq \Qr[^{1\star}] - R$. Hence, we have that $| \Qr[^{2\star}] - \Qr[^{1\star}]| \leq R \leq R(L+1).$
 
     \paragraph{Wrapping it up}
 
@@ -726,7 +717,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     and all $\os\in\ocS$, $\cF^2\in\text{Ball}(\cF^1,\|\oQ^2-\oQ^1\|_\infty)$ and $\cF^1$ is
     the graph of a $L$-Lipschitz function with $L<1/\discountfactor - 1$.
     Moreover, the solutions of $\budgetedpolicy_\text{greedy}(\oQ^1)$ and $\budgetedpolicy_\text{greedy}(\oQ^2)$ at
-    $\os$ are such that $ \|\oQ^{2*} - \oQ^{1*}\|_\infty \leq (L+1)\|\oQ^2-\oQ^1\|_\infty$.
+    $\os$ are such that $ \|\oQ[^{2\star}] - \oQ[^{1\star}]\|_\infty \leq (L+1)\|\oQ^2-\oQ^1\|_\infty$.
 
     Hence, for all $\oa$,
     \begin{align*}
@@ -734,11 +725,10 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
         &= \discountfactor\left\|\expectedvalueover{\os'\sim\augmentedtransition(\os'|\os,\oa)}
         \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\oQ^1)}\oQ^1(\os',\oa') -
         \expectedvalueover{\oa'\sim\budgetedpolicy_\text{greedy}(\oQ^2)}\oQ^2(\os',\oa')\right\|_\infty \\
-        &= \discountfactor\left\|\oQ^{2*} - \oQ^{1*}\right\|_\infty \\
+        &= \discountfactor\left\|\oQ[^{2\star}] - \oQ[^{1\star}]\right\|_\infty \\
         &\leq \discountfactor(L+1)\|\oQ^2-\oQ^1\|_\infty.
     \end{align*}
     Taking the sup on $\ocS\ocA$,
-
     \begin{equation*}
         \|\abo^{*}\oQ^1 - \abo^{*}\oQ^2\|_\infty \leq \discountfactor(L+1)\|\oQ^1-\oQ^2\|_\infty
     \end{equation*}
@@ -862,9 +852,9 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
 
     \paragraph{Regular case}
 
-    There exists $q^0\in\cF_{\oQ}$ such that $q^0_c \geq \budget$. Then $q^1$ and $q^2$ must flank the \idx{budget}: $q_c^1 \leq \budget \leq q_c^2$. Indeed, by contradiction, if $q_c^2 \geq q_c^1 > \budget$ then $q_c^* > \budget$ which contradicts $\policies_r^{\oQ}$. Conversely, if $q_c^1 \leq q_c^2 < \budget$ then $q^* < \budget \leq q^0_c$, which would make $q^*$ a worse candidate than $q^\top=(1-\lambda)q^* + \lambda q^0$ when $\lambda$ is chosen such that $q_c^\top=\budget$, and contradict $\policies_r^{\oQ}$ again.
+    There exists $q^0\in\cF_{\oQ}$ such that $q^0_c \geq \budget$. Then $q^1$ and $q^2$ must flank the budget: $q_c^1 \leq \budget \leq q_c^2$. Indeed, by contradiction, if $q_c^2 \geq q_c^1 > \budget$ then $q_c^* > \budget$ which contradicts $\policies_r^{\oQ}$. Conversely, if $q_c^1 \leq q_c^2 < \budget$ then $q^* < \budget \leq q^0_c$, which would make $q^*$ a worse candidate than $q^\top=(1-\lambda)q^* + \lambda q^0$ when $\lambda$ is chosen such that $q_c^\top=\budget$, and contradict $\policies_r^{\oQ}$ again.
 
-    Because $\cF$ is the graph of a non-decreasing function, $\lambda$ should be as high as possible, as long as the \idx{budget} $q^*\leq\budget$ is respected. We reach the highest $q_r^*$ when $q^*_c=\budget$, that is: $\lambda=(\budget-q_c^1)/(q_c^2-q_c^1)$.
+    Because $\cF$ is the graph of a non-decreasing function, $\lambda$ should be as high as possible, as long as the budget $q^*\leq\budget$ is respected. We reach the highest $q_r^*$ when $q^*_c=\budget$, that is: $\lambda=(\budget-q_c^1)/(q_c^2-q_c^1)$.
 
     It remains to show that $q^1$ and $q^2$ are two successive points in $\cF_{\oQ}$: $\not\exists q\in\cF_{\oQ}\setminus\{q^1, q^2\}: q^1_c \leq q_c \leq q^2_c$. Otherwise, as $\cF$ is the graph of a concave function, we would have $q_r \geq (1-\mu)q_r^1 + \mu q_r^2$. $q_r$ cannot be strictly greater than $(1-\mu)q_r^1 + \mu q_r^2$ which would contradict $q^*$, but it can still be equal, which means the tree points $q, q^1, q^2$ are aligned. In fact, every points aligned with $q^1$ and $q^2$ can also be used to construct mixtures resulting in $q^*$, but among these solutions we can still choose $q^1$ and $q^2$ as the two points in $\cF_{\oQ}$ closest to $q^*$.
 
