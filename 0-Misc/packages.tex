@@ -90,6 +90,7 @@
 
 % --- Glossaries
 \usepackage[acronym,toc,symbols,sort=use]{glossaries-extra}
+\newglossary[alg]{algorithms}{alo}{als}{Algorithm}
 \makeglossaries
 \setabbreviationstyle{long-short}
 \setabbreviationstyle[algorithm]{long-short-sc}
@@ -103,6 +104,7 @@
 	\fi
 }
 \glssetcategoryattribute{symbol}{indexonlyfirst}{true}  % Index first occurence of symbols only
+\glssetcategoryattribute{general}{nohyper}{true}  % Disable hyperref for general glossary
 \usepackage{makeidx} % Required to make an index
 \makeindex
 \input{5-Nomenclature/Nomenclature}

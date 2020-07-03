@@ -1,3 +1,6 @@
+\newglossaryentry{model-based}{name={model-based},description={refers to algorithms that \emph{do} estimate the \gls{MDP} parameters $\Ps$ and $\R$.}}
+\newglossaryentry{model-free}{name={model-free},description={refers to algorithms that \emph{do not} estimate the \gls{MDP} parameters $\Ps$ and $\R$.}}
+
 % --- RL
 \newabbreviation{ML}{ML}{\itag{M}achine \itag{L}earning}
 \newabbreviation{MAB}{MAB}{\itag{M}ulti-\itag{A}rmed \itag{B}andits}
@@ -6,12 +9,15 @@
 \newabbreviation{MDP}{MDP}{\itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{CMDP}{CMDP}{\itag{C}onstrained \itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{BMDP}{BMDP}{\itag{B}udgeted \itag{M}arkov \itag{D}ecision \itag{P}rocess}
+\newabbreviation{POMDP}{MOMDP}{\itag{P}artially \itag{O}bservable \itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{MOMDP}{MOMDP}{\itag{M}ulti-\itag{O}bjective \itag{M}arkov \itag{D}ecision \itag{P}rocess}
 \newabbreviation{DP}{DP}{\itag{D}ynamic \itag{P}rogramming}
 \newabbreviation{MPC}{MPC}{\itag{M}odel \itag{P}redictive \itag{C}ontrol}
 \newabbreviation{PAC}{PAC}{\itag{P}robably \itag{A}pproximately \itag{C}orrect}
 \newabbreviation{MLE}{MLE}{\itag{M}aximum \itag{L}ikelihood \itag{E}stimation}
 \newabbreviation{NN}{NN}{\itag{N}eural \itag{N}etwork}
+\newabbreviation{CNN}{CNN}{\itag{C}onvolutional \itag{N}eural \itag{N}etwork}
+\newabbreviation{FCN}{FCN}{\itag{F}ully-\itag{C}onnected \itag{N}etwork}
 \newabbreviation{MCTS}{MCTS}{\itag{M}onte-\itag{C}arlo \itag{T}ree Search}
 \newabbreviation{DQN}{DQN}{\itag{D}eep \itag{Q}-\itag{N}etwork}
 \newabbreviation{PRM}{PRM}{\itag{P}robabilistic \itag{R}oadmap}
@@ -32,11 +38,11 @@
 \newabbreviation{MOBIL}{MOBIL}{\itag{M}inimizing \itag{O}verall \itag{B}raking \itag{I}nduced by \itag{L}ane change}
 
 % Algorithms
-\newabbreviation[category=algorithm]{OLOP}{olop}{Open-Loop Optimistic Planning}
-\newabbreviation[category=algorithm]{OPD}{opd}{Optimistic Planning of Determinisitc Systems}
-\newabbreviation[category=algorithm]{KLOLOP}{kl-olop}{Kullback-Leibler OLOP}
-\newabbreviation[category=algorithm]{FTQ}{ftq}{Fit\itag{t}ed Q-Learning}
-\newabbreviation[category=algorithm]{BFTQ}{bftq}{Budgeted Fit\itag{t}ed Q-Learning}
+\newabbreviation[type=algorithms,category=algorithm]{OLOP}{olop}{Open-Loop Optimistic Planning}
+\newabbreviation[type=algorithms,category=algorithm]{OPD}{opd}{Optimistic Planning of Determinisitc Systems}
+\newabbreviation[type=algorithms,category=algorithm]{KLOLOP}{kl-olop}{Kullback-Leibler OLOP}
+\newabbreviation[type=algorithms,category=algorithm]{FTQ}{ftq}{Fit\itag{t}ed Q-Learning}
+\newabbreviation[type=algorithms,category=algorithm]{BFTQ}{bftq}{Budgeted Fit\itag{t}ed Q-Learning}
 
 \newcommand{\OLOP}{\gls{OLOP}\xspace}
 \newcommand{\OPD}{\gls{OPD}\xspace}
