@@ -23,6 +23,17 @@
 *.nlo
 *.nls
 *.pyg
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.slg
+*.slo
+*.sls
 
 PhD_thesis__Edouard_Leurent.pdf
 
