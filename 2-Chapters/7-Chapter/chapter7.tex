@@ -20,10 +20,10 @@ This chapter\dots
 \minitocStartChapter{}
 
 
-Despite the recent successes of Reinforcement Learning in cracking many hard problems \citep[e.g.][]{mnih2015humanlevel,Silver1140}, this tool has hardly been applied in real industrial issues. This could be attributed to two undesirable properties which limit its practical applications. First, it depends on a tremendous amount of interaction data that cannot always be simulated. This issue is alleviated by model-based methods -- which we consider in this work -- that benefit from better sample efficiencies by exploiting a richer data stream than their model-free counterparts. Second, it relies on trial-and-error and random exploration. In this paper, we consider the problem of controlling an unknown linear system $x(t)$ so as to maximise an \emph{arbitrary} bounded reward function $R$, in a critical setting where mistakes are costly and must be avoided at all time. 
+Despite the recent successes of Reinforcement Learning in cracking many hard problems \citep[e.g.][]{mnih2015humanlevel,Silver1140}, this tool has hardly been applied in real industrial issues. This could be attributed to two undesirable properties which limit its practical applications. First, it depends on a tremendous amount of interaction data that cannot always be simulated. This issue is alleviated by \gls{model-based} methods -- which we consider in this work -- that benefit from better sample efficiencies by exploiting a richer data stream than their \gls{model-free} counterparts. Second, it relies on trial-and-error and random exploration. In this paper, we consider the problem of controlling an unknown linear system $x(t)$ so as to maximise an \emph{arbitrary} bounded reward function $R$, in a critical setting where mistakes are costly and must be avoided at all time. 
 This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a reference trajectory already known a priori \citep[e.g.][]{Kumar2013}.
 
-Since experiencing failures is out of question, the only way to prevent them from the outset, when the system is first deployed, is to rely on some sort of prior knowledge. In this work, we assume that the system dynamics are partially known, in the form of a parametrized dynamical system with unknown parameters. We argue that this assumption is realistic given that most industrial applications to date have been relying on physical models to describe their processes and well-engineered controllers to operate them, rather than machine learning. Our framework relaxes this modelling effort by allowing some \emph{structured uncertainty} around the nominal model. We adopt a data-driven scheme where we wish to estimate the parameters more accurately as we interact with the true system. Most model-based reinforcement learning algorithms rely on the estimated dynamics to derive the corresponding optimal controls \citep[e.g.][]{Lenz2015,Levine2015}, but suffer from \emph{model bias}: they ignore the error that exists between the learned and true dynamics, which can dramatically degrade the control performances \citep{Schneider1997}. It is particularly likely when maximising an objective under constraints, which naturally pushes the systems to operate in the vicinity of constraint saturation and makes it prone to failure.
+Since experiencing failures is out of question, the only way to prevent them from the outset, when the system is first deployed, is to rely on some sort of prior knowledge. In this work, we assume that the system dynamics are partially known, in the form of a parametrized dynamical system with unknown parameters. We argue that this assumption is realistic given that most industrial applications to date have been relying on physical models to describe their processes and well-engineered controllers to operate them, rather than machine learning. Our framework relaxes this modelling effort by allowing some \emph{structured uncertainty} around the nominal model. We adopt a data-driven scheme where we wish to estimate the parameters more accurately as we interact with the true system. Most \gls{model-based} reinforcement learning algorithms rely on the estimated dynamics to derive the corresponding optimal controls \citep[e.g.][]{Lenz2015,Levine2015}, but suffer from \emph{model bias}: they ignore the error that exists between the learned and true dynamics, which can dramatically degrade the control performances \citep{Schneider1997}. It is particularly likely when maximising an objective under constraints, which naturally pushes the systems to operate in the vicinity of constraint saturation and makes it prone to failure.
 
 To address this issue, we turn to the framework of \emph{robust} decision-making \citep{Bental2009,Bertsimas2011,Gorissen2015}: instead of merely considering a point estimate of the dynamics, we build an entire \emph{confidence region} that contains the true dynamics with high probability, and optimise the decisions so as to maximise the worst-case outcome with respect to this uncertainty. Maximin problems are notoriously hard to solve, and all the more in our setting where the reward function $R$ is generic. In particular, this excludes a number of tools from the robust synthesis literature, such as $\cH_\infty$ control \citep[see, e.g.][]{Basar1996} or system-level synthesis \citep{Dean2017,Dean2018}. We turn instead to more general planning algorithms. The continuous state space prevents us from using dynamic programming techniques, so we consider tree-based planning instead. Though there exist works addressing continuous actions \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the decision space by adopting a hierarchical control architecture. At each time, the agent can select low-level controller to execute among a finite basis, e.g. choose a short-term goal to reach or a skill to execute such as a driving maneuver. The discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis. Tree-based planning algorithms are relevant in this context of discrete actions, but are only designed for a single known generative model instead of an entire confidence region for the system dynamics. We adapt them to the robust framework by following a two-steps procedure: we first predict a set of states that can be reached under a planned control sequence with respect to all possible dynamics. This reachability set is used to provide a conservative pessimistic reward to the planning algorithm. The next section aims to clarify and formalise these ideas, and state our contributions.
 
@@ -317,14 +317,14 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 
 
 
-There are plenty of emerging application domains nowadays, where the decision algorithms have to operate in the conditions of a severe uncertainty. To mention a few: the systems biology and control of bioreactors (where it is hard to establish detailed models and it is impossible to isolate and evaluate most of the external to the plant perturbations) and the path planning for self-driving cars (where despite of a large parametric variation of the models, the presence of humans in the loop introduces a lot of imprecision due to their spontaneous reactions). Therefore, the decision procedures need more information, then the estimation, identification and prediction algorithms come to the attention. In most of these applications, even the nominal simplified models are nonlinear, and in order to solve the problem of estimation and control in nonlinear and uncertain systems, a popular approach is based on the Linear Parameter-Varying (LPV) representation of their dynamics \cite{Shamma2012,Marcos_Balas04,Shamma_Cloutier93,Tan97}, since it allows to reduce the problem to the linear context at the price of augmented parametric variation.
+There are plenty of emerging application domains nowadays, where the decision algorithms have to operate in the conditions of a severe uncertainty. To mention a few: the systems biology and control of bioreactors (where it is hard to establish detailed models and it is impossible to isolate and evaluate most of the external to the plant perturbations) and the path planning for self-driving cars (where despite of a large parametric variation of the models, the presence of humans in the loop introduces a lot of imprecision due to their spontaneous reactions). Therefore, the decision procedures need more information, then the estimation, identification and prediction algorithms come to the attention. In most of these applications, even the nominal simplified models are nonlinear, and in order to solve the problem of estimation and control in nonlinear and uncertain systems, a popular approach is based on the Linear Parameter-Varying (LPV) representation of their dynamics \citep{Shamma2012,Marcos_Balas04,Shamma_Cloutier93,Tan97}, since it allows to reduce the problem to the linear context at the price of augmented parametric variation.
 
-In the presence of uncertainty (unknown parameters or/and external disturbances) the design of a conventional estimator or predictor, approaching the ideal value of the state, can be realized under restrictive assumptions only. However, an interval estimation/prediction remains frequently feasible: using input-output information an algorithm evaluates the set of admissible values (interval) for the state at each instant of time \cite{Efimov2016,Raiessi2018}. The interval length must be minimized via a parametric tuning of the system, and it is typically proportional to the size of the model uncertainty \cite{Chebotarev2015}. It is worth stressing that the interval estimation or prediction is not a relaxation of the original problem, in fact it is an improvement since the interval mean value can be used as the state pointwise estimate, while the interval bounds provide a simultaneous accuracy evaluation for given uncertainty.
+In the presence of uncertainty (unknown parameters or/and external disturbances) the design of a conventional estimator or predictor, approaching the ideal value of the state, can be realized under restrictive assumptions only. However, an interval estimation/prediction remains frequently feasible: using input-output information an algorithm evaluates the set of admissible values (interval) for the state at each instant of time \citep{Efimov2016,Raiessi2018}. The interval length must be minimized via a parametric tuning of the system, and it is typically proportional to the size of the model uncertainty \citep{Chebotarev2015}. It is worth stressing that the interval estimation or prediction is not a relaxation of the original problem, in fact it is an improvement since the interval mean value can be used as the state pointwise estimate, while the interval bounds provide a simultaneous accuracy evaluation for given uncertainty.
 
-There are many approaches to design interval/set-membership estimators and predictors \cite{Jaulin02,Kieffer_Walter04,Bernard_Gouze04,Moisan_Bernard_Gouze09}, and this paper focuses on the design based on the monotone systems theory \cite{Bernard_Gouze04,Moisan_Bernard_Gouze09,RVZ10,REZ11,Efimov_a2012}.
-In such a way the main difficulty for synthesis consists in ensuring cooperativity of the interval error dynamics by a proper design of the algorithm. As it has been shown in \cite{MazencBernard11,REZ11,Combastel2012}, such a complexity of the design can be handled by applying an additional transformation of coordinates, which maps a stable system into a stable and monotone one. An approach for selection of a constant similarity transformation matrix representing a given interval of matrices to an interval of Metzler matrices (providing monotonicity) has been developed in \cite{Efimov_a2013,Chebotarev2015}. 
+There are many approaches to design interval/set-membership estimators and predictors \citep{Jaulin02,Kieffer_Walter04,Bernard_Gouze04,Moisan_Bernard_Gouze09}, and this paper focuses on the design based on the monotone systems theory \citep{Bernard_Gouze04,Moisan_Bernard_Gouze09,RVZ10,REZ11,Efimov_a2012}.
+In such a way the main difficulty for synthesis consists in ensuring cooperativity of the interval error dynamics by a proper design of the algorithm. As it has been shown in \citep{MazencBernard11,REZ11,Combastel2012}, such a complexity of the design can be handled by applying an additional transformation of coordinates, which maps a stable system into a stable and monotone one. An approach for selection of a constant similarity transformation matrix representing a given interval of matrices to an interval of Metzler matrices (providing monotonicity) has been developed in \citep{Efimov_a2013,Chebotarev2015}. 
 
-The objective of this paper is to propose an interval predictor for linear time-invariant (LTI) and LPV systems. The main difficulty to overcome is the predictor stability, which contrarily to an observer cannot be imposed by a proper design of the gains. An interval inclusion of the uncertain components can be restrictive and transform an initially stable system to an unstable one. In other words, an important problem is to keep the interval predictor stability in the presence of uncertainties and saving the interval inclusion property of the estimates, then an unstable system can definitely enclose the trajectories of a stable one, but at the price of the precision. To solve this problem, first, a generic predictor is proposed for an LPV system, whose estimates can be combined with the interval frequency based estimator presented earlier. To analyze stability of the predictor, which is modeled by a nonlinear Lipschitz dynamics, a novel non-conservative Lyapunov function is developed, whose features can be verified through solution of linear matrix inequalities (LMIs). Second, we revisit the case of LTI models and demonstrate an asymptotic accuracy improvement that can be achieved if an additional information about external signals are given: the admissible interval of frequency spectrum. Finally, the utility of the developed theory is demonstrated on the problem of path planning for a self-driving car by making comparison with earlier results from \cite{Leurent2018}.
+The objective of this paper is to propose an interval predictor for linear time-invariant (LTI) and LPV systems. The main difficulty to overcome is the predictor stability, which contrarily to an observer cannot be imposed by a proper design of the gains. An interval inclusion of the uncertain components can be restrictive and transform an initially stable system to an unstable one. In other words, an important problem is to keep the interval predictor stability in the presence of uncertainties and saving the interval inclusion property of the estimates, then an unstable system can definitely enclose the trajectories of a stable one, but at the price of the precision. To solve this problem, first, a generic predictor is proposed for an LPV system, whose estimates can be combined with the interval frequency based estimator presented earlier. To analyze stability of the predictor, which is modeled by a nonlinear Lipschitz dynamics, a novel non-conservative Lyapunov function is developed, whose features can be verified through solution of linear matrix inequalities (LMIs). Second, we revisit the case of LTI models and demonstrate an asymptotic accuracy improvement that can be achieved if an additional information about external signals are given: the admissible interval of frequency spectrum. Finally, the utility of the developed theory is demonstrated on the problem of path planning for a self-driving car by making comparison with earlier results from \citep{Leurent2018}.
 
 The paper is organized as follows. An introduction to the theory of interval estimation for LTI systems is given in Section \ref{sec:Preliminaries}. The problem statement and a motivating example are introduced in Section \ref{sec:Problem-statement}. An improved interval predictor is presented in Section \ref{sec:Main-results}. The asymptotic accuracy is enhanced using frequency based estimation in Section \ref{sec:Frequency}. Application of the developed theory to the problem of path planning for an autonomous vehicle is shown in Section \ref{sec:Examples}.
 
@@ -347,7 +347,7 @@ For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues is denoted as
 
 For two vectors $x_{1},x_{2}\in\mathbb{R}^{n}$ or matrices $A_{1},A_{2}\in\Real^{n\times n}$, the relations $x_{1}\le x_{2}$ and $A_{1}\le A_{2}$ are understood elementwise. The relation $P\prec0$ ($P\succ0$) means that a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite. Given a matrix $A\in\Real^{m\times n}$, define $A^{+}=\max\{0,A\}$, $A^{-}=A^{+}-A$ (similarly for vectors) and denote the matrix of absolute values of all elements by $|A|=A^{+}+A^{-}$. 
 \begin{lemma}
-	\textup{\cite{EFRZS12}} \label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
+	\textup{\citep{EFRZS12}} \label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 	
 	\textup{(1)} If $A\in\Real^{m\times n}$ is a constant matrix, then
 	\begin{equation}
@@ -369,7 +369,7 @@ A matrix $A\in\Real^{n\times n}$ is called Hurwitz if all its eigenvalues have n
 \dot{x}(t)=Ax(t)+B\omega(t),\:t\geq0,\label{eq:LTI_syst}\\
 y(t)=Cx(t)+D\omega(t),\nonumber 
 \end{gather}
-with $x(t)\in\Real^{n}$, $y(t)\in\Real^{p}$ and a Metzler matrix $A\in\Real^{n\times n}$, is elementwise nonnegative for all $t\ge0$ provided that $x(0)\ge0$, $\omega:\Real_{+}\to\Real_{+}^{q}$ and $B\in\Real_{+}^{n\times q}$ \cite{FarinaRinaldi2000,Smith95}. The output solution $y(t)$ is nonnegative if $C\in\Real_{+}^{p\times n}$ and $D\in\Real_{+}^{p\times q}$. Such dynamical systems are called cooperative (monotone) or nonnegative if only initial conditions in $\Real_{+}^{n}$ are considered \cite{FarinaRinaldi2000,Smith95}.
+with $x(t)\in\Real^{n}$, $y(t)\in\Real^{p}$ and a Metzler matrix $A\in\Real^{n\times n}$, is elementwise nonnegative for all $t\ge0$ provided that $x(0)\ge0$, $\omega:\Real_{+}\to\Real_{+}^{q}$ and $B\in\Real_{+}^{n\times q}$ \citep{FarinaRinaldi2000,Smith95}. The output solution $y(t)$ is nonnegative if $C\in\Real_{+}^{p\times n}$ and $D\in\Real_{+}^{p\times q}$. Such dynamical systems are called cooperative (monotone) or nonnegative if only initial conditions in $\Real_{+}^{n}$ are considered \citep{FarinaRinaldi2000,Smith95}.
 \begin{lemma}[\citealt{REZ11}]
 	\label{lem:l2}
 	\begin{leftbar}[lemmabar]
@@ -408,7 +408,7 @@ The following assumptions will be used in this work.
 		There exists known signals $\underline{d},\overline{d}\in\cL_{\infty}^{n}$ such that $\underline{d}(t)\leq d(t)\leq\overline{d}(t)$ for all $t\geq0$.
 	\end{leftbar}
 \end{assumption}
-Assumption \ref{ass:a1} means that the system \eqref{eq:LPV_syst} generates stable trajectories with a bounded state $x$ for the applied class of inputs $d$, and the initial conditions $x(0)$ are constrained to belong to a given interval $[\underline{x}_{0},\overline{x}_{0}]$. In Assumption \ref{ass:a2}, it is supposed that the input $d(t)$ belongs to a known bounded interval $[\underline{d}(t),\overline{d}(t)]$ for all $t\in\Real_{+}$, which is the standard hypothesis for the interval estimation \cite{Efimov2016,Raiessi2018}.
+Assumption \ref{ass:a1} means that the system \eqref{eq:LPV_syst} generates stable trajectories with a bounded state $x$ for the applied class of inputs $d$, and the initial conditions $x(0)$ are constrained to belong to a given interval $[\underline{x}_{0},\overline{x}_{0}]$. In Assumption \ref{ass:a2}, it is supposed that the input $d(t)$ belongs to a known bounded interval $[\underline{d}(t),\overline{d}(t)]$ for all $t\in\Real_{+}$, which is the standard hypothesis for the interval estimation \citep{Efimov2016,Raiessi2018}.
 
 Note that since the function $A$ and the set $\Pi$ are known, and $\theta\in\Pi$, then there exist matrices $\underline{A},\overline{A}\in\Real^{n\times n}$, which can be easily computed, such that 
 \[
@@ -424,7 +424,7 @@ The objective of this work is to design an \emph{interval predictor} for the sys
 
 \subsubsection{A motivation example}
 
-Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem used in \cite{Leurent2018}:
+Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem used in \citep{Leurent2018}:
 \begin{eqnarray}
 \dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:predictor-naive}\\
 \dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
@@ -453,7 +453,7 @@ then it is obvious to verify that the relations \eqref{eq:inclusion-property} ar
 \subsection{Interval predictor design}
 \label{sec:Main-results}
 
-Note that, in related papers \cite{AitRami2008,RVZ10,Bolajraf2011,Efimov_a2013,Efimov_tac2013,Chebotarev2015}, various interval observers for LPV systems have been proposed, but in those works the cooperativity and stability of the estimation error dynamics are ensured by a proper selection of observer gains and/or by design of control algorithms, which can be dependent on $\underline{x}$, $\overline{x}$ and guarantee the observer robust stability. For interval predictor there is no such a freedom, then a careful selection of hypotheses has to be made in order to provide a desired solution.
+Note that, in related papers \citep{AitRami2008,RVZ10,Bolajraf2011,Efimov_a2013,Efimov_tac2013,Chebotarev2015}, various interval observers for LPV systems have been proposed, but in those works the cooperativity and stability of the estimation error dynamics are ensured by a proper selection of observer gains and/or by design of control algorithms, which can be dependent on $\underline{x}$, $\overline{x}$ and guarantee the observer robust stability. For interval predictor there is no such a freedom, then a careful selection of hypotheses has to be made in order to provide a desired solution.
 We will additionally assume the following:
 \begin{assumption}
 	\label{ass:a3}
@@ -513,7 +513,7 @@ then the following interval predictor can be designed:
 	}then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{d}$, $\overline{d}$.
 \end{leftbar}
 \end{theorem}
-Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \cite{FarinaRinaldi2000}.
+Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \citep{FarinaRinaldi2000}.
 \begin{proof}
 	First, let us demonstrate \eqref{eq:inclusion-property}, to this end note that
 	\[
@@ -539,7 +539,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\overline{r}_{1}=\Delta A_{+}\overline{x}^{+}+\Delta A_{-}\underline{x}^{-}-\sum_{i=1}^{N}\lambda_{i}\Delta A_{i}x,\\
 	\overline{r}_{2}=B^{+}\overline{d}-B^{-}\underline{d}-Bd.
 	\end{gather*}
-	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:inclusion-property} holds and due to the calculations above. Note that the relations \eqref{eq:inclusion-property} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \cite{Smith95}, which confirms the relations \eqref{eq:inclusion-property}.
+	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:inclusion-property} holds and due to the calculations above. Note that the relations \eqref{eq:inclusion-property} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \citep{Smith95}, which confirms the relations \eqref{eq:inclusion-property}.
 	
 	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$, whose dynamics admit the differential equation
 	\[
@@ -602,7 +602,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\[
 	\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
 	\]
-	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \cite{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
+	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \citep{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
 \end{proof}
 \begin{remark}
 	\begin{leftbar}[remarkbar]
@@ -669,7 +669,7 @@ Assume that there exist two signals $\underline{\omega},\overline{\omega}:\Real_
 \begin{gather*}
 \underline{\omega}(t)\leq\omega(t)\leq\overline{\omega}(t),\quad\forall t\geq0,\\
 \underline{x}_{0}\leq x(0)\leq\overline{x}_{0},
-\end{gather*} and there is a matrix $L\in\Real^{n\times p}$ such that $A-LC$ is Hurwitz and Metzler, then an interval observer for the system \eqref{eq:LTI_syst} can be written as follows \cite{REZ11}:
+\end{gather*} and there is a matrix $L\in\Real^{n\times p}$ such that $A-LC$ is Hurwitz and Metzler, then an interval observer for the system \eqref{eq:LTI_syst} can be written as follows \citep{REZ11}:
 \begin{eqnarray}
 \dot{\underline{x}}(t) & = & (A-LC)\underline{x}(t)+Ly(t)\nonumber \\
 &  & +(B-LD)^{+}\underline{\omega}(t)-(B-LD)^{-}\overline{\omega}(t),\nonumber \\
@@ -734,7 +734,7 @@ The interval observer \eqref{eq:IO_LTI}, if we assume that $\overline{\omega}(t)
 
 \subsection{Prediction for a self-driving vehicle}
 \label{sec:Examples}
-We consider the problem of safe decision-making for autonomous highway driving \cite{highway-env}. The videos and source code of all experiments are available\footnote{\href{https://eleurent.github.io/interval-prediction/}{https://eleurent.github.io/interval-prediction/}}.
+We consider the problem of safe decision-making for autonomous highway driving \citep{highway-env}. The videos and source code of all experiments are available\footnote{\href{https://eleurent.github.io/interval-prediction/}{https://eleurent.github.io/interval-prediction/}}.
 
 An autonomous vehicle is driving on a highway populated with $N$ other agents, and uses Model Predictive Control to plan a sequence of decisions. To that end, it relies on parametrized dynamical model for each agent to predict the future trajectory of each traffic participant: $$\dot{z}_i=f_i(Z,\theta_i),\;i=\overline{1,N},$$ where $f_i$ are described below, $z_i\in\Real^4$ is the state of an agent, $Z = [z_1,\dots,z_N]^\top\in\Real^{4N}$ and $\theta_i\in\Real^5$ is the corresponding vector of unknown parameters. Crucially, this system describes the couplings and interactions between vehicles, so that the autonomous agent can properly anticipate their reactions. 
 However, we assume that we do not have access to the true values of the behavioural parameters $\theta=[\theta_1,\dots,\theta_N]^\top$; instead, we merely know that these parameters lie in a set of admissible values $\Pi\subset\Real^{5N}$. In order to act safely in the face of uncertainty, we follow the framework of robust decision-making: the agent must consider all the possible trajectories in the space of $Z$ that each vehicle can follow in order to take its decisions. In this work, we focus on how to compute these trajectory enclosures through interval prediction.
@@ -849,7 +849,7 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 \end{figure}
 
 
-We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:predictor-naive} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \cite{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \cite{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
+We show the resulting intervals in Fig.~\ref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In Fig.~\ref{sub:hw-a}, we observe that the direct predictor \eqref{eq:predictor-naive} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In \citep{Leurent2018}, they had to circumvent this issue by subdividing $\Pi$ and $[\underline{Z}, \overline{Z}]$ to reduce the initial overestimations and merely delay the divergence \citep{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in Fig.~\ref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in Fig.~\ref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in Fig.~\ref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
 
 \subsection*{Conclusion}
 
@@ -921,7 +921,7 @@ Due to \eqref{eq:inclusion-generic}, the boundedness of $\xi(t)$
 implies the same property of $x(t)$. Therefore, in order to regulate
 \eqref{eq:dynamics} it is required to design a state feedback $u(t)$
 minimizing the asymptotic amplitude of the state $\xi(t)$ for given
-input $\delta(t)$ \cite{Efimov2013a}. In other words, it is necessary
+input $\delta(t)$ \citep{Efimov2013a}. In other words, it is necessary
 to design a control $u(t)$ that input-to-state stabilizes \eqref{eq:predictor}.
 It is proposed to look for such a control in the form
 \begin{equation}
@@ -968,7 +968,7 @@ Note that the requirement that the matrix $P$ has to be diagonal is not
 restrictive, since for a Metzler matrix $\cD_{0}$ (the case of \eqref{eq:predictor-naive}
 and \eqref{eq:interval-predictor}), its stability is equivalent to
 existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P\cD_{0}\prec0$
-\cite{Positive}.
+\citep{Positive}.
 \begin{proof}
 	Consider a candidate Lyapunov function
 	\begin{gather*}
@@ -1016,7 +1016,7 @@ existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P
 	\]
 	is a diagonal matrix. The substantiated properties of $V$ and its
 	derivative imply that \eqref{eq:closed-loop_pr} is input-to-state
-	stable \cite{Sontag:01:Springer,Dashkovskiy:11:AiT} with respect
+	stable \citep{Sontag:01:Springer,Dashkovskiy:11:AiT} with respect
 	to the input $\tilde{\delta}$ (or, by its definition, with respect
 	to $(\underline{\omega},\overline{\omega})$).
 \end{proof}
@@ -1113,7 +1113,7 @@ it implies that the system \eqref{eq:dynamics} also will reach a
 neighborhood of the origin under the control \eqref{eq:control_pr}.
 Hence, the posed control problem would be solved provided that \eqref{eq:constraints}
 holds. In order to ensure the robust constraint satisfaction we
-consider an MPC design in the next section.
+consider an \gls{MPC} design in the next section.
 
 \subsection{\label{sec:control} Robust Control}
 
@@ -1143,12 +1143,12 @@ that can be always applied to stabilize the predictor \eqref{eq:interval-predict
 (the worst-case estimate set $\Theta$ is used to calculate the system
 matrices) and into the set $\X_{f}$ the restrictions \eqref{eq:constraints}
 also hold for such a control. Define $T>0$ and $\tau\in(0,T)$ as the interval of prediction and
-the application time for MPC, \emph{i.e}., at each $t\geq0$ to design
+the application time for \gls{MPC}, \emph{i.e}., at each $t\geq0$ to design
 input $u(t)$, an optimal control problem is solved on the interval
 $[t,t+T]$, and this optimal control problem is resolved again
 after $\tau$ units of time (on the interval $[t,t+\tau)$ the obtained
 optimal control is applied). Denote $t_{i}=i\tau$ for $i\in\Natural_{+}$,
-then the developed MPC algorithm can be formalized as follows for
+then the developed \gls{MPC} algorithm can be formalized as follows for
 any $t_{i}\geq0$:
 \begin{enumerate}
 	\item Take $\hat{\Theta}(t_{i})$ from \eqref{eq:set_LS} and calculate
@@ -1187,8 +1187,8 @@ any $t_{i}\geq0$:
 	\end{equation}
 	where $K_{0},K_{1},K_{2}$ are taken from Assumption \ref{assu:ctrl}.
 \end{enumerate}
-As we can conclude, the idea of the proposed dual MPC scheme (see
-also \cite{Michalska1993,MPC1,MPC:Tube2}) is to use an open-loop
+As we can conclude, the idea of the proposed dual \gls{MPC} scheme (see
+also \citep{Michalska1993,MPC1,MPC:Tube2}) is to use an open-loop
 optimal control to reach a neighborhood of the origin $\X_{f}$ ensuring
 a robust constraint satisfaction \eqref{eq:constraints}, where a
 closed-loop control \eqref{eq:control_pr} can be applied, which provides
@@ -1290,12 +1290,12 @@ The main result of the paper is as follows:
 	\end{leftbar}
 \end{remark}
 
-We illustrate the efficiency of the proposed MPC approach by numerical
+We illustrate the efficiency of the proposed \gls{MPC} approach by numerical
 experiments.
 
 \subsection{\label{sec:experiments} Numerical experiment}
 
-We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \citep{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
 Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with
 % \begin{align*}
 % \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
@@ -1349,7 +1349,7 @@ Instead of simply stabilizing the vehicle state $x$, we track the lateral positi
 	\label{fig:lane-keeping}
 \end{figure}
 
-The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme \cite{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at this url: \url{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr_ql_/}.
+The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based \gls{MPC} scheme \citep{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at this url: \url{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr_ql_/}.
 
 
 \section{Minimax control with generic costs}

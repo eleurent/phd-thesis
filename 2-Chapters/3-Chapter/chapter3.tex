@@ -8,18 +8,18 @@
 % Se retourne pensif vers les jours oubliés.
 % Charles-Marie LECONTE DE LISLE - Dies Irae
 
-At the violet hour, when the eyes and back
-Turn upward from the desk, when the human engine waits
-Like a taxi throbbing waiting,
-I Tiresias, though blind, throbbing between two lives,
-Perceived the scene, and foretold the rest —
+% At the violet hour, when the eyes and back
+% Turn upward from the desk, when the human engine waits
+% Like a taxi throbbing waiting,
+% I Tiresias, though blind, throbbing between two lives,
+% Perceived the scene, and foretold the rest —
 
 \chapter{Problem Statement}
 \label{chapter:3}
 
 
 \abstractStartChapter{}%
-Having discussed at length the range of \glsxtrlong[hyper=false]{AD} modelling perspectives in \Cref{chapter:2}, we now formalize the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \glsxtrlong{MDP}, by specifying each element of a $(\cS, \cA, \Ps, \R, \discount)$ tuple suitable for a set of tactical decision-making tasks.
+Having discussed at length the range of \acrlong[hyper=false]{AD} modelling perspectives in \Cref{chapter:2}, we now formalize the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \acrlong{MDP}, by specifying each element of a $(\cS, \cA, \Ps, \R, \discount)$ tuple suitable for a set of tactical decision-making tasks.
 \minitocStartChapter{}
 
 \section{Perceived states}
@@ -45,13 +45,15 @@ Any vehicle of index $i\in[0,N_v]$ is represented by
 \end{enumerate}
 
 The resulting joint state is the traffic description: 
-$$s = \begin{bmatrix}
+\begin{equation}
+\label{eq:state-space}
+s = \begin{bmatrix}
 x_0 & y_0 & v_0 & \psi_0\\
 \vdots & \vdots & \vdots & \vdots\\
 x_{N_v} & y_{N_v} & v_{N_v} & \psi_{N_v}\\
 \end{bmatrix}
-\in\cS \eqdef\Real^{(N_v+1) \times 4}.$$
-
+\in\gls+{cS} \eqdef\Real^{(N_v+1) \times 4}.
+\end{equation}
 We can make a few observations: first, the state space is continuous, which means we will have to resort to function approximation to represent either the policy $\pi$, the value function $Q$ or the dynamics $P$. Second, it has a variable size, since it depends on the number of vehicles nearby, which the function approximation scheme will have to accommodate. Its dimensionality should be in the order of fifty at most, for a dozen observed vehicles.
 
 \paragraph{Roads}
@@ -67,7 +69,7 @@ We also assume knowledge of the road network, comprising:
 	where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
 \end{enumerate}
 
-However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, model-free algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, model-based algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
+However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, \gls{model-free} algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, \gls{model-based} algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
 
 \section{Behavioural decisions}
 
@@ -79,18 +81,19 @@ We follow the hierarchical architecture of the Decision module discussed in \Cre
 
 Thus, the purpose of the Behavioural Planning layer is to specify short-term instructions for the Motion Planning layer, in the form of a lane to follow and a speed to adapt. The produced trajectory will always conform to the planned route, but the Behavioural Planner is in charge of \eg deciding when to merge on a highway, negotiating right of way at an intersection, overtaking vehicles, \etc. To that end, we specify the following space of \emph{meta-actions}:
 
-\[
-\cA \eqdef \left\{ \begin{array}{c}
+\begin{equation}
+\label{eq:action-space}
+\gls+{cA} \eqdef \left\{ \begin{array}{c}
 \text{change to the left lane},\, \text{change to the right lane}, \\
 \text{drive faster},\, \text{drive slower},\, \text{maintain speed and lane}
 \end{array}\right\}
-\]
+\end{equation}
 
 Meta-actions are executed at a frequency of $\SI{1}{\hertz}$. Their influence on the evolution of the state $s\in\cS$ is described next.
 
 \section{Traffic dynamics}
 
-This section describes how the behavioural decisions influence the evolution of the perceived states, under their above definitions, through the dynamics distribution $P\parentheses{s' \mid s,a}$. As explained in \Cref{chapter:1}, it is crucial that the simulated vehicles in the scene are able to \emph{react} to the actions of the ego-vehicle, so that interaction patterns can be learnt.
+This section describes how the behavioural decisions influence the evolution of the perceived states, under their above definitions, through the dynamics distribution $\gls+{transition}\parentheses{s' \mid s,a}$. As explained in \Cref{chapter:1}, it is crucial that the simulated vehicles in the scene are able to \emph{react} to the actions of the ego-vehicle, so that interaction patterns can be learnt.
 
 \subsection{Kinematics}
 
@@ -178,14 +181,16 @@ Thus, we focus on only two features: a vehicle should
 Since the Markov Decision Process formalism requires rewards to be bounded, by convention we normalize them in the $[0, 1]$ range.
 Note that we forbid negative rewards, since they may incentivise the agent to prefer terminating an episode early (by causing a collision) rather than risking suffering a negative return if no satisfying trajectory can be found.
 
-Thus, unless otherwise stated, the reward function $R$ is chosen as follows:
-\[
-R(x) = 
+Thus, unless otherwise stated, the reward function $\R$ is chosen as follows:
+\begin{equation}
+\label{eq:reward-function}
+\gls+{reward}(s,a) = 
 \begin{cases}
 1 & \text{if the ego-vehicle is at full speed;}\\
 0 & \text{if the ego-vehicle has collided with another vehicle;}\\
 0.5 & \text{else.}
-\end{cases}\]
+\end{cases}
+\end{equation}
 
 A more realistic reward function may include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
 
@@ -206,5 +211,5 @@ This reward function is \emph{dense}, since the maximum reward can easily be obt
 	\label{fig:highway-env-status}
 \end{figure}
 
-I created the \href{https://github.com/eleurent/highway-env}{\textsc{highway-env}} environment: a minimalist driving simulator tailored for behavioural planning tasks, following the \gls{MDP} formalization presented in this chapter. It is written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available, along with instructions to reproduce every numerical experiments presented throughout this manuscript. We discuss at length the features and architecture of this project in \Cref{chapter:a}. We mention that in addition to our own works, several students and researchers already make use of this environment, as shown in \Cref{fig:highway-env-status}.
+I created the \href{https://github.com/eleurent/highway-env}{\textsc{highway-env}} environment, a minimalist driving simulator tailored for behavioural planning tasks following the \gls{MDP} formalization presented in this chapter. It is written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available, along with instructions to reproduce every numerical experiments presented throughout this manuscript. We discuss at length the features and architecture of this software in \Cref{chapter:a}. We mention that in addition to our own works, several students and researchers already make use of this environment, as shown in \Cref{fig:highway-env-status}.
 

@@ -46,33 +46,41 @@ In other words, in these augmented dynamics, the output budget $\budgetaction$ r
 We stack the rewards and cost functions in a single \emph{vectorial} signal $\oR \in (\Real^2)^{{\ocS \times \ocA}}$:
 
 \begin{definition}
-	Given an augmented transition $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define:
+	\begin{leftbar}[defnbar]
+	Given an augmented transition $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define
 	\begin{equation}
 	\gls+{oR}(\os, \oa) \eqdef  \begin{bmatrix}
 	\R(s, a)\\
 	\constraint(s, a)
 	\end{bmatrix}\in\Real^2.
 	\end{equation}
+	\end{leftbar}
 \end{definition}
 
 Likewise, we augment the return:
 
 \begin{definition}
-	The return $\augmentedreturn^{\budgetedpolicy} = (\return^{\budgetedpolicy}, \constraintreturn[^{\budgetedpolicy}])$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ refers to:
+	\begin{leftbar}[defnbar]
+	The return $\augmentedreturn[^{\budgetedpolicy}] = (\return[^{\budgetedpolicy}], \constraintreturn[^{\budgetedpolicy}])$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ refers to
 	\begin{equation}
-	\gls+{augmentedreturn}^{\budgetedpolicy} \eqdef \sum_{t=0}^\infty \discountfactor^t \oR(\os_t, \oa_t).
+	\gls+{augmentedreturn}[^{\budgetedpolicy}] \eqdef \sum_{t=0}^\infty \discountfactor^t \oR(\os_t, \oa_t).
 	\end{equation}
+	\end{leftbar}
 \end{definition}
 
-We also augment the value functions:
+as well as the value functions:
 
 \begin{definition}
-	The value functions $\oV^{\budgetedpolicy}$, $\oQ^{\budgetedpolicy}$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ are defined as:
-	\begin{equation}
+	\begin{leftbar}[defnbar]
+	The value functions $\oV[^{\budgetedpolicy}]$, $\oQ[^{\budgetedpolicy}]$ of a \idx{budgeted policy} $\budgetedpolicy\in\policies$ are defined as
+	\begin{align}
+	\begin{split}
 	\label{eq:value-function}
-	\oV^{\budgetedpolicy}(\os) = (\Vr[^\budgetedpolicy], \Vc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
-	\oQ^{\budgetedpolicy}(\os, \oa)= (\Qr[^\budgetedpolicy], \Qc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
-	\end{equation}
+	\gls+{oV}[^{\budgetedpolicy}](\os) &= (\Vr[^\budgetedpolicy], \Vc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
+	\gls+{oQ}[^{\budgetedpolicy}](\os, \oa) &= (\Qr[^\budgetedpolicy], \Qc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
+	\end{split}
+	\end{align}
+	\end{leftbar}
 \end{definition}
 
 We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\budget)\in\ocS: \exists \budgetedpolicy\in\policies, \Vc[^\budgetedpolicy](s) \leq \budget\}$ that we assume is non-empty for the \gls{BMDP} to admit a solution. We still write $\ocS$ in place of $\ocS_f$ for brevity of notations.
