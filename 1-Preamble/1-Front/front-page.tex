@@ -28,9 +28,6 @@
 \begingroup
 \thispagestyle{empty} % Suppress headers and footers on the title page
 
-\definecolor{top} {HTML}{FFE5BF}
-\definecolor{bot} {HTML}{FFE5BF}
-\definecolor{title-color} {HTML}{FFFFFF}
 
 \begin{tikzpicture}[remember picture,overlay]
 \node [rectangle, anchor=north, minimum width=\paperwidth, minimum height=\paperheight] (box) at (current page.north){};
@@ -43,25 +40,38 @@
 
 \draw (page cs:0.,0.6) node [text opacity=1,inner sep=1cm]
 {\large\centering\parbox[c][][t]{\paperwidth}
-	{\centering \textbf{Thèse de Doctorat}\\\centering Spécialité:  \textbf{Informatique} \\\normalsize Présentée par \large \textbf{Edouard Leurent}}
+	{
+		\centering {\LARGE\textsc{Thèse de Doctorat}}\\[0.8cm]
+		\centering Spécialité \textbf{Informatique} \\[0.4cm]
+		\normalsize présentée par\\
+		{\Large \textbf{\textsc{Edouard Leurent}}}
+    }
 };
 
-\draw (page cs:0.,0.35) node [fill=title-color,inner sep=1cm]
+\draw (page cs:0.,0.35) node [inner sep=1cm]
 {\large\centering\parbox[c][][t]{\paperwidth}
-	{\centering  \par\noindent\rule{0.8\textwidth}{0.4pt}\\
-		{\Large Safe and Efficient Reinforcement Learning \\for Behavioural Planning in Autonomous Driving}\\
-		 \par\noindent\rule{0.8\textwidth}{0.4pt}
+	{\centering  \par\noindent\rule{0.9\textwidth}{0.4pt}\\
+		{\LARGE\textsc{Safe and Efficient Reinforcement Learning}\\ \textsc{for Behavioural Planning in Autonomous Driving}}\\
+		 \par\noindent\rule{0.9\textwidth}{0.4pt}
 }};
 
 \draw (page cs:0.,0.1) node [text opacity=1,inner sep=1cm]
 {\Huge\centering\parbox[c][][t]{\paperwidth}
-	{\centering\normalsize sous la direction du \large \textbf{Pr. Odalric-Ambrym Maillard}\\\normalsize et l'encadrement du \large \textbf{Pr. Denis Efimov}\\ \normalsize ainsi que du \large \textbf{Dr. Yann Blanco}}
+	{\centering\normalsize sous la direction de \large \textbf{Odalric-Ambrym Maillard}\\
+	\normalsize et de \large \textbf{Wilfrid Perruquetti}\\
+	\normalsize et l'encadrement de \large \textbf{Denis Efimov}\\
+	\normalsize ainsi que de \large \textbf{Yann Blanco}}
 };
 
 
 \draw (page cs:0.,-0.15) node [text opacity=1,inner sep=1cm]
-{\normalsize\centering\parbox[c][][t]{\paperwidth}
-	{\centering Soutenue publiquement à Villeneuve d'Ascq, le XX XX 2019 devant le jury composé de :}
+{
+	\normalsize\centering
+	\parbox[c][][t]{\paperwidth}
+	{
+		\centering \par\noindent\rule{0.5\textwidth}{0.4pt}\\
+		Soutenue publiquement à \textbf{Villeneuve d'Ascq}, le \textbf{XX octobre 2020} devant le jury composé de :
+	}
 };
 
 \draw (page cs:0.,-0.35) node [text opacity=1,inner sep=1cm]
@@ -69,29 +79,34 @@
 	{\centering
 		\begin{tabular}{l l l}
 		
-		Dr. First \textbf{Last} & University & Président du jury \\
-		Dr. First \textbf{Last} & University & Rapporteur \\
-		Dr. First \textbf{Last} & University & Rapporteur \\
-		Dr. First \textbf{Last} & University & Directeur de thèse \\
-		Dr. First \textbf{Last} & University & Examinateur \\
-		Dr. First \textbf{Last} & University & Examinateur \\
-		Dr. First \textbf{Last} & University & Examinateur
+		First \textbf{Last} & University & Président du jury \\
+		First \textbf{Last} & University & Rapporteur \\
+		First \textbf{Last} & University & Rapporteur \\
+		M. Odalric-Ambrym \textbf{Maillard} & Université de Lille & Directeur de thèse \\
+		M. Wilfrid \textbf{Perruquetti} & Centralle Lille & Directeur de thèse \\
+		M. Denis \textbf{Efimov} & Université de Lille & Examinateur \\
+		M. Yann \textbf{Blanco} & Groupe Renault & Encadrant industriel
 		\end{tabular}}
 };
 
 
 \draw (page cs:0.,-0.65) node [text opacity=1,inner sep=1cm]
 {\normalsize\centering\parbox[c][][t]{\paperwidth}
-	{\centering Centre de Recherche en Informatique, Signal et Automatique de Lille (CRIStAL), \\UMR 9189 Équipe SequeL, 59650, Villeneuve d’Ascq, France}
+	{\centering  \par\noindent\rule{0.5\textwidth}{0.4pt}\\
+		Centre de Recherche en Informatique, Signal et Automatique de Lille (CRIStAL), \\UMR 9189 Équipe SequeL, 59650, Villeneuve d’Ascq, France}
 };
 
 
 
 \draw (page cs:0.,-0.8) node[inner sep=0pt]
-    {\includegraphics[width=0.9\paperwidth]{1-Preamble/1-Front/logos.pdf}};
-%{\includesvg[width=0.9\paperwidth]{1-Preamble/1-Front/logos}};
+{
+	\hspace*{1em}
+   	\includegraphics[height=0.05\paperheight]{1-Preamble/1-Front/img/renault} \hspace*{1em}
+   	\includegraphics[height=0.05\paperheight]{1-Preamble/1-Front/img/univ-lille} \hspace*{1em}
+   	\includegraphics[height=0.05\paperheight]{1-Preamble/1-Front/img/CRIStAL} \hspace*{0.5em}
+   	\includegraphics[height=0.05\paperheight]{1-Preamble/1-Front/img/inria}
+};
 
-% Author name
 \end{tikzpicture}
 \vfill
 \endgroup
