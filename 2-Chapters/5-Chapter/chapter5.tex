@@ -27,10 +27,32 @@
 %\end{flushright}
 
 \glsreset{BMDP}
+\glsreset{CMDP}
 
 \abstractStartChapter{}%
-In this chapter, we strive to reconcile two contradictory objectives: \textit{efficiency} and \textit{safety}. To that end, we consider the framework of \glspl{BMDP}, in which first notion of \textit{risk} is formalised in the shape of a cost signal constrained to lie below an adjustable threshold.  So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application that features continuous states and unknown human behaviours, as discussed in \Cref{chapter:3}. This chapter extends the state-of-the-art to continuous spaces environments and unknown dynamics. We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce natural extensions of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}.
+In this chapter, we strive to reconcile two contradictory aspects of a driving policy: \textit{efficiency} and \textit{safety}. To that end, we consider the framework of \glspl+{BMDP}, in which a first notion of \textit{risk} is formalised in the shape of a cost signal constrained to lie below an adjustable threshold. So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application which features continuous kinematic states and unknown human behaviours, as discussed in \Cref{chapter:3}. This chapter extends the state-of-the-art to continuous spaces environments and unknown dynamics. We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce natural extensions of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}.
 \minitocStartChapter{}
+
+\section{Motivation}
+
+As stated in \Cref{chapter:1}, \gls{RL} is a general framework for decision-making under uncertainty. Formally, we seek a policy $\policy\in\cM(A)^{\cS}$ that maximises in expectation the $\discountfactor$-discounted return of rewards $\return^{\policy} = \sum_{t=0}^\infty \discountfactor^t \reward(s_t, a_t)$.
+
+However, this modelling assumption comes at a price: no control is given over the spread of the performance distribution \citep{Dann2018}. In many critical real-world applications, including \glsxtrlong{AD}, failures may turn out very costly. This is an issue as most decision-makers would rather give away some amount of expected optimality to increase the performances in the lower-tail of the distribution. As discussed in \Cref{chapter:2}, this has led to the development of several risk-averse variants where the optimisation criteria include other statistics of the performance, such as the worst-case realisation \citep{Iyengar2005,Nilim2005,Wiesemann2013}, the variance-penalised expectation \citep{Tamar2012,Garcia2015}, the Value at Risk \citep{Mausser2003,Luenberger2013}, or the Conditional Value at Risk \citep{Chow2014,ChowGJP15}.
+
+\glsxtrlong{RL} also assumes that the performance can be described by a single reward function $\reward$. Conversely, real problems typically involve many aspects, some of which can be contradictory \citep{Liu2014}. In our case, a self-driving car needs to balance between progressing quickly on the road and avoiding collisions. When aggregating several objectives in a single scalar signal, as often in \gls{MORL} \citep{Roijers2013ASO}, no control is given over their relative ratios, as high rewards can compensate high penalties. For instance, if a weighted sum is used to balance velocity $v$ and crashes $c$, then for any given choice of weights $\omega$ the optimality equation $\omega_v\expectedvalue[\sum\discountfactor^t v_t] + \omega_a\expectedvalue[\sum\discountfactor^t c_t] = \return^{\star} = \max_{\policy} \return^{\policy}$ is the equation of a line in $(\expectedvalue[\sum\discountfactor^t v_t], \expectedvalue[\sum\discountfactor^t c_t])$, and the automotive company cannot control where its optimal policy $\optimalpolicy$ lies on that line. 
+
+Both of these concerns are addressed in the \gls+{CMDP} setting \citep{BEUTLER1985236,Altman95constrainedmarkov}. In this multi-objective formulation, task completion and safety are considered separately. We equip the \gls{MDP} with a cost signal $\constraint \in \Real^{\cS\times \cA}$ and a cost {budget} $\budget\in\Real$. Similarly to $\return^{\policy}$, we define the return of costs $\hlrb{\constraintreturn^{\policy}} = \sum_{t=0}^\infty \discountfactor^t \constraint(s_t, a_t)$ and the new cost-constrained objective:
+\begin{equation}
+\label{eq:cmdp}
+\begin{array}{lcr}
+\displaystyle \max_{\policy\in\cM(\cA)^{\cS}} \expectedvalue[\hlgb{\return^{\policy}} | s_0=s] & \text{ s.t. } & \expectedvalue[\hlrb{\constraintreturn^{\policy}} | s_0=s] \leq \hlbb{\budget}
+\end{array}
+\end{equation}
+This constrained framework allows for better control of the performance-safety trade-off. However, it suffers from a major limitation: the \idx{budget} has to be chosen before training, and cannot be changed afterwards.
+
+To tackle this issue, the \gls{BMDP} was introduced in \citep{Boutilier_Lu:uai16} as an extension of \glspl{CMDP} to enable the online control over the \idx{budget} $\budget$ within an interval $\budgetspace \subset \Real$ of admissible budgets\index{budget}. Instead of fixing the \idx{budget} prior to training, the objective is now to find a generic optimal policy $\optimalpolicy$ that takes $\budget$ as input so as to solve the corresponding \gls{CMDP} (Eq. \ref{eq:cmdp}) for all budgets $\budget\in\budgetspace$. This gives the system designer the ability to move the optimal policy $\optimalpolicy$ in real-time along the Pareto-optimal curve of the different reward-cost trade-offs.
+
+Our first contribution is to re-frame the original \gls{BMDP} formulation in the context of continuous states and infinite discounted horizon. We then propose a novel Budgeted Bellman Optimality Operator and prove the optimal value function to be a fixed point of this operator. Second, we use this operator in \gls{BFTQ}, a {batch} \gls{RL} algorithm, for solving \glspl{BMDP} \idx{Online} by interacting with an {environment}, through function approximation and a tailored exploration procedure. Third, we scale this algorithm to large problems by providing an efficient implementation of the Budgeted\index{budget} Bellman Optimality operator based on convex programming, and by leveraging tools from Deep \glsxtrlong{RL} such as \glspl{NN} and synchronous parallel computing. Finally, we validate our approach in two {environment}s that display a clear trade-off between rewards and costs: a dialogue system example, and a behavioural planning problem for overtaking on a two-way road. 
 
 \section{Budgeted dynamic programming}
 \label{sec:bdp}
@@ -39,7 +61,7 @@ We work in the space of budgeted policies\index{budgeted policy}, where $\policy
 We cast the \gls{BMDP} problem as a \gls{MOMDP} problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \budgetspace$ and $\ocA= \cA\times \budgetspace$, and equip them with the augmented dynamics $\augmentedtransition\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
 \begin{equation}
 \label{eq:dynamics}
-\augmentedtransition\left(\os' \condbar \os, \oa\right) = \augmentedtransition\left((s',\nextbudget) \condbar (s,\budget), (a, \budgetaction)\right) \eqdef \Ps(s'|s, a)\dirac(\nextbudget - \budgetaction),
+\augmentedtransition\left(\os' \condbar \os, \oa\right) = \augmentedtransition\left((s',\budget') \condbar (s,\budget), (a, \budgetaction)\right) \eqdef \Ps(s'|s, a)\dirac(\budget' - \budgetaction),
 \end{equation}
 where $\dirac$ is the Dirac indicator distribution.
 
@@ -52,8 +74,8 @@ We stack the rewards and cost functions in a single \emph{vectorial} signal $\oR
 	Given an augmented transition $(\os, \oa) =((s,\budget), (a, \budgetaction))$, we define
 	\begin{equation}
 	\gls+{oR}(\os, \oa) \eqdef  \begin{bmatrix}
-	\R(s, a)\\
-	\constraint(s, a)
+	\hlg{\R(s, a)}\\
+	\hlr{\constraint(s, a)}
 	\end{bmatrix}\in\Real^2.
 	\end{equation}
 	\end{leftbar}
@@ -78,8 +100,8 @@ as well as the value functions:
 	\begin{align}
 	\begin{split}
 	\label{eq:value-function}
-	\gls+{oV}[^{\budgetedpolicy}](\os) &= (\Vr[^\budgetedpolicy], \Vc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
-	\gls+{oQ}[^{\budgetedpolicy}](\os, \oa) &= (\Qr[^\budgetedpolicy], \Qc[^\budgetedpolicy]) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
+	\gls+{oV}[^{\budgetedpolicy}](\os) &= (\hlg{\Vr[^\budgetedpolicy]}, \hlr{\Vc[^\budgetedpolicy]}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os\right] \\
+	\gls+{oQ}[^{\budgetedpolicy}](\os, \oa) &= (\hlg{\Qr[^\budgetedpolicy]}, \hlr{\Qc[^\budgetedpolicy]}) \eqdef \expectedvalue\left[ \augmentedreturn^{\budgetedpolicy} \condbar \ov{s_0} = \os, \ov{a_0} = \oa\right].
 	\end{split}
 	\end{align}
 	\end{leftbar}
@@ -94,11 +116,11 @@ We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\budget)\in\ocS
 	\begin{align}
 	\oV^{\budgetedpolicy}(\os) = \sum_{\oa\in\ocA}\budgetedpolicy(\oa | \os) \oQ^{\budgetedpolicy}(\os, \oa) \qquad \oQ^{\budgetedpolicy}(\os, \oa) = \gls{oR}(\os, \oa) + \discountfactor\sum_{\os'\in\ocS}\augmentedtransition\left(\os' \condbar \os, \oa\right) \oV^{\budgetedpolicy}(\os'). \label{eq:bellman_expectation}
 	\end{align}
-	Moreover, consider the Budgeted Bellman Evaluation\index{Bellman Evaluation} operator $\abo^{\budgetedpolicy}$:
+	Moreover, consider the Budgeted Bellman Evaluation\index{Bellman Evaluation} operator $\abo^{\gls+{budgetedpolicy}}$:
 	$\forall \oQ\in(\Real^2)^{\ocS\ocA}, \os\in\ocS, \oa\in\ocA$,
 	\begin{align}
 	\label{eq:bellman_expectation_operator}
-	\abo^{\budgetedpolicy} \oQ(\os, \oa) &\eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\augmentedtransition(\os'|\os, \oa)\budgetedpolicy(\oa'|\os') \oQ(\os', \oa').
+	\gls+{abo}^{\gls+{budgetedpolicy}} \oQ(\os, \oa) &\eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS}\sum_{\oa'\in\ocA}\augmentedtransition(\os'|\os, \oa)\budgetedpolicy(\oa'|\os') \oQ(\os', \oa').
 	\end{align}
 	Then $\abo^{\budgetedpolicy}$ is a $\discountfactor$-contraction and $\oQ^{\budgetedpolicy}$ is its unique fixed point.
 	\end{leftbar}
@@ -115,26 +137,40 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	\begin{leftbar}[defnbar]
 	To that end, we define for all $\os\in\ocS$,
 	\begin{enumerate}[label=(\roman*)]
-		\item admissible policies $\policies_a$ as
+		\item admissible policies $\hlb{\policies_a}$ as
 		\begin{equation}
-		\policies_a(\os) \eqdef \{\budgetedpolicy\in\policies: \Vc[^\budgetedpolicy](\os) \leq \budget\}\text{ where }\os = (s, \budget);
+		\hlb{\policies_a(\os)} \eqdef \{\budgetedpolicy\in\policies: \hlbb{\Vc[^\budgetedpolicy](\os) \leq \budget}\}\text{ where }\os = (s, \budget);
 		\end{equation}
-		\item the optimal value function for rewards $\Vr[^\star]$ and candidate policies $\policies_r$ as
+		\item the optimal value function for rewards $\hlg{\Vr[^\star]}$ and candidate policies $\hlg{\policies_r}$ as
 		\begin{equation}
-		\Vr[^\star](\os) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Vr[^\budgetedpolicy](\os) \qquad\qquad \policies_r(\os) \eqdef \argmax_{\budgetedpolicy\in\policies_a(\os)}  \Vr[^\budgetedpolicy](\os);
+		\hlg{\Vr[^\star](\os)} \eqdef \hlg{\max}_{\budgetedpolicy\in\hlb{\policies_a(\os)}}  \Vr[^\budgetedpolicy](\os) \qquad\qquad \hlg{\policies_r(\os)} \eqdef \hlg{\argmax}_{\budgetedpolicy\in\policies_a(\os)}  \Vr[^\budgetedpolicy](\os);
 		\end{equation}
 		\item the optimal value function for costs $\Vc[^\star]$ and optimal policies $\policies^\star$ as
 		\begin{equation}
-		\Vc[^\star](\os) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os), \qquad\qquad \policies^{\star}(\os) \eqdef \argmin_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os).
+		\hlr{\Vc[^\star](\os)} \eqdef \hlr{\min}_{\budgetedpolicy\in \hlg{\policies_r(\os)}}  \Vc[^\budgetedpolicy](\os), \qquad\qquad \policies^{\star}(\os) \eqdef \hlr{\argmin}_{\budgetedpolicy\in\policies_r(\os)}  \Vc[^\budgetedpolicy](\os).
 		\end{equation}
 	\end{enumerate}
-	We define the budgeted action-value function $\oQ^{\star}$ similarly as
+	We define the budgeted action-value function $\gls+{oQ}^{\star}$ similarly as
 	\begin{equation}
-	\Qr[^\star](\os, \oa) \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr[^\budgetedpolicy](\os, \oa) \qquad\qquad \Qc[^\star](\os, \oa) \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc[^\budgetedpolicy](\os, \oa),
+	{\Qr[^\star](\os, \oa)} \eqdef \max_{\budgetedpolicy\in\policies_a(\os)}  \Qr[^\budgetedpolicy](\os, \oa) \qquad\qquad {\Qc[^\star](\os, \oa)} \eqdef \min_{\budgetedpolicy\in\policies_r(\os)}  \Qc[^\budgetedpolicy](\os, \oa),
 	\end{equation}
-	and denote $\oV^{\star} = (\Vr[^\star], \Vc[^\star])$, $\oQ^{\star} = (\Qr[^\star], \Qc[^\star])$.
+	and denote $\gls+{oV}^{\star} = (\hlg{\Vr[^\star]}, \hlr{\Vc[^\star]})$, $\gls+{oQ}^{\star} = (\hlg{\Qr[^\star]}, \hlr{\Qc[^\star]})$.
 	\end{leftbar}
 \end{definition}
+
+In contrast to \glspl{MDP} for which there always exists a deterministic optimal policy, in a \gls{CMDP}, and \textit{a fortiori} in a \gls{BMDP}, this is generally not the case. 
+To illustrate this fact, let us consider the trivial \gls{BMDP} on the left of \Cref{fig:stochasticneeded}.
+In this example we have $\return^{\policy}=10\pi_1$ and $\constraintreturn^{\policy}=\pi_1$. The \idx{deterministic policy} consisting in always picking the safe action is feasible for any $\budget\geq 0$. But if $\budget=1/2$, the most rewarding feasible policy is to randomly pick the safe and risky actions with equal probabilities.
+If we attempt to cast this \gls{BMDP} into an \gls{MDP} by replacing the costs by negative rewards, the corresponding greedy policy will be deterministic\index{deterministic policy}, hence sub-optimal.
+%
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/SafeRiskyExample}
+	\caption[Example of relaxed Budgeted Markov Decision Process]{On the left hand side, a simple \textit{risky-vs-safe} \gls{BMDP}. The probability of picking the risky action is $\pi_1$. On the right hand side an attempt to relax the problem with negative rewards.}
+	\label{fig:stochasticneeded}
+\end{figure}
+
+However, the optimal value function $\oQ^\star$ in a \gls{BMDP} can still be characterised by a fixed-point equation, similarly to \Cref{thm:bellman-optimality-mdp} for \glspl{MDP}.
 
 \begin{theorem}[Budgeted Bellman Optimality]
 	\begin{leftbar}[theorembar]
@@ -142,7 +178,7 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	The optimal budgeted action-value function $\oQ^{\star}$ verifies
 	\begin{equation}
 	\label{eq:bellman-optimality}
-	\oQ^{\star}(\os, \oa) = \abo^{\star}\oQ^{\star}(\os, \oa) \eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \budgetedpolicy_\text{greedy}(\ov{a'}|\ov{s'}; \oQ^{\star}) \oQ^{\star}(\ov{s'}, \ov{a'}),
+	\oQ^{\star}(\os, \oa) = \gls+{abo}^{\star}\oQ^{\star}(\os, \oa) \eqdef \gls{oR}(\os, \oa) + \discountfactor \sum_{\os'\in\ocS} \augmentedtransition(\ov{s'} | \os, \oa)\sum_{\ov{a'}\in \ocA} \budgetedpolicy_\text{greedy}(\ov{a'}|\ov{s'}; \oQ^{\star}) \oQ^{\star}(\ov{s'}, \ov{a'}),
 	\end{equation}
 	where the greedy policy $\budgetedpolicy_\text{greedy}$ is defined by: $\forall \os=(s,\budget)\in \ocS, \oa\in
 	\ocA, \forall \oQ\in(\Real^2)^{\ocA\times\ocS},$
@@ -160,14 +196,19 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 \begin{remark}[Appearance of the greedy policy]
 	\begin{leftbar}[remarkbar]
 	\label{rmk:greedy}
-	In classical \acrlong{RL}, the greedy policy takes a simple form $\policy_\text{greedy}(s; \Q^{\star}) = \argmax_{a\in\cA} \Q^{\star}(s, a)$, and the term $\policy_\text{greedy}(a'|s';\Q^{\star}) \Q^{\star}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} \Q^{\star}(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
+	In classical \glsxtrlong{RL}, the greedy policy takes a simple form $\policy_\text{greedy}(s; \Q^{\star}) = \argmax_{a\in\cA} \Q^{\star}(s, a)$, and the term $\policy_\text{greedy}(a'|s';\Q^{\star}) \Q^{\star}(s', a')$ in \eqref{eq:bellman-optimality} conveniently simplifies to $\max_{a'\in \cA} \Q^{\star}(s', a')$. Unfortunately, in a budgeted setting the greedy policy requires solving the nested constrained optimisation program \eqref{eq:pi_greedy} at each state and budget in order to apply this Budgeted Bellman Optimality operator.
 	\end{leftbar}
 \end{remark}
 
 \begin{proposition}[Optimality of the greedy policy]
 	\begin{leftbar}[propositionbar]
 	\label{prop:greedy_optimal}
-	The greedy policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$ is \emph{uniformly} optimal: for all $\os\in\ocS$, $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})\in\policies^{\star}(\os)$. In particular, $\oV^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})} = \oV^{\star}$ and $\oQ^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})}= \oQ^{\star}$.
+	The greedy policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$ is {uniformly} optimal: 
+	\begin{equation*}
+	\text{for all }\os\in\ocS,\,\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})\in\policies^{\star}(\os). 
+	\end{equation*}
+	In particular, 
+	$$\oV^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})} = \oV^{\star} \text{ and } \oQ^{\budgetedpolicy_\text{greedy}(\cdot; \oQ^{\star})}= \oQ^{\star}.$$
 	\end{leftbar}
 \end{proposition}
 
@@ -186,12 +227,12 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	\label{algo:bvi}
 \end{algorithm}
 
-The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \Cref{algo:bvi}, a \acrlong{DP} algorithm for solving known \glspl{BMDP}. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $\oQ^{\star}$ and recover the associated optimal budgeted policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$.
+The Budgeted Bellman Optimality equation is a fixed-point equation, which motivates the introduction of a fixed-point iteration procedure. We introduce \Cref{algo:bvi}, a \glsxtrlong{DP} algorithm for solving known \glspl{BMDP}. If it were to converge to a unique fixed point, this algorithm would provide a way to compute $\oQ^{\star}$ and recover the associated optimal budgeted policy $\budgetedpolicy_\text{greedy}(\cdot~; \oQ^{\star})$.
 
 \begin{theorem}[Non-contractivity of $\abo^{\star}$]
 	\begin{leftbar}[theorembar]
 	\label{thm:contraction}
-	For any \gls{BMDP} ($\cS,\cA,\Ps,\R,\constraint,\discountfactor$) with $|\cA| \geq 2$, $\abo^{\star}$ is not a contraction. Precisely: $\forall\epsilon>0, \exists Q^1,Q^2\in(\Real^2)^{\ocS\ocA}:\|\cT Q^1-\cT Q^2\|_\infty \geq \frac{1}{\epsilon}\|Q^1-Q^2\|_\infty$.
+	For any \gls{BMDP} ($\cS,\cA,\Ps,\R,\constraint,\discountfactor$) with $|\cA| \geq 2$, $\abo^{\star}$ is \emph{not} a contraction. Precisely, $$\forall\epsilon>0, \exists \oQ[^1],\,\oQ[^2]\in(\Real^2)^{\ocS\ocA}:\|\abo \oQ[^1]-\abo \oQ[^2]\|_\infty \geq \frac{1}{\epsilon}\|\oQ[^1] - \oQ[^2]\|_\infty.$$
 	\end{leftbar}
 \end{theorem}
 
@@ -203,10 +244,13 @@ Unfortunately, as $\abo^{\star}$ is not a contraction, we can guarantee neither 
 	The operator $\abo^{\star}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that "$\Qr$ is Lipschitz with respect to $\Qc$":
 	\begin{equation}
 	\cL_\discount = \left\{\begin{array}{cc}
-	Q\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
-	|Q_r(\os,\oa_1) - Q_r(\os,\oa_2)| \leq L|Q_c(\os,\oa_1) - Q_c(\os,\oa_2)|
-	\end{array}\right\}
+	\oQ\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
+	|\Qr(\os,\oa_1) - \Qr(\os,\oa_2)| \leq L|\Qc(\os,\oa_1) - \Qc(\os,\oa_2)|
+	\end{array}\right\},
 	\end{equation}
+	\begin{equation*}
+	\forall \oQ[^1],\oQ[^2]\in \cL_\discount,\; \|\abo \oQ[^1]- \abo \oQ[^2]\|_\infty  < \|\oQ[^1]-\oQ[^2]\|_\infty.
+	\end{equation*}
 	\end{leftbar}
 \end{theorem}
 
@@ -227,7 +271,7 @@ When the \gls{BMDP} is unknown, we need to adapt \Cref{algo:bvi} to work with a 
 \hat{\abo^{\star}} \oQ(\os, \oa, \overline{r}, \os') \eqdef \overline{r} + \discount \sum_{\ov{a'}\in \ocA} \pi_\text{greedy}(\ov{a'}|\ov{s'}; \oQ) \oQ(\ov{s'}, \ov{a'}).
 \end{equation*}
 We introduce in \Cref{algo:bftq} the \gls{BFTQ} algorithm, an extension of the \gls{FTQ} algorithm adapted to solve unknown \glspl{BMDP}. Because we work with continuous state space $\cS$ and budget space $\budgetspace$, we need to employ function-approximation in order to generalise to nearby states and budgets. Precisely, given a parametrized model $\oQ_\params$, we seek to minimise a regression loss $\cL(\oQ_\params, \oQ_\text{target};\cD) = \sum_{\cD} \|\oQ_\params(\os, \oa) - \oQ_\text{target}(\os, \oa, r, \os')\|_2^2$.
-Any model can be used, such as linear models, regression trees, or \acrlongpl{NN}.
+Any model can be used, such as linear models, regression trees, or \glsxtrlongpl{NN}.
 
 \begin{algorithm}[ht]
 	\DontPrintSemicolon
@@ -301,7 +345,7 @@ The computation of $\pi_\text{hull}$ in \Cref{algo:pi_hull} is illustrated in \C
 
 \subsection{Function approximation}
 
-\acrlongpl{NN} are well suited to model $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
+\glsxtrlongpl{NN} are well suited to model $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
 %TODO %The overall architecture is shown in \Cref{fig:bftq-architecture} in \Cref{sec:bftq-full}.
 
 \subsection{Parallel computing}
@@ -456,12 +500,11 @@ To our knowledge, there were only two ways of solving a \gls{BMDP}. The first on
 The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \gls{DP} algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the model ($\Ps$, $\R$, $\constraint$), and do not address the question of learning from interaction data.
 
 
-\section*{Conclusion}
+\section*{Chapter Conclusion}
 \label{sec:conclusion}
-\acrlongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest when dealing with continuous variables such as vehicle positions. We extend their definition to continuous states by introducing of a novel \acrlong{DP} operator, that we build upon to propose a \acrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \acrlong{RL}. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\budget$ instead of the tedious tuning of the penalty $\lambda$.
+\glsxtrlongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest when dealing with continuous variables such as vehicle positions. We extend their definition to continuous states by introducing of a novel \glsxtrlong{DP} operator, that we build upon to propose a \glsxtrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \glsxtrlong{RL}. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\budget$ instead of the tedious tuning of the penalty $\lambda$.
 
-
-
+\clearpage
 
 \begin{subappendices}
 
