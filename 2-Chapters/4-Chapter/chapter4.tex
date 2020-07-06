@@ -307,19 +307,19 @@ In stark contrast, the \EgoAtt policy quickly learns both when it must slow down
 \begin{figure}[htp]
 	\centering
 	\begin{subfigure}[t]{0.6\linewidth}
-		\label{fig:attention-reward}
 		\includegraphics[width=\linewidth]{img/total_reward}
 		\caption{Average return $\return=\sum_t\gamma^t\R(s_t,a_t)$ (higher is better)}
+		\label{fig:attention-reward}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.49\linewidth}
-		\label{fig:attention-length}
 		\includegraphics[width=\linewidth]{img/length}
 		\caption{Average episode length. Higher is better, since episodes are terminated at collisions (or after 13 steps).}
+		\label{fig:attention-length}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.49\linewidth}
-		\label{fig:attention-velocity}
 		\includegraphics[width=\linewidth]{img/velocity}
 		\caption{Average speed $v_0$ of the ego-vehicle (higher is better)}
+		\label{fig:attention-velocity}
 	\end{subfigure}
 	\caption{Performances of the tree agents according to various measures. We display the mean values -- along with their 95\% confidence interval -- averaged over 120 random seeds.}
 	\label{fig:attention-results}
@@ -409,4 +409,5 @@ In the previous examples, we trained a policy tailored for left-turns only becau
 
 In this chapter, we showed that the \emph{list of features} representation, commonly used to describe vehicles in autonomous driving literature, is not tailored for use in a function approximation setting, in particular with neural networks. These concerns can be addressed by the \emph{spatial grid} representation, but at the price of an increased input size and loss of accuracy. In contrast, we proposed an attention-based neural network architecture to tackle the aforementioned issues of the \emph{list of features} representation without compromising either size or accuracy. This architecture enjoys a better performance on a simulated negotiation and intersection crossing task, and is also more interpretable thanks to the visualisation of the attention matrix. The resulting policy successfully learns to recognise and exploit the interaction patterns that govern the nearby traffic.
 
-Let us back up a moment and reflect on \Cref{fig:attention-results}. Though \EgoAtt performs better than \CNNG in terms of rewards (see \Cref{fig:attention-reward}), it still has shorter episodes (see \Cref{fig:attention-length}) which means that it collides more often with other vehicles, on average. Of course, this is compensated by an increased average speed (see \Cref{fig:attention-velocity}), but this trade-off may not be desirable in practice. To address this issue, the .
+Let us back up a moment and reflect again on the behaviours exhibited by \Cref{fig:attention-results}. Though \EgoAtt performs better than \CNNG, it also has shorter episodes, which means it collides more often with other vehicles. Though this {aggressive} behaviour is deemed better by our choice of reward function, it may not be desirable in practice. A straightforward way to make the optimal policy more {conservative} is to manually tune the reward function and increase the weight of collisions. However, setting too high a penalty may also result in overly {cautious} behaviours. Finding the sweet spot between these two extremes can be difficult and demanding since changing the reward requires retraining the policy entirely. In the next chapter, we study a way to learn not a single policy but rather a whole range of policies that exhibit different levels of risk.
+

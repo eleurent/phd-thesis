@@ -26,8 +26,10 @@
 %	T. S. Eliot, \href{https://www.poetryfoundation.org/poems/47311/the-waste-land}{\emph{The Waste Land}}.	
 %\end{flushright}
 
+\glsreset{BMDP}
+
 \abstractStartChapter{}%
-This chapter\dots
+In this chapter, we strive to reconcile two contradictory objectives: \textit{efficiency} and \textit{safety}. To that end, we consider the framework of \glspl{BMDP}, in which first notion of \textit{risk} is formalised in the shape of a cost signal constrained to lie below an adjustable threshold.  So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application that features continuous states and unknown human behaviours, as discussed in \Cref{chapter:3}. This chapter extends the state-of-the-art to continuous spaces environments and unknown dynamics. We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce natural extensions of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}.
 \minitocStartChapter{}
 
 \section{Budgeted dynamic programming}
