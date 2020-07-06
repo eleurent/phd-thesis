@@ -901,11 +901,11 @@ wish to left align your text}
 \newcommand{\supervisor}[1]{\renewcommand{\@supervisor}{#1}\PHD@supervisortrue}
 
 % Supervisor Title (Supervisor - Default, can be changed)
-\newcommand{\@supervisorrole}{Supervisor: }
+\newcommand{\@supervisorrole}{under the direction of }
 \newcommand{\supervisorrole}[1]{\renewcommand{\@supervisorrole}{#1}}
 
 % Supervisor width to align
-\newcommand{\@supervisorlinewidth}{0.35\textwidth}
+\newcommand{\@supervisorlinewidth}{0.5\textwidth}
 \newcommand{\supervisorlinewidth}[1]{\renewcommand{\@supervisorlinewidth}{#1}}
 
 % Advisor
@@ -914,11 +914,11 @@ wish to left align your text}
 \newcommand{\advisor}[1]{\renewcommand{\@advisor}{#1}\PHD@advisortrue}
 
 % Advisor Title (Advisor - Default, can be changed)
-\newcommand{\@advisorrole}{Advisor: }
+\newcommand{\@advisorrole}{and the supervision of }
 \newcommand{\advisorrole}[1]{\renewcommand{\@advisorrole}{#1}}
 
 % Advisor width to align
-\newcommand{\@advisorlinewidth}{0.25\textwidth}
+\newcommand{\@advisorlinewidth}{0.5\textwidth}
 \newcommand{\advisorlinewidth}[1]{\renewcommand{\@advisorlinewidth}{#1}}
 
 % Submission Text
@@ -1204,7 +1204,9 @@ wish to left align your text}
 \newsavebox{\PHD@Title}
 \begin{lrbox}{\PHD@Title}
   \begin{minipage}[c]{0.98\textwidth}
+    \par\noindent\rule{\textwidth}{0.4pt}
     \centering \Huge \bfseries{\@title}
+    \par\noindent\rule{\textwidth}{0.4pt}
     \ifthenelse{\equal{\@subtitle}{}}{
       % subtitle is not defined
     }{
@@ -1251,7 +1253,7 @@ wish to left align your text}
           \@supervisorrole \parbox[t]{\@supervisorlinewidth}{\@supervisor}
         }
       \end{center}
-      \vspace{0.5em}
+      % \vspace{0.5em}
     } % supervisor is defined
   \end{minipage}
 \end{lrbox}
