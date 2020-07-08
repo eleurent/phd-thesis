@@ -10,7 +10,7 @@
         \tikzstyle{autoencoder neuron}=[neuron];
         \tikzstyle{annot} = [text width=4em, text centered]
         \tikzstyle{annot2} = [text width=10em, text centered]
-        \def\layersep{2cm}
+        \def\layersep{2.2cm}
         % Draw the input layer nodes
         \foreach \name / \y in {0,...,1}
             \pgfmathtruncatemacro{\y}{0 + \y}
@@ -26,7 +26,7 @@
                 \path (I-\source) edge (H1-\dest);
 
         % BETA
-        \node[input beta, pin=left:$\beta_a$] (BETA) at (0,-3.5) {};
+        \node[input beta, pin=left:$\budgetaction$] (BETA) at (0,-3.5) {};
 
         % beta auto encoder
         \foreach \name / \y in {0,...,1}
@@ -44,11 +44,11 @@
         % actions
         \foreach \name / \y in {0,...,1}
         \pgfmathtruncatemacro{\y}{0 + \y}
-            \path[yshift=-0.5cm] node[qr,pin=right:$Q_r(a^\y)$] (Qr-\name) at (2.2*\layersep,-\y cm) {};
+            \path[yshift=-0.5cm] node[qr,pin=right:$\Qr(a^\y)$] (Qr-\name) at (2.2*\layersep,-\y cm) {};
 
         \foreach \name / \y in {0,...,1}
         \pgfmathtruncatemacro{\yy}{2 + \y}
-            \path[yshift=-0.5cm] node[qc,pin=right:$Q_c(a^\y)$] (Qc-\name) at (2.2*\layersep,-\yy cm) {};
+            \path[yshift=-0.5cm] node[qc,pin=right:$\Qc(a^\y)$] (Qc-\name) at (2.2*\layersep,-\yy cm) {};
 
         \foreach \source in {0,...,1}
             \foreach \dest in {0,...,4}
@@ -71,10 +71,10 @@
             \foreach \dest in {0,...,1}
                 \path (H2-\source) edge (Qc-\dest);
         % Annotate the layers
-       \node[annot] (input) at (0,1) {$(s,\beta_a)$};
+       \node[annot] (input) at (0,1) {$(s,\budgetaction)$};
        \node[annot2] (input) at (\layersep/3.5,-4.6) {Encoder};
        \node[annot](h1) at (\layersep,1) {Hidden Layer 1};
-       \node[annot](h2) at(1.6* \layersep,1) {Hidden Layer 2};
-       \node[annot](output) at(2.2* \layersep,1) {$Q$};
+       \node[annot](h2) at(1.65 * \layersep,1) {Hidden Layer 2};
+       \node[annot](output) at(2.2* \layersep,1) {$\oQ$};
         %\node[annot,right of=hl] {Output layer};
     \end{tikzpicture}

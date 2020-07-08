@@ -30,29 +30,58 @@
 \glsreset{CMDP}
 
 \abstractStartChapter{}%
-In this chapter, we strive to reconcile two contradictory aspects of a driving policy: \textit{efficiency} and \textit{safety}. To that end, we consider the framework of \glspl+{BMDP}, in which a first notion of \textit{risk} is formalised in the shape of a cost signal constrained to lie below an \emph{adjustable} threshold. The latter thus provides the system manufacturer with a slider allowing them to adjust in real time the level of risk taken by the vehicle. So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application which features continuous kinematic states and unknown human behaviours, as discussed in \Cref{chapter:3}. This chapter extends the state-of-the-art to continuous spaces environments and unknown dynamics. We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce natural extensions of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}.
+  When we drive, we must comply with two contradictory objectives: \textit{efficiency} and \textit{safety}. In this chapter, we strive to reconcile them by formalising a first notion of \textit{risk}. We consider \glspl+{BMDP}, in which risk is implemented as a cost signal constrained to lie below an \emph{adjustable} threshold. The latter provides the system manufacturer with a slider allowing them to adjust in real time the level of risk taken by the vehicle. So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application which features continuous kinematic states and unknown human behaviours. This chapter extends the state-of-the-art to continuous spaces and unknown dynamics. %We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce a natural extension of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}. 
+  Our approach is motivated by the prospect of training a risk-sensitive driving policy for a two-way road, where overtaking a vehicle requires driving on the wrong lane.\footnote{The work in this chapter has been done in collaboration with Nicolas Carrara, who came up with the algorithm and carried-out the dialogue experiment. I did most of the theoretical analysis, and the driving experiment. We worked together on the exploration procedure, part of the analysis, and scaling-up the implementation.}
 \minitocStartChapter{}
 
-\section{Motivation}
+\section{Reconciling efficiency and safety}
 
 As stated in \Cref{chapter:1}, \glsxtrlong{RL} is a general framework for decision-making under uncertainty. Formally, we seek a policy $\policy\in\cM(\cA)^{\cS}$ that maximises in expectation the $\discountfactor$-discounted return of rewards $\return^{\policy} = \sum_{t=0}^\infty \discountfactor^t \reward(s_t, a_t)$.
 
 However, this modelling assumption comes at a price: no control is given over the spread of the performance distribution \citep{Dann2018}. In many critical real-world applications, including \glsxtrlong{AD}, failures may turn out very costly. This is an issue as most decision-makers would rather give away some amount of expected optimality to increase the performances in the lower-tail of the distribution. As discussed in \Cref{chapter:2}, this has led to the development of several risk-averse variants where the optimisation criteria include other statistics of the performance, such as the worst-case realisation \citep{Iyengar2005,Nilim2005,Wiesemann2013}, the variance-penalised expectation \citep{Tamar2012,Garcia2015}, the Value at Risk \citep{Mausser2003,Luenberger2013}, or the Conditional Value at Risk \citep{Chow2014,ChowGJP15}.
 
-\glsxtrlong{RL} also assumes that the performance can be described by a single reward function $\reward$. Conversely, real problems typically involve many aspects, some of which can be contradictory \citep{Liu2014}. In our case, a self-driving car needs to balance between progressing quickly on the road and avoiding collisions. When aggregating several objectives in a single scalar signal, as often in \gls{MORL} \citep{Roijers2013ASO}, no control is given over their relative ratios, as high rewards can compensate high penalties. For instance, if a weighted sum is used to balance velocity $v$ and crashes $c$, then for any given choice of weights $\omega$ the optimality equation $\omega_v\expectedvalue[\sum\discountfactor^t v_t] + \omega_a\expectedvalue[\sum\discountfactor^t c_t] = \return^{\star} = \max_{\policy} \return^{\policy}$ is the equation of a line in $(\expectedvalue[\sum\discountfactor^t v_t], \expectedvalue[\sum\discountfactor^t c_t])$, and the automotive company cannot control where its optimal policy $\optimalpolicy$ lies on that line. 
+\glsxtrlong{RL} also assumes that the performance can be described by a single reward function $\reward$. Conversely, real problems typically involve many aspects, some of which can be contradictory \citep{Liu2014}. In our case, a self-driving car needs to balance between progressing quickly on the road and avoiding collisions. In \gls{MORL}, each of this aspect is independently modelled by a separate reward signal. Then, the set of policies is partitioned into 
+\begin{enumerate*}[label=(\roman*)]
+	\item the class of \emph{dominated} policies $\pi$, for which there exists an \emph{improvement}, \ie another policy$\pi'$ for which at least some objectives increase, and none decrease;
+	\item the \emph{Pareto front} $\Pi^\star$, of undominated policies, illustrated in \Cref{fig:pareto-front}.
+\end{enumerate*}
 
-Both of these concerns are addressed in the \gls+{CMDP} setting \citep{BEUTLER1985236,Altman95constrainedmarkov}. In this multi-objective formulation, task completion and safety are considered separately. We equip the \gls{MDP} with a cost signal $\constraint \in \Real^{\cS\times \cA}$ and a cost {budget} $\budget\in\Real$. Similarly to $\return^{\policy}$, we define the return of costs $\hlrb{\constraintreturn^{\policy}} = \sum_{t=0}^\infty \discountfactor^t \constraint(s_t, a_t)$ and the new cost-constrained objective:
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.55\linewidth]{img/pareto1}
+\caption{A \gls{MOMDP} with two objectives: the rewards $R$ must be maximised, while the costs $C$ must be minimised. The policies are partitioned into dominated policies, shown in light shades of green, and the Pareto front $\Pi^\star$, shown in dark green. Cautious policies with low efficiency and risk are located on the bottom-left, while aggressive policies with high efficiency and risk are on the top-right.}
+\label{fig:pareto-front}
+\end{figure}
+
+A standard way to cast a \gls{MOMDP} into an \gls{MDP} is to aggregate several objectives in a single reward function \citep{Roijers2013ASO}. However, this does not allow to explicitly control the trade-off between the different objectives, since higher rewards can compensate for higher penalties. For instance, if a weighted sum is used to balance velocity $v$ and crashes $c$, then for any given choice of weights $\omega$ the optimality equation $\omega_v\expectedvalue[\sum\discountfactor^t v_t] + \omega_a\expectedvalue[\sum\discountfactor^t c_t] = \return^{\star} = \max_{\policy} \return^{\policy}$ is the equation of a line in $(\expectedvalue[\sum\discountfactor^t v_t], \expectedvalue[\sum\discountfactor^t c_t])$, and the automotive company cannot control where its optimal policy $\optimalpolicy$ lies on that line. 
+
+Both of these concerns are addressed in the \glsfirst+{CMDP} setting \citep{BEUTLER1985236,Altman95constrainedmarkov}, illustrated in \Cref{fig:cmdp}. In this multi-objective formulation, \hlg{task completion} and \hlr{safety} are considered separately. We equip the \gls{MDP} with a cost signal $\hlr{\constraint} \in \Real^{\cS\times \cA}$ and a cost {budget} $\hlb{\budget}\in\Real$. Similarly to $\hlg{\return^{\policy}}$, we define the return of costs $\hlrb{\constraintreturn[^{\policy}]} = \sum_{t=0}^\infty \discountfactor^t \constraint(s_t, a_t)$ and the new cost-constrained objective:
 \begin{equation}
 \label{eq:cmdp}
 \begin{array}{lcr}
-\displaystyle \max_{\policy\in\cM(\cA)^{\cS}} \expectedvalue[\hlgb{\return^{\policy}} | s_0=s] & \text{ s.t. } & \expectedvalue[\hlrb{\constraintreturn^{\policy}} | s_0=s] \leq \hlbb{\budget}
+\displaystyle \max_{\policy\in\cM(\cA)^{\cS}} \expectedvalue[\hlgb{\return^{\policy}} | s_0=s] & \text{ s.t. } & \expectedvalue[\hlrb{\constraintreturn[^{\policy}]} | s_0=s] \leq \hlbb{\budget}
 \end{array}
 \end{equation}
 This constrained framework allows for better control of the performance-safety trade-off. However, it suffers from a major limitation: the \idx{budget} has to be chosen before training, and cannot be changed afterwards.
 
-To tackle this issue, the \gls{BMDP} was introduced in \citep{Boutilier_Lu:uai16} as an extension of \glspl{CMDP} to enable the online control over the \idx{budget} $\budget$ within an interval $\budgetspace \subset \Real$ of admissible budgets\index{budget}. Instead of fixing the \idx{budget} prior to training, the objective is now to find a generic optimal policy $\optimalpolicy$ that takes $\budget$ as input so as to solve the corresponding \gls{CMDP} (Eq. \ref{eq:cmdp}) for all budgets $\budget\in\budgetspace$. This gives the system designer the ability to move the optimal policy $\optimalpolicy$ in real-time along the Pareto-optimal curve of the different reward-cost trade-offs.
 
-Our first contribution is to re-frame the original \gls{BMDP} formulation in the context of continuous states and infinite discounted horizon. We then propose a novel Budgeted Bellman Optimality Operator and prove the optimal value function to be a fixed point of this operator. Second, we use this operator in \gls{BFTQ}, a {batch} \gls{RL} algorithm, for solving \glspl{BMDP} \idx{Online} by interacting with an {environment}, through function approximation and a tailored exploration procedure. Third, we scale this algorithm to large problems by providing an efficient implementation of the Budgeted\index{budget} Bellman Optimality operator based on convex programming, and by leveraging tools from Deep \glsxtrlong{RL} such as \glspl{NN} and synchronous parallel computing. Finally, we validate our approach in two {environment}s that display a clear trade-off between rewards and costs: a dialogue system example, and a behavioural planning problem for overtaking on a two-way road. 
+\begin{figure}[ht]
+\begin{subfigure}[t]{0.48\linewidth}
+	\includegraphics[width=\linewidth]{img/pareto2}
+	\caption{In a \glsxtrshort{CMDP}, we learn a single policy $\pi^\star$ (blue dot) with a fixed expected risk $\budget\in\budgetspace$}
+	\label{fig:cmdp}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\linewidth}
+	\includegraphics[width=\linewidth]{img/pareto3}
+	\caption{In a \glsxtrshort{BMDP}, we learn the Pareto front $\Pi^\star$ (blue frontier) for the whole set $\budgetspace$ of allowed risks}
+	\label{fig:bmdp}
+\end{subfigure}
+\caption{Comparison between the \gls{CMDP} and \gls{BMDP} frameworks.}
+\end{figure}
+
+To tackle this issue, the \glsfirst+{BMDP} was introduced in \citep{Boutilier_Lu:uai16} as an extension of \glspl{CMDP} to enable the online control over the {budget} $\budget$ within an interval $\budgetspace \subset \Real$ of admissible budgets\index{budget}. Instead of fixing the {budget} prior to training, the objective is now to find a generic optimal policy $\optimalpolicy$ that takes $\budget$ as input so as to solve the corresponding \gls{CMDP} \eqref{eq:cmdp} for all budgets $\budget\in\budgetspace$. This gives the system designer the ability to move in real-time the optimal policy $\optimalpolicy$ along the Pareto front of the different reward-cost trade-offs, as shown in \Cref{fig:bmdp}.
+
+In the seminal work of \citet{Boutilier_Lu:uai16}, \glspl{BMDP} were originally studied in the context of finite states $\cS$, finite horizon, and known \gls{BMDP} parameters. Our first contribution is to re-frame the \gls{BMDP} formulation in the context of continuous states and infinite discounted horizon. We then propose a novel Budgeted Bellman Optimality Operator and prove the optimal value function to be a fixed point of this operator. Second, we use this operator in \gls{BFTQ}, a {batch} \gls{RL} algorithm, for solving \glspl{BMDP} {online}, without prior knowledge of the $(\Ps, \reward, \constraint)$ parameters, by interacting with an {environment}. Third, we scale this algorithm to large problems by (i) providing an efficient implementation of the Budgeted Bellman Optimality operator based on convex programming, (ii) a tailored risk-sensitive exploration procedure, and (iii) leveraging tools from Deep \glsxtrlong{RL} such as \glsxtrlongpl{NN} for function approximation and synchronous parallel computing. Finally, we validate our approach in two {environment}s that display a clear trade-off between rewards and costs: a dialogue system example, and a behavioural planning problem for overtaking on a two-way road. 
 
 \section{Budgeted dynamic programming}
 \label{sec:bdp}
@@ -158,17 +187,18 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 	\end{leftbar}
 \end{definition}
 
-In contrast to \glspl{MDP} for which there always exists a deterministic optimal policy, in a \gls{CMDP}, and \textit{a fortiori} in a \gls{BMDP}, this is generally not the case. 
-To illustrate this fact, let us consider the trivial \gls{BMDP} on the left of \Cref{fig:stochasticneeded}.
-In this example we have $\return^{\policy}=10\pi_1$ and $\constraintreturn^{\policy}=\pi_1$. The \idx{deterministic policy} consisting in always picking the safe action is feasible for any $\budget\geq 0$. But if $\budget=1/2$, the most rewarding feasible policy is to randomly pick the safe and risky actions with equal probabilities.
-If we attempt to cast this \gls{BMDP} into an \gls{MDP} by replacing the costs by negative rewards, the corresponding greedy policy will be deterministic\index{deterministic policy}, hence sub-optimal.
-%
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/SafeRiskyExample}
 	\caption[Example of relaxed Budgeted Markov Decision Process]{On the left hand side, a simple \textit{risky-vs-safe} \gls{BMDP}. The probability of picking the risky action is $\pi_1$. On the right hand side an attempt to relax the problem with negative rewards.}
 	\label{fig:stochasticneeded}
 \end{figure}
+
+In contrast to \glspl{MDP} for which there always exists a deterministic optimal policy, in a \gls{CMDP}, and \textit{a fortiori} in a \gls{BMDP}, this is generally not the case. 
+To illustrate this fact, let us consider the trivial \gls{BMDP} on the left of \Cref{fig:stochasticneeded}.
+In this example we have $\return^{\policy}=10\pi_1$ and $\constraintreturn^{\policy}=\pi_1$. The \idx{deterministic policy} consisting in always picking the safe action is feasible for any $\budget\geq 0$. But if $\budget=1/2$, the most rewarding feasible policy is to randomly pick the safe and risky actions with equal probabilities.
+If we attempt to cast this \gls{BMDP} into an \gls{MDP} by replacing the costs by negative rewards, the corresponding greedy policy will be deterministic\index{deterministic policy}, hence sub-optimal.
+
 
 However, the optimal value function $\oQ^\star$ in a \gls{BMDP} can still be characterised by a fixed-point equation, similarly to \Cref{thm:bellman-optimality-mdp} for \glspl{MDP}.
 
@@ -345,8 +375,7 @@ The computation of $\pi_\text{hull}$ in \Cref{algo:pi_hull} is illustrated in \C
 
 \subsection{Function approximation}
 
-\glsxtrlongpl{NN} are well suited to model $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \gls{NN}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
-%TODO %The overall architecture is shown in \Cref{fig:bftq-architecture} in \Cref{sec:bftq-full}.
+\glsxtrlongpl{NN} are well suited to model $\oQ$-functions in \gls{RL} algorithms \citep{Mnih2015}. We approximate $\oQ = (\Qr, \Qc)$ using one single \glsxtrlong{NN}, as illustrated in \Cref{fig:bftq-architecture}. Thus, the two components are jointly optimised which accelerates convergence and fosters learning of useful shared representations. Moreover, as in \citep{Mnih2015} we are dealing with a finite (categorical) action space $\cA$, instead of including the action in the input we add the output of the $\oQ$-function for each action to the last layer. Again, it provides a faster convergence toward useful shared representations and it only requires one forward pass to evaluate all action values. Finally, beside the state $s$ there is one more input to a budgeted $\oQ$-function:~the budget $\budgetaction$. This budget is a scalar value whereas the state $s$ is a vector of potentially large size. To avoid a weak influence of the budget $\budget_a$ compared to the state $s$ in the prediction, we include an additional encoder for the budget, whose width and depth may depend on the application. A straightforward choice is a single layer with the same width as the state.
 
 \subsection{Parallel computing}
 \label{subsec:parallel-computing}
@@ -380,14 +409,13 @@ In our experiments, a single training of \BFTQ corresponds to 10 trainings of \F
 	\centering
 	\includegraphics[width=0.5\textwidth]{img/CalibrationExample}
 	\caption{Calibration of a penalty multiplier according to the budget $\budget$. The optimal multiplier $\lambda^{\star}_{\text{avg}}$ is the smallest one to satisfy the budget constraint on average. Safer policies can also be selected according to the largest deviation from this mean cost.}
-	% TODO: penalization -> penalty
 	\label{fig:Lagrangian}
 \end{figure}
 
 
 \subsection{Environments}
 \label{subsec:environments}
-We evaluate our method on three different environments involving reward-cost trade-offs. % TODO: Their parameters can be found in \Cref{sec:env-parameters}
+We evaluate our method on three different environments involving reward-cost trade-offs.
 
 \paragraph{Corridors}
 This simple environment is only meant to highlight clearly the specificity of exploration in a budgeted setting. It is a continuous gridworld with Gaussian perturbations, consisting in a maze composed of two corridors: a risky one with high rewards and costs, and a safe one with low rewards and no cost. In both corridors the outermost cell is the one yielding the most reward, which motivates a deep exploration.
@@ -429,10 +457,10 @@ Our second application is a dialogue-based slot-filling simulation that has alre
     \label{tab:param-slot-filling}
 \end{table}
 
-\paragraph{Autonomous driving}
-In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated highway driving and behavioural decision-making.
-We define a task that displays a clear trade-off between safety and efficiency. The agent controls a vehicle with a finite set of manoeuvres implemented by low-lever controllers: $\mathcal{A}$ = \{\text{no-op}, \text{right-lane}, \text{left-lane}, \text{faster}, \text{slower}\}. It is driving on a two-lane road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. Their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
-The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory horizon. Thus, the constrained signal is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
+\paragraph{Two-way road}
+In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment presented in \Cref{chapter:3}.
+We define a task that displays a clear trade-off between safety and efficiency. As we mentioned, the agent controls a vehicle with a finite set \cA of manoeuvres \eqref{eq:action-space} implemented by low-lever controllers. It is driving on a two-way road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. The parameters controlling their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
+The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory horizon. Thus, the constrained signal $\constraintreturn$ is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
 
 \begin{table}[ht!]
     \centering
@@ -440,7 +468,7 @@ The task consists in driving as fast as possible, which is modelled by a reward 
         \toprule
         Parameter & Description & Value\tabularnewline
         \midrule
-        $N_v$& Number of vehicles & 2 - 6\tabularnewline
+        $N_v$& Number of other vehicles & 2 - 6\tabularnewline
         $\sigma_p$& Standard deviation of vehicles initial positions & \SI{100}{\meter}\tabularnewline
         $\sigma_v$& Standard deviation of vehicles initial velocities & \SI{3}{\meter\per\second}\tabularnewline
         H & Trajectory duration & \SI{15}{\second}\tabularnewline
@@ -455,18 +483,22 @@ The task consists in driving as fast as possible, which is modelled by a reward 
 \label{subsec:results}
 In the following figures, each patch represents the mean and 95\% confidence interval over $N_{\text{seeds}}$ seeds of the means of $(\return^{\policy},\constraintreturn[^{\policy}])$ ($(\return^{\budgetedpolicy},\constraintreturn[^{\budgetedpolicy}])$ for \BFTQ) over $N_\text{trajs}$ trajectories. That way, we display the variation related to learning (and batches) rather than the variation in the execution of the policies.
 
-We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment: \Cref{fig:exploration} shows the set of trajectories collected by each exploration strategy.
-and the resulting performance of a budgeted policy trained on each batch. The trajectories (orange) in the risk-neutral batch are concentrated along the risky corridor (right) and ignore the safe corridor (left), which results in bad performances in the low-risk regime. Conversely, trajectories in the risk-sensitive batch (blue) are well distributed among both corridors and the corresponding budgeted policy achieves good performance across the whole spectrum of risk budgets. 
-% TODO: redaction
-The animations at  \href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/} display the trajectories collected in each intermediate sub-batch.
-Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/}: When the budget is low, the agent takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Each animation corresponds to a different seed.
+We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment. \Cref{fig:exploration-trajs} shows how the two strategies behave in the corridor environment: the risk neutral procedure focuses on high-reward corridor only, while the risk-sensitive procedure also explores low-risk trajectories. Videos showing the data collection process are available\footnote{\href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/\#risk-sensitive-exploration}}. In \Cref{fig:exploration-perfs}, we observe that this better distributed exploration translates as a uniformly better performance across the range $\budgetspace$ of risk budgets. 
+When the budget is low, the corresponding optimal budgeted policy $\budgetedpolicy^\star$ takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Animations illustrating these optimal policies for different level of risks are available \footnote{\href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}}.
 
 \begin{figure}[tp]
 	\centering
-	\includegraphics[width=0.49\textwidth]{img/corridors_densities.pdf}
-	%\includegraphics[width=0.23\textwidth]{source/img/risk-sensitive.png}
-	\includegraphics[page=1, width=0.49\textwidth]{img/corridors}
-	\caption{Density of explored states (left) and corresponding policy performances (right) of two exploration strategies in the {corridors} environment. }
+	\begin{subfigure}[t]{0.48\linewidth}
+		\includegraphics[width=\linewidth]{img/corridors_densities.pdf}
+		\caption{State occupations for the two strategies. \emph{Left}: in the \hlb{risk-sensitive} batch, trajectories are well-distributed among both corridors. \emph{Right}: conversely, in the \hlo{risk-neutral} batch, trajectories focus on the risky corridor (to the right) only and ignore the safe corridor (to the left).}
+		\label{fig:exploration-trajs}
+	\end{subfigure}\hfill
+	\begin{subfigure}[t]{0.48\linewidth}
+	    \includegraphics[page=1, width=\textwidth]{img/corridors}
+	    \caption{Performances of the optimal budgeted policy $\budgetedpolicy^\star$ trained on batches of transitions obtained by following a \hlo{risk-neutral} and a \hlb{risk-sensitive} exploration. The risk-sensitive procedure attains a better performance across the whole spectrum of risk budgets.}
+	    \label{fig:exploration-perfs}
+	\end{subfigure}
+	\caption{Comparison of two exploration strategies in the corridors environment. }
 	\label{fig:exploration}
 \end{figure}
 
@@ -481,14 +513,12 @@ Animations are displayed at  \href{https://budgeted-rl.github.io/\#optimal-budge
 \end{figure}
 
 In a second experiment displayed in \Cref{sec:brl-results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
-Qualitatively, the budgeted agents display a variety of behaviours. Animations are displayed at  \href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/}. When $\budget = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\budget = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\budget = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
 For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[\constraintreturn|\budget=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\abo}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $\oQ_\params$ instead of $\oQ$.
-
 Still, \BFTQ provides a better control on the expected cost of the policy, than \FTQl. In addition, \BFTQ behaves more consistently than \FTQl overall, as shown by its lower extra-seed variance.
+Qualitatively, the budgeted agents display a variety of behaviours, shown in several animations\footnote{\href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/\#driving-styles}}. When $\budget = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\budget = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\budget = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
 
+\section*{Discussion}
 
-\section{Discussion}
-\label{subsec:discussions}
 \Cref{algo:bftq} is an algorithm for solving large unknown \glspl{BMDP} with continuous states. To the best of our knowledge, there is no algorithm in the current literature that combines all those features.
 
 Algorithms have been proposed for \glspl{CMDP}, which are less flexible sub-problems of the more general \gls{BMDP}. When the environment parameters ($\Ps$, $\R$, $\constraint$) are known but not tractable, solutions relying on function approximation~\citep{Undurti} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown environments, Online algorithms \citep{Geibel2005, Abe2010,AchiamHTA17,ChowGJP15} and a batch algorithm \citep{Thomas2015, Petrik2016, Laroche2019,Le2019} can solve large unknown \glspl{CMDP}. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
@@ -502,15 +532,15 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \section*{Chapter Conclusion}
 \label{sec:conclusion}
-\glsxtrlongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest when dealing with continuous variables such as vehicle positions. We extend their definition to continuous states by introducing of a novel \glsxtrlong{DP} operator, that we build upon to propose a \glsxtrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \glsxtrlong{RL}. We show that on two practical tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable $\budget$ instead of the tedious tuning of the penalty $\lambda$.
+\glsxtrlongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. They formulate risk as an expected cumulative cost, which can be estimated and controlled in a model-free fashion. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest for \glsxtrlong{AD} applications that require dealing with continuous variables such as vehicle positions. We extend their scope to continuous states by introducing of a novel \glsxtrlong{DP} operator, that we build upon to propose a \glsxtrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \glsxtrlong{RL}. We show that on two simulated tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable risk budget $\budget$ instead of the tedious tuning of the penalty $\lambda$.
 
 \clearpage
 
 \begin{subappendices}
 
-\section{Proofs}
+\section{Technical details}
 \label{sec:proofs}
-\subsection{\Cref{prop:bellman-expectation}}
+\subsection{Proof of \Cref{prop:bellman-expectation}}
 
 \begin{proof}
 	Thanks to the introduction of the augmented spaces $\ocS, \ocA$ and dynamics $\augmentedtransition$, this proof is the same as that in classical \glspl{MOMDP}.
@@ -540,7 +570,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 	
 \end{proof}
 
-\subsection{\Cref{thm:bellman-optimality}}
+\subsection{Proof of \Cref{thm:bellman-optimality}}
 
 % TODO: \Qr[^\star] must be replaced by \Qr[^{\star}], same for Qc
 
@@ -585,7 +615,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 \end{proof}
 
 
-\subsection{\Cref{prop:greedy_optimal}}
+\subsection{Proof of \Cref{prop:greedy_optimal}}
 \begin{proof}
     Notice from the definitions of $\abo^{\star}$ and $\abo^{\budgetedpolicy}$ in \eqref{eq:bellman-optimality} and \eqref{eq:bellman_expectation_operator} that $\abo^{\star}$ and $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$ coincide on $\oQ^{\star}$. Moreover, since $\oQ^{\star} = \abo^{\star}\oQ^{\star}$ by \Cref{thm:bellman-optimality}, we have: $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})} \oQ^{\star} = \abo^{\star} \oQ^{\star} = \oQ^{\star}$.
     Hence, $\oQ^{\star}$ is a fixed point of $\abo^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$, and by \Cref{prop:bellman-expectation} it must be equal to $\oQ^{\budgetedpolicy_\text{greedy}(\cdot;\oQ^{\star})}$
@@ -597,7 +627,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     By applying the definitions of $\oQ^{\star}$ and $\budgetedpolicy_\text{greedy}$, we recover the definition of $\oV^{\star}$.
 \end{proof}
 
-\subsection{\Cref{thm:contraction}}
+\subsection{Proof of \Cref{thm:contraction}}
 \label{sec:proof_contraction}
 \begin{proof}
 	In the trivial case $|\cA| = 1$, there exits only one policy $\budgetedpolicy$ and $\abo = \abo^\budgetedpolicy$, which is a contraction by \Cref{prop:bellman-expectation}.
@@ -644,7 +674,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 	In other words, $\abo$ is not a contraction for $\|\cdot\|_\infty$.
 \end{proof}
 
-\subsection{\Cref{rmk:contractivity-smooth}}
+\subsection{Proof of \Cref{rmk:contractivity-smooth}}
 \label{proof:contraction-with-smooth}
 
 \begin{remark}
@@ -823,7 +853,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 %\end{proof}
 
 
-\subsection{\Cref{prop:bftq_pi_hull}}
+\subsection{Proof of \Cref{prop:bftq_pi_hull}}
 \label{sec:proof_pi_hull}
 \begin{definition}
 	\begin{leftbar}[defnbar]

@@ -90,12 +90,12 @@
 
 % --- Glossaries
 \usepackage[acronym,toc,symbols,sort=use]{glossaries-extra}
-\newglossary[alg]{algorithms}{alo}{als}{Algorithm}
 \makeglossaries
 \setabbreviationstyle{long-short}
-\setabbreviationstyle[algorithm]{long-short-sc}
+%\glssetcategoryattribute{general}{textformat}{textsf}
+\glssetcategoryattribute{algorithm}{textformat}{texttt}
+\glsxtrabbreviationfont
 \GlsXtrEnableInitialTagging{acronym,abbreviation}{\itag}
-\glssetcategoryattribute{abbreviation}{glossname}{uc}
 \GlsXtrEnableLinkCounting{abbreviation} % Link first occurence
 \GlsXtrEnableLinkCounting[chapter]{acronym,general,symbol}  % Link first occurence in each chapter
 \renewcommand*{\glslinkpresetkeys}{% % disable hyperlink if link count is greater than 1:
@@ -106,7 +106,7 @@
 \glssetcategoryattribute{symbol}{indexonlyfirst}{true}  % Index first occurence of symbols only
 \glssetcategoryattribute{general}{nohyper}{true}  % Disable hyperref for general glossary
 \usepackage{makeidx} % Required to make an index
-\makeindex
+%\makeindex
 \input{5-Nomenclature/Nomenclature}
 \input{5-Nomenclature/Symbol}
 
@@ -134,7 +134,7 @@
 \setcounter{minitocdepth}{1}
 
 \newcommand\Chapter[2]{
-	\chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
+	\chapter[#1 {#2}]{#1\\[1.5ex]\Large{#2}}
 }
 
 % --- Source code input, see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
