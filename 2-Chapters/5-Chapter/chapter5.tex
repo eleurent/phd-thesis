@@ -338,14 +338,16 @@ As stated in \Cref{rmk:greedy}, computing the greedy policy $\budgetedpolicy_\te
 However, it can be solved efficiently by exploiting the \emph{structure} of the set of solutions with respect to $\budget$, that is, concave and increasing.
 
 \begin{proposition}[Equality of $\budgetedpolicy_\text{greedy}$ and $\budgetedpolicy_\text{hull}$]
+	\begin{leftbar}[propositionbar]
 	\label{prop:bftq_pi_hull}
 	\Cref{algo:bvi} and \Cref{algo:bftq} can be run by replacing $\budgetedpolicy_\text{greedy}$ in the equation \eqref{eq:bellman-optimality} of $\abo$ with $\budgetedpolicy_\text{hull}$ as described in \Cref{algo:pi_hull}.
     \begin{equation*}
         \budgetedpolicy_\text{greedy}(\oa|\os; \oQ) = \budgetedpolicy_\text{hull}(\oa|\os; \oQ)
     \end{equation*}
+    \end{leftbar}
 \end{proposition}
 
-\begin{algorithm}
+\begin{algorithm}[th]
 	\DontPrintSemicolon
     \KwData{$\os=(s,\budget)$, $\oQ$}
     $\oQ^+\leftarrow \{\Qc > \min \{\Qc(\os,\oa) \text{ s.t. }\oa\in\argmax_{\oa} \Qr(\os,\oa)\} \}$\tcp*[f]{dominated points}\;
@@ -361,7 +363,7 @@ However, it can be solved efficiently by exploiting the \emph{structure} of the 
     \label{algo:pi_hull}
 \end{algorithm}
 
-\begin{figure}[ht]
+\begin{figure}[t]
 	\centering
 	\includegraphics[width=0.6\linewidth]{img/pi.pdf}
 	\caption{Representation of $\pi_\text{hull}$. When the budget lies between $Q(\os,\oa_1)$ and $Q(\os,\oa_2)$, two points of the top frontier of the convex hull, then the policy is a mixture of these two points.}
@@ -459,8 +461,15 @@ Our second application is a dialogue-based slot-filling simulation that has alre
 
 \paragraph{Two-way road}
 In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment presented in \Cref{chapter:3}.
-We define a task that displays a clear trade-off between safety and efficiency. As we mentioned, the agent controls a vehicle with a finite set \cA of manoeuvres \eqref{eq:action-space} implemented by low-lever controllers. It is driving on a two-way road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. The parameters controlling their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
+We define a task that displays a clear trade-off between safety and efficiency, illustrated in \Cref{fig:two-way}. As we mentioned, the agent controls a vehicle with a finite set \cA of manoeuvres \eqref{eq:action-space} implemented by low-lever controllers. It is driving on a two-way road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. The parameters controlling their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
 The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory horizon. Thus, the constrained signal $\constraintreturn$ is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{img/two-way}
+	\caption{The two-way road environment requires the vehicle to drive in the wrong lane and risk front collisions in order to overtake slow vehicles.}
+	\label{fig:two-way}
+\end{figure}
 
 \begin{table}[ht!]
     \centering
@@ -486,7 +495,7 @@ In the following figures, each patch represents the mean and 95\% confidence int
 We first bring to light the role of risk-sensitive exploration in the \text{corridors} environment. \Cref{fig:exploration-trajs} shows how the two strategies behave in the corridor environment: the risk neutral procedure focuses on high-reward corridor only, while the risk-sensitive procedure also explores low-risk trajectories. Videos showing the data collection process are available\footnote{\href{https://budgeted-rl.github.io/\#risk-sensitive-exploration}{https://budgeted-rl.github.io/\#risk-sensitive-exploration}}. In \Cref{fig:exploration-perfs}, we observe that this better distributed exploration translates as a uniformly better performance across the range $\budgetspace$ of risk budgets. 
 When the budget is low, the corresponding optimal budgeted policy $\budgetedpolicy^\star$ takes the safest path on the left. When the budget increases, it gradually switches to the other lane, earning higher rewards but also costs. This gradual process could not be achieved with a deterministic policy as it would chose either one path or the other. Animations illustrating these optimal policies for different level of risks are available \footnote{\href{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}{https://budgeted-rl.github.io/\#optimal-budgeted-policies-learnt-with-a-risk-sensitive-exploration}}.
 
-\begin{figure}[tp]
+\begin{figure}[th]
 	\centering
 	\begin{subfigure}[t]{0.48\linewidth}
 		\includegraphics[width=\linewidth]{img/corridors_densities.pdf}
@@ -503,7 +512,7 @@ When the budget is low, the corresponding optimal budgeted policy $\budgetedpoli
 \end{figure}
 
 
-\begin{figure}[tp]
+\begin{figure}[th]
 	\begin{center}
 		\includegraphics[width=0.49\linewidth]{img/slot-filling}
 		\includegraphics[width=0.49\linewidth]{img/highway}
