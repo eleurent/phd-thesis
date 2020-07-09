@@ -29,46 +29,54 @@ In this chapter, we look into the planning step in our setting where the state s
 In this chapter, we assume that an \emph{estimation oracle} provides us with a good estimate of the \gls{MDP} $(\cS, \cA, \Ps, \reward)$, and we ponder over the \emph{planning} problem: how to compute the corresponding optimal policy $\policy^\star$?
 When state-action space $\cS\times\cA$ is discrete, \glsxtrlong{DP} algorithms such as Value Iteration \citep{Bellman1957} and Policy Iteration \citep{Howard1960} enable to compute an $\epsilon$-optimal policy with a computational complexity of $\cO\left(\cS\cA\log_\gamma(\epsilon(1-\gamma))\right)$. However, when $\cS$ is continuous or large, exact \gls{DP} is not feasible. Then, a popular solution to this issue is to perform \gls{ADP}, where the value function or policy is approximated within a given hypothesis class, at the cost of the loss of optimality.
 
-Another option is to resort to sampling-based optimisation. This family of methods does not require the full knowledge of the \gls{MDP} parameters, but rather only assume access to a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \Ps{s'|s,a}$ and reward $R(s_t, a_t)$ when queried. Thus, black-box optimisation algorithms such as \gls{CEM} or \gls{CMAES} can be directly applied in the space of sequences of actions. When the action space $\cA$ is discrete\footnote{This requirement has been circumvented by the work of \citet{Coulom2007,Chaslot2008,Wang2009,Busoniu2013,Busoniu2018}}, the sequential nature of the optimisation problem is better exploited by \gls{MCTS} algorithms, which leverage the discrete action branching to build a \emph{look-ahead} tree rooted at the current state. This online planning strategy is illustrated in \Cref{fig:online-planning}. At each step of real interaction, a full planning cycle of simulated trajectories is run, depicted \hlg{in green}: a look-ahead tree rooted at the current state is progressively expanded by sampling trajectories through $n$ calls to the generative model, before returning a recommendation for the estimated best action $\hat{a}_n$. The quality of recommended actions is evaluated by their \emph{simple regret}
+Another option is to resort to sampling-based optimisation. This family of methods does not require the full knowledge of the \gls{MDP} parameters, but rather only assume access to a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \Ps{s'|s,a}$ and reward $R(s_t, a_t)$ when queried. Thus, black-box optimisation algorithms such as \gls{CEM} or \gls{CMAES} can be directly applied in the space of sequences of actions. When the action space $\cA$ is discrete\footnote{This requirement has been circumvented by the work of \citet{Coulom2007,Chaslot2008,Wang2009,Busoniu2013,Busoniu2018}}, the sequential nature of the optimisation problem is better exploited by \gls{MCTS} algorithms, which leverage the discrete action branching to build a \emph{look-ahead} tree rooted at the current state. This online planning strategy is illustrated in \Cref{fig:online-planning}. At each decision step, a look-ahead tree rooted at the current state is progressively expanded by sampling trajectories through $n$ calls to the generative model, before returning a recommendation for the estimated best action $\hat{a}_n$. The quality of recommended actions is evaluated by their \emph{simple regret}
 \begin{equation*}
-\regret(\hat{a}_n) = V(s) - Q(s, \hat{a}_n).
+\regret(\hat{a}_n) = \V^\star(s) - \Q^\star(s, \hat{a}_n).
 \end{equation*}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[trim = {0 1.3cm 0 1.3cm}, clip, width=0.7\linewidth]{img/online_planning}
-	\caption{Online planning with a generative model. The true interaction cycle between the agent and the environment is depicted \hlb{in blue}. }
+	\caption{Online planning with a generative model. The true interaction cycle between the agent and the environment is depicted \hlb{in blue}. At each step of real interaction, a full planning cycle of simulated trajectories is run, depicted \hlg{in green}.}
 	\label{fig:online-planning}
 \end{figure}
 
 There are two main frames of analysis for planning algorithms. 
-In the \emph{fixed-confidence} setting, $n$ is not fixed and the generative model is called until we can confidently identify an $\epsilon$-optimal action with probability $1-\delta$. 
+\begin{itemize}
+\item In the \emph{fixed-confidence} setting, the generative model is called for a random number of samples $n$ until we can confidently identify an near optimal action:
 \begin{equation*}
-\probability{\regret(\hat{a}_n) \leq \epsilon} \geq 1-\delta
+\probability{\regret(\hat{a}_n) \leq \epsilon} \geq 1-\delta.
 \end{equation*}
-So-called \gls{PAC} algorithms verifying this property are then evaluated by their expected sample complexity 
-
-In the \emph{fixed-budget} setting, the generative model can only be called a fixed number of times $n$. Fixed-budget algorithms aim at minimising the simple regret $\expectedvalue[\regret]$ in expectation.
+So-called \gls{PAC} algorithms verifying this property are then evaluated by their expected sample complexity $\expectedvalue [n]$.
+\item In the \emph{fixed-budget} setting, the generative model can only be called a fixed number of times $n$. Fixed-budget algorithms aim at minimising the expected simple regret $\expectedvalue[\regret]$.
+\end{itemize}
 In a real-time scenario, decisions need to be taken at a given frequency, even if this means settling for a suboptimal action. Therefore, we will focus on the fixed-budget setting, whose bounded computational complexity makes it more appropriate for our application.
 
-\paragraph{Related work} \gls{MCTS} algorithms were historically motivated by the application of computer Go, and made a first appearance in the CrazyStone software \citet{Coulom2006}. They were later reformulated in the setting of Multi-Armed Bandits by \citet{Kocsis2006} with their \gls{UCT} algorithm. Despite its popularity \citep{Silver2016,Silver2017,Silver2018}, \gls{UCT} has been shown to suffer from several limitations: its sample complexity can be at least doubly-exponential for some problems (e.g. when a narrow optimal path is hidden in a suboptimal branch), which is much worse than uniform planning \citep{Coquelin2007}. The \texttt{Sparse Sampling} algorithm of \citet{Kearns2002} achieves better worst-case performance, but it is still non-polynomial and doesn't adapt to the structure of the \gls{MDP}. In stark contrast, the \OPD algorithm considered by \citet{Hren2008} in the case of deterministic transitions and rewards exploits the structure of the cumulative discounted reward to achieve a problem-dependent polynomial bound on sample complexity. A similar line of work in a deterministic setting is that of \gls{SOOP} and \gls{OPC} by \citet{Busoniu2013,Busoniu2018}, who focus on continuous action spaces $\cA$. \OPD was later extended to stochastic systems with the \glsxtrfull+{OLOP} algorithm introduced by \citet{Bubeck2010} in the open-loop setting, where sequences of actions are considered independently of the states they lead to. This restriction in the space of policies causes a loss of optimality, but greatly simplifies the planning problem in cases where the state space $\cS$ is large or infinite. In the fixed-confidence setting, polynomial sample complexities have been obtained for \texttt{St0p} \citep{Szorenyi2014}, \texttt{TrailBlazer} \citep{Grill2016} and SmoothCruiser \citep{SmoothCruiser19} but the three algorithms suffer from numerical inefficiency. Indeed, \texttt{StOP} explicitly reasons about policies and storing them is very costly, while \texttt{TrailBlazer} and \texttt{SmoothCruiser} require a very large amount of recursive calls even for small \glspl{MDP}.
+\paragraph{Related work} \gls{MCTS} algorithms were historically motivated by the application of computer Go, and made a first appearance in the CrazyStone software \citet{Coulom2006}. They were later reformulated in the setting of Multi-Armed Bandits by \citet{Kocsis2006} with their \gls{UCT} algorithm. Despite its popularity \citep{Silver2016,Silver2017,Silver2018}, \gls{UCT} has been shown to suffer from several limitations: its sample complexity can be at least doubly-exponential for some problems (e.g. when a narrow optimal path is hidden in a suboptimal branch), which is much worse than uniform planning \citep{Coquelin2007}. The \texttt{Sparse Sampling} algorithm of \citet{Kearns2002} achieves better worst-case performance, but it is still non-polynomial and doesn't adapt to the structure of the \gls{MDP}. In stark contrast, the \OPD algorithm considered by \citet{Hren2008} in the case of deterministic transitions and rewards exploits the structure of the cumulative discounted reward to achieve a problem-dependent polynomial bound on sample complexity. A similar line of work in a deterministic setting is that of \gls{SOOP} and \gls{OPC} by \citet{Busoniu2013,Busoniu2018}, who focus on continuous action spaces $\cA$. \OPD was later extended to stochastic systems with the \glsxtrfull+{OLOP} algorithm introduced by \citet{Bubeck2010} in the open-loop setting, where sequences of actions are considered independently of the states they lead to. This restriction in the space of policies causes a loss of optimality, but greatly simplifies the planning problem in cases where the state space $\cS$ is large or infinite. In the fixed-confidence setting, polynomial sample complexities have been obtained for \texttt{St0p} \citep{Szorenyi2014}, \texttt{TrailBlazer} \citep{Grill2016} and \texttt{SmoothCruiser} \citep{Grill2019} but the three algorithms suffer from numerical inefficiency. Indeed, \texttt{StOP} explicitly reasons about policies and storing them is very costly, while \texttt{TrailBlazer} and \texttt{SmoothCruiser} require a very large amount of recursive calls even for small \glspl{MDP}.
+
+\paragraph{Contributions} First, in \Cref{sec:olop}, we exhibit a faulty behaviour of the \OLOP algorithm when applied to numerical problems, and propose a modified version that addresses it, leading to an improved performance with a retained guarantee. Second, in \Cref{sec:gbopd} we look into how \gls{MCTS} can benefit from merging overlapping trajectories, to better exploit the underlying graphical structure of the dynamics.
 
 \section{Open-loop optimistic planning}
+\label{sec:olop}
 
-\paragraph{Contributions} The goal of this section is to study the practical performances of \OLOP when applied to numerical problems. Indeed, \OLOP was introduced along with a theoretical sample complexity analysis but no experiment was carried-out. Our contributions are the following:	first, we show that in our experiments \OLOP is overly pessimistic, especially in the low-budget regime, and we provide an intuitive explanation by casting light on an unintended effect that alters the behaviour of \OLOP. Second, we circumvent this issue by leveraging modern tools from the bandits literature to design and analyse a modified version with tighter upper-confidence bounds called \KLOLOP. We show that we retain the asymptotic regret bounds of $\OLOP$ while improving its performances by an order of magnitude in numerical experiments.
+The goal of this section is two study the empirical performance of the \OLOP algorithm. Indeed, it was introduced with a theoretical sample complexity analysis but no experiment was carried-out. We show that in our experiments \OLOP is overly pessimistic, especially in the low-budget regime, and we provide an intuitive explanation by casting light on an unintended effect that alters the behaviour of \OLOP. we circumvent this issue by leveraging modern tools from the bandits literature to design and analyse a modified version with tighter upper-confidence bounds called \KLOLOP. We show that we retain the asymptotic regret bounds of $\OLOP$ while improving its performances by an order of magnitude in numerical experiments.
 
 This section is structured as follows: in \Cref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in \Cref{sec:sample-complexity}, and whose empirical performance is evaluated in \Cref{sec:planning-experiments} in several numerical experiments.
 
 \paragraph{Notations}
 We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in \cA^{\ast}$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in \cA^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in \cA^t$. $\cA^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in \cA^{\ast}$ and $b\in \cA^{\ast}$ can be concatenated as $ab\in \cA^{\ast}$, the set of finite and infinite suffixes of $a$ are respectively $a \cA^{\ast} = \{c\in\mathcal{A}^{\star}: \exists b\in \cA^{\ast}$ such that $c=ab\}$ and $a\cA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
 
-During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in \cA^t$ and receives a reward $Y_t^m$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{Y_t^m | s_t, a^m_t} \prod_{k=1}^{t-1} \probability{s_{k+1} | s_{k}, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1$ is the current state.
+During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in \cA^t$ and receives a reward $R(s_t^m)$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{R(s_t^m) | s_t^m} \prod_{k=1}^{t-1} \probability{s_{k+1}^m | s_{k}^m, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1^m=s_1$ is the current state.
 
-After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in \cA^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$
-\begin{equation}
-\label{eq:value}
-V(a) = \sup_{b\in a\cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}),
-\end{equation}
+
+\begin{definition}[Sequence values]
+	\label{def:sequence-values}
+	We define the value $V(a)$ of a sequence of actions $a\in \cA^h$ as the maximum expected discounted cumulative reward one may obtain after executing $a$:
+	\begin{equation}
+	\label{eq:value}
+	V(a) = \sup_{b\in a\cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}).
+	\end{equation}
+\end{definition}
 
 
 \subsection{Kullback-Leibler Open-Loop Optimistic Planning}
@@ -129,8 +137,8 @@ B_a(m) \eqdef \inf_{1 \leq t \leq L} U_{a_{1:t}}(m)
 \end{equation}
 
 
-The general algorithm structure is shown in Algorithm \ref{algo:kl-olop}.
-We now discuss two specific implementations that differ in their choice of divergence $d$ and non-decreasing function $f$. They are compared in Table \ref{tab:comparison}.
+The general algorithm structure is shown in \Cref{algo:kl-olop}.
+We now discuss two specific implementations that differ in their choice of divergence $d$ and non-decreasing function $f$. They are compared in \Cref{tab:comparison}.
 
 \begin{algorithm}[tp]
 	\DontPrintSemicolon
@@ -145,7 +153,7 @@ We now discuss two specific implementations that differ in their choice of diver
 \end{algorithm}
 
 \begin{table}[tp]
-	\caption{Different implementations of Algorithm \ref{algo:kl-olop} in \OLOP and \KLOLOP}
+	\caption{Different implementations of \Cref{algo:kl-olop} in \OLOP and \KLOLOP}
 	\label{tab:comparison}
 	\centering
 	\begin{tabular}{ccc}
@@ -202,7 +210,7 @@ However, this property is only true if the upper-bound defined in \eqref{eq:u_mu
 
 Yet, the Chernoff-Hoeffding bounds used in \OLOP start in the $U^{\mu}_a(m) > 1$ regime -- initially $U^{\mu}_a(m) = \infty$ -- and can remain in this regime for a long time especially in the near-optimal branches where $\hat{\mu}_a(m)$ is close to one.
 
-Under these circumstances, the Lemma \ref{lemma:seq_values} has a drastic effect on the search behaviour. Indeed, as long as a subtree under the root verifies $U^{\mu}_a(m) > 1$ for every sequence $a$, then all these sequences share the same B-value $B_a(m) = U_{a_{1:1}(m)}$. This means that \OLOP cannot differentiate them and exploit information from their shared history as intended, and behaves as uniform sampling instead.
+Under these circumstances, the \Cref{lemma:seq_values} has a drastic effect on the search behaviour. Indeed, as long as a subtree under the root verifies $U^{\mu}_a(m) > 1$ for every sequence $a$, then all these sequences share the same B-value $B_a(m) = U_{a_{1:1}(m)}$. This means that \OLOP cannot differentiate them and exploit information from their shared history as intended, and behaves as uniform sampling instead.
 Once the early depths have been explored sufficiently, \OLOP resumes its intended behaviour, but the problem is only shifted to deeper unexplored subtrees.
 
 This consideration motivates us to leverage the recent developments in the Multi-Armed Bandits literature, and modify the upper-confidence bounds for the expected rewards $U^\mu_a(m)$ so that they respect the reward bounds.
@@ -212,7 +220,7 @@ This consideration motivates us to leverage the recent developments in the Multi
 \label{sec:kl-olop-kl-olop}
 
 \noindent
-We propose a novel implementation of Algorithm \ref{algo:kl-olop} where we leverage the analysis of the kl-UCB algorithm from \citep{Cappe2013} for multi-armed bandits with general bounded rewards.
+We propose a novel implementation of \Cref{algo:kl-olop} where we leverage the analysis of the kl-UCB algorithm from \citep{Cappe2013} for multi-armed bandits with general bounded rewards.
 Likewise, we use the Bernoulli Kullback-Leibler divergence defined on the interval $I=[0,1]$ by
 
 \begin{equation*}
@@ -221,7 +229,7 @@ Likewise, we use the Bernoulli Kullback-Leibler divergence defined on the interv
 
 \noindent
 with, by convention, $0 \log 0 = 0 \log 0/0 = 0$ and $x \log x /0 = +\infty$ for $x>0$.
-This divergence and the corresponding bounds are illustrated in Figure \ref{fig:ukl}.
+This divergence and the corresponding bounds are illustrated in \Cref{fig:ukl}.
 
 \begin{figure}[tp]
 	\centering
@@ -232,13 +240,13 @@ This divergence and the corresponding bounds are illustrated in Figure \ref{fig:
 
 $U^{\mu}_a(m)$ and $L^{\mu}_a(m)$ can be efficiently computed using Newton iterations, as for any $p\in[0, 1]$ the function $q \rightarrow \dber(p,q)$ is strictly convex and increasing (resp. decreasing) on the interval [p, 1] (resp. [0, p]).
 
-Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log M$. This choice is justified in the end of section \ref{sec:regret-proof}. Because $f_2$ is lower than $f_4$, the Figure \ref{fig:ukl} shows that the bounds are tighter and hence less conservative than that of \OLOP, which should increase the performance, provided that their associated probability of violation does not invalidate the regret bound of \OLOP.
+Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log M$. This choice is justified in the end of \Cref{sec:regret-proof}. Because $f_2$ is lower than $f_4$, the \Cref{fig:ukl} shows that the bounds are tighter and hence less conservative than that of \OLOP, which should increase the performance, provided that their associated probability of violation does not invalidate the regret bound of \OLOP.
 
 
 \begin{remark}[Upper bounds sharpening]
 	\label{rmk:sharpen}
 	\begin{leftbar}[remarkbar]
-	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By Lemma \ref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of Algorithm \ref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in \cA^L$.
+	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By \Cref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of \Cref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in \cA^L$.
 	\end{leftbar}
 \end{remark}
 
@@ -271,7 +279,7 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 
 We provide a time and memory efficient implementation of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, bringing an exponential speedup that allows to scale these algorithms to high sample budgets.
 
-\subsection{Proof of Theorem \ref{thm:regret-kl-olop}}
+\subsection{Proof of \Cref{thm:regret-kl-olop}}
 \label{sec:regret-proof}
 
 We follow step-by step the pyramidal proof of \citep{Bubeck2010}, and adapt it to the Kullback-Leibler upper confidence bound. The adjustments resulting from the change of confidence bounds are \diff{highlighted}. The proofs of lemmas which are not significantly altered are listed in \Cref{sec:planning-technical}. 
@@ -337,7 +345,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in \cA^L}  U_a(m)$ and $a^{\star}\in \cA^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
+	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see \Cref{rmk:sharpen} and \Cref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by \Cref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in \cA^L}  U_a(m)$ and $a^{\star}\in \cA^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
 	
 	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
@@ -495,7 +503,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 
-Thus by combining Lemma \ref{lemma:expected-regret} and \ref{lemma:expected-plays-count} we obtain
+Thus by combining \Cref{lemma:expected-regret,lemma:expected-plays-count} we obtain
 \begin{equation*}
 \expectedvalue r_n = \tilde{O}\left(\discount^H + \discount^{-H}M^{-1} + (\kappa' \discount)^{H}M^{-1}\diff{(1+M\Delta_M+\Delta_M)} + (\kappa')^H\discount^{-H}M^{-1}\diff{\Delta_M}\right)
 \end{equation*}
@@ -517,7 +525,7 @@ Thus, the claimed bounds are obtained in both cases as long as we can impose $\D
 \sum_{m=1}^M \delta_m = O(M^{-1})\quad \text{and}\quad f(m)\log (m) e^{-f(m)} = O(\delta_m)
 \end{equation}
 
-By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the corresponding \KLOLOP algorithm does achieve the regret bound claimed in Theorem \ref{thm:regret-kl-olop}.
+By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the corresponding \KLOLOP algorithm does achieve the regret bound claimed in \Cref{thm:regret-kl-olop}.
 
 
 \subsection{Experiments}
@@ -527,8 +535,8 @@ We have performed some numerical experiments to evaluate and compare the followi
 \begin{itemize}
 	\item \texttt{Random}: returns a random action, we use it as a minimal performance baseline.
 	\item \OPD: the \emph{Optimistic Planning for Deterministic systems} from \citep{Hren2008}, used as a baseline of optimal performance. This planner is only suited for deterministic environments, and exploits this property to obtain faster rates. However, it is expected to fail in stochastic environments.
-	\item \OLOP: as described in subsection \ref{sec:kl-olop-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in \Cref{sec:kl-olop-time}, otherwise the exponential running-time would have been prohibitive.}
-	\item \KLOLOP: as described in subsection \ref{sec:kl-olop-kl-olop}.\footnotemark[2]
+	\item \OLOP: as described in \Cref{sec:kl-olop-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in \Cref{sec:kl-olop-time}, otherwise the exponential running-time would have been prohibitive.}
+	\item \KLOLOP: as described in \Cref{sec:kl-olop-kl-olop}.\footnotemark[2]
 	\item \KLOLOP(1): an aggressive version of \KLOLOP where we used $f_1(m) = \log M$ instead of $f_2(m)$. This threshold function makes the upper bounds even tighter, at the cost of an increased probability of violation. Hence, we expect this solution to be more efficient in close-to-deterministic environments. However, since we have no theoretical guarantee concerning its regret as we do with $\KLOLOP$, it might not be conservative enough and converge too early to a suboptimal sequence, especially in highly stochastic environments.
 \end{itemize}
 %TODO: probleme de reference des sous-sections dans le itemize.
@@ -572,14 +580,13 @@ They are evaluated on the following tasks, using a discount factor of $\discount
 	\label{fig:trees}
 \end{figure}
 
-The results of our experiments are shown in Figure \ref{fig:experiments}. The \OPD algorithm converges very quickly to the optimal return in the two first environments, shown in Figure \ref{sub:highway} and Figure \ref{sub:gridworld}, because it exploits their deterministic nature: it needs neither to estimate the rewards through upper-confidence bounds nor to sample whole sequences all the way from the root when expanding a leaf, which provides a significant speedup. It can be seen as an oracle allowing to measure the conservativeness of stochastic planning algorithms. And indeed, even before introducing stochasticity, we can see that \OLOP performs quite badly on the two environments, only managing to solve them with a budget in the order of $10^{3.5}$. In stark contrast, \KLOLOP makes a much better use of its samples and reaches the same performance an order of magnitude faster. This is illustrated by the expanded trees shown in Figure \ref{fig:trees}: \OPD exploits the deterministic setting and produces a sparse tree densely concentrated around the optimal trajectory. Conversely, the tree developed by \OLOP is evenly balanced, which suggests that \OLOP behaves as uniform planning as hypothesised in Section \ref{sec:kl-olop-behaviour}. \KLOLOP is more efficient and expands a highly unbalanced tree, exploring the same regions as \OPD. Furthermore, in the stochastic gridworld environment shown in Figure \ref{sub:gridworld_stoch}, we observe that the deterministic \OPD planner's performance saturates as it settles to suboptimal trajectories, as expected. Conversely, the stochastic planners all find better-performing open-loop policies, which justifies the need for this framework. Again, \KLOLOP converges an order of magnitude faster than \OLOP. Finally, \KLOLOP(1) enjoys good performance overall and displays the most satisfying trade-off between aggressiveness in deterministic environments and conservativeness in stochastic environments; hence we recommend this tuning for practical use.
+The results of our experiments are shown in \Cref{fig:experiments}. The \OPD algorithm converges very quickly to the optimal return in the two first environments, shown in \Cref{sub:highway} and \Cref{sub:gridworld}, because it exploits their deterministic nature: it needs neither to estimate the rewards through upper-confidence bounds nor to sample whole sequences all the way from the root when expanding a leaf, which provides a significant speed-up. It can be seen as an oracle allowing to measure the conservativeness of stochastic planning algorithms. And indeed, even before introducing stochasticity, we can see that \OLOP performs quite badly on the two environments, only managing to solve them with a budget in the order of $10^{3.5}$. In stark contrast, \KLOLOP makes a much better use of its samples and reaches the same performance an order of magnitude faster. This is illustrated by the expanded trees shown in \Cref{fig:trees}: \OPD exploits the deterministic setting and produces a sparse tree densely concentrated around the optimal trajectory. Conversely, the tree developed by \OLOP is evenly balanced, which suggests that \OLOP behaves as uniform planning as hypothesised in \Cref{sec:kl-olop-behaviour}. \KLOLOP is more efficient and expands a highly unbalanced tree, exploring the same regions as \OPD. Furthermore, in the stochastic gridworld environment shown in \Cref{sub:gridworld_stoch}, we observe that the deterministic \OPD planner's performance saturates as it settles to suboptimal trajectories, as expected. Conversely, the stochastic planners all find better-performing open-loop policies, which justifies the need for this framework. Again, \KLOLOP converges an order of magnitude faster than \OLOP. Finally, \KLOLOP(1) enjoys good performance overall and displays the most satisfying trade-off between aggressiveness in deterministic environments and conservativeness in stochastic environments; hence we recommend this tuning for practical use.
 
 \subsection*{Section conclusion}
 
 We introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Finally, we proposed an efficient implementation that benefits from a substantial speedup, facilitating its use for real-time planning applications.
 
-
-\section{On a closed-loop algorithm}
+\subsection{On a closed-loop algorithm}
 
 We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \MDPGapE, was developed as part of a collaboration \citep{jonsson2020planning} and analysed in the fixed-confidence setting.
 
@@ -593,55 +600,47 @@ L_{h}(s) &= \max_{a\in A} \left[\ell_t(s,a) + \discount \min_{q \in \cC_t(s,a)} 
 \end{align*}
 
 \section{Graph-based optimistic planning}
+\label{sec:gbop}
+
+The goal of this section is to address a paradox: despite the underlying \gls{MDP} transitions having a graph structure, the popular \gls{MCTS} algorithms such as \gls{UCT} rely on a tree structure to represent their value estimates. That is, they do not identify together two similar states reached via different trajectories and represented in separate branches of the tree. In this section, we propose a \emph{graph-based} planning algorithm, which takes into account this state similarity. In our analysis, we provide a regret bound that depends on a novel problem-dependent measure of difficulty, which improves on the original tree-based bound in \glspl{MDP} where the trajectories overlap, and recovers it otherwise. Then, we show that this methodology can be adapted to existing planning algorithms that deal with stochastic systems. Finally, numerical simulations illustrate the benefits of our approach.
+
+\subsection{Graph-Based Planning for Deterministic Systems}
 \label{sec:gbopd}
 
-We start by considering the simple setting of MDPs with deterministic dynamics and rewards, and will denote $r(s,a)$ and $P(s,a)$ the unique reward $r$ and next state $s'$ sampled from $P\left(r,s'|s,a\right)$, respectively.
-Let us give some background on the interplay of data structures and optimistic planning algorithms.
+In this section, we introduce a simple yet highly effective variant of tree-based planning algorithms. We first consider the simple setting of \glspl{MDP} with deterministic dynamics, and will denote $P(s,a)$ the unique next state $s'$ sampled from $P\left(s'|s,a\right)$.
+We start by giving some background on the interplay of data structures and optimistic planning algorithms.
 
-\subsection{Data structures}
+\subsubsection{Data structures}
 
-In this work, we compare two data structures for planning in an MDP: tree and (directed) graph, represented in \Cref{fig:structures}. In order to distinguish them, we use Roman symbols when referring to trees, e.g. $T, U, L, B$ and calligraphic symbols when referring to graphs, e.g. $\cG, \cU, \cL, \cB$. In both structures, we say that a node is \emph{internal} if it has outgoing edges, and \emph{external} else.
+In this work, we compare two data structures for planning in an MDP: tree and (directed) graph, represented in \Cref{fig:structures}. In order to distinguish them, we referring to trees with Roman symbols, e.g. $T, U, L, B$; and to graphs with calligraphic symbols, e.g. $\cG, \cU, \cL, \cB$. In both structures, we say that a node is \emph{internal} if it has outgoing edges, and \emph{external} else.
 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[trim={1.8cm 2.2cm 1.9cm 2.7cm}, clip,width=0.46\linewidth]{img/gbop/tree_1}
 	\hfill
 	\includegraphics[trim={1.8cm 1.2cm 1.9cm 0.8cm}, clip,width=0.46\linewidth]{img/gbop/graph_1}
-	\caption{Illustration of the tree $\Tau_n$ (left) and the graph $\cG_n$ (right) built with the same observed transitions. In the tree, two nodes with the same colour and shape (not black nor round) lead to the same state.}
+	\caption{Illustration of the tree $\Tau_n$ (left) and the graph $\cG_n$ (right) built from the same observed transitions. The root of the tree corresponds to the central graph node. In the tree, two nodes with the same colour and shape (not black round) lead to the same state.}
 	\label{fig:structures}
 \end{figure}
 
-In a tree, a node of depth $h$ represents a sequence of actions $a\in \cA^h$. The \textit{root} of the tree corresponds to the empty action sequence, and hence to the initial state $s_0\in S$. At iteration $n$, we denote the current tree as $\Tau_n$. Borrowing notations from topology, we denote its set of internal nodes as $\inte{\Tau}_n$ and its set of external nodes (the leaves) as $\ext{\Tau}_n$. Note that since the MDP is deterministic, a sequence of action $a$ is associated with its final state denoted $s(a)$, but this association is not one-to-one: several sequences of action can lead to the same state, which will be represented several times in the tree.
+In a tree, a node of depth $h$ represents a sequence of actions $a\in A^h$. The \textit{root} of the tree corresponds to the empty action sequence, and hence to the initial state $s_0\in S$. At iteration $n$, we denote the current tree as $\Tau_n$. Borrowing notations from topology, we denote its set of internal nodes as $\inte{\Tau}_n$ and its set of external nodes (the leaves) as $\ext{\Tau}_n$. Note that since the MDP is deterministic, a sequence of action $a$ is associated with its final state denoted $s(a)$, but this association is not one-to-one: several sequences of action can lead to the same state, which will be represented several times in the tree.
 
 In a graph, the nodes represent states $s\in S$, and the edges represent transitions between states. The \textit{source} of the graph corresponds to the initial state $s_0$. At iteration $n$, we denote the current graph as $\cG_n$, its set of internal nodes as $\inte{\cG}_n$ and its set of \textit{sinks} as $\ext{\cG}_n$.
 
-Both structures are built iteratively from a single starting node, by selecting an external node (leaf or sink) to expand. The \emph{expansion} of a node $a$ or $s$ refers to calling the generative model to sample the reward $r$ and next state $s'$ for each action $a\in A$, and adding child nodes to the data structure. In a tree, the expansion of a node $a\in \cA^h$ always lead to the creation of new leaves that represent the suffix sequence of action $ab\in \cA^{h+1},\, b\in A$. The maximum depth of an expanded node in $T_n$ is denoted $d_n$. In contrast, in a graph the next state $s'$ reached from $s,a$ might already be present in $\cG_n$, in which case we add the edge between $s$ and $s'$ without creating a new node.
+Both structures are built iteratively from a single starting node, by selecting an external node (leaf or sink) to expand. The \emph{expansion} of a node $a$ or $s$ refers to calling the generative model to sample the reward $r$ and next state $s'$ for each action $a\in A$, and adding child nodes to the data structure. In a tree, the expansion of a node $a\in A^h$ always lead to the creation of new leaves that represent the suffix sequence of action $ab\in A^{h+1},\, b\in A$. The maximum depth of an expanded node in $T_n$ is denoted $d_n$. In contrast, in a graph the next state $s'$ reached from $s,a$ might already be present in $\cG_n$, in which case we add the edge between $s$ and $s'$ without creating a new node.
 These data structures can be used to store information about the MDP, such as the transitions and rewards $r(s, a)$, or other informations useful for planning.
 
 
-\subsection{Optimistic planning}
+\subsubsection{Optimistic planning}
 
 A planning algorithm is typically composed of two main rules:
 \begin{enumerate*}[label=(\roman*)]
 	\item A \emph{sampling rule}, that selects promising transitions to simulate at each iteration $n$;
-	\item A \emph{recommendation rule}, that recommends a good first action $a_n$ 	to take (in $s_0$).
+	\item A \emph{recommendation rule}, that recommends a good first action $\hat{a}_n$ 	to take (in $s_0$).
 \end{enumerate*}
-%The pseudo-code of generic planning algorithm is provided in \Cref{alg:generic}.
-%\begin{algorithm}
-%	\caption{A generic planning algorithm}
-%	\label{alg:generic}
-%	\DontPrintSemicolon
-%	\For{each iteration $n$}{
-%		Select the node $b_n$ (or $\hat{s_n}$) to expand according to the \textbf{sampling rule}.\;
-%		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
-%			Simulate the transition $r, s' \sim P\left(r, s' \condbar s, a\right)$ from the generative model.\;
-%			Insert the observed transition to the data structure accordingly.
-%		}
-%	}
-%	\Return the recommended action $a_{n}$ according to the \textbf{recommendation rule}.\;
-%\end{algorithm}
-These rules can be chosen with the goal of minimising the simple regret $r_n$.
-A popular approach is to follow the principle of \emph{Optimism in the Face of Uncertainty} (OFU) \citep[see][]{Munos14}, which consists in exploring the option that maximises an upper-bound of the true objective. In the context of planning, it has been applied by forming bounds on the value function $V$.
+
+These rules can be chosen with the goal of minimising the simple regret $\regret$.
+A popular approach is to follow the principle of \gls{OFU} \citep[see][]{Munos14}, which consists in exploring the option that maximises an upper-bound of the true objective. In the context of planning, it has been applied by forming bounds on the value function $V$.
 
 \begin{definition}[Value bounds]
 	\begin{leftbar}[defnbar]
@@ -660,7 +659,7 @@ A popular approach is to follow the principle of \emph{Optimism in the Face of U
 Following the OFU principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010open, Busoniu2012optimistic}.
 
 For instance, since we assume that the rewards are bounded in [0, 1], trivial bounds on $V(s)$ are
-$0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
+$0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
 
 \begin{definition}[Bellman optimality operator]
 	\begin{leftbar}[defnbar]
@@ -669,7 +668,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds
 	\begin{equation}
 	\label{eq:bellman-tree}
 	B_n(f)(a) \eqdef \begin{cases}
-	\max_{b\in A} r(s(a), b) + \discount f({ab})
+	\max_{b\in A} R(s(a), b) + \discount f({ab})
 	& \text{if $a\in\inte{\Tau}_n$.} \\
 	f(a) & \text{if $a\in\ext{\Tau}_n$;}
 	\end{cases}
@@ -679,7 +678,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds
 	\begin{equation}
 	\label{eq:bellman-graph}
 	\cB_n(f)(s) \eqdef \begin{cases}
-	\max_{b\in A} r(s, b) + \discount f(P(s,b))
+	\max_{b\in A} R(s, b) + \discount f(P(s,b))
 	& \text{if $s\in\inte{\cG}_n$.} \\
 	f(s) & \text{if $s\in\ext{\cG}_n$;}
 	\end{cases}
@@ -688,11 +687,11 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds
 	\end{leftbar}
 \end{definition}
 
-\begin{remark}
-	\begin{leftbar}[remarkbar]
-	For ease of notation, we will sometimes drop the $n$ index on $B$ and $\cB$ when it is non-ambiguous.
-	\end{leftbar}
-\end{remark}
+% \begin{remark}
+% 	\begin{leftbar}[remarkbar]
+% 	For ease of notation, we will sometimes drop the $n$ index on $B$ and $\cB$ when it is non-ambiguous.
+% 	\end{leftbar}
+% \end{remark}
 
 
 \begin{figure}[tp]
@@ -704,7 +703,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds
 	\label{fig:bellman}
 \end{figure}
 
-\citet{Hren2008optimistic} used this Bellman operator $B_n$ in their \texttt{OPD} algorithm to define a pair of bounds $(L_n,\, U_n)$ at each iteration $n$. They use trivial bounds at the leaves, and backup these estimates up to the root by iteratively applying $B_n$. We can show that, under a \textit{monotonicity} condition (satisfied by the trivial bounds $0$ and $V_{max}$), applying $B_n$ can only tighten a bound and converges in a finite time.
+\citet{Hren2008optimistic} used this Bellman operator $B_n$ in their \OPD algorithm to define a pair of bounds $(L_n,\, U_n)$ at each iteration $n$. They use trivial bounds at the leaves, and backup these estimates up to the root by iteratively applying $B_n$. We can show that, under a \textit{monotonicity} condition (satisfied by the trivial bounds $0$ and $V_{max}$), applying $B_n$ can only tighten a bound and converges in a finite time.
 
 \begin{definition}[Monotonicity]
 	\begin{leftbar}[defnbar]
@@ -723,7 +722,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef {1}/({1-\discount})$. But these trivial bounds
 		\item $B_n$ preserves monotonicity and tightens monotonic bounds: $$
 		\text{if } L\leq V\leq U \text{, then } L \leq B_n(L) \leq V \leq B_n(U) \leq U;
 		$$
-		\item $(B_n^k)_k$ converges in a finite time $d_n$, where $d_n$ is the depth of $T_n$. 
+		\item The sequence $B_n^k = \underbrace{B_n \circ \dots\circ B_n}_{\text{$k$ times}} $ converges in a finite time $k=d_n$, where $d_n$ is the depth of $T_n$. 
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
@@ -733,7 +732,31 @@ This enables \citet{Hren2008optimistic} to define\footnote{We use an iteration o
 L_n \eqdef B_n^{d_n}(0), \qquad U_n \eqdef B_n^{d_n}(V_{\max}),
 \end{align}
 where $0$ is the null function.
-The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewise, we have
+The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}.
+
+\begin{algorithm}[!ht]
+	\caption{The \emph{Optimistic Planning of Deterministic Systems} (\OPD) algorithm from \citep{Hren2008optimistic}.}
+	\label{alg:opd}
+	\DontPrintSemicolon
+	\For{each iteration $n$}{
+		Compute the bounds $L_n = B_n^{d_n}(0)$ and $U_n = B_n^{d_n}(V_{\max})$.\; 
+		
+		$b_n\gets \emptyset$\;
+		
+		\While{the node $b_n\in\inte{\Tau}_n$ is internal}{
+			$b_n\gets \displaystyle\argmax_{a'\in b_n A} r(a') + \gamma U_n(a')$ \Comment*[r]{Optimistic sampling rule}
+		}
+		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
+			Simulate $r \gets r(s(b_n),a)$ and $s' \gets P(s(b_n),a)$.\;
+			
+			Add a new leaf $b_n a$ to $\Tau_{n+1}$, with associated reward $r$.\;
+		}
+	}
+	\Return $\displaystyle\argmax_{a\in A} r(s, a) + \gamma L_n(a)$. \Comment*[r]{Conservative recommendation rule}\;
+\end{algorithm}
+
+
+ Likewise, we show that the graph version $\cB_n$ verifies similar properties.
 \begin{lemma}[Properties of $\cB_n$]
 	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-graph}
@@ -745,54 +768,37 @@ The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}. Likewis
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
-which motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref{alg:opd} adapted to a graph structure.
+This motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref{alg:opd} adapted to a graph structure.
 
-\begin{algorithm}[th]
-	\caption{The \emph{Optimistic Planning of Deterministic Systems} (\OPD) algorithm from \citep{Hren2008optimistic}.}
-	\label{alg:opd}
-	\DontPrintSemicolon
-	\For{each iteration $n$}{
-		Compute the bounds $L_n = B_n^{d_n}(0)$ and $U_n = B_n^{d_n}(V_{\max})$.\; 
-		
-		$b_n$ = $\emptyset$\;
-		\While{$b_n\in\inte{\Tau}_n$}{
-			$b_n\gets \displaystyle\argmax_{a'\in b_n A} r(a') + \discount U(a')$ \Comment*[r]{Optimistic sampling rule}
-		}
-		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
-			Simulate $r, s' \sim P\left(r, s' \condbar s(b_n), a\right)$.\;
-			Add a new leaf $b_n a$ to $\Tau_{n+1}$, with associated reward $r$.
-		}
-	}
-	\Return $\displaystyle\argmax_{a\in A} r(s, a) + \discount L_n(a)$. \Comment*[r]{Conservative recommendation rule}\;
-\end{algorithm}
-
-\begin{algorithm}[th]
+\begin{algorithm}[!ht]
 	\caption{Our proposed \emph{Graph-Based Optimistic Planning for Deterministic systems} (\GBOPD) algorithm.}
 	\label{alg:gbop-d}
 	\DontPrintSemicolon
 	\For{each iteration $n$}{
 		\nl Compute the bounds $\cL_n = \cB_n^{\infty}(0)$ and $\cU_n = \cB_n^\infty(V_{\max})$.\; 
 		
-		$\hat{s}_n$ = $s_0$\;
-		\nl \While{$s_n\in\inte{\cG}_n$}{
-			$s_n\gets \displaystyle\argmax_{s'} r(s_n, a) + \discount \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
+		$s_n \gets s_0$\;
+		
+		\While{the node $s_n\in\inte{\cG}_n$ is internal}{
+			\nl $s_n\gets \displaystyle\argmax_{s'} r(s_n, a) + \gamma \cU_n(s')$ \Comment*[r]{Optimistic sampling rule}
 		}
 		\For(\Comment*[f]{Node expansion}){action $a\in A$}{
-			Simulate $r, s' \sim P\left(r, s' \condbar s_n, a\right)$.\;
-			Get or create the node $s'$ in $\cG_{n+1}$, and add the transition $(s_n,a) \rightarrow s', r$.
+			Simulate $r \gets r(s_n, a)$ and $s' \gets P(s_n,a)$.\;
+			
+			Get or create the node $s'$ in $\cG_{n+1}$, and add the transition $(s_n,a) \rightarrow s', r$.\;
 		}
 	}
-	\Return $\displaystyle\argmax_{a\in A} r(s,a) + \discount \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
+	\Return $\displaystyle\argmax_{a\in \cA} R(s,a) + \discount \cL_n(s(a))$. \Comment*[r]{Conservative recommendation rule}
 \end{algorithm}
 
 \begin{remark}[Termination and complexity]
 	\begin{leftbar}[remarkbar]
 	There are two procedures in \GBOPD that may not terminate in finite time when $\cG_n$ contains a loop:
-	\begin{enumerate*}[label=(\roman*)]
-		\item the computation of $\cB_n^\infty$ (line 1); and
-		\item the sampling rule loop (line 2),
-	\end{enumerate*}
-	In the Supplementary Material, we discuss an approximate implementation where these two procedures are stopped whenever they reach a desired accuracy $\varepsilon$, along with an analysis of the corresponding time complexity and impact on the planning performance.
+	% \begin{enumerate*}[label=(\roman*)
+		the computation of $\cB_n^\infty$ (line 1) and
+		the sampling rule loop (line 2).
+	% \end{enumerate*}
+	We handle these steps carefully in \Cref{sec:planning-technical}, where we discuss an approximate implementation in which these two procedures are stopped whenever they reach a desired accuracy $\varepsilon$, along with an analysis of the corresponding time complexity and impact on the performance.
 	\end{leftbar}
 \end{remark}
 
@@ -801,22 +807,22 @@ Though both algorithms share a similar design, we claim that using graphs provid
 \subsection{Analysis}
 \label{sec:analysis}
 
-Comparing \OPD and \GBOPD directly is difficult since they do not involve the same structure, which implies implicit differences in their behaviours. Studying them under a common framework would make these differences explicit. To leverage the analysis of \OPD by \citet{Hren2008optimistic}, we frame \GBOPD as a tree-based planning algorithm. To account for the distinction between the operators $B$ and $\cB$, we represent $\cB$ as tree backup $B$ applied on an \emph{unrolled} tree $T(\cG_n)$.
+Comparing \OPD and \GBOPD directly is difficult since they do not involve the same structure, which implies implicit differences in their behaviours. Studying them under a common framework makes these differences explicit. To leverage the analysis of \OPD by \citet{Hren2008optimistic}, we will frame \GBOPD as a tree-based planning algorithm: the graph operator $\cB$ will be represented as tree backup $B$ applied on an \emph{unrolled} tree $T(\cG_n)$, defined below.
 
 \subsubsection{Background on the sample complexity of \OPD}
 
-First, we recall the analysis of \citet{Hren2008optimistic}. We start by introducing some notations.
+First, we recall the analysis of \citet{Hren2008optimistic} and introduce some notations.
 
-\begin{definition}[Sequence values]
+\begin{lemma}[Sequence values]
 	\begin{leftbar}[defnbar]
-	The value of a finite \textbf{sequence} of actions $a\in \cA^h$ is
+	The value of a finite \textbf{sequence} of actions $a\in \cA^h$, defined in \Cref{def:sequence-values}, verifies
 	\begin{equation*}
 	\label{eq:state_value}
-	V(a) = R(s_0,a) + \discount^{h} V(s(a)),
+	V(a) = G(s_0,a) + \discount^{h} V(s(a)),
 	\end{equation*}
-	where $R(s, a) = \sum_{t=0}^{h-1} \discount^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
+	where $G(s, a) = \sum_{t=0}^{h-1} \discount^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
 	\end{leftbar}
-\end{definition}
+\end{lemma}
 
 This enables to define a measure of the difficulty of a planning problem.
 
@@ -1122,7 +1128,7 @@ C(\KLOLOP) = O(M|\Tau|) = O(MK^L).
 
 The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
 
-We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in Figure \ref{fig:tree}, while preserving the inner workings of the original algorithm.
+We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in \Cref{fig:tree}, while preserving the inner workings of the original algorithm.
 
 \begin{figure}[ht]
 	\centering
@@ -1157,12 +1163,12 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 
 \begin{proposition}[Time and memory complexity]
 	\begin{leftbar}[propositionbar]
-		Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of
+		\Cref{algo:lazy-kl-olop} has time and memory complexities of
 		\begin{equation*}
 		C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
 		\end{equation*}
 		
-		The corresponding complexity gain compared to the original Algorithm \ref{algo:kl-olop} is: 
+		The corresponding complexity gain compared to the original \Cref{algo:kl-olop} is: 
 		\begin{equation*}
 		\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
 		\end{equation*}
@@ -1183,7 +1189,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 \end{proposition}
 
 \begin{proof}
-	To prove consistency of Algorithm \ref{algo:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in Algorithm \ref{algo:lazy-kl-olop}.
+	To prove consistency of \Cref{algo:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in \Cref{algo:lazy-kl-olop}.
 	Namely, 
 	
 	\begin{equation*}
@@ -1218,11 +1224,11 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\end{paragraph}
 	
 	\begin{remark}[About children extensions]
-		We could frame Algorithm \ref{algo:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
+		We could frame \Cref{algo:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
 	\end{remark}
 	
 	\begin{lemma}[Sets construction]
-		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in Algorithm  \ref{algo:lazy-kl-olop}.
+		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{algo:lazy-kl-olop}.
 	\end{lemma}
 	\begin{proof}
 		Note that for each episode $1 \leq m \leq M - 1$, we have:
@@ -1240,7 +1246,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 		&= \Tau_{m}^+ + a^{m+1}_{1:0} + \sum_{t=0}^L a^{m+1}_{1:t}A &\text{ as } \sum_{t=1}^L a^{m+1}_{1:t} \subset \sum_{t=0}^L a^{m+1}_{1:t}A\\
 		&=  \Tau_{m}^+ + \sum_{t=0}^L a^{m+1}_{1:t}A  &\text{ as }a^{m+1}_{1:0}=\emptyset \in \Tau_{0} \subset \Tau_{m} \subset \Tau_m^+
 		\end{align*}
-		This recursion is the one implemented in Algorithm \ref{algo:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
+		This recursion is the one implemented in \Cref{algo:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
 		
 		Finally, we highlight that $\LL_m^+ = \pi^+(\cA^L)$ is the set of leaves of $\Tau_{m}^+$.
 		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
@@ -1324,21 +1330,21 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	However, we have:
 	
 	\begin{align*}
-	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by Lemma \ref{lemma:value-conservation}} \\
+	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by Lemma \Cref{lemma:value-conservation}} \\
 	&= {\pi_m^+}^{-1}\left(\argmax_{a\in {\pi_m^+}(\cA^L)} U_{a}(m)\right) & \\
 	&= \left\{b\in{\pi_m^+}^{-1}(a) : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \\
-	&= \left\{b\in a \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by Lemma \ref{lemma:inverse-proj}} 
+	&= \left\{b\in a \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by Lemma \Cref{lemma:inverse-proj}} 
 	\end{align*}
 	
-	Thus, at each episode the sequence of actions $a^m$ sampled by Algorithm \ref{algo:lazy-kl-olop} could have been sampled by Algorithm \ref{algo:kl-olop} as well.
+	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{algo:lazy-kl-olop} could have been sampled by \Cref{algo:kl-olop} as well.
 	
 	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
 	% \qed
 \end{proof}
 
-\subsection{Supplementary proofs of Theorem \ref{thm:regret}}
+\subsection{Supplementary proofs of \Cref{thm:regret}}
 
-\subsubsection{Lemma \ref{lemma:expected-regret}}
+\subsubsection{Proof of \Cref{lemma:expected-regret}}
 \begin{proof}
 	The proof is identical to that of Lemma 4 in \citep{Bubeck2010}.
 	Since $\arg \max _{a \in A} T_{a}(M)$, and $\sum_{a \in A} T_{a}(M)=M,$ we have $T_{a(n)}(M) \geq M / K$, and thus:
@@ -1357,9 +1363,9 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\qed
 \end{proof}
 
-\subsubsection{Lemma \ref{lemma:size_Ph}}
+\subsubsection{Proof of \Cref{lemma:size_Ph}}
 \begin{proof}
-	The event $\tau^a_{h,h'}=1$ implies $a^{m+1}\in a A^*$ and \eqref{eq:sampled-enough}. This implies by Lemma \ref{lemma:sub-optimal-pull} that either \eqref{eq:cond-ukl}, \eqref{eq:cond-lkl} or \eqref{eq:cond-dkl} is satisfied. Now by Lemma \ref{lemma:ci-length} this implies that either \eqref{eq:cond-ukl} is true or \eqref{eq:cond-lkl} is true or \eqref{eq:sampled-enough-h} is false. We now prove that if \eqref{eq:P-min-size} is not satisfied then \eqref{eq:sampled-enough} is true, which clearly ends the proof.
+	The event $\tau^a_{h,h'}=1$ implies $a^{m+1}\in a A^*$ and \eqref{eq:sampled-enough}. This implies by \Cref{lemma:sub-optimal-pull} that either \eqref{eq:cond-ukl}, \eqref{eq:cond-lkl} or \eqref{eq:cond-dkl} is satisfied. Now by \Cref{lemma:ci-length} this implies that either \eqref{eq:cond-ukl} is true or \eqref{eq:cond-lkl} is true or \eqref{eq:sampled-enough-h} is false. We now prove that if \eqref{eq:P-min-size} is not satisfied then \eqref{eq:sampled-enough} is true, which clearly ends the proof.
 	This follows from: For any $0 \leq t \leq h'$:
 	
 	\begin{align*}
@@ -1370,7 +1376,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	%\
 \end{proof}
 
-\subsubsection{Lemma \ref{lemma:expected-P-size}}
+\subsubsection{Proof of \Cref{lemma:expected-P-size}}
 
 \begin{proof}
 	The proof is identical to that of Lemma 9 in \citep{Bubeck2010}.
@@ -1405,23 +1411,23 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\begin{aligned}
 	\left|\mathcal{P}_{h, h^{\prime}}^{a} \setminus \cup_{h, h^{\prime}}^{s+1} \mathcal{P}_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right|=&\sum_{m=\tilde{m}}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1)=\sum_{m=0}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1) \mathbbm{1}\{\eqref{eq:P-min-size} \text { is not satisfied }\} \\ & \leq \sum_{m=0}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1) \mathbbm{1}\{\eqref{eq:cond-ukl} \text { or }\eqref{eq:cond-lkl}\} \end{aligned}
 	\end{equation*}
-	where the last inequality results from Lemma \ref{lemma:size_Ph}. Hence, we proved:
+	where the last inequality results from \Cref{lemma:size_Ph}. Hence, we proved:
 	
 	\begin{equation*}
 	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right| \leq \sum_{t=0}^{h^{\prime}} \gamma^{2\left(t-h^{\prime}\right)}\left|\mathcal{I}_{t}\right|+\sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \mathbbm{1}\{\eqref{eq:cond-ukl}\text{ or }\eqref{eq:cond-lkl}\}
 	\end{equation*}
 	
-	Taking the expectation and applying Lemma \ref{lemma:boundary-crossing-prob} yield the claimed bound for $h'\geq 1$.
+	Taking the expectation and applying \Cref{lemma:boundary-crossing-prob} yield the claimed bound for $h'\geq 1$.
 	
-	Now for $h' = 0$ we need a modified version of Lemma \ref{lemma:size_Ph}. Indeed in this case one can directly prove that $\tau_{h,0}^a(m+1)=1$ implies that either equation \eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} is satisfied (this follows from the fact that $\tau_{h,0}^a(m+1)=1$ always imply that \eqref{eq:sampled-enough-h} is true for $h'= 0$). Thus we obtain:
+	Now for $h' = 0$ we need a modified version of \Cref{lemma:size_Ph}. Indeed in this case one can directly prove that $\tau_{h,0}^a(m+1)=1$ implies that either equation \eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} is satisfied (this follows from the fact that $\tau_{h,0}^a(m+1)=1$ always imply that \eqref{eq:sampled-enough-h} is true for $h'= 0$). Thus we obtain:
 	\begin{equation*}
 	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|=\sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \tau_{h, 0}^{a}(m+1) \leq \sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \mathbbm{1}\{\eqref{eq:cond-ukl}\text{ or }\eqref{eq:cond-lkl}\}
 	\end{equation*}
-	Taking the expectation and applying Lemma \ref{lemma:boundary-crossing-prob} yield the claimed bound for $h' = 0$ and ends the proof.
+	Taking the expectation and applying \Cref{lemma:boundary-crossing-prob} yield the claimed bound for $h' = 0$ and ends the proof.
 	\qed
 \end{proof}
 
-\subsubsection{Lemma \ref{lemma:expected-plays-count}}
+\subsubsection{Proof of \Cref{lemma:expected-plays-count}}
 
 \begin{proof}
 	The proof is identical to that of Lemma 10 in \citep{Bubeck2010}:
@@ -1430,6 +1436,6 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	&\leq 2f(m)(h+1)^{2} \gamma^{2(h-2-h)}\left|\mathcal{J}_{h}\right|+\sum_{h^{\prime}=1}^{h-1} 2f(m)(h+1)^{2} \gamma^{2\left(h^{\prime}-2-h\right)} \log M\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\\
 	&=\tilde{O}\left(\left(\kappa^{\prime}\right)^{h}+\gamma^{-2 h} \sum_{h^{\prime}=1}^{h-1} \gamma^{2 h^{\prime}}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\right)
 	\end{align*}
-	Taking the expectation and applying the bound of Lemma \ref{lemma:expected-P-size} give the claimed bound.
+	Taking the expectation and applying the bound of \Cref{lemma:expected-P-size} give the claimed bound.
 	\qed
 \end{proof}
