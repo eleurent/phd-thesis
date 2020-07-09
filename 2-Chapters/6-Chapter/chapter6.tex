@@ -27,44 +27,47 @@ In this chapter, we look into the planning step in our setting where the state s
 \section{Motivation}
 
 In this chapter, we assume that an \emph{estimation oracle} provides us with a good estimate of the \gls{MDP} $(\cS, \cA, \Ps, \reward)$, and we ponder over the \emph{planning} problem: how to compute the corresponding optimal policy $\policy^\star$?
-When state-action space $\cS\times\cA$ is discrete, \glsxtrlong{DP} algorithms such as Value Iteration \citep{Bellman1957} and Policy Iteration \citep{Howard1960} enable to compute an $\epsilon$-optimal policy with a computational complexity of $\cO\left(\cS\cA\log_\gamma(\epsilon(1-\gamma))\right)$. However, when $\cS$ is continuous or large, exact \gls{DP} is not feasible. A popular solution is then to do \gls{ADP}, where the value function or policy is approximated within a given hypothesis class, at the cost of the loss of optimality.
+When state-action space $\cS\times\cA$ is discrete, \glsxtrlong{DP} algorithms such as Value Iteration \citep{Bellman1957} and Policy Iteration \citep{Howard1960} enable to compute an $\epsilon$-optimal policy with a computational complexity of $\cO\left(\cS\cA\log_\gamma(\epsilon(1-\gamma))\right)$. However, when $\cS$ is continuous or large, exact \gls{DP} is not feasible. Then, a popular solution to this issue is to perform \gls{ADP}, where the value function or policy is approximated within a given hypothesis class, at the cost of the loss of optimality.
 
-Another option is to resort to sampling-based optimisation. This family of methods does not require the full knowledge of the MDP parameters, but rather only assume access to a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \Ps{s'|s,a}$ and reward $R(s_t, a_t)$ when queried. Thus, black-box optimisation algorithms such as \gls{CEM} or \gls{CMAES} can be directly applied in the space of sequences of actions. When the action space $\cA$ is discrete\footnote{This requirement has been circumvented by the work of \citet{Coulom2007,Chaslot2008,Wang2009,Busoniu2013,Busoniu2018}}, the sequential nature of the optimisation problem is better exploited by \gls{MCTS} algorithms, which exploit the discrete action branching to build a \emph{look-ahead} tree rooted at the current state. This online planning strategy is illustrated in \Cref{fig:online-planning}.
+Another option is to resort to sampling-based optimisation. This family of methods does not require the full knowledge of the \gls{MDP} parameters, but rather only assume access to a \emph{generative model} (e.g. a simulator) which yields samples of the next state $s' \sim \Ps{s'|s,a}$ and reward $R(s_t, a_t)$ when queried. Thus, black-box optimisation algorithms such as \gls{CEM} or \gls{CMAES} can be directly applied in the space of sequences of actions. When the action space $\cA$ is discrete\footnote{This requirement has been circumvented by the work of \citet{Coulom2007,Chaslot2008,Wang2009,Busoniu2013,Busoniu2018}}, the sequential nature of the optimisation problem is better exploited by \gls{MCTS} algorithms, which leverage the discrete action branching to build a \emph{look-ahead} tree rooted at the current state. This online planning strategy is illustrated in \Cref{fig:online-planning}. At each step of real interaction, a full planning cycle of simulated trajectories is run, depicted \hlg{in green}: a look-ahead tree rooted at the current state is progressively expanded by sampling trajectories through $n$ calls to the generative model, before returning a recommendation for the estimated best action $\hat{a}_n$. The quality of recommended actions is evaluated by their \emph{simple regret}
+\begin{equation*}
+\regret(\hat{a}_n) = V(s) - Q(s, \hat{a}_n).
+\end{equation*}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[trim = {0 1.3cm 0 1.3cm}, clip, width=0.7\linewidth]{img/online_planning}
-	\caption{Online planning with a generative model. The true interaction cycle between the agent and the environment is depicted \hlb{in blue}. At each step of real interaction, a full planning cycle of simulated trajectories is run, depicted \hlg{in green}: a look-ahead tree rooted at the current state is progressively expanded by sampling trajectories through calls to the generative model, before returning a recommendation for the estimated best action.}
+	\caption{Online planning with a generative model. The true interaction cycle between the agent and the environment is depicted \hlb{in blue}. }
 	\label{fig:online-planning}
 \end{figure}
 
-\emph{Fixed-confidence} setting: run until we identify an $\epsilon$-optimal action with probability $1-\delta$, minimise the expected sample complexity.
-\emph{fixed-budget} setting where the generative model can only be called a maximum number of times, called the budget $n$. 
-For a real-time scenario like ours, fixed-budget allows provide a recommendation under a control bounded time, even if this means settling for a suboptimal action.
+There are two main frames of analysis for planning algorithms. 
+In the \emph{fixed-confidence} setting, $n$ is not fixed and the generative model is called until we can confidently identify an $\epsilon$-optimal action with probability $1-\delta$. 
+\begin{equation*}
+\probability{\regret(\hat{a}_n) \leq \epsilon} \geq 1-\delta
+\end{equation*}
+So-called \gls{PAC} algorithms verifying this property are then evaluated by their expected sample complexity 
 
-\emph{Monte-Carlo Tree Search} (\texttt{MCTS}) algorithms were historically motivated by the application of computer Go, and made a first appearance in the CrazyStone software \citet{Coulom2006}. They were later reformulated in the setting of Multi-Armed Bandits by \citet{Kocsis2006} with their \emph{Upper Confidence bounds applied to Trees} (\texttt{UCT}) algorithm. Despite its popularity \citep{Silver2016,Silver2017,Silver2018}, \texttt{UCT} has been shown to suffer from several limitations: its sample complexity can be at least doubly-exponential for some problems (e.g. when a narrow optimal path is hidden in a suboptimal branch), which is much worse than uniform planning \citep{Coquelin2007}. The \texttt{Sparse Sampling} algorithm of \citet{Kearns2002} achieves better worst-case performance, but it is still non-polynomial and doesn't adapt to the structure of the MDP. In stark contrast, the \emph{Optimistic Planning for Deterministic systems} (\OPD) algorithm considered by \citet{Hren2008} in the case of deterministic transitions and rewards exploits the structure of the cumulative discounted reward to achieve a problem-dependent polynomial bound on sample complexity. A similar line of work in a deterministic setting is that of \texttt{SOOP} and \texttt{OPC} by \citep{Busoniu2013,Busoniu2018} though they focus on continuous action spaces. \OPD was later extended to stochastic systems with the \emph{Open-Loop Optimistic Planning} (\OLOP) algorithm introduced by \citet{Bubeck2010} in the open-loop setting: we only consider sequences of actions independently of the states that they lead to. This restriction in the space of policies causes a loss of optimality, but greatly simplifies the planning problem in the cases where the state space is large or infinite. More recent work such as \texttt{St0p} \citep{Szorenyi2014} and \texttt{TrailBlazer} \citep{Grill2016} focus on the probably approximately correct (PAC) framework: rather than simply recommending an action to maximise the expected rewards, they return an $\epsilon$-approximation of the value at the root that holds with high probability. This highly demanding framework puts a severe strain on these algorithms that were developed for theoretical analysis only and cannot be applied to real problems.
+In the \emph{fixed-budget} setting, the generative model can only be called a fixed number of times $n$. Fixed-budget algorithms aim at minimising the simple regret $\expectedvalue[\regret]$ in expectation.
+In a real-time scenario, decisions need to be taken at a given frequency, even if this means settling for a suboptimal action. Therefore, we will focus on the fixed-budget setting, whose bounded computational complexity makes it more appropriate for our application.
+
+\paragraph{Related work} \gls{MCTS} algorithms were historically motivated by the application of computer Go, and made a first appearance in the CrazyStone software \citet{Coulom2006}. They were later reformulated in the setting of Multi-Armed Bandits by \citet{Kocsis2006} with their \gls{UCT} algorithm. Despite its popularity \citep{Silver2016,Silver2017,Silver2018}, \gls{UCT} has been shown to suffer from several limitations: its sample complexity can be at least doubly-exponential for some problems (e.g. when a narrow optimal path is hidden in a suboptimal branch), which is much worse than uniform planning \citep{Coquelin2007}. The \texttt{Sparse Sampling} algorithm of \citet{Kearns2002} achieves better worst-case performance, but it is still non-polynomial and doesn't adapt to the structure of the \gls{MDP}. In stark contrast, the \OPD algorithm considered by \citet{Hren2008} in the case of deterministic transitions and rewards exploits the structure of the cumulative discounted reward to achieve a problem-dependent polynomial bound on sample complexity. A similar line of work in a deterministic setting is that of \gls{SOOP} and \gls{OPC} by \citet{Busoniu2013,Busoniu2018}, who focus on continuous action spaces $\cA$. \OPD was later extended to stochastic systems with the \glsxtrfull+{OLOP} algorithm introduced by \citet{Bubeck2010} in the open-loop setting, where sequences of actions are considered independently of the states they lead to. This restriction in the space of policies causes a loss of optimality, but greatly simplifies the planning problem in cases where the state space $\cS$ is large or infinite. In the fixed-confidence setting, polynomial sample complexities have been obtained for \texttt{St0p} \citep{Szorenyi2014}, \texttt{TrailBlazer} \citep{Grill2016} and SmoothCruiser \citep{SmoothCruiser19} but the three algorithms suffer from numerical inefficiency. Indeed, \texttt{StOP} explicitly reasons about policies and storing them is very costly, while \texttt{TrailBlazer} and \texttt{SmoothCruiser} require a very large amount of recursive calls even for small \glspl{MDP}.
 
 \section{Open-loop optimistic planning}
 
-\paragraph{Contributions} The goal of this section is to study the practical performances of \OLOP when applied to numerical problems. Indeed, \OLOP was introduced along with a theoretical sample complexity analysis but no experiment was carried-out. Our contribution is threefold:
+\paragraph{Contributions} The goal of this section is to study the practical performances of \OLOP when applied to numerical problems. Indeed, \OLOP was introduced along with a theoretical sample complexity analysis but no experiment was carried-out. Our contributions are the following:	first, we show that in our experiments \OLOP is overly pessimistic, especially in the low-budget regime, and we provide an intuitive explanation by casting light on an unintended effect that alters the behaviour of \OLOP. Second, we circumvent this issue by leveraging modern tools from the bandits literature to design and analyse a modified version with tighter upper-confidence bounds called \KLOLOP. We show that we retain the asymptotic regret bounds of $\OLOP$ while improving its performances by an order of magnitude in numerical experiments.
 
-\begin{itemize}
-	\item First, we show that in our experiments \OLOP is overly pessimistic, especially in the low-budget regime, and we provide an intuitive explanation by casting light on an unintended effect that alters the behaviour of \OLOP.
-	\item Second, we circumvent this issue by leveraging modern tools from the bandits literature to design and analyse a modified version with tighter upper-confidence bounds called \KLOLOP. We show that we retain the asymptotic regret bounds of $\OLOP$ while improving its performances by an order of magnitude in numerical experiments.
-	\item Third, we provide a time and memory efficient implementation of \OLOP and \KLOLOP, bringing an exponential speedup that allows to scale these algorithms to high sample budgets.
-\end{itemize}
-
-The paper is structured as follows: in section \ref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in section \ref{sec:sample-complexity}. In section \ref{sec:time-complexity}, we propose an efficient implementation of the two algorithms. Finally in section \ref{sec:planning-experiments}, we evaluate them in several numerical experiments.
+This section is structured as follows: in \Cref{sec:kl-olop}, we present \OLOP, give some intuition on its limitations, and introduce \KLOLOP, whose sample complexity is further analysed in \Cref{sec:sample-complexity}, and whose empirical performance is evaluated in \Cref{sec:planning-experiments} in several numerical experiments.
 
 \paragraph{Notations}
-We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in A^{\ast}$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in A^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in A^t$. $A^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in A^{\ast}$ and $b\in A^{\ast}$ can be concatenated as $ab\in A^{\ast}$, the set of finite and infinite suffixes of $a$ are respectively $a A^{\ast} = \{c\in\mathcal{A}^{\star}: \exists b\in A^{\ast}$ such that $c=ab\}$ and $aA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
+We follow the notations from \citep{Bubeck2010} and use the standard notations over alphabets: a finite word $a \in \cA^{\ast}$ of length $h$ represents a sequence of actions $(a_0, \cdots, a_h) \in \cA^h$. Its prefix of length $t \leq h$ is denoted $a_{1:t} = (a_0,\cdots,a_t) \in \cA^t$. $\cA^\infty$ denotes the set of infinite sequences of actions. Two finite sequences $a\in \cA^{\ast}$ and $b\in \cA^{\ast}$ can be concatenated as $ab\in \cA^{\ast}$, the set of finite and infinite suffixes of $a$ are respectively $a \cA^{\ast} = \{c\in\mathcal{A}^{\star}: \exists b\in \cA^{\ast}$ such that $c=ab\}$ and $a\cA^\infty$ defined likewise, and the empty sequence is $\emptyset$.
 
-During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in A^t$ and receives a reward $Y_t^m$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{Y_t^m | s_t, a^m_t} \prod_{k=1}^{t-1} \probability{s_{k+1} | s_{k}, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1$ is the current state.
+During the planning process, the agent iteratively selects sequences of actions until it reaches the allowed budget of $n$ actions. More precisely, at time $t$ during the $m^{\text{th}}$ sequence, the agent played $a^m_{1:t} = a^m_1 \cdots a^m_t \in \cA^t$ and receives a reward $Y_t^m$. We denote the probability distribution of this reward as $\nu(a_{1:t}^m) = \probability{Y_t^m | s_t, a^m_t} \prod_{k=1}^{t-1} \probability{s_{k+1} | s_{k}, a_{k}^m}$, and its mean as $\mu(a_{1:t}^m)$, where $s_1$ is the current state.
 
-After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in A^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$
+After this exploration phase, the agent selects an action $a(n)$ so as to minimise the \emph{simple regret} $r_n = V - V(a(n))$, where $V=V(\emptyset)$ and $V(a)$ refers to the value of a sequence of actions $a\in \cA^h$, that is, the maximum expected discounted cumulative reward one may obtain after executing $a$
 \begin{equation}
 \label{eq:value}
-V(a) = \sup_{b\in aA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}),
+V(a) = \sup_{b\in a\cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}),
 \end{equation}
 
 
@@ -80,9 +83,9 @@ First, following \OLOP, the total sample budget $n$ is split in $M$ trajectories
 &M\text{ is the largest integer such that } M \ceil{\log M/(2 \log 1/\discount)} \leq n;\\
 &L= \ceil{\log M / (2 \log 1/\discount)}.
 \end{align*}
-The look-ahead tree of depth $L$ is denoted $\Tau = \sum_{h=0}^L A^h$.
+The look-ahead tree of depth $L$ is denoted $\Tau = \sum_{h=0}^L \cA^h$.
 
-Then, we introduce some useful definitions. Consider episode $1 \leq m \leq M$. For any $1 \leq h \leq L$ and $a\in A^h$, let 
+Then, we introduce some useful definitions. Consider episode $1 \leq m \leq M$. For any $1 \leq h \leq L$ and $a\in \cA^h$, let 
 
 
 \begin{equation*}
@@ -117,7 +120,7 @@ U_a(m) \eqdef \sum_{t=1}^h \discount^t U^{\mu}_{a_{1:t}}(m) + \frac{\discount^{h
 
 
 \noindent
-where $\frac{\discount^{h+1}}{1-\discount}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in A^L$ by taking
+where $\frac{\discount^{h+1}}{1-\discount}$ comes from upper-bounding by one every reward-to-go in the sum \eqref{eq:value}, for $t\geq h+1$. In \citep{Bubeck2010}, there is an extra step to "sharpen the bounds" of sequences $a \in \cA^L$ by taking
 
 
 \begin{equation}
@@ -133,10 +136,10 @@ We now discuss two specific implementations that differ in their choice of diver
 	\DontPrintSemicolon
 	\For{each episode $m = 1, \cdots, M$}{
 		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau$\;
-		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in A^L$\;\label{alg:b_values_compute}
-		Sample a sequence with highest B-value: $a^m \in \argmax_{a\in A^L} B_a(m-1)$\;
+		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in \cA^L$\;\label{alg:b_values_compute}
+		Sample a sequence with highest B-value: $a^m \in \argmax_{a\in \cA^L} B_a(m-1)$\;
 	}
-	\Return the most played sequence $a(n) \in \argmax_{a\in A^L} T_a(M)$
+	\Return the most played sequence $a(n) \in \argmax_{a\in \cA^L} T_a(M)$
 	\caption{General structure for Open-Loop Optimistic Planning}
 	\label{algo:kl-olop}
 \end{algorithm}
@@ -156,7 +159,7 @@ We now discuss two specific implementations that differ in their choice of diver
 	\end{tabular}
 \end{table}
 
-\subsubsection{OLOP}
+\subsubsection{\gls*{OLOP}}
 \label{sec:kl-olop-olop}
 To recover the original \OLOP algorithm of \citet{Bubeck2010} from \Cref{algo:kl-olop}, we can use a quadratic divergence $\dquad$ on $I=\mathbb{R}$ and a constant function $f_4$ defined as follows:
 \begin{equation*}
@@ -179,14 +182,14 @@ However, this property is only true if the upper-bound defined in \eqref{eq:u_mu
 	\begin{leftbar}[lemmabar]
 	We have that:
 	\begin{itemize}
-	\item if it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in A^{\ast}$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
-	\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in A^{\ast}$, then for any $a\in A^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
+	\item if it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in \cA^{\ast}$, then for any $a\in \cA^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
+	\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in \cA^{\ast}$, then for any $a\in \cA^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
 	\end{itemize}
 	\end{leftbar}
 \end{lemma}
 
 \begin{proof}
-	We prove the first proposition, and the same reasoning applies to the second. For $a\in A^L$ and $1 \leq h \leq L - 1$, we have by \eqref{eq:Ua}:
+	We prove the first proposition, and the same reasoning applies to the second. For $a\in \cA^L$ and $1 \leq h \leq L - 1$, we have by \eqref{eq:Ua}:
 	\begin{align*}
 	U_{a_{1:h+1}}(m) - U_{a_{1:h}}(m) &= \discount^{h+1}U^{\mu}_{a_{1:h+1}}(m) + \frac{\discount^{h+2}}{1-\discount} - \frac{\discount^{h+1}}{1-\discount}\\
 	&= \discount^{h+1}(\underbrace{U^{\mu}_{a_{1:h+1}}(m)}_{\in [0, 1]} - 1) \leq 0
@@ -205,7 +208,7 @@ Once the early depths have been explored sufficiently, \OLOP resumes its intende
 This consideration motivates us to leverage the recent developments in the Multi-Armed Bandits literature, and modify the upper-confidence bounds for the expected rewards $U^\mu_a(m)$ so that they respect the reward bounds.
 
 
-\subsubsection{KL-OLOP}
+\subsubsection{\gls*{KLOLOP}}
 \label{sec:kl-olop-kl-olop}
 
 \noindent
@@ -235,7 +238,7 @@ Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log
 \begin{remark}[Upper bounds sharpening]
 	\label{rmk:sharpen}
 	\begin{leftbar}[remarkbar]
-	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By Lemma \ref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of Algorithm \ref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in A^L$.
+	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By Lemma \ref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of Algorithm \ref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in \cA^L$.
 	\end{leftbar}
 \end{remark}
 
@@ -252,13 +255,13 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 \end{equation*}
 
 \begin{theorem}[Sample complexity]
-	\label{thm:regret}
+	\label{thm:regret-kl-olop}
 	\begin{leftbar}[theorembar]
 	We show that \KLOLOP enjoys the same asymptotic regret bounds as \OLOP. More precisely, for any $\kappa' > \kappa_2$, \KLOLOP satisfies:
 	
 	
 	\begin{equation*}
-	\expectedvalue r_n = \begin{cases}
+	\expectedvalue [\regret] = \begin{cases}
 	\tilde{0}\left(n^{-\frac{\log 1/\discount}{\log \kappa'}}\right), & \text{if}\ \discount\sqrt{\kappa'} > 1 \\
 	\tilde{0}\left(n^{-\frac{1}{2}}\right), & \text{if}\ \discount\sqrt{\kappa'} \leq 1
 	\end{cases}
@@ -266,89 +269,18 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 	\end{leftbar}
 \end{theorem}
 
-\subsection{Time and memory complexity}
-\label{sec:time-complexity}
+We provide a time and memory efficient implementation of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, bringing an exponential speedup that allows to scale these algorithms to high sample budgets.
 
-After having considered the sample efficiency of \OLOP and \KLOLOP, we now turn to study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
-
-The Algorithm \ref{algo:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L A^h$.
-Hence, its time and memory complexities are 
-\begin{equation}
-C(\KLOLOP) = O(M|\Tau|) = O(MK^L).
-\end{equation}
-
-The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
-
-We propose in Algorithm \ref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in Figure \ref{fig:tree}, while preserving the inner workings of the original algorithm.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{img/tree_svg-tex}
-	\caption{A representation of the tree $\Tau_m^+$, with $K = 2$ actions and after episode $m = 2$, when two sequences have been sampled. They are represented with solid lines and dots \textbullet, and they constitute the explored subtree $\Tau_m$. When extending $\Tau_m$ with the missing children of each node, represented with dashed lines and diamonds $\diamond$, we obtain the full extended subtree $\Tau_m^+$. The set of its leaves is denoted $\LL_m^+$ and shown as a dotted set.}
-	\label{fig:tree}
-\end{figure}
-
-\begin{algorithm}[tp]
-	\DontPrintSemicolon
-	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\discount) \leq n$\;
-	Let $L = \log M / (2 \log 1/\discount)$\;
-	Let $\Tau_0^+ = \LL_0^+ = \{\emptyset\}$\;
-	\For{each episode $m = 1, \cdots, M$}{
-		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau_{m-1}^+$\;
-		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in \LL_{m-1}^+$\;
-		Sample a sequence with highest B-value: $a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)$\;
-		Choose an arbitrary continuation $a^m \in aA^{L-|a|}$\tcp*{e.g. uniformly}
-		Let $\Tau_m^+ = \Tau_{m-1}^+$ and $\LL_m^+ = \LL_{m-1}^+$\;
-		\For{$t=1, \cdots, L$}{
-			\If{$a^m_{1:t} \not \in \Tau_{m}^+$}{
-				Add $a^m_{1:t-1}A$ to $\Tau_{m}^+$ and $\LL_{m}^+$\;
-				Remove $a^m_{1:t-1}$ from $\LL_{m}^+$
-			}
-		}
-	}
-	\Return the most played sequence $a(n) \in \argmax_{a\in \LL_m^+} T_a(M)$
-	\caption{Lazy Open Loop Optimistic Planning}
-	\label{algo:lazy-kl-olop}
-\end{algorithm}
-
-\begin{theorem}[Consistency]
-	\label{thm:consistency}
-	\begin{leftbar}[theorembar]
-	The set of sequences returned by Algorithm \ref{algo:lazy-kl-olop} is the same as the one returned by Algorithm \ref{algo:kl-olop}.
-	In particular, Algorithm \ref{algo:lazy-kl-olop} enjoys the same regret bounds as in Theorem \ref{thm:regret}.
-	\end{leftbar}
-\end{theorem}
-
-\begin{proposition}[Time and memory complexity]
-	\begin{leftbar}[propositionbar]
-	Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of
-	\begin{equation*}
-	C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
-	\end{equation*}
-	
-	The corresponding complexity gain compared to the original Algorithm \ref{algo:kl-olop} is: 
-	\begin{equation*}
-	\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
-	\end{equation*}
-	which highlights that only a subtree corresponding to the sample budget $n$ is processed instead of the search whole tree $\Tau$.
-	\end{leftbar}
-\end{proposition}
-\begin{proof}
-	At episode $m = 1, \cdots, M$, we compute and store in memory the reward upper-bounds and U-values of all nodes in the subtree $\Tau_m^+$. Moreover, the tree $\Tau_m^+$ is constructed iteratively by adding K nodes at most L times at each episode from 0 to $m$. Hence, $|\Tau_m^+| = O(mKL)$.
-	This yields directly $C(\texttt{Lazy KL-OLOP}) = \sum_{m=1}^M O(mKL) = O(M^2KL)$.
-\end{proof}
-
-\subsection{Proof of Theorem \ref{thm:regret}}
+\subsection{Proof of Theorem \ref{thm:regret-kl-olop}}
 \label{sec:regret-proof}
 
-
-We follow step-by step the pyramidal proof of \citep{Bubeck2010}, and adapt it to the Kullback-Leibler upper confidence bound. The adjustments resulting from the change of confidence bounds are \diff{highlighted}. The proofs of lemmas which are not significantly altered are listed in the Supplementary Material. 
+We follow step-by step the pyramidal proof of \citep{Bubeck2010}, and adapt it to the Kullback-Leibler upper confidence bound. The adjustments resulting from the change of confidence bounds are \diff{highlighted}. The proofs of lemmas which are not significantly altered are listed in \Cref{sec:planning-technical}. 
 
 We start by recalling their notations.
-Let $1 \leq H \leq L$ and $a^{\star} \in A^L$ such that $V(a^{\star}) = V$.
+Let $1 \leq H \leq L$ and $a^{\star} \in \cA^L$ such that $V(a^{\star}) = V$.
 Considering sequences of actions of length $1 \leq h \leq H$, we define the subset $\mathcal{I}_h$ of near-optimal sequences and the subset $\mathcal{J}$ of sub-optimal sequences that were near-optimal at depth $h-1$
 \begin{equation*}
-\mathcal{I}_h = \left\{a \in A^h: V - V(a) \leq 2\frac{\discount^{h+1}}{1-\discount}\right\}, \mathcal{J}_h = \left\{a \in A^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
+\mathcal{I}_h = \left\{a \in \cA^h: V - V(a) \leq 2\frac{\discount^{h+1}}{1-\discount}\right\}, \mathcal{J}_h = \left\{a \in \cA^h: a_{1:h-1} \in \mathcal{I}_{h-1} \text{ and } a \not\in \mathcal{I}_h\right\}
 \end{equation*}
 
 By convention, $\mathcal{I}_0 = \{\emptyset\}$. From the definition of $\kappa_2$, we have that for any $\kappa'>\kappa_2$, there exists a constant C such that for any $h \geq 1$,
@@ -357,9 +289,9 @@ $|\mathcal{I}_h| \leq C {\kappa'}^h$
 %\end{equation*}
 Hence, we also have $|\mathcal{J}_h| \leq K|\mathcal{I}_{h-1}| = O({\kappa'}^h)$.
 
-Now, for $1\leq m \leq M$, $a \in A^t$ with $t \leq h$, $h'<h$, we define the set $\mathcal{P}^a_{h,h'}(m)$ of suffixes of $a$ in $\mathcal{J}_h$ that have been played at least a certain number of times
+Now, for $1\leq m \leq M$, $a \in \cA^t$ with $t \leq h$, $h'<h$, we define the set $\mathcal{P}^a_{h,h'}(m)$ of suffixes of $a$ in $\mathcal{J}_h$ that have been played at least a certain number of times
 \begin{equation*}
-\mathcal{P}^a_{h,h'}(m) = \left\{ b\in a A^{h-t}\cap \mathcal{J}_h : T_b(m) \geq \diff{2f(m)}(h+1)^2\discount^{2(h'-h+1)} + 1 \right\}
+\mathcal{P}^a_{h,h'}(m) = \left\{ b\in a \cA^{h-t}\cap \mathcal{J}_h : T_b(m) \geq \diff{2f(m)}(h+1)^2\discount^{2(h'-h+1)} + 1 \right\}
 \end{equation*}
 
 and the random variable
@@ -384,7 +316,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 \begin{lemma}[Conditions for sub-optimal pull]
 	\label{lemma:sub-optimal-pull}
 	\begin{leftbar}[lemmabar]
-	Assume that at step $m+1$ we select a sub-optimal sequence $a^{m+1}$: there exist $0 \leq h \leq L,  a\in \mathcal{J}_h$ such that $a^{m+1} \in aA^{\ast}$. Then, it implies that one of the following propositions is true:
+	Assume that at step $m+1$ we select a sub-optimal sequence $a^{m+1}$: there exist $0 \leq h \leq L,  a\in \mathcal{J}_h$ such that $a^{m+1} \in a\cA^{\ast}$. Then, it implies that one of the following propositions is true:
 	\begin{equation}
 	\label{eq:cond-ukl}
 	\tag{UCB violation}
@@ -405,7 +337,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in A^L}  U_a(m)$ and $a^{\star}\in A^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
+	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see Remark \ref{rmk:sharpen} and Lemma \ref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by Algorithm \ref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in \cA^L}  U_a(m)$ and $a^{\star}\in \cA^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
 	
 	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
@@ -515,7 +447,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\begin{equation*}
 	\diff{\dber(p, q) \leq C   \implies 2(q - p)^2 < C  \implies p - \sqrt{C/2} < q < p + \sqrt{C/2}}
 	\end{equation*}
-	\diff{And thus, for all $b\in A^{\ast}$, by definition of $U^{\mu}$ and $L^{\mu}$:}
+	\diff{And thus, for all $b\in \cA^{\ast}$, by definition of $U^{\mu}$ and $L^{\mu}$:}
 	\begin{align*}
 	\diff{U^{\mu}_{b}(m) - L^{\mu}_{b}(m) \leq \frac{S_b(m)}{T_b(m)} + \sqrt{\frac{f(m)}{2T_b(m)}} -  \left(\frac{S_b(m)}{T_b(m)} - \sqrt{\frac{f(m)}{2T_b(m)}}\right) 
 		= \sqrt{\frac{2f(m)}{T_b(m)}}}
@@ -585,20 +517,21 @@ Thus, the claimed bounds are obtained in both cases as long as we can impose $\D
 \sum_{m=1}^M \delta_m = O(M^{-1})\quad \text{and}\quad f(m)\log (m) e^{-f(m)} = O(\delta_m)
 \end{equation}
 
-By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the corresponding \KLOLOP algorithm does achieve the regret bound claimed in Theorem \ref{thm:regret}.
+By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the corresponding \KLOLOP algorithm does achieve the regret bound claimed in Theorem \ref{thm:regret-kl-olop}.
 
 
-\subsection{Experiments and Conclusion}
+\subsection{Experiments}
 \label{sec:planning-experiments}
 
 We have performed some numerical experiments to evaluate and compare the following planning algorithms\footnote[1]{The source code is available at \url{https://eleurent.github.io/kl-olop/}}:
 \begin{itemize}
 	\item \texttt{Random}: returns a random action, we use it as a minimal performance baseline.
 	\item \OPD: the \emph{Optimistic Planning for Deterministic systems} from \citep{Hren2008}, used as a baseline of optimal performance. This planner is only suited for deterministic environments, and exploits this property to obtain faster rates. However, it is expected to fail in stochastic environments.
-	\item \OLOP: as described in section \ref{sec:kl-olop-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in Section \ref{sec:time-complexity}, otherwise the exponential running-time would have been prohibitive.}
-	\item \KLOLOP: as described in section \ref{sec:kl-olop-kl-olop}.\footnotemark[2]
+	\item \OLOP: as described in subsection \ref{sec:kl-olop-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in \Cref{sec:kl-olop-time}, otherwise the exponential running-time would have been prohibitive.}
+	\item \KLOLOP: as described in subsection \ref{sec:kl-olop-kl-olop}.\footnotemark[2]
 	\item \KLOLOP(1): an aggressive version of \KLOLOP where we used $f_1(m) = \log M$ instead of $f_2(m)$. This threshold function makes the upper bounds even tighter, at the cost of an increased probability of violation. Hence, we expect this solution to be more efficient in close-to-deterministic environments. However, since we have no theoretical guarantee concerning its regret as we do with $\KLOLOP$, it might not be conservative enough and converge too early to a suboptimal sequence, especially in highly stochastic environments.
 \end{itemize}
+%TODO: probleme de reference des sous-sections dans le itemize.
 
 They are evaluated on the following tasks, using a discount factor of $\discount=0.8$:
 \begin{itemize}
@@ -641,7 +574,7 @@ They are evaluated on the following tasks, using a discount factor of $\discount
 
 The results of our experiments are shown in Figure \ref{fig:experiments}. The \OPD algorithm converges very quickly to the optimal return in the two first environments, shown in Figure \ref{sub:highway} and Figure \ref{sub:gridworld}, because it exploits their deterministic nature: it needs neither to estimate the rewards through upper-confidence bounds nor to sample whole sequences all the way from the root when expanding a leaf, which provides a significant speedup. It can be seen as an oracle allowing to measure the conservativeness of stochastic planning algorithms. And indeed, even before introducing stochasticity, we can see that \OLOP performs quite badly on the two environments, only managing to solve them with a budget in the order of $10^{3.5}$. In stark contrast, \KLOLOP makes a much better use of its samples and reaches the same performance an order of magnitude faster. This is illustrated by the expanded trees shown in Figure \ref{fig:trees}: \OPD exploits the deterministic setting and produces a sparse tree densely concentrated around the optimal trajectory. Conversely, the tree developed by \OLOP is evenly balanced, which suggests that \OLOP behaves as uniform planning as hypothesised in Section \ref{sec:kl-olop-behaviour}. \KLOLOP is more efficient and expands a highly unbalanced tree, exploring the same regions as \OPD. Furthermore, in the stochastic gridworld environment shown in Figure \ref{sub:gridworld_stoch}, we observe that the deterministic \OPD planner's performance saturates as it settles to suboptimal trajectories, as expected. Conversely, the stochastic planners all find better-performing open-loop policies, which justifies the need for this framework. Again, \KLOLOP converges an order of magnitude faster than \OLOP. Finally, \KLOLOP(1) enjoys good performance overall and displays the most satisfying trade-off between aggressiveness in deterministic environments and conservativeness in stochastic environments; hence we recommend this tuning for practical use.
 
-\subsection{Conclusion}
+\subsection*{Section conclusion}
 
 We introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Finally, we proposed an efficient implementation that benefits from a substantial speedup, facilitating its use for real-time planning applications.
 
@@ -678,11 +611,11 @@ In this work, we compare two data structures for planning in an MDP: tree and (d
 	\label{fig:structures}
 \end{figure}
 
-In a tree, a node of depth $h$ represents a sequence of actions $a\in A^h$. The \textit{root} of the tree corresponds to the empty action sequence, and hence to the initial state $s_0\in S$. At iteration $n$, we denote the current tree as $\Tau_n$. Borrowing notations from topology, we denote its set of internal nodes as $\inte{\Tau}_n$ and its set of external nodes (the leaves) as $\ext{\Tau}_n$. Note that since the MDP is deterministic, a sequence of action $a$ is associated with its final state denoted $s(a)$, but this association is not one-to-one: several sequences of action can lead to the same state, which will be represented several times in the tree.
+In a tree, a node of depth $h$ represents a sequence of actions $a\in \cA^h$. The \textit{root} of the tree corresponds to the empty action sequence, and hence to the initial state $s_0\in S$. At iteration $n$, we denote the current tree as $\Tau_n$. Borrowing notations from topology, we denote its set of internal nodes as $\inte{\Tau}_n$ and its set of external nodes (the leaves) as $\ext{\Tau}_n$. Note that since the MDP is deterministic, a sequence of action $a$ is associated with its final state denoted $s(a)$, but this association is not one-to-one: several sequences of action can lead to the same state, which will be represented several times in the tree.
 
 In a graph, the nodes represent states $s\in S$, and the edges represent transitions between states. The \textit{source} of the graph corresponds to the initial state $s_0$. At iteration $n$, we denote the current graph as $\cG_n$, its set of internal nodes as $\inte{\cG}_n$ and its set of \textit{sinks} as $\ext{\cG}_n$.
 
-Both structures are built iteratively from a single starting node, by selecting an external node (leaf or sink) to expand. The \emph{expansion} of a node $a$ or $s$ refers to calling the generative model to sample the reward $r$ and next state $s'$ for each action $a\in A$, and adding child nodes to the data structure. In a tree, the expansion of a node $a\in A^h$ always lead to the creation of new leaves that represent the suffix sequence of action $ab\in A^{h+1},\, b\in A$. The maximum depth of an expanded node in $T_n$ is denoted $d_n$. In contrast, in a graph the next state $s'$ reached from $s,a$ might already be present in $\cG_n$, in which case we add the edge between $s$ and $s'$ without creating a new node.
+Both structures are built iteratively from a single starting node, by selecting an external node (leaf or sink) to expand. The \emph{expansion} of a node $a$ or $s$ refers to calling the generative model to sample the reward $r$ and next state $s'$ for each action $a\in A$, and adding child nodes to the data structure. In a tree, the expansion of a node $a\in \cA^h$ always lead to the creation of new leaves that represent the suffix sequence of action $ab\in \cA^{h+1},\, b\in A$. The maximum depth of an expanded node in $T_n$ is denoted $d_n$. In contrast, in a graph the next state $s'$ reached from $s,a$ might already be present in $\cG_n$, in which case we add the edge between $s$ and $s'$ without creating a new node.
 These data structures can be used to store information about the MDP, such as the transitions and rewards $r(s, a)$, or other informations useful for planning.
 
 
@@ -876,7 +809,7 @@ First, we recall the analysis of \citet{Hren2008optimistic}. We start by introdu
 
 \begin{definition}[Sequence values]
 	\begin{leftbar}[defnbar]
-	The value of a finite \textbf{sequence} of actions $a\in A^h$ is
+	The value of a finite \textbf{sequence} of actions $a\in \cA^h$ is
 	\begin{equation*}
 	\label{eq:state_value}
 	V(a) = R(s_0,a) + \discount^{h} V(s(a)),
@@ -893,7 +826,7 @@ This enables to define a measure of the difficulty of a planning problem.
 	\begin{equation}
 	\hlrb{\kappa = \limsup_{h\rightarrow\infty} |\hlrb{\Tau_h^\infty}|^{1/h}} \in [1, K]
 	\end{equation}
-	where $\Tau^\infty_h = \displaystyle \left\{a\in A^h: V^\star-V(a) \leq \frac{\discount^h}{1-\discount}\right\}$ is the set of near-optimal nodes at depth $h$.
+	where $\Tau^\infty_h = \displaystyle \left\{a\in \cA^h: V^\star-V(a) \leq \frac{\discount^h}{1-\discount}\right\}$ is the set of near-optimal nodes at depth $h$.
 	\end{leftbar}
 \end{definition}
 
@@ -948,7 +881,7 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	\end{equation}
 	where
 	$ \displaystyle
-	{\Tau_h^\infty(L,U)}=\left\{a\in A^h: V^\star - V(a)\leq \discount^{h}(U(a)-L(a))\right\}.
+	{\Tau_h^\infty(L,U)}=\left\{a\in \cA^h: V^\star - V(a)\leq \discount^{h}(U(a)-L(a))\right\}.
 	$
 	\end{leftbar}
 \end{definition}
@@ -983,7 +916,7 @@ In order to reproduce the behaviour of \Cref{alg:gbop-d} on a tree structure, we
 To account for this observation in the analysis, we will consider an \emph{unrolling} operator $T$ that builds a potentially infinite tree $T(\cG_n)$ containing every sequence of action that can be traversed in a graph $\cG_n$.
 
 \begin{equation}
-T(\cG_n) = \{a\in A^h: s_{t+1} \in \cG_n \text{ with } s_{t+1} = P(s_{t}, a_t)\text{ for } 0 \leq t < h\}
+T(\cG_n) = \{a\in \cA^h: s_{t+1} \in \cG_n \text{ with } s_{t+1} = P(s_{t}, a_t)\text{ for } 0 \leq t < h\}
 \end{equation}
 
 \begin{figure}[htp]
@@ -1018,7 +951,7 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 	V^\star-V(a) \leq \discount^h(U_n(a)-L_n(a)).
 	\end{equation}
 	
-	In particular, if the sampling rule samples an infinite sequence $a\in A^\infty$, it is an optimal sequence, and we write that \eqref{alg:gbop-d} also holds for $a$ with $h=\infty$.
+	In particular, if the sampling rule samples an infinite sequence $a\in \cA^\infty$, it is an optimal sequence, and we write that \eqref{alg:gbop-d} also holds for $a$ with $h=\infty$.
 	\end{leftbar}
 \end{lemma}
 
@@ -1171,3 +1104,332 @@ In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, a
 \subsection*{Conclusion}
 
 We proposed an algorithm that exploits a graph structure to plan in an MDP with a generative model under limited budget $n$. We showed that this graph structure provides a benefit compared to tree structure in the deterministic setting, in the form of an improved regret bound that depends on a smaller problem difficulty. This improvement translates to an enhanced performance in practice, and can be adapted to stochastic problems as we demonstrate experimentally.
+
+\section{Technical details}
+\label{sec:planning-technical}
+
+
+\subsection{Time and memory complexity of \KLOLOP}
+\label{sec:kl-olop-time}
+
+After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
+
+The \Cref{algo:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
+Hence, its time and memory complexities are 
+\begin{equation}
+C(\KLOLOP) = O(M|\Tau|) = O(MK^L).
+\end{equation}
+
+The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
+
+We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in Figure \ref{fig:tree}, while preserving the inner workings of the original algorithm.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/tree_svg-tex}
+	\caption{A representation of the tree $\Tau_m^+$, with $K = 2$ actions and after episode $m = 2$, when two sequences have been sampled. They are represented with solid lines and dots \textbullet, and they constitute the explored subtree $\Tau_m$. When extending $\Tau_m$ with the missing children of each node, represented with dashed lines and diamonds $\diamond$, we obtain the full extended subtree $\Tau_m^+$. The set of its leaves is denoted $\LL_m^+$ and shown as a dotted set.}
+	\label{fig:tree}
+\end{figure}
+
+\begin{algorithm}[tp]
+	\DontPrintSemicolon
+	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\discount) \leq n$\;
+	Let $L = \log M / (2 \log 1/\discount)$\;
+	Let $\Tau_0^+ = \LL_0^+ = \{\emptyset\}$\;
+	\For{each episode $m = 1, \cdots, M$}{
+		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau_{m-1}^+$\;
+		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in \LL_{m-1}^+$\;
+		Sample a sequence with highest B-value: $a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)$\;
+		Choose an arbitrary continuation $a^m \in a\cA^{L-|a|}$\tcp*{e.g. uniformly}
+		Let $\Tau_m^+ = \Tau_{m-1}^+$ and $\LL_m^+ = \LL_{m-1}^+$\;
+		\For{$t=1, \cdots, L$}{
+			\If{$a^m_{1:t} \not \in \Tau_{m}^+$}{
+				Add $a^m_{1:t-1}A$ to $\Tau_{m}^+$ and $\LL_{m}^+$\;
+				Remove $a^m_{1:t-1}$ from $\LL_{m}^+$
+			}
+		}
+	}
+	\Return the most played sequence $a(n) \in \argmax_{a\in \LL_m^+} T_a(M)$
+	\caption{Lazy Open Loop Optimistic Planning}
+	\label{algo:lazy-kl-olop}
+\end{algorithm}
+
+
+\begin{proposition}[Time and memory complexity]
+	\begin{leftbar}[propositionbar]
+		Algorithm \ref{algo:lazy-kl-olop} has time and memory complexities of
+		\begin{equation*}
+		C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
+		\end{equation*}
+		
+		The corresponding complexity gain compared to the original Algorithm \ref{algo:kl-olop} is: 
+		\begin{equation*}
+		\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
+		\end{equation*}
+		which highlights that only a subtree corresponding to the sample budget $n$ is processed instead of the search whole tree $\Tau$.
+	\end{leftbar}
+\end{proposition}
+\begin{proof}
+	At episode $m = 1, \cdots, M$, we compute and store in memory the reward upper-bounds and U-values of all nodes in the subtree $\Tau_m^+$. Moreover, the tree $\Tau_m^+$ is constructed iteratively by adding K nodes at most L times at each episode from 0 to $m$. Hence, $|\Tau_m^+| = O(mKL)$.
+	This yields directly $C(\texttt{Lazy KL-OLOP}) = \sum_{m=1}^M O(mKL) = O(M^2KL)$.
+\end{proof}
+
+\begin{proposition}[Consistency]
+	\label{prop:consistency}
+	\begin{leftbar}[propositionbar]
+		The set of sequences returned by \Cref{algo:lazy-kl-olop} is the same as the one returned by \Cref{algo:kl-olop}.
+		In particular, \Cref{algo:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret}.
+	\end{leftbar}
+\end{proposition}
+
+\begin{proof}
+	To prove consistency of Algorithm \ref{algo:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in Algorithm \ref{algo:lazy-kl-olop}.
+	Namely, 
+	
+	\begin{equation*}
+	\left\{ b\in a \cA^{L-|a|} : a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)\right\} = \argmax_{a\in \cA^L} B_a(m-1)
+	\end{equation*}
+	
+	To that end, we first introduce some useful notations:
+	
+	\begin{paragraph}{Definition}
+		% We remind that $\Tau$ refers to the whole search tree $\Tau = \sum_{h=0}^L \cA^h$.
+		Let $\Tau_m$ be the set of visited nodes after episode $m$:
+		\begin{equation*}
+		\Tau_m \eqdef \left\{a\in \cA^*: T_a(m) > 0\right\}
+		\end{equation*}
+		
+		We also define its extension $\Tau_m^+$ of visited nodes and their children:
+		\begin{equation*}
+		\Tau_m^+ \eqdef \Tau_m + \Tau_m A
+		\end{equation*}
+		
+		Now for $a\in \cA^*$, $\pi_m(a)$ (resp. $\pi_m^+(a)$) refers to its longest prefix within $\Tau_m$ (resp. $\Tau_m^+$):
+		\begin{align*}
+		\pi_m(a) &\eqdef \argmax_{b\in\Tau_m} \{|b|: a\in b \cA^* \} \\
+		\pi_m^+(a) &\eqdef \argmax_{b\in\Tau_m^+} \{|b|: a\in b \cA^* \}
+		\end{align*}
+		
+		Finally, $\LL_m$ and $\LL_m^+$ are the image of $\cA^L$ by $\pi_m$ and $\pi_m^+$, respectively.
+		\begin{align*}
+		\LL_m &\eqdef \pi_m(\cA^L) \\
+		\LL_m^+ &\eqdef \pi_m^+(\cA^L) \}
+		\end{align*}
+	\end{paragraph}
+	
+	\begin{remark}[About children extensions]
+		We could frame Algorithm \ref{algo:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
+	\end{remark}
+	
+	\begin{lemma}[Sets construction]
+		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in Algorithm  \ref{algo:lazy-kl-olop}.
+	\end{lemma}
+	\begin{proof}
+		Note that for each episode $1 \leq m \leq M - 1$, we have:
+		\begin{equation}
+		\label{eq:tau_mp1}
+		\Tau_{m+1} = \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t}
+		\end{equation}
+		Indeed, the nodes visited at least once at time $m+1$ where either already visited once at time $m$ (e.g. in $\Tau_{m}$) or have been visited for the first time during episode $m+1$, which means they are a prefix of $a^{m+1}$. The reverse is clearly true as well.
+		
+		This enables to write:
+		\begin{align*}
+		\Tau_{m+1}^+ &= \Tau_{m+1} + \Tau_{m+1}A & \text{by definition}\\
+		&= \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t} + (\Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t})A & \text{by \eqref{eq:tau_mp1}} & \\
+		&= (\Tau_{m} + \Tau_{m}A) + \sum_{t=0}^L a^{m+1}_{1:t} + \sum_{t=0}^L a^{m+1}_{1:t}A & \\
+		&= \Tau_{m}^+ + a^{m+1}_{1:0} + \sum_{t=0}^L a^{m+1}_{1:t}A &\text{ as } \sum_{t=1}^L a^{m+1}_{1:t} \subset \sum_{t=0}^L a^{m+1}_{1:t}A\\
+		&=  \Tau_{m}^+ + \sum_{t=0}^L a^{m+1}_{1:t}A  &\text{ as }a^{m+1}_{1:0}=\emptyset \in \Tau_{0} \subset \Tau_{m} \subset \Tau_m^+
+		\end{align*}
+		This recursion is the one implemented in Algorithm \ref{algo:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
+		
+		Finally, we highlight that $\LL_m^+ = \pi^+(\cA^L)$ is the set of leaves of $\Tau_{m}^+$.
+		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
+		
+		Thus, when updating $\Tau_{m-1}^+$, the set of its leaves is updated accordingly: when the children of a leaf $a^m_{1:t-1}$ are added to $\Tau_m^+$, they become new leaves in place of their parent. Hence, they are added to $\LL_m^+$ while $a^m_{1:t-1}$ is removed from it.
+		% \qed
+	\end{proof}
+	
+	\begin{lemma}[U-values conservation]
+		\label{lemma:value-conservation}
+		For all $a \in \cA^*$,
+		\begin{equation*}
+		U_a(m) = U_{\pi_m(a)}(m) = U_{\pi_m^+(a)}(m)
+		\end{equation*}
+	\end{lemma}
+	\begin{proof}
+		Let $a \in \cA^*$, denote $h=|a|$ and $h'=|\pi_m(a)|$.
+		
+		By definition of $\pi_m(a)$, $0 \leq h' \leq h$, and
+		\begin{itemize}
+			\item for $1\leq t \leq h'$, we have $a_{1:t} = {\pi_m(a)}_{1:t}$ ;
+			\item for $h'+1\leq t \leq h$, we have $a_{1:t} \not \in \Tau_m$, hence $T_{a_{1:t}}(m) = 0$ and $U^{\mu}_{a_{1:t}}(m) = 1$.
+		\end{itemize}
+		Then,
+		\begin{align*}
+		U_a(m) &= \sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma} \\
+		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{a_{1:t}}(m) + \sum_{t=h'+1}^h \gamma^t \underbrace{U^{\mu}_{a_{1:t}}(m)}_1 + \frac{\gamma^{h+1}}{1-\gamma} \\
+		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m(a)}_{1:t}}(m) + \frac{\gamma^{h'+1}}{1-\gamma} \\
+		&= U_{\pi_m(a)}(m)
+		\end{align*}
+		
+		Now, consider $\pi_m^+(a) \in \Tau_m^+$.
+		By definition, it belongs either to $\Tau_m$ or $\Tau_m A$.
+		\begin{itemize}
+			\item If $\pi_m^+(a) \in \Tau_m$, then $\pi_m^+(a) = \pi_m(a)$ and $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$.
+			\item Else, $\pi_m^+(a) \in \Tau_m A$ and $p(\pi_m^+(a)) = \pi_m(a)$.
+			
+			As $\pi_m^+(a) \not \in \Tau_m$, we have $T_{\pi_m^+(a)}(m) = 0$ and $U^{\mu}_{\pi_m^+(a)}(m) = 1$.
+			This yields:
+			
+			\begin{equation*}
+			U_{\pi_m^+(a)}(m) = \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m^+(a)}_{1:t}}(m) + \gamma^{h'+1} \underbrace{U^{\mu}_{{\pi_m^+(a)}}(m)}_1 + \frac{\gamma^{h'+2}}{1-\gamma} = U_{\pi_m(a)}(m)
+			\end{equation*}
+			
+		\end{itemize}
+		We showed that $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$, which concludes the proof.
+		% \qed
+	\end{proof}
+	
+	\begin{lemma}[Inverse projection]
+		\label{lemma:inverse-proj}
+		For all $a\in \LL_m^+$ of length $h\leq L$,
+		\begin{equation*}
+		{\pi_m^+}^{-1}(a) = a \cA^{L-h}
+		\end{equation*}
+		
+		This allows to easily pick a sequence inside ${\pi_m^+}^{-1}(a)$: just continue the sequence $a$ with a default action of $A$ (e.g. the first) until it reaches length $L$.
+	\end{lemma}
+	\begin{proof}
+		Let $a\in \LL_m^+$. 
+		
+		By definition of $\pi_m^+$, any sequence in ${\pi_m^+}^{-1}(a)$ is a suffix of $a$ of length $L$, so we clearly have the direct inclusion ${\pi_m^+}^{-1}(a) \subset a \cA^{L-h}$.
+		
+		Now for the other side: let $b\in a \cA^{L-h}$, i.e. $a=b_{1:h}$. We need to show that $\pi_m^+(b) = a$.
+		As $a\in \LL_m^+$, there exists $c\in \cA^L$ such that $\pi_m^+(c) = a$.
+		\begin{itemize}
+			\item If h = L, then $b=a$, so $b \in \LL_m^+ \subset \Tau_m^+$, and hence $\pi_m^+(b)=b=a$.
+			\item If h < L, we can show by contradiction that $a \not \in \Tau_m$. Indeed, if $a \in \Tau_m$, then $c_{1:h+1}$ is the child of a node of $\Tau_m$ and hence belongs to $\Tau_m^+$. But then, $c_{1:h+1}$ is a prefix of $c$ in $\Tau_m^+$ with greater length than $a$, which contradicts the definition of $a = \pi_m^+(c)$.
+			
+			Now, because $a \not \in \Tau_m$, it is also true for all suffixes of $a$, and in particular for $b_{1:t}$ with $h \leq t \leq L$. Indeed, we have $a^s_{1:t} = b_{1:t} \implies a^s_{1:h} = b_{1:h} = a$, so:
+			\begin{equation*}
+			T_{b_{1:t}}(m) = \sum_{s=1}^m \mathbbm{1}\{a^s_{1:t} = b_{1:t}\} \leq \sum_{s=1}^m \mathbbm{1}\{a^s_{1:h} = a\} = T_a(m) = 0
+			\end{equation*}
+			Hence, $b_{1:t} \not \in \Tau_m$ for all $h \leq t \leq L$, so in particular $b_{1:t} \not \in \Tau_m^+$ for all $h+1 \leq t \leq L$. Since $b_{1:h} = a \in \Tau_m^+$, $a$ is indeed the longest prefix of $b$ in $\Tau_m^+$, that is: $\pi_m^+(b) = a$.
+		\end{itemize}
+		We have shown the other side of the inclusion: $a \cA^{L-h} \subset {\pi_m^+}^{-1}(a)$, which entails that the two sets are in fact equal.
+		% \qed
+	\end{proof}
+	
+	We can now conclude our proof of \Cref{prop:consistency}: at episode $m$, \KLOLOP samples a sequence of action $a^m$ within the set $\argmax_{a\in \cA^L} U_a(m)$. 
+	However, we have:
+	
+	\begin{align*}
+	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by Lemma \ref{lemma:value-conservation}} \\
+	&= {\pi_m^+}^{-1}\left(\argmax_{a\in {\pi_m^+}(\cA^L)} U_{a}(m)\right) & \\
+	&= \left\{b\in{\pi_m^+}^{-1}(a) : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \\
+	&= \left\{b\in a \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by Lemma \ref{lemma:inverse-proj}} 
+	\end{align*}
+	
+	Thus, at each episode the sequence of actions $a^m$ sampled by Algorithm \ref{algo:lazy-kl-olop} could have been sampled by Algorithm \ref{algo:kl-olop} as well.
+	
+	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
+	% \qed
+\end{proof}
+
+\subsection{Supplementary proofs of Theorem \ref{thm:regret}}
+
+\subsubsection{Lemma \ref{lemma:expected-regret}}
+\begin{proof}
+	The proof is identical to that of Lemma 4 in \citep{Bubeck2010}.
+	Since $\arg \max _{a \in A} T_{a}(M)$, and $\sum_{a \in A} T_{a}(M)=M,$ we have $T_{a(n)}(M) \geq M / K$, and thus:
+	\begin{equation*}
+	\frac{M}{K}(V-V(a(n))) \leq(V-V(a(n))) T_{a(n)}(M) \leq \sum_{m=1}^{M} V-V\left(a^{m}\right)
+	\end{equation*}
+	Hence, we have, $r_{n} \leq \frac{K}{M} \sum_{m=1}^{M} V-V\left(a^{m}\right)$. Now remark that, for any sequence of actions $a\in A^L$, we have either:
+	\begin{itemize}
+		\item $a_{1 : H} \in \mathcal{I}_{H} ;$ which implies $V-V(a) \leq \frac{2 \gamma^{H+1}}{1-\gamma}$
+		\item or there exists $1\leq h \leq H$ such that $a_{1:h} \in \mathcal{J}_h$; which implies $V-V(a) \leq V-V\left(a_{1 : h-1}\right)+\frac{\gamma^{h}}{1-\gamma} \leq \frac{3 \gamma^{h}}{1-\gamma}$.
+	\end{itemize}
+	Thus we can write:
+	\begin{equation*}
+	\begin{aligned} \sum_{m=1}^{M}\left(V-V\left(a^{m}\right)\right) &=\sum_{m=1}^{M}\left(V-V\left(a^{m}\right)\right)\left(\mathbbm{1}\left\{a^{m} \in \mathcal{I}_{H}\right\}+\mathbbm{1}\left\{\exists 1 \leq h \leq H : a_{1 : h}^{m} \in \mathcal{J}_{h}\right\}\right) \\ & \leq \frac{2 \gamma^{H+1}}{1-\gamma} M+3 \sum_{h=1}^{H} \sum_{a \in \mathcal{J}_{h}} \frac{\gamma^{h}}{1-\gamma} T_{a}(M) \end{aligned}
+	\end{equation*}
+	\qed
+\end{proof}
+
+\subsubsection{Lemma \ref{lemma:size_Ph}}
+\begin{proof}
+	The event $\tau^a_{h,h'}=1$ implies $a^{m+1}\in a A^*$ and \eqref{eq:sampled-enough}. This implies by Lemma \ref{lemma:sub-optimal-pull} that either \eqref{eq:cond-ukl}, \eqref{eq:cond-lkl} or \eqref{eq:cond-dkl} is satisfied. Now by Lemma \ref{lemma:ci-length} this implies that either \eqref{eq:cond-ukl} is true or \eqref{eq:cond-lkl} is true or \eqref{eq:sampled-enough-h} is false. We now prove that if \eqref{eq:P-min-size} is not satisfied then \eqref{eq:sampled-enough} is true, which clearly ends the proof.
+	This follows from: For any $0 \leq t \leq h'$:
+	
+	\begin{align*}
+	T_{a_{1:t}}(m) &= \sum_{b\in a_{1:t}A^{h-t}} T_b(m) \geq \sum_{b\in \mathcal{P}^{a_{1:t}}_{h,h'}} T_b(m) \\
+	&\geq \left(\gamma^{2(t-h')}\right) \left(2f(m)(h+1)^2\gamma^{2(h'-h-1)}\right)\\
+	&= 2f(m)(h+1)^2\gamma^{2(t-h-1)}\,.\qquad\qquad\qed
+	\end{align*}
+	%\
+\end{proof}
+
+\subsubsection{Lemma \ref{lemma:expected-P-size}}
+
+\begin{proof}
+	The proof is identical to that of Lemma 9 in \citep{Bubeck2010}.
+	
+	\noindent
+	Let $h'\geq 1$ and $0 \leq s \leq h'$. We introduce the following random variables:
+	\begin{equation*}
+	m_{s}^{a}=\min \left(M, \min \left\{m \geq 0 :\left|\mathcal{P}_{h, h^{\prime}}^{a}(m)\right| \geq \gamma^{2\left(s-h^{\prime}\right)}\right\}\right).
+	\end{equation*}
+	We will prove recursively that,
+	\begin{equation}
+	\label{eq:toprove}
+	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}(m)\right| \leq \sum_{t=0}^{s} \gamma^{2\left(t-h^{\prime}\right)}\left|\mathcal{I}_{t}\right|+\sum_{a \in \mathcal{I}_{s}}\left|\mathcal{P}_{h, h^{\prime}}^{a} \setminus \cup_{t=0}^{s} \mathcal{P}_{h, h^{\prime}}^{a_{1:t}}\left(m_{t}^{a_{1:t}}\right)\right|
+	\end{equation}
+	The result is true for $s = 0$ since $\mathcal{I}_0 = \{\emptyset\}$ and by definition of $m^\emptyset_0$,
+	\begin{equation*}
+	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}(m)\right| \leq \gamma^{-2 h^{\prime}}+\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}(m) \setminus \mathcal{P}_{h, h^{\prime}}^{\emptyset}\left(m_{0}^{\emptyset}\right)\right|
+	\end{equation*}
+	Now let us assume that the result is true for $s<h'$. We have:
+	\begin{align*}
+	\sum_{a \in \mathcal{I}_{s}}\left|\mathcal{P}_{h, h^{\prime}}^{a}(m) \setminus \cup_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right|&=\sum_{a \in \mathcal{I}_{s+1}}\left|\mathcal{P}_{h, h^{\prime}}^{a}(m) \setminus \cup_{t=0}^{s} \mathcal{P}_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right|\\
+	&\leq \sum_{a \in \mathcal{I}_{s+1}} \gamma^{2\left(s+1-h^{\prime}\right)}+\left|\mathcal{P}_{h, h^{\prime}}^{a}(m) \setminus \cup_{t=0}^{s+1} \mathcal{P}_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right|\\
+	&= \gamma^{2\left(s+1-h^{\prime}\right)}\left|\mathcal{I}_{s+1}\right|+\sum_{a \in \mathcal{I}_{s+1}}\left|\mathcal{P}_{h, h^{\prime}}^{a}(m) \setminus \cup_{t=0}^{s+1} \mathcal{P}_{h, h^{\prime}}^{a_{1 ; t}}\left(m_{t}^{a_{1 : t}}\right)\right|
+	\end{align*}
+	which ends the proof of \eqref{eq:toprove}. Thus we proved (by taking $s=h'$ and $m=M$):
+	\begin{equation*}
+	\begin{aligned}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}(M)\right| & \leq \sum_{t=0}^{h^{\prime}} \gamma^{2\left(t-h^{\prime}\right)}\left|\mathcal{I}_{t}\right|+\sum_{a \in \mathcal{I}_{h^{\prime}}}\left|\mathcal{P}_{h, h^{\prime}}^{a}(M) \setminus \cup_{t=0}^{s+1} \mathcal{P}_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right.\\ &=\sum_{t=0}^{h^{\prime}} \gamma^{2\left(t-h^{\prime}\right)}\left|\mathcal{I}_{t}\right|+\sum_{a \in \mathcal{J}_{h}}\left|\mathcal{P}_{h, h^{\prime}}^{a}(M) \setminus \cup_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right| \end{aligned}
+	\end{equation*}
+	
+	Now, for any $a\in \mathcal{J}_h$, let $\tilde{m} = \max_{0\leq t\leq h'} m_t^{a_{1:t}}$. Note that for $m\geq \tilde{m}$, equation \eqref{eq:P-min-size} is not satisfied. Thus we have
+	\begin{equation*}
+	\begin{aligned}
+	\left|\mathcal{P}_{h, h^{\prime}}^{a} \setminus \cup_{h, h^{\prime}}^{s+1} \mathcal{P}_{h, h^{\prime}}^{a_{1 : t}}\left(m_{t}^{a_{1 : t}}\right)\right|=&\sum_{m=\tilde{m}}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1)=\sum_{m=0}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1) \mathbbm{1}\{\eqref{eq:P-min-size} \text { is not satisfied }\} \\ & \leq \sum_{m=0}^{M-1} \tau_{h, h^{\prime}}^{a}(m+1) \mathbbm{1}\{\eqref{eq:cond-ukl} \text { or }\eqref{eq:cond-lkl}\} \end{aligned}
+	\end{equation*}
+	where the last inequality results from Lemma \ref{lemma:size_Ph}. Hence, we proved:
+	
+	\begin{equation*}
+	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right| \leq \sum_{t=0}^{h^{\prime}} \gamma^{2\left(t-h^{\prime}\right)}\left|\mathcal{I}_{t}\right|+\sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \mathbbm{1}\{\eqref{eq:cond-ukl}\text{ or }\eqref{eq:cond-lkl}\}
+	\end{equation*}
+	
+	Taking the expectation and applying Lemma \ref{lemma:boundary-crossing-prob} yield the claimed bound for $h'\geq 1$.
+	
+	Now for $h' = 0$ we need a modified version of Lemma \ref{lemma:size_Ph}. Indeed in this case one can directly prove that $\tau_{h,0}^a(m+1)=1$ implies that either equation \eqref{eq:cond-ukl} or \eqref{eq:cond-lkl} is satisfied (this follows from the fact that $\tau_{h,0}^a(m+1)=1$ always imply that \eqref{eq:sampled-enough-h} is true for $h'= 0$). Thus we obtain:
+	\begin{equation*}
+	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|=\sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \tau_{h, 0}^{a}(m+1) \leq \sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \mathbbm{1}\{\eqref{eq:cond-ukl}\text{ or }\eqref{eq:cond-lkl}\}
+	\end{equation*}
+	Taking the expectation and applying Lemma \ref{lemma:boundary-crossing-prob} yield the claimed bound for $h' = 0$ and ends the proof.
+	\qed
+\end{proof}
+
+\subsubsection{Lemma \ref{lemma:expected-plays-count}}
+
+\begin{proof}
+	The proof is identical to that of Lemma 10 in \citep{Bubeck2010}:
+	\begin{align*}
+	\sum_{a \in \mathcal{J}_{h}} T_{a}(M) &= \sum_{a \in \mathcal{J}_{h} \backslash \mathcal{P}_{h, h-1}^{\emptyset}} T_{a}(M)+\sum_{h^{\prime}=1}^{h-1} \sum_{a \in \mathcal{P}_{h, h^{\prime}}^{\emptyset} \setminus \mathcal{P}_{h, h^{\prime}-1}^{\emptyset}} T_{a}(M)+\sum_{a \in \mathcal{P}_{h, 0}^{\emptyset}} T_{a}(M)\\
+	&\leq 2f(m)(h+1)^{2} \gamma^{2(h-2-h)}\left|\mathcal{J}_{h}\right|+\sum_{h^{\prime}=1}^{h-1} 2f(m)(h+1)^{2} \gamma^{2\left(h^{\prime}-2-h\right)} \log M\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\\
+	&=\tilde{O}\left(\left(\kappa^{\prime}\right)^{h}+\gamma^{-2 h} \sum_{h^{\prime}=1}^{h-1} \gamma^{2 h^{\prime}}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\right)
+	\end{align*}
+	Taking the expectation and applying the bound of Lemma \ref{lemma:expected-P-size} give the claimed bound.
+	\qed
+\end{proof}
