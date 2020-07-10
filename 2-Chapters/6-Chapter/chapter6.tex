@@ -588,7 +588,7 @@ We introduced an enhanced version of the \OLOP algorithm for open-loop online pl
 
 \subsection{On a closed-loop algorithm}
 
-We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \MDPGapE, was developed as part of a collaboration \citep{jonsson2020planning} and analysed in the fixed-confidence setting.
+We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \MDPGapE, was developed as part of a collaboration \citep{Jonsson2020planning} and analysed in the fixed-confidence setting.
 
 It relies on estimating confidence sets $\cC_t$ on the probability vector $p(\cdot|s,a)$
 $$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \leq \frac {\beta^p(n_t(s,a), n)} {n_t(s,a)}\right\},$$
@@ -656,7 +656,7 @@ A popular approach is to follow the principle of \gls{OFU} \citep[see][]{Munos14
 	\end{leftbar}
 \end{definition}
 
-Following the OFU principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010open, Busoniu2012optimistic}.
+Following the OFU principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010, Busoniu2012optimistic}.
 
 For instance, since we assume that the rewards are bounded in [0, 1], trivial bounds on $V(s)$ are
 $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
@@ -846,7 +846,7 @@ This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the su
 	\begin{align*}
 	\quad r_n = \tilde{\cO}\left( n^{-\log \frac{1}{\discount}/\hlrb{\log\kappa}}\right),
 	\end{align*}
-	where $f_n = \tilde{\cO}(n^{-\alpha})$ means that for any $\alpha'<\alpha$, $f_n = \cO(n^{-\alpha'}).$
+where $f_n = \tilde{\cO}(n^{-\alpha})$ means that for any $\alpha'<\alpha$, $f_n = \cO(n^{-\alpha'})$, for all $\alpha\in \Real_+ \cup \{+\infty\}$.
 	\end{leftbar}
 \end{theorem}
 
@@ -878,7 +878,7 @@ As shown in \Cref{fig:bellman}, in a tree the Bellman operator $B_n$ only propag
 Likewise, the recommendation rule simply uses \eqref{eq:recommendation_rule} with the trivial lower-bound $L_n = 0$. Thus, \texttt{OPD} amounts to simply using the trivial bound $(0,\, V_{\max})$ on leaf nodes, and does not make use of all the available information in $\Tau_n$ to improve these bounds.
 
 Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ provided by an oracle: $$0\leq L\leq V\leq U\leq V_{\max}.$$
-\vspace*{-0.5cm}
+
 \begin{definition}[A finer difficulty measure]
 	\begin{leftbar}[defnbar]
 	We define the near-optimal branching factor \emph{according to the bounds $(L,\,U)$} as 
@@ -990,16 +990,16 @@ Intuitively, $\kappa_\infty$ should be much lower than $\kappa$ in problems wher
 
 \subsubsection{Illustrative example}
 
-We consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \discount$, and $ r^- = r^\star - \frac{\discount}{1-\discount} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\discount} - 1\right).$ Note that the choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
+In Proposition \ref{prop:illustrative-example}, we consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \gamma$, and $ r^- = r^\star - \frac{\gamma}{1-\gamma} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\gamma} - 1\right).$ Note that this choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
 
 \begin{figure}[htp]
 	\centering
 	\includegraphics[trim={0.5cm 0.0cm 0.3cm 0.6cm}, clip, width=0.35\textwidth]{img/gbop/mdp.pdf}
-	\caption{A toy MDP with three states and $K \geq 2$ actions. We start in the top state. The first action $a_1$ is represented by \textcolor{lightgreen}{green} arrows, and all other actions $a_2, \dots, a_K$ are represented by \textcolor{Orange}{orange} arrows. The rewards are shown next to the transitions.}
+	\caption{A toy MDP with three states and $K \geq 2$ actions. We start in the top state. The first action $a_1$ is represented by \hlg{green} arrows, and all other actions $a_2, \dots, a_K$ are represented by \hlo{orange} arrows. The rewards are shown next to the transitions.}
 	\label{fig:mdp}
 \end{figure}
 
-\begin{proposition}[Comparison of branching factors]
+\begin{proposition}[Branching factors]
 	\begin{leftbar}[propositionbar]
 	\label{prop:illustrative-example}
 	The MDP $\cM$ verifies $\hlrb{\kappa = K-1}$ and $\hlgb{\kappa_\infty = 1}$.
@@ -1020,8 +1020,9 @@ The approach developed in \Cref{sec:gbopd,sec:analysis} consists in using state 
 
 \paragraph{Confidence intervals for rewards.}
 
-When the reward kernel $P\left(r \condbar s,a\right)$ is stochastic, deviation inequalities can be used to design a confidence interval $[\ell_t(s,a), u_t(s,a)]$ over its expected value $\expectedvalue\left[r | s,a\right]$. For instance, the Chernoff-Hoeffding deviation inequality was used to design confidence intervals in \citep{Kocsis06UCT,Bubeck2010open,Kaufmann2017}.
-In recent works \citep{Leurent2019practical, MDPGapE2020}, the tighter Kullback-Leibler confidence interval is preferred:
+% TODO: say that rewards can be stochastic
+When the reward kernel $P\left(r \condbar s,a\right)$ is stochastic, deviation inequalities can be used to design a confidence interval $[\ell_t(s,a), u_t(s,a)]$ over its expected value $\expectedvalue\left[r | s,a\right]$. For instance, the Chernoff-Hoeffding deviation inequality was used to design confidence intervals in \citep{Kocsis06UCT,Bubeck2010,Kaufmann2017}.
+In recent works \citep{Leurent2019practical, Jonsson2020planning}, the tighter Kullback-Leibler confidence interval is preferred:
 \begin{align*}
 u_t(s,a) &\eqdef \max \left\{v : \kl\!\big(\hat{r}_t(s,a),v\big) \leq \frac {\beta^r(n_t(s,a), n)} {n_t(s,a)} \right\},\\
 \ell_t(s,a) &\eqdef\min \left\{v : \kl\!\big(\hat{r}_t(s,a),v\big) \leq \frac {\beta^r(n_t(s,a), n)} {n_t(s,a)} \right\},
@@ -1031,22 +1032,22 @@ where $\hat{r}_t(s,a)$ is the sample mean, $\beta^r$ is an exploration function 
 \paragraph{Confidence region for transitions.}
 
 Likewise, when the transition kernel $P\left(s' \condbar s,a\right)$ is stochastic, a confidence set on the probability vector $p(\cdot|s,a)$ can be defined as
-$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \leq \frac {\beta^p(n_t(s,a), n)} {n_t(s,a)}\right\}$,
-where $\Sigma_S$ is the probability simplex over $S$, $\beta^p$ is an exploration function and $\KL(p,q)= \sum_{s \in S}  p(s) \log \tfrac{ p(s)} {{q}(s)}$ is the Kullback-Leibler divergence between categorical distributions.
+$$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \leq \frac {\beta^p(n_t(s,a), n)} {n_t(s,a)}\right\},$$
+where $\hp_t(\cdot|s,a) \eqdef n_t(s,a,\cdot) / n_t(s,a)$ is the empirical distribution, $\Sigma_S$ is the probability simplex over $S$, $\beta^p$ is an exploration function and $\KL(p,q)= \sum_{s \in S}  p(s) \log \tfrac{ p(s)} {{q}(s)}$ is the Kullback-Leibler divergence between categorical distributions.
 
 \paragraph{Bellman operator with stochasticity.}
 
-In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, MDPGapE2020}. We modify the \Cref{def:bellman} of the Bellman operator on graphs as
+In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, Jonsson2020planning}. We modify the \Cref{def:bellman} of the Bellman operator on graphs $\cB_t$ as
 
 \begin{align*}
-\cB_t^+(\cU)(s) &= \max_{a\in A} \left[u_t(s,a) + \discount \max_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a) \cU(s')\right], \\
-\cB_t^-(\cL)(s) &= \max_{a\in A} \left[\ell_t(s,a) + \discount \min_{p \in \cC_t(s,a)} \sum_{s'} p(s'|s,a)\cL(s')\right],
+\cB_t^+(\cU)(s) &= \max_{a\in A} \left[u_t(s,a) + \gamma \max_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a) \cU(s')\right], \\
+\cB_t^-(\cL)(s) &= \max_{a\in A} \left[\ell_t(s,a) + \gamma \min_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a)\cL(s')\right],
 \end{align*}
 for all $s\in\inte{\cG_n}$, where the maximum and minimum over these Kullback-Leibler confidence regions $\cC_t(s,a)$ can be computed as explained in \citep[Appendix A of][]{Filippi2010optimism}. Under the event that every confidence regions $[\ell_t(s,a), u_t(s,a)]$ and $\cC_t(s,a)$ are valid at time $t$, the \Cref{lem:properties-b-graph} still holds for $\cB_t^-, \cB_t^+$.
 
 \paragraph{Structure of the planning algorithm}
 
-In the deterministic setting, once a transition has been observed, it is known with certainty and doesn't need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt and episodic setting where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[e.g.][]{Kearns02SS,Kocsis06UCT,Bubeck2010open,Feldman14BRUE,Leurent2019practical,MDPGapE2020}. We also follow this scheme in our proposed \GBOP
+In the deterministic setting, once a transition has been observed, it is known with certainty and doesn't need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt and episodic setting where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[e.g.][]{Kearns02SS,Kocsis06UCT,Bubeck2010,Feldman14BRUE,Leurent2019practical,Jonsson2020planning}. We also follow this scheme in our proposed \Cref{alg:gbop}.
 
 \begin{algorithm}[ht]
 	\caption{\emph{Graph-Based Optimistic Planning} (\GBOP) algorithm.}
@@ -1069,27 +1070,34 @@ In the deterministic setting, once a transition has been observed, it is known w
 
 To evaluate the practical benefits of our approach, we compare graph-based and tree-based planning algorithms in various problems.
 
+\paragraph{Parameters.} In every experiment, we used $\gamma=0.95$. In \GBOPD and \GBOP, the fixed accuracy $\varepsilon=\num{1e-2}$ was used for computing $\cB_n^\infty$, and the sampling rule was stopped after reaching the depth $d^+_n = n$ (see \Cref{sec:implementation}).
+Regarding the tuning of confidence intervals in \GBOP, since the rewards are deterministic and the transitions are stochastic in both domains we used $\beta^r(n_t(s,a), n) = 0$ and $\beta^p(n_t(s,a), n) = \log n$, following the observations of \Cref{sec:kl-olop}. The maximal size $B$ of the support of the transitions $\Ps\left(s'|s,a\right)$ was also used ($B=4$ in the gridworld domain and $B=3$ in the sailing domain) to accelerate the computations of the confidence region $\cC_t$ for transitions, as explained in \citep{Jonsson2020planning}.
+
 \paragraph{Gridworld domain.}
 We consider a grid in which the agent can move in $K=4$ directions. The reward function is $0$ everywhere, except in the vicinity of a goal located at $(10, 10)$, around which the reward decreases quadratically from $1$ to $0$ in a ball of radius $5$. %: $r(x, y) = \max(1 - \frac{1}{5^2}((x-10)^2 + (y-10)^2), 0)$. 
-The \Cref{fig:deterministic-gridworld} shows number of times a state is sampled by \OPD and \GBOPD, both run with a budget $n = 5460$ and discount $\discount=0.95$. In the absence of rewards, \OPD samples sequences of actions uniformly (in a breadth-first search manner), which --because of the dynamics structure-- results in a non-uniform occupancy of the state space $S$, where the trajectories concentrate near the starting state. In contrast, \GBOPD explores uniformly in $S$, sampling each state up to four times (from its four  neighbours), until it finds the goal vicinity and finally samples the goal location indefinitely. We reproduce the experiment in the stochastic setting by adding noise on the transitions with probability $p=10\%$, and comparing \GBOP to \texttt{UCT} as we show in \Cref{fig:stochastic-gridworld}. To quantify these qualitative differences, we define an exploration score: the average distance $d(s_t, s_0)$ of sampled states to the initial state (exploration) minus the distance $d(s_t, s_g)$ to the goal state (exploitation), that we show in \Cref{fig:exploration-score}.
+The \Cref{fig:deterministic-gridworld} shows number of times a state is sampled by \OPD and \GBOPD, both run with a budget $n = 5460$ and discount $\discount=0.95$. In the absence of rewards, \OPD samples sequences of actions uniformly (in a breadth-first search manner), which --because of the dynamics structure-- results in a non-uniform occupancy of the state space $S$, where the trajectories concentrate near the starting state. In contrast, \GBOPD explores uniformly in $S$, sampling each state up to four times (from its four  neighbours), until it finds the goal vicinity and finally samples the goal location indefinitely. We reproduce the experiment in the stochastic setting by adding noise on the transitions with probability $p=10\%$, and comparing \GBOP to \texttt{UCT} as we show in \Cref{fig:stochastic-gridworld}. To quantify these qualitative differences, we define in \Cref{fig:exploration-score} an exploration score: the mean distance $d(s_t, s_0)$ of sampled states to the initial state (exploration) minus the distance $d(s_t, s_g)$ to the goal state (exploitation).
+
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_OPD.pdf}
-	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_GBOP-D.pdf}
-	\caption{State occupancies of two planning algorithms in a deterministic gridworld.}
+	\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_OPD.pdf}
+	\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_GBOP-D.pdf}
+	\caption{State occupancies of tree-based \vs graph-based planning algorithms in a deterministic gridworld.}
 	\label{fig:deterministic-gridworld}
 \end{figure}
 \begin{figure}[ht]
 	\centering
-	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_UCT.pdf}
-	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_GBOP.pdf}
-	\caption{State occupancies of two planning algorithms in a stochastic gridworld.}
+	\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_UCT.pdf}
+	\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.7cm}, clip, width=0.4\linewidth]{img/gbop/occupations_GBOP.pdf}\\
+	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.33\linewidth]{img/gbop/occupations_KL-OLOP.pdf}
+	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.33\linewidth]{img/gbop/occupations_BRUE.pdf}
+	\includegraphics[trim={1.8cm 0.7cm 1.8cm 0.7cm}, clip, width=0.33\linewidth]{img/gbop/occupations_MDP-GapE.pdf}
+	\caption{State occupancies of tree-based \vs graph-based algorithms in a stochastic gridworld.}
 	\label{fig:stochastic-gridworld}
 \end{figure}
 
 \paragraph{Sailing domain \citep{Vanderbei1996}.}
-In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, and suffers a cost (move duration) that depends on the direction of the wind which follows stochastic dynamics. \Cref{fig:sailing} shows the evolution of the simple regret $r_n$ of stochastic planning algorithms with respect to the number $n$ of oracle calls. We show the mean regret and its 95\% confidence interval computed over 500 simulations. The asymptotic log-log slope $\sigma$ provides an empirical measurement of the effective branching factor $\kappa_e = \exp(-\log(1/\discount)/\sigma)$ for each algorithm. We measure that for $n>10^{3.5}$, $\sigma \approx-0.04$ and $\kappa_e \approx 3.6$ for \texttt{BRUE}, \texttt{KL-OLOP}, \texttt{MDP-GapE}, \texttt{UCT}. In contrast, we measure $\sigma \approx-0.3$ and $\kappa_e \approx 1.2$ for \GBOP, which suggests that our result of \Cref{thm:regret-gbop} might generalize to the stochastic setting. Additional results and experimental details are provided in the Supplementary Material.
+In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, and suffers a cost (move duration) that depends on the direction of the wind which follows stochastic dynamics. \Cref{fig:sailing} shows the evolution of the simple regret $r_n$ of stochastic planning algorithms with respect to the number $n$ of oracle calls. We show the mean regret and its 95\% confidence interval computed over 500 simulations. The asymptotic log-log slope $\sigma$ provides an empirical measurement of the effective branching factor $\kappa_e = \exp(-\log(1/\discount)/\sigma)$ for each algorithm. We measure that for $n>10^{3.5}$, $\sigma \approx-0.04$ and $\kappa_e \approx 3.6$ for \texttt{BRUE}, \KLOLOP, \texttt{MDP-GapE}, \texttt{UCT}. In contrast, we measure $\sigma \approx-0.3$ and $\kappa_e \approx 1.2$ for \GBOP, which suggests that our result of \Cref{thm:regret-gbop} might generalize to the stochastic setting. 
 
 \begin{figure}[ht]
 	\centering
@@ -1107,13 +1115,30 @@ In a second experiment, a boat is sailing in $K=8$ directions to reach a goal, a
 	\caption{Benchmark of planning performances.}
 \end{figure}
 
-\subsection*{Conclusion}
+In \Cref{fig:suppl-trees}, we compare the trees $T_n$ expanded by \OPD and \texttt{KL-OLOP} to the unrolled graph $T(\cG_n)$ of \GBOPD in the deterministic gridworld domain. For clarity of the figure, we only display the nodes selected for expansion and not the entire $T(\cG_n)$ as in \Cref{fig:unroll}, since it is infinite and fractal. We observe that \OPD explores uniformly in the space of sequences, which results in a concentrated exploration in the state space as seen in \Cref{fig:deterministic-gridworld}. This phenomenon is similar to the concentration properties of martingales. \texttt{KL-OLOP} behaves similarly, but allocates its bugdet $n$ in fewer trajectories of higher length than \OPD, which results in a sparser tree and slightly better exploration (compare \Cref{fig:deterministic-gridworld} to \Cref{fig:suppl-occupancies}). In contrast, \GBOPD expands a very sparse and unbalanced tree $T(\cG_n)$ which corresponds to uniform exploration in the state space, and allows to explore deeper for the same budget $n$ (The tree is only shown up to depth $12$, but continues much deeper since the optimal transition is sampled indefinitely once it is discovered). In particular, the paths towards the goal are sampled many times, while other algorithms are still balanced at the root in terms of number of visits.
+
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics[trim={0 0.5cm 0 0.5cm}, clip, width=0.85\linewidth]{img/gbop/tree_OPD.pdf}
+	\includegraphics[trim={0 0.5cm 0 0.5cm}, clip, width=0.85\linewidth]{img/gbop/tree_KL-OLOP.pdf}
+	\includegraphics[trim={0 0.5cm 0 0.5cm}, clip, width=0.85\linewidth]{img/gbop/tree_GBOP-D.pdf}
+	\caption{Trees expanded by \OPD, by \texttt{KL-OLOP}, and sequences of actions sampled by \GBOPD. The width of edges is proportional to the number of visits.}
+	\label{fig:suppl-trees}
+\end{figure}
+
+
+\subsection*{Section conclusion}
 
 We proposed an algorithm that exploits a graph structure to plan in an MDP with a generative model under limited budget $n$. We showed that this graph structure provides a benefit compared to tree structure in the deterministic setting, in the form of an improved regret bound that depends on a smaller problem difficulty. This improvement translates to an enhanced performance in practice, and can be adapted to stochastic problems as we demonstrate experimentally.
 
 \section{Technical details}
 \label{sec:planning-technical}
 
+
+\paragraph{Outline}
+In \Cref{sec:kl-olop-time}, we ... 
+%TODO rediger
 
 \subsection{Time and memory complexity of \KLOLOP}
 \label{sec:kl-olop-time}
@@ -1252,7 +1277,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
 		
 		Thus, when updating $\Tau_{m-1}^+$, the set of its leaves is updated accordingly: when the children of a leaf $a^m_{1:t-1}$ are added to $\Tau_m^+$, they become new leaves in place of their parent. Hence, they are added to $\LL_m^+$ while $a^m_{1:t-1}$ is removed from it.
-		% \qed
+		% 
 	\end{proof}
 	
 	\begin{lemma}[U-values conservation]
@@ -1293,7 +1318,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 			
 		\end{itemize}
 		We showed that $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$, which concludes the proof.
-		% \qed
+		% 
 	\end{proof}
 	
 	\begin{lemma}[Inverse projection]
@@ -1323,26 +1348,134 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 			Hence, $b_{1:t} \not \in \Tau_m$ for all $h \leq t \leq L$, so in particular $b_{1:t} \not \in \Tau_m^+$ for all $h+1 \leq t \leq L$. Since $b_{1:h} = a \in \Tau_m^+$, $a$ is indeed the longest prefix of $b$ in $\Tau_m^+$, that is: $\pi_m^+(b) = a$.
 		\end{itemize}
 		We have shown the other side of the inclusion: $a \cA^{L-h} \subset {\pi_m^+}^{-1}(a)$, which entails that the two sets are in fact equal.
-		% \qed
+		% 
 	\end{proof}
 	
 	We can now conclude our proof of \Cref{prop:consistency}: at episode $m$, \KLOLOP samples a sequence of action $a^m$ within the set $\argmax_{a\in \cA^L} U_a(m)$. 
 	However, we have:
 	
 	\begin{align*}
-	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by Lemma \Cref{lemma:value-conservation}} \\
+	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by \Cref{lemma:value-conservation}} \\
 	&= {\pi_m^+}^{-1}\left(\argmax_{a\in {\pi_m^+}(\cA^L)} U_{a}(m)\right) & \\
 	&= \left\{b\in{\pi_m^+}^{-1}(a) : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \\
-	&= \left\{b\in a \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by Lemma \Cref{lemma:inverse-proj}} 
+	&= \left\{b\in a \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by \Cref{lemma:inverse-proj}} 
 	\end{align*}
 	
 	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{algo:lazy-kl-olop} could have been sampled by \Cref{algo:kl-olop} as well.
 	
 	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
-	% \qed
+	% 
 \end{proof}
 
-\subsection{Supplementary proofs of \Cref{thm:regret}}
+\subsection{Implementation details for \GBOP}
+\label{sec:implementation}
+
+In this section, we provide more details about the implementation of \GBOPD and \GBOP. First, we discuss how two procedures can be approximated so that they terminate in finite time, and study the impact of this approximation on the regret guarantees. Second, we propose a lazy implementation of the bounds computation through $\cB_n^\infty$ that only considers a subset of nodes to update.
+
+\subsubsection{Termination}
+
+\paragraph{Bounds computation}
+
+The bounds computation step $\cB_n^\infty$ (line 1 of \GBOPD) can converge in infinite time whenever $\cG_n$ contains a loop, as shown in \Cref{fig:simple_loop}. We consider the effect of stopping early after a fixed number of iterations $k(\varepsilon,\gamma)$.
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[trim=2.5cm 1cm 9cm 2cm, clip, width=0.1\linewidth]{img/gbop/loop.pdf}\\
+	\begin{tabular}{lccccc}
+		\toprule
+		$k$ & $0$ & $1$ & $\cdots$ & $k$ \\
+		\midrule
+		$\cU = \cB^k(V_{\max})(s)$ & $V_{\max}$ & $\frac{1}{2} + \gamma V_{\max}$ && $\frac{1}{2}(1-\gamma^k)V_{\max} + \gamma^k V_{\max}$\\
+		$\cL = \cB^k(0)(s)$ & $0$ & $\frac{1}{2}$ && $\frac{1}{2}(1-\gamma^k)V_{\max}$\\
+		\bottomrule
+	\end{tabular}
+	\caption{\textbf{Top}: a simple looping MDP with $|S|=|A|=1$ after having observed a single transition ($n=1$). \textbf{Bottom}: the sequence of bounds $\cB_1^k(0)$ and $\cB_1^k(V_{\max})$. They converge geometrically to their limit $\cU_1 = \cL_1 = V = \frac{1}{2}V_{\max}$, thus in infinite time.}
+	\label{fig:simple_loop}
+\end{figure}
+
+\begin{proposition}[Time complexity of bounds computation]
+	An $\varepsilon$-approximation of $(\cL_n, \cU_n)$ can be computed by applying $\cB_n$ for a finite number $k(\epsilon,\gamma)$ of iterations, with $$k(\epsilon,\gamma) = \log_\gamma\frac{1}{\varepsilon(1-\gamma)}.$$ 
+\end{proposition}
+\begin{proof}
+	$\cB_n$ is a $\gamma$-contraction by Lemma \ref{lem:properties-b-graph}, and $\cU_n$ (resp $\cL_n$) is at a distance (in $\|\dot\|_\infty$) at most $V_{\max}$ of the initial value bound $V_{\max}$ (resp $0$). Thus, the $k^{\text{th}}$ application of $\cB_n$ decreases this error by a factor $\gamma^k$, which gives the result.
+	\end{proof}
+
+The impact of using an $\varepsilon$-approximation of $(\cL_n, \cU_n)$ during planning is the following:
+\begin{proposition}[Effect of early stopping]
+	\label{prop:early-stopping}
+	Denote the approximate bounds $(\hat{\cL}_n, \hat{\cU}_n)$ obtained by applying $\cB_n^{k(\varepsilon,\gamma)}$ instead of $\cB_n^\infty$, and likewise $(\hat{L}_n, \hat{U}_n)$ in their tree version obtained by applying $B_n^{k(\varepsilon,\gamma)}$ instead of $B_n^\infty$.
+	Then, running \GBOPD with $\hat{\cL}_n, \hat{\cU}_n$ gives the following regret:
+	\begin{align*}
+	r_n = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlob{\log \hat{\kappa}_\infty}}\right),
+	\end{align*}
+	with $$\hlgb{{\kappa}_\infty} \leq \hlob{\hat{\kappa}_\infty \eqdef \lim_{n\rightarrow\infty} \kappa(\hat{L}_n, \hat{U}_n)} \leq \hlrb{\kappa}.$$
+	Moreover, the approximation gap $\hlgb{\kappa_\infty} - \hlob{\hat{\kappa}_\infty}$ is non-increasing with respect to $\varepsilon$.
+\end{proposition}
+It is difficult to control more explicitly the gap between $\hlgb{\kappa_\infty}$ and $\hlob{\hat{\kappa}_\infty}$, which might be discontinuous with $\varepsilon$.
+
+\begin{proof}
+	Note that $\hat{L}_n$ and $\hat{U}_n$ are valid monotonic bounds on $V$, verifying
+	\[0\leq \hat{L}_n\leq {L}_n \leq V \leq {U}_n\leq \hat{U}_n \leq V_{\max}.\]
+	Thus, Lemma \ref{lem:bounds} holds with the difference that we only have an inequality $\overline{U_n}(a) \geq \max_{a'\in a A^\infty} \overline{U}(a')$ rather than an equality, by monotonicity but non-invariance by $B_n$. However, this was the actual inequality used in Lemma \ref{lem:expansion-bound}, which still holds by replacing $L_n,U_n$ by their approximation $\hat{L}_n,\hat{U}_n$. Likewise, Lemma \ref{lem:recommendation-bound} holds. The proof of \Cref{thm:regret-gbop}, can be written with the modification that expanded nodes belong to $T_h^\infty(\hat{L}_n, \hat{U}_n))$, which gives the claimed bound.
+	
+	As $\varepsilon$ decreases, $k(\epsilon,\gamma)$ increases, which means by Lemma \ref{lem:properties-b-tree} that $(\hat{\cL}_n, \hat{\cU}_n)$ get tighter and $\hlob{\hat{\kappa}_\infty}$ shrinks by Lemma \ref{lem:shrink}. It reaches its minimum $\hlgb{\kappa_\infty}$ when $\varepsilon=0$.
+	\end{proof}
+
+Thus, we observe that there is a \emph{tradeoff} between the time complexity $k(\varepsilon)$ and the sample complexity $\hlob{\hat{\kappa}_\infty}$: decreasing one increases the other.
+
+Note that \OPD uses $d_n$ iterations of $B_n$, which corresponds to a tuning of $\varepsilon$ with $n$: $\varepsilon_n = \frac{\gamma^{d_n}}{1-\gamma} = \cO(n^{-\frac{\log 1/\gamma}{\log \kappa}})$. 
+
+
+\paragraph{Sampling rule}
+
+The sampling rule of \GBOPD (line 2 of \GBOPD) can yield an infinite sequence $b_n$. We propose to stop the sampling after a fixed depth $d^+_n$.
+
+\begin{proposition}[Time complexity of sampling]
+	Consider the variant of \GBOPD where we stop the sampling rule when reaching a fixed depth $d^+_n$ chosen polynomial with $n$:
+	\[d^+_n = \ceil{\alpha n^\beta},\; \text{with }\alpha,\beta > 0\]
+	Then, the regret bound of \Cref{thm:regret-gbop} (or that of Proposition \ref{prop:early-stopping} when using early stopping in the bounds computation) still holds.
+\end{proposition}
+
+Note that this is not too constraining compared to \OPD, for which the sampling rule complexity $d_n$ is upper-bounded by $n$. Hence, by choosing $\alpha=\beta=1$, \GBOPD preserve the same complexity as \OPD in the worst case.
+
+\begin{proof}
+	Let $\kappa'>\hlgb{{\kappa}_\infty}$ (or $\kappa'>\hlob{\hat{\kappa}_\infty}$ under approximate bounds). In the proof of \Cref{thm:regret-gbop}, it is shown that the maximum depth $d_n$ of an expanded node is at least $d^-_n \eqdef \log_{\kappa'}\frac{n-C_0}{C_1'}$, which allows to conclude with Lemma \ref{lem:recommendation-bound} that $r_n = \cO(\gamma^{d_n}) = \cO(\gamma^{d^-_n})$. By choosing $d^+_n$ polynomial, we have that $d^+_n$ is greater than $d^-_n$ for $n$ sufficiently high. Thus, by stopping the sampling after reaching a depth $d^+_n$, we have that $r_n \leq \gamma^{\min\{d_n, d^+_n\}} / (1-\gamma) = \cO(\gamma^{d^-_n}) = \cO(n^{\frac{-\log 1/\gamma}{\log \kappa'}})$
+	\end{proof}
+
+\subsubsection{Efficient implementation of $\cB_n^\infty$}
+
+The bounds $\cL_n$ and $\cU_n$ are computed by fixed-point iteration of $\cB_n$ from the trivial bounds $(0,V_{\max})$. The naive implementation of $\cB_n$ requires to iterate over the whole set of state-action pairs in $\cG_n$. 
+Two ideas can be used to increase the efficiency of both steps:
+\begin{enumerate}[label=(\roman*)]
+	\item Instead of starting the iteration with the trivial bounds, the previous estimate $\cL_{n-1}, \cU_{n-1}$ can be used instead at iteration $n$. Since these bounds are closer to their limit ($0\leq \cL_{n-1}\leq \cL_n$ and $\cU_n\leq \cU_{n-1} \leq V_{\max}$), the fixed-point iteration will converge quicker.
+	\item In particular, since $\cL_{n-1}$ and $\cU_{n-1}$ are invariant by $\cB_n$, the the only nodes modified by a supplementary application of $\cB_n$ are the parents of only updated node: the expanded state $s_n$. Once its value is updated by $\cB_n$, the same reasoning can be applied for the next iteration of $\cB_n$: only its predecessors can be updated. Thus, we can keep track of a set $q$ of states that can be updated, for every application of $\cB_n$.
+\end{enumerate}
+These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|\cB_n^{k+1} - \cB_n^k\| \leq \frac{1-\gamma}{\gamma}\varepsilon$ is used to detect that the limit $\cB_n^\infty$ is approximated with accuracy $\varepsilon$, and stems from $\cB_n$ being a $\gamma$-contraction:
+\begin{proof}
+	$\|\cB_n^k - \cB_n^\infty\| \leq \gamma\| \cB_n^{k+1} - \cB_n^\infty\| \leq \gamma \|\cB_n^{k+1} - \cB_n^{k}\| + \gamma \|\cB_n^{k} - \cB_n^\infty\|$, with $\| \cB_n^{k+1} - \cB_n^{k}\| \leq \frac{1-\gamma}{\gamma}\varepsilon$, thus $\|\cB_n^{k} - \cB_n^\infty\| \leq \varepsilon$.
+	\end{proof}
+
+\begin{algorithm}
+	\caption{A queue-based implementation of $\cB_n^\infty$.}
+	\label{alg:queue-b-inf}
+	\KwIn{Initial bound $\cU_{n-1}$, expanded node $s_n$, accuracy $\varepsilon$}
+	\KwOut{An $\varepsilon$-approximation of $\cU_{n}$}
+	\DontPrintSemicolon
+	$\cU_n \gets \cU_{n-1}$\;
+	$q\gets [s_n]$\;
+	\While{$q$ is not empty}{
+		$s'\gets$ Pop the first node from the queue $q$\;
+		$\cU' \gets \cB_n(\cU_n)(s')$\Comment*[r]{Node backup}
+		\If(\Comment*[f]{Stopping rule}){$\cU' - \cU_n > \frac{1-\gamma}{\gamma}\varepsilon$}{
+			Push the predecessors $s$ of $s'$ to the queue $q$ \Comment*[r]{Propagation rule}
+		}
+		$\cU_n(s') \gets \cU'$\;
+	}
+	\Return $\cU_n$\;
+\end{algorithm}
+
+
+\subsection{Proofs of \KLOLOP results}
 
 \subsubsection{Proof of \Cref{lemma:expected-regret}}
 \begin{proof}
@@ -1360,7 +1493,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\begin{equation*}
 	\begin{aligned} \sum_{m=1}^{M}\left(V-V\left(a^{m}\right)\right) &=\sum_{m=1}^{M}\left(V-V\left(a^{m}\right)\right)\left(\mathbbm{1}\left\{a^{m} \in \mathcal{I}_{H}\right\}+\mathbbm{1}\left\{\exists 1 \leq h \leq H : a_{1 : h}^{m} \in \mathcal{J}_{h}\right\}\right) \\ & \leq \frac{2 \gamma^{H+1}}{1-\gamma} M+3 \sum_{h=1}^{H} \sum_{a \in \mathcal{J}_{h}} \frac{\gamma^{h}}{1-\gamma} T_{a}(M) \end{aligned}
 	\end{equation*}
-	\qed
+	
 \end{proof}
 
 \subsubsection{Proof of \Cref{lemma:size_Ph}}
@@ -1371,7 +1504,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\begin{align*}
 	T_{a_{1:t}}(m) &= \sum_{b\in a_{1:t}A^{h-t}} T_b(m) \geq \sum_{b\in \mathcal{P}^{a_{1:t}}_{h,h'}} T_b(m) \\
 	&\geq \left(\gamma^{2(t-h')}\right) \left(2f(m)(h+1)^2\gamma^{2(h'-h-1)}\right)\\
-	&= 2f(m)(h+1)^2\gamma^{2(t-h-1)}\,.\qquad\qquad\qed
+	&= 2f(m)(h+1)^2\gamma^{2(t-h-1)}\,.\qquad\qquad
 	\end{align*}
 	%\
 \end{proof}
@@ -1424,7 +1557,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|=\sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \tau_{h, 0}^{a}(m+1) \leq \sum_{m=0}^{M-1} \sum_{a \in \mathcal{J}_{h}} \mathbbm{1}\{\eqref{eq:cond-ukl}\text{ or }\eqref{eq:cond-lkl}\}
 	\end{equation*}
 	Taking the expectation and applying \Cref{lemma:boundary-crossing-prob} yield the claimed bound for $h' = 0$ and ends the proof.
-	\qed
+	
 \end{proof}
 
 \subsubsection{Proof of \Cref{lemma:expected-plays-count}}
@@ -1437,5 +1570,203 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	&=\tilde{O}\left(\left(\kappa^{\prime}\right)^{h}+\gamma^{-2 h} \sum_{h^{\prime}=1}^{h-1} \gamma^{2 h^{\prime}}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\right)
 	\end{align*}
 	Taking the expectation and applying the bound of \Cref{lemma:expected-P-size} give the claimed bound.
-	\qed
+	
 \end{proof}
+
+
+\subsection{Proof of \GBOP results}
+
+\subsubsection{Proof of Lemma \ref{lem:properties-b-tree}}
+\begin{proof}
+The tightening property is directly obtained by definition of monotonicity.
+Let us show the preservation of monotonicity. Let $U$ a monotonic upper-bound, $a\in A^h$. Then, for any $b\in A$:
+\begin{align*}
+U(ab) \geq B(U)(ab) \implies 
+r(ab) + \gamma U(ab) \geq r(ab) + \gamma B(U)(ab).
+\end{align*}
+Thus, my taking the $\max$ on $b$,
+$
+B(U)(a) \geq B^2(U)(a).
+$
+The same can be obtained for a lower-bound $L$.
+
+The finite time convergence can be obtained by recursion from the leaves to the root, by noticing that if the value of a set of siblings $aA$ is invariant by $B$, then the value of their parent $a$ is invariant by $B^2$.
+\end{proof}
+
+\subsubsection{Proof of \Cref{lem:properties-b-graph}}
+\begin{proof}
+The proof of tightening and monotonicity preservation is the same as that of Lemma \ref{lem:properties-b-tree}.
+The contraction property is standard for the Bellman Operator, see e.g. Puterman M., Markov Decision Processes: Discrete Stochastic Dynamic Programming (2005).
+\end{proof}
+
+\subsubsection{Proof of \Cref{thm:regret-opd}}
+We recall the main steps of the proof of \citet{Hren2008optimistic}.\\
+
+\begin{enumerate}
+	\item The recommendation $a_n$ has a maximal depth $d_n$ in the tree, and its gap $r_n = V^\star - V({a_{n,1}})$ is bounded by $r_n \leq \frac{\gamma^{d_n}}{1-\gamma}$. We need to relate $d_n$ to $n$.
+	
+	\item Each expanded node belongs to $\Tau^\infty = \bigcup_{h\geq 0} \Tau_h^\infty$, where $$\Tau_h^\infty = \left\{a\in A^h: V^\star-V(a) \leq \frac{\gamma^h}{1-\gamma}\right\}.$$ Introduce the difficulty measure $\kappa$ such that $|\Tau_h^\infty| = \cO(\kappa^h)$ (the smallest).
+	
+	\item In the worst case, expanded nodes fully fill the depths of $\Tau^\infty$ up to $d_n$: $n = \sum_{d=1}^{d_n} n_d \leq  C\sum_{d=1}^{d_n} \kappa^d = \begin{cases}
+	\cO(d_n) &\text{if $\kappa=1$}\\
+	\cO(\kappa^{d_n}) &\text{else.}
+	\end{cases}$\\
+	Hence $r_n = \begin{cases}
+	\cO(\gamma^n) &\text{if $\kappa=1$}\\
+	\cO(\gamma^{\frac{\log n}{\log \kappa}}) = \cO(n^{-\frac{\log 1/\gamma}{\log \kappa}}) &\text{else.}
+	\end{cases}$
+\end{enumerate}
+
+\subsubsection{Proof of \Cref{lem:shrink}}
+
+\begin{proof}
+Let $L_2\leq L_1\leq V\leq U_1\leq U_2$, then $\Tau_h^\infty(L_1,U_1) \subset \Tau_h^\infty(L_2,U_2)$, which implies $|\Tau_h^\infty(L_1,U_1)|^{1/h} \leq |\Tau_h^\infty(L_2,U_2)|^{1/h}$ and the claimed result in the limit $h\rightarrow\infty$.
+\end{proof}
+
+\subsubsection{Proof of \Cref{thm:regret-bound-U}}
+In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \texttt{OPD}.
+
+\begin{remark}
+It no longer holds that $a_n$ must be of maximal depth $d_n$.  This is due to the fact the exploration bonus $\gamma^h U(a)$ is not depth-wise constant: consider two nodes $a,b$ at the same depth with $R(a) > R(b)$. In \texttt{OPD}, both get the same bonus $\gamma^h/(1-\gamma)$, and the node $a$ is expanded first. But with the local bonus, $b$ could be expanded in priority rather than $a$, if its own bonus is sufficiently higher than that of $a$, precisely if $R(a)+\gamma^h U(a) < R(b)+\gamma^h U(b)$. For instance, $U(a)=0$ when $a$ is known to be a terminal state while $b$ can lead to future rewards. If after expanding and exploring the subtree of $b$ we find out that $V(b) = 0$, we still return the recommendation $a$, which is of non-maximal depth.
+\end{remark}
+
+The regret bound still holds, however. First, notice that:
+\begin{lemma}[Expansion]
+\label{lem:expansion-bound-U}
+Whenever a node $a$ of depth $h$ is expanded by the optimistic algorithm, its first action $a_1$ enjoys a simple regret $V(a^\star)-V(a_1) \leq \gamma^h(U(a)-L(a))$. 
+\end{lemma}
+\begin{proof}
+Let $t$ be the time of expansion of $a$, it holds that $\overline{U}_t(b) \leq \overline{U}_t(a)$ for all $b\in \ext{\Tau}_t$, in particular those in a branch starting by an optimal action $a^\star$. Since $U=B(U)$ and $L=B(L)$, we also have $\overline{U}_t(a^\star) = \max_{b\in a^\star A^*} \overline{U}_t(b) \leq \overline{U}_t(a)$, and $\overline{L}_t(a_1) = \max{b\in a_1 A^*} \overline{L}_t(b) \geq  \overline{L}_t(a)$. Thus, $V(a^\star)-V(a_1) \leq \overline{U}_t(a^\star) - \overline{L}_t(a_1) \leq \overline{U}_t(a) - \overline{L}_t(a) = \gamma^h(U(a)-L(a))$.
+\end{proof}
+ 
+\begin{lemma}[Recommendation]
+	\label{lem:recommendation-bound-U}
+The recommended action $a_n$ has a simple regret $r_n \leq \frac{\gamma^{d_n}}{1-\gamma}$, where $d_n$ is the maximal depth of $\Tau_n$.
+\end{lemma}
+\begin{proof}
+Let $i$ a node of maximal depth $d_n$, and consider the recommended node $a_n$ at time $n$, of depth $d$. In particular, $\overline{L}_n(a_n) \geq \overline{L}_n(i)$, and since $(\overline{L}_t)_t$ is non-decreasing we also have $\overline{L}_n(i) \geq \overline{L}_t(i)$. At the time $t$ when $i$ is expanded, we have $\overline{U}_t(a_n) \leq \overline{U}_t(i)$, and since $(\overline{U}_t)_t$ is non-increasing we also have $\overline{U}_n(a_n) \leq \overline{U}_t(a_n)$. We can conclude with Lemma \ref{lem:expansion-bound-U} applied to $a_n$: $r_n \leq \gamma^d(U(a_n)-L(a_n) = \overline{U}_n(a_n) - \overline{L}_n(a_n)  \leq \overline{U}_t(a_n) - \overline{L}_n(i) \leq \overline{U}_t(i) - \overline{L}_t(i) = \gamma^{d_n}(U(i) - L(i)$, which yields the claimed bound since $U(i) - L(i) \leq V_{\max}-0$.
+\end{proof}
+
+\begin{lemma}[Near-optimal nodes]
+\label{lem:near-optimal-nodes-U}
+Every node expanded by \eqref{eq:sampling_rule} is in $\Tau^\infty(L,U) = \bigcup_{h\geq 0} \Tau^\infty_h(L,U)$.
+\end{lemma}
+\begin{proof}
+Let $a$ be a node of depth $h$ expanded at round $n$, then $\overline{U}_n(a) \geq \overline{U}_n(b)$ for all $b\in\ext{\Tau}_n$. Thus, since $U = B(U)$, we have $\overline{U}(a) = \overline{B(U)}(\emptyset) = B(U)(s_0) \geq V(s_0) = V^\star$. Thus, $V^\star - V(a) \leq \overline{U}(a) - \overline{L}(a) = \gamma^h(U(a) - L(a))$.
+\end{proof}
+
+Finally, we can move on to the proof of \Cref{thm:regret-bound-U}.
+Let $n_d$ be the number of expanded nodes of depth $d$, by Lemma \ref{lem:near-optimal-nodes-U} we have $n_d \leq |\Tau^\infty_d(L,U)| \leq C\kappa(L,U)^d$. Thus, 
+\[n = \sum_{d=1}^{d_n} n_d \leq C\sum_{d=0}^{d_n} \kappa(L,U)^d = C\frac{\kappa(L,U)^{d_n+1}-1}{\kappa(L,U)-1}\]
+Hence, $d_n \geq C'\frac{\log n}{\log\kappa(L,U)},$ which along with Lemma \ref{lem:expansion-bound-U} gives the claimed bound.
+
+Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B(U)$, then planning with $B(L),B(U)$ instead will yield the proved bound with a branching factor $\kappa(B(L),B(U))$, and since $L\leq B(L)\leq V\leq B(U)\leq U$ we have $\kappa(B(L),B(U)) \leq \kappa(L,U)$, which still gives \begin{align*}
+r_n = \cO\left(n^{-\frac{\log 1/\gamma}{\log \kappa(L,U)}}\right);
+\end{align*}
+
+%\subsection{Proof of Proposition \ref{prop:b-eq-mb}}
+
+%\begin{proof}
+%	Let $U$ equivalent to $\cU$, and $a\in T_n$.
+%	If $a\in\ext{T_n}$, then necessarily $s(a)\in\ext{\cG_n}$, and both are unchanged by $B_n$ and $\cB_n$ respectively.
+%	If $a\in\inte{T_n}$, then necessarily $s(a)\in\int{\cG_n}$. There exist a'
+%\end{proof}
+
+%\subsection{Proof of Lemma \ref{lem:properties-mb}}
+%\begin{proof}
+%Let $U_1, U_2\in \Real^\Tau_n, a\in\Tau_n$,
+%\begin{align*}
+%    (M_n^+ U_1 - M_n^+ U_2)(a) &= \min_{a'\in N_n(a)} U_1(a') - \min_{a'\in N_n(a)} U_2(a') \\
+%    &= \min_{a'\in N_n(a)} U_1(a') - U_2(a^-) \\
+%    &\leq U_1(a^-) - U_2(a^-) \\
+%    &\leq \|U_1 - U_2\|_\infty
+%\end{align*}
+%where $a^-\in \argmin_{a'\in N_n(a)} U_2(a')$. 
+%Hence, $\|M_n^+ U_1 - M_n^+ U_2\|_\infty \leq \|U_1 - U_2\|_\infty$
+%\end{proof}
+%
+%\subsection{Proof of Proposition \ref{prop:pruning}}
+%
+%\begin{proof}
+%Assume $h(a_2) \geq h(a_1)$.
+%\begin{align*}
+%    V(a_1) - V(a_2) &= R(a_1)- R(a_2) + \underbrace{\left(\gamma^{h(a_1)} - \gamma^{h(a_2)}\right)}_{\geq 0}V(s) \\
+%    &\leq R(a_1)- R(a_2) + \left(\gamma^{h(a_1)} - \gamma^{h(a_2)}\right)U(s)\\
+%    &= \overline{U}(a_1) - \overline{U}(a_2)
+%\end{align*}
+%Hence, if this last term is negative, then $V(a_1) - V(a_2)$ is as well.
+%\end{proof}
+
+\subsubsection{Proof of \Cref{lem:equivalence}}
+\begin{proof}
+	
+We first show that if $U$ is equivalent to $\cU$, meaning that for any sequence $a\in T(\cG_n)$ we have $U(a) = \cU(s(a))$, then $B_n(U)$ is equivalent to $\cB_n(\cU)$.
+
+By definition of $T(\cG_n)$, any sequence of action $a\in T(\cG_n)$ corresponds to a path $s_0, a_0,\dots, s_{h-1}, a_{h-1}, s_{h}$ in $\cG_n$. If $a\in\ext{T(\cG_n)}$, then necessarily $s(a)\in\ext{\cG_n}$, and both are unchanged by $B_n$ and $\cB_n$ respectively. Conversely, if $a\in\inte{T}(\cG_n)$, then $s(a)\in\inte{\cG_n}$ by construction. Thus, $B_n(U)(a) = \max_{b\in A} r(s(a), b) + \gamma U({ab}) = \max_{b\in A} r(s(a), b) + \gamma \cU(s({ab}))$ (by hypothesis) $= \max_{b\in A} r(s(a), b) + \gamma \cU(P(s({a}),b)) = \cB_n(\cU_n)(s(a))$.
+
+By induction, for any $k>0$ $B_n^k(U)$ is equivalent to $\cB_n^k(\cU)$, and at the limit $k\rightarrow\infty$ it comes that $U_n$ is equivalent to $\cU_n$. The same result can be shown similary for $L_n$ and $\cL_n$.
+\end{proof}
+
+\subsubsection{Proof of \Cref{lem:expansion-bound}}
+
+We start by showing a preliminary lemma.
+\begin{lemma}[Bounds of sequence values]
+	\label{lem:bounds}
+	The bounds $(\overline{L}_n, \overline{U}_n)$ on the value of sequences of actions verify are respectively non-decreasing and non-increasing with respect to $n$, and verify: for all $a\in A^*$, $\overline{U_n}(a) = \max_{a'\in a A^\infty} \overline{U}(a')$.
+\end{lemma}
+\begin{proof}
+	The second property can be easily shown by induction using the fact that $U_n$ and $L_n$ are fixed-points of $B_n$ by definition. Applying this equation at each depth $h$ gives the result. From this observation, we can deduce that $\overline{L}_n$ is increasing with $n$. Indeed, since when $T(\cG_n)$ is expanded with additional nodes compared to $T(\cG_{n-1})$, the leaves $a$ of $T(\cG_{n-1})$ with previous value $L_{n-1}(a)=0$ are updated to $L_n(a) = \max_b r(s(a), b) \geq 0 = L_{n-1}(a)$, and this increase at the leaves is then propagated through $\max_{a'\in a A^\infty}$ to any internal node $a$. Thus, $L_n$ is non-decreasing and likewise, $U_n$ is non-increasing with respect to $n$. The same is obtained directly of the bounds on sequence values $(\overline{L}_n, \overline{U}_n)$.
+\end{proof}
+
+Which enables us to proceed to the proof of Lemma \ref{lem:expansion-bound}.
+\begin{proof}
+	Let $t$ be the time of expansion of $a$, it holds that $\overline{U}_t(b) \leq \overline{U}_t(a)$ for all $b\in T(\cG_n)$. In particular for $b$ in a branch starting by an optimal action $a^\star$ $\overline{U}_t(a) \geq \max_{b\in a^\star A^*}  \overline{U}_t(b) = \overline{U}_t(a^\star)$. Thus, $V(a^\star)-V(a) \leq \overline{U}_t(a^\star) - \overline{L}_t(a) \leq \overline{U}_t(a) - \overline{L}_t(a) = \gamma^h(U_t(a)-L_t(a))$.
+\end{proof}
+
+\subsubsection{Proof of \Cref{lem:recommendation-bound}}
+\begin{proof}
+	Let $i$ an expanded node of maximal depth $d_n\in\Real\cup\{\infty\}$, and consider the recommended node $a_n$ at time $n$, of depth $d\in\Real\cup\{\infty\}$. In particular, $\overline{L}_n(a_n) \geq \overline{L}_n(i)$, and since $(\overline{L}_t)_t$ is non-decreasing we also have $\overline{L}_n(i) \geq \overline{L}_t(i)$. At the time $t$ when $i$ is expanded, we have $\overline{U}_t(a_n) \leq \overline{U}_t(i)$, and since $(\overline{U}_t)_t$ is non-increasing we also have $\overline{U}_n(a_n) \leq \overline{U}_t(a_n)$. We can conclude with Lemma \ref{lem:expansion-bound} applied to $a_n$: $r_n \leq V^\star - V(a_n) \leq  \gamma^d(U(a_n)-L(a_n) = \overline{U}_n(a_n) - \overline{L}_n(a_n)  \leq \overline{U}_t(a_n) - \overline{L}_n(i) \leq \overline{U}_t(i) - \overline{L}_t(i) = \gamma^{d_n}(U_t(i) - L_t(i)$, which yields the claimed bound since $U(i) - L(i) \leq V_{\max}-0$.
+\end{proof}
+
+
+\subsubsection{Proof of \Cref{thm:regret-gbop}}
+
+\begin{proof}
+Let $\kappa'>\kappa_\infty$. Since $\kappa(L_n,U_n)\rightarrow\kappa_\infty$, there exists $n_0\in\Natural$ such that for all $n\geq n_0$, $\kappa(L_n,U_n) \leq \kappa'$.
+By Lemma \ref{lem:expansion-bound}, at each iteration $n$ the expanded node must belong to $\Tau^\infty(L_n,U_n)$.
+Let $n\geq n_0$, and define $d_0 = \min\{d\in\Natural: \exists t \in[n_0,n], b_t\in A^d \}$. By definition, for all $d\geq d_0$, any expanded node of depth $d$ was expanded at a time $t\geq n_0$, and thus $b_t\in\Tau^\infty_t \subset\Tau^\infty_{n_0}$. We denote $n_d$ the number of expanded nodes of depth $d$. If $d_n=\infty$,then $r_n = 0$ and the bound holds. Else, we obtain
+\[
+n = \sum_{d=0}^{d_0-1}n_d + \sum_{d=d_0}^{d_n} n_d \leq  C_0 + C_1\sum_{d=d_0}^{d_n} (\kappa')^d \leq C_0 + C_1' (\kappa')^{d_n}
+\]
+And since $r_n \leq \frac{\gamma^{d_n}}{1-\gamma}$ by Lemma \ref{lem:recommendation-bound}, we obtain the claimed bound.
+
+Moreover, given a history of observed transitions up to iteration $n$, the bounds $U_n, L_n$ obtained from \eqref{eq:gbop-t-bounds} on the unrolled tree $T(\cG_n)$ are tighter than those of \eqref{eq:opd-bounds} since $T_n\subset T(\cG_n)$, which implies by Lemma \ref{lem:shrink} that $\kappa(L_n, U_n) \leq \kappa$. We obtain $\kappa_\infty \leq \kappa$ at the limit. 
+\end{proof}
+
+\subsubsection{Proof of \Cref{prop:illustrative-example}}
+
+The \Cref{fig:mdp-tree} shows the planning tree corresponding to the MDP $\cM$. Whenever the action $a_1$ is taken \textcolor{green}{(in green)} the resulting subtree is represented by a leaf node $s^\star$ of value $V^\star = \frac{r^\star}{1-\gamma}$. When, in contrast, we take a sequence of actions among $a_2\dots a_K$ \textcolor{red}{(in red)}, we stay in the state $s^+$ and denote $V_h$ the corresponding value at depth $h$.
+
+\begin{figure}
+    \centering
+    \includegraphics[trim={3.5cm 2cm 0.5cm 0.5cm}, clip, width=0.5\linewidth]{img/gbop/mdp_tree.pdf}
+    \caption{Planning tree of the MDP $\cM$ of \Cref{fig:mdp}}.
+    \label{fig:mdp-tree}
+\end{figure}
+\begin{lemma}
+ Any sequence of actions in $A\setminus{a_1}$ is in $\Tau^\infty$.
+\end{lemma}
+\begin{proof}
+Any such sequence of actions yields the sequence of rewards $r^-, r^+, \dots,r^+$. and end up in the state $s^+$ with value at least $V^\star$ (obtained by further taking $a_1$ indefinitely). Thus its value $V_h$ verifies, 
+\begin{align*}
+    V_h &\geq \sum_{t=0}^{h-1} \gamma^t r_t + \gamma^h V^\star\\
+    &= r^- - r^+ + \sum_{t=0}^{h-1} \gamma^t r^+ + \gamma^h V^\star \\
+    &= (-\frac{\gamma}{1-\gamma} - 1)S + \frac{1-\gamma^h}{1-\gamma} (r^\star + S) + \gamma^h V^\star\\
+    &= V^\star - S\frac{\gamma^h}{1-\gamma} \geq V^\star - \frac{\gamma^h}{1-\gamma}
+\end{align*}
+\end{proof}
+
+We can directly conclude that $\kappa \geq \limsup{|\{a_2,\dots,a_K\}^h|^{1/h}} = K-1$.
+
+Now, consider the nodes expanded by \GBOPD. The first expansion is that of the root, which discovers $s^\star$ and $s^+$. In the absence of information on these two state, the bound $V_{\max}$ is used and the first action $a_1$ gets a higher $\overline{U}$ that any other action $a_2,\dots,a_K$ since $r^\star \geq r^-$. Hence, at the second iteration, the node $a_1$ gets expanded. At this point, the self-loop of the state $s^\star$ is discovered, which means that form now on the bounds verify $L_n(a_1) = V^\star = U_n(a_1)$ for $n\geq2$, which means that $L_n(a_1A^*)-U_n(a_1A^*) = 0$. The nodes $a_2,\dots,a_K$ can be expanded at most once before the entire MDP is discovered and $L_n=V=U_n$ over the entire tree, which means that $\Tau_n^\infty$ is the set of optimal nodes, i.e. the nodes in the only optimal sequence $a_1^\star$. Hence, $\kappa_\infty = 1.$ 
+
