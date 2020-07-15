@@ -148,12 +148,12 @@ Other simulated vehicles follow simple and behavioural models from the traffic s
 The acceleration command $a_i$ of a vehicle $i\in[1, N_v]$ is controlled directly by the \gls{IDM} from \citep{Treiber2000}:
 \begin{align}
 \begin{split}
-a_i &= a\left[1-\left(\frac{v}{v_0}\right)^\delta - \left(\frac{d^{\star}_i}{d_i}\right)^2\right], \\
-\text{where }\quad d^{\star}_i &= d_0 + Tv_i + \frac{v_i\Delta v_i}{2\sqrt{ab}},
+a_i &= a_i^+\left[1-\left(\frac{v}{v_i^0}\right)^\delta - \left(\frac{d^{\star}_i}{d_i}\right)^2\right], \\
+\text{where }\quad d^{\star}_i &= d_i^0 + T_i v_i + \frac{v_i\Delta v_i}{2\sqrt{a_i^+ b_i}},
 \end{split}
 \end{align}
 $v_i$ is the vehicle velocity, $d_i$ is the distance to its front vehicle.
-The dynamics are parametrised by the desired velocity $v_0$ , the time gap $T$, the jam distance $d_0$, the maximum acceleration $a$ and deceleration $b$, and the velocity exponent $\delta$.
+The dynamics of vehicle $i\in[1, N_v]$ are thus parametrised by the desired velocity $v_i^0$ , the time gap $T_i$, the jam distance $d_i^0$, the maximum acceleration $a_i^+$ and deceleration $b_i$, and the velocity exponent $\delta$.
 
 \paragraph{Lateral behaviour}
 
@@ -178,7 +178,7 @@ A lane change decision modifies the target lane $L_i$ followed by vehicle $i$ on
 
 So far, we explained how both the ego-vehicle ($i=0$) and the other simulated vehicles ($i\in[1, N_v]$) behave on a multi-lanes road segment, through their Behavioural and Control layers. The Route Planning layer is finally responsible for selecting the sequence of road segments leading to a destination, sampled randomly at initialisation. To that end, the Route Planning performs a Breadth First Search in the graph description of the road network mentioned above, and returns a shortest path of road segments from initial position to destination.
 
-In the end, we make the decision of framing the state space $\cS$ as fully observable but subjected to uncertain transition dynamics $P\parentheses{s' \mid s, a}$, which are parametrised by several unobserved variables including the destinations of agents in the scenes and the parameters of their Behavioural and Control layers.
+In the end, we make the decision of framing the state space $\cS$ as fully observable but subjected to uncertain transition dynamics $\Ps\parentheses{s' \mid s, a}$, which are parametrised by several unobserved variables including the destinations of agents in the scenes and the parameters of their Behavioural and Control layers.
 
 \section{Rewards}
 
@@ -190,7 +190,7 @@ Thus, we focus on only two features: a vehicle should
 	\item avoid collisions.
 \end{enumerate*}
 
-Since the Markov Decision Process formalism requires rewards to be bounded, by convention we normalize them in the $[0, 1]$ range.
+Since the \gls{MDP} formalism requires rewards to be bounded, by convention we normalize them in the $[0, 1]$ range.
 Note that we forbid negative rewards, since they may incentivise the agent to prefer terminating an episode early (by causing a collision) rather than risking suffering a negative return if no satisfying trajectory can be found.
 
 Thus, unless otherwise stated, the reward function $\R$ is chosen as follows:
