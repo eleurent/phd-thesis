@@ -72,7 +72,7 @@ Thus, since $Q^{\star}$ is a fixed-point of a contracting operator, it can be co
 
 \subsection{Common traffic state representations}
 
-In order to apply a reinforcement learning algorithm such as \gls{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. that the state should at least contain a description of every nearby vehicle, when social interactions are relevant to the decision. We recall our definition \eqref{eq:state-space} of $\cS$ from \Cref{chapter:3}, in which a vehicle driving on a road is described by it's continuous position, heading and velocity, and the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N_v$ other vehicles can be described by a list of individual vehicle states.
+In order to apply a reinforcement learning algorithm such as \gls{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. The state should at least contain a description of every nearby vehicle, when social interactions are relevant to the decision. We recall our definition \eqref{eq:state-space} of $\cS$ from \Cref{chapter:3}, in which a vehicle driving on a road is described by it's continuous position, heading and velocity, and the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N_v$ other vehicles can be described by a list of individual vehicle states:
 \begin{equation*}
 s = \begin{bmatrix}
 x_0 & y_0 & v_0 & \psi_0\\
@@ -82,7 +82,7 @@ x_{N_v} & y_{N_v} & v_{N_v} & \psi_{N_v}\\
 \in\gls+{cS} \eqdef\Real^{(N_v+1) \times 4}.
 \end{equation*}
 
-This description was appropriate to simply describe the system dynamics. However, it has several drawbacks when used for function approximation: because of its $2\pi$-periodicity, the heading $\psi_i$ is either clipped to $(-\pi, \pi]$ which causes a discontinuity at $\pm\pi$, or unclipped which causes several inputs to correspond to the same state. Likewise, the forward velocity $v_i$ needs to be combined with$\psi_i$ and projected to inform the future positions $x_i,\,y_i$ of the vehicle $i$. Consequently, we slightly modify the features describing the vehicle states as
+This description was appropriate to simply describe the system dynamics. However, it has several drawbacks when used for function approximation: because of its $2\pi$-periodicity, the heading $\psi_i$ is either clipped to $(-\pi, \pi]$ which causes a discontinuity at $\pm\pi$, or unclipped which causes several inputs to correspond to the same state. Likewise, the forward velocity $v_i$ needs to be combined with the heading $\psi_i$ and projected to inform the future positions $x_i,\,y_i$ of the vehicle $i$. Consequently, we slightly modify the features describing the vehicle states as
 \begin{equation}
 s = \left(s_i \right)_{i \in [0, N_v]}\qquad
 \text{where}\qquad

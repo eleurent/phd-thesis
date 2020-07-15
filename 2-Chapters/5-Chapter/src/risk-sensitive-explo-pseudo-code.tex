@@ -6,17 +6,17 @@ $\cD\leftarrow\emptyset$\;
 \For{each intermediate batch} {
 split episodes between $W$ workers\;
 \For(\tcp*[f]{run this loop on each worker in parallel}){each episode in batch}{
-sample initial budget $\beta\sim\mathcal{U}(\mathcal{B})$.\;
+sample initial budget $\beta\sim\mathcal{U}(\mathcal{B})$\;
 \While{episode not done}{
-update $\epsilon$ from schedule.\;
-sample $z\sim\mathcal{U}([0, 1])$.\;
-\lIf{$z < \epsilon$}{sample $(a, \beta_a)\sim\mathcal{U}(\Delta_{\cA\cB})$.\tcp*[f]{Explore}}
-\lElse{sample $(a, \beta_a)\sim\pi_\text{greedy}(a, \beta_a|s, \beta; Q^{\star})$.\tcp*[f]{Exploit}}
-append transition $(s, \beta, a, \beta_a, R, C, s')$ to batch $\mathcal{D}$.\;
+update $\epsilon$ from schedule\;
+sample $z\sim\mathcal{U}([0, 1])$\;
+\lIf{$z < \epsilon$}{sample $(a, \beta_a)\sim\mathcal{U}(\Delta_{\cA\cB})$\tcp*[f]{Explore}}
+\lElse{sample $(a, \beta_a)\sim\pi_\text{greedy}(a, \beta_a|s, \beta; Q^{\star})$\tcp*[f]{Exploit}}
+append transition $(s, \beta, a, \beta_a, R, C, s')$ to batch $\mathcal{D}$\;
 step episode budget $\beta \leftarrow \beta_a$
 }
 }
-$\pi_\text{greedy}(\cdot\sim; ~Q^{\star}) \leftarrow\texttt{BFTQ}(\cD)$.
+$\pi_\text{greedy}(\cdot\sim; ~Q^{\star}) \leftarrow\texttt{BFTQ}(\cD)$
 }
 \Return{the batch of transitions $\cD$}
 \caption{Risk-sensitive exploration}

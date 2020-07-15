@@ -42,7 +42,7 @@ However, this modelling assumption comes at a price: no control is given over th
 
 \glsxtrlong{RL} also assumes that the performance can be described by a single reward function $\reward$. Conversely, real problems typically involve many aspects, some of which can be contradictory \citep{Liu2014}. In our case, a self-driving car needs to balance between progressing quickly on the road and avoiding collisions. In \gls{MORL}, each of this aspect is independently modelled by a separate reward signal. Then, the set of policies is partitioned into 
 \begin{enumerate*}[label=(\roman*)]
-	\item the class of \emph{dominated} policies $\pi$, for which there exists an \emph{improvement}, \ie another policy$\pi'$ for which at least some objectives increase, and none decrease;
+	\item the class of \emph{dominated} policies $\pi$, for which there exists an \emph{improvement}, \ie another policy $\pi'$ for which at least some objectives increase, and none decrease;
 	\item the \emph{Pareto front} $\Pi^\star$, of undominated policies, illustrated in \Cref{fig:pareto-front}.
 \end{enumerate*}
 
@@ -450,7 +450,7 @@ Our second application is a dialogue-based slot-filling simulation that has alre
         $\mu_{\bot}$& Gaussian mean for misunderstanding & -0.25\tabularnewline
         $\mu_{\top}$& Gaussian mean for understanding & 0.25\tabularnewline
         $\sigma$& Gaussian standard deviation & 0.6\tabularnewline
-        $p$& Probability of hangup & 0.25\tabularnewline
+        $p$& Probability of hang up & 0.25\tabularnewline
         H & Trajectory duration & 10\tabularnewline
         - & Number of slots & 3\tabularnewline
         \bottomrule
@@ -461,7 +461,7 @@ Our second application is a dialogue-based slot-filling simulation that has alre
 
 \paragraph{Two-way road}
 In our third application, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment presented in \Cref{chapter:3}.
-We define a task that displays a clear trade-off between safety and efficiency, illustrated in \Cref{fig:two-way}. As we mentioned, the agent controls a vehicle with a finite set \cA of manoeuvres \eqref{eq:action-space} implemented by low-lever controllers. It is driving on a two-way road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. The parameters controlling their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
+We define a task that displays a clear trade-off between safety and efficiency, illustrated in \Cref{fig:two-way}. As we mentioned, the agent controls a vehicle with a finite set $\cA$ of manoeuvres \eqref{eq:action-space} implemented by low-lever controllers. It is driving on a two-way road populated with other traffic participants: the vehicles in front of the agent drive slowly, and there are incoming vehicles on the opposite lane. The parameters controlling their behaviours are randomised, which introduces some uncertainty with respect to their possible future trajectories.
 The task consists in driving as fast as possible, which is modelled by a reward proportional to the velocity: $\R(s_t, a_t) \propto v_t$. This motivates the agent to try and overtake its preceding vehicles by driving fast on the opposite lane. This optimal but overly aggressive behaviour can be tempered through a cost function that embodies a safety objective: $\constraint(s_t, a_t)$ is set to $1/H$ whenever the ego-vehicle is driving on the opposite lane, where $H$ is the trajectory horizon. Thus, the constrained signal $\constraintreturn$ is the maximum proportion of time that the agent is allowed to drive on the wrong side of the road.
 
 \begin{figure}[t]
