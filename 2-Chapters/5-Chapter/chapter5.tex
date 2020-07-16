@@ -89,7 +89,6 @@ We work in the space of budgeted policies\index{budgeted policy}, where $\policy
 
 We cast the \gls{BMDP} problem as a \gls{MOMDP} problem \citep{Roijers2013ASO} by considering \emph{augmented} state and action spaces $\ocS = \cS\times \budgetspace$ and $\ocA= \cA\times \budgetspace$, and equip them with the augmented dynamics $\augmentedtransition\in \cM(\ocS)^{\ocS \times \ocA}$ defined as:
 \begin{equation}
-\label{eq:dynamics}
 \augmentedtransition\left(\os' \condbar \os, \oa\right) = \augmentedtransition\left((s',\budget') \condbar (s,\budget), (a, \budgetaction)\right) \eqdef \Ps(s'|s, a)\dirac(\budget' - \budgetaction),
 \end{equation}
 where $\dirac$ is the Dirac indicator distribution.
