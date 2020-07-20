@@ -16,36 +16,48 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-Model-based algorithms often decouple estimation and control through \emph{certainty equivalence}: using a point estimate of the unknown dynamics as if it were the true value. Though \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build an entire \emph{confidence region} that contains the true dynamics with high probability, and optimise the decisions so as to maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and model-predictive control, accompanied by an end-to-end analysis of robust stabilisation and minimax control with generic costs.
+Model-based algorithms often decouple estimation and control through \emph{certainty equivalence}: using a point estimate of the unknown dynamics as if it were the true value. Though \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build an entire \emph{confidence region} that contains the true dynamics with high probability, and optimise the decisions so as to maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.
 \minitocStartChapter{}
 
 \section{Motivation}
+
+\begin{remark}[Change of notations]
+\begin{leftbar}[remarkbar]
+So far, we borrowed notations from the \glsxtrlong*{RL} community to describe states $s\in \cS$, actions $a\in\cA$ and transitions $s_{t+1} = \Ps\parentheses{s_{t+1}\mid s_t,a_t}$. In this chapter, we change conventions and switch to notations from the Control community, which are better suited to describe continuous-time dynamics: states are denoted as $x(t)$, controls as $u(t)$, and dynamics as $\dot{x}(t) = f(x(t), u(t))$. 
+The system dynamics are described in continuous time, but sensing and control are performed in discrete time with time-step $\dd t>0$. For any variable $z$, we use subscript to refer to these discrete times: $z_n = z(t_n)$ with $t_n = n\dd t$ and $n\in\Natural$. We use bold symbols to denote temporal sequences $\bz = (z_n)_{n\in\Natural}$.
+\end{leftbar}
+\end{remark}
 
 % --- 1. Model bias and robust control
 \paragraph{Model bias and robust control}
 Despite the recent successes of Reinforcement Learning \citep[e.g.][]{mnih2015humanlevel,Silver1140}, it has hardly been applied in real industrial issues. This could be attributed to two undesirable properties which limit its practical applications. First, it depends on a tremendous amount of interaction data that cannot always be simulated. This issue can be alleviated by model-based methods -- which we consider in this part -- that often benefit from better sample efficiencies than their model-free counterparts. Second, it relies on trial-and-error and random exploration, which is unacceptable in a critical setting where mistakes are costly and must be avoided at all time.
 
-%TODO: say that we adopt continuous control notations, and continuous time
-Since experiencing failures is out of question, the only way to prevent them from the outset is to rely on some sort of prior knowledge. In this chapter, we assume that the system dynamics are partially known, in the form of differential equation with unknown parameters and inputs. More precisely,
+Since experiencing failures is out of question, the only way to prevent them from the outset is to rely on some sort of prior knowledge. In this chapter, we assume that the system dynamics are \emph{partially known}, in the form of differential equation with unknown parameters and inputs. More precisely,
 
-\begin{assumption}[Structure I]
+\begin{assumption}[Structure \textsc{i}]
 \begin{leftbar}[assumptionbar]
-We consider a dynamical system with state $x\in\Real^p$, acted on by controls $u\in\Real^q$ and perturbations $\omega\in\Real^r$, with dynamics in the form:
+We consider a dynamical system with state $x\in\Real^p$, acted on by controls $u\in\Real^q$ and perturbations $\omega\in\Real^r$, with dynamics in the form
 \begin{equation*}
-\dot{x}(t) = f_\theta\left(x(t),u(t),\omega(t)\right)
+\dot{x}(t) = f_\theta\left(x(t),u(t),\omega(t)\right),
 \end{equation*}
 where the dynamics structure $\theta\rightarrow f_\theta$ is \emph{known}, and the parameter vector $\theta$ belongs to a known compact set $\Theta \subset \Real^d$.
 \end{leftbar}
 \end{assumption}
-\noindent We argue that this structure assumption is realistic given that most industrial applications to date have been relying on physical models to describe their processes and well-engineered controllers to operate them, rather than machine learning. Our framework relaxes this modelling effort by allowing some \emph{structured uncertainty} around the nominal model. 
+\noindent We argue that this structure assumption is realistic given that most industrial applications to date have been relying on physical models to describe their processes and well-engineered controllers to operate them, rather than machine learning. Our framework relaxes this modelling effort by allowing some \emph{structured uncertainty} around the nominal model.
 
 We adopt a data-driven scheme to estimate the parameters $\theta$ more accurately as we interact with the true system. Most model-based reinforcement learning algorithms rely on the estimated dynamics $\hat{\theta}$ to derive the corresponding optimal controls \citep[e.g.][]{Lenz2015,Levine2015}, but suffer from \emph{model bias}: they ignore the error between the learned and true dynamics, which can dramatically degrade control performances \citep{Doyle1978,Schneider1997}. It is particularly likely to happen when maximising an objective under constraints, which naturally pushes the systems to operate in the vicinity of constraint saturation and makes it prone to failure.
-For instance, 
-% TODO: instert a motivating example of model bias at an intersection: tree-based planning of chapter 6 with an true model gives aggressive trajectories for our simple reward definition where we did not specify  
+
+% TODO: instert a motivating example of model bias at an intersection: tree-based planning of chapter 6 with an true model gives aggressive trajectories for our simple reward definition where we did not specify. "For instance, ..." 
 % TODO: say a word about safety distances?
 
 % --- 2. We need to estimate a confidence region -> linear dependency in the parameters.
 \paragraph{Embracing model ambiguity}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[trim={1cm 0 0 0}, clip, width=0.5\linewidth]{img/ellipsoid}
+	\caption{The model estimation procedure. The confidence region $C_{[N],\delta}$ shrinks with the number of samples $N$.}
+	\label{fig:estimation}
+\end{figure}
 To address this issue, we turn to the framework of \emph{robust} decision-making: instead of merely considering a point estimate of the dynamics, the control scheme needs to rely on an entire \emph{confidence region} $\cC_{[N],\delta}$, illustrated in \Cref{fig:estimation}, that contains the true dynamics parameters with high probability:
 \begin{align}
 \probability{\theta\in \cC_{[N],\delta}} \geq 1-\delta,
@@ -54,14 +66,7 @@ To address this issue, we turn to the framework of \emph{robust} decision-making
 where $\delta\in(0,1)$ is the confidence level. 
 In order to derive an explicit form for this confidence region $\cC_{[N],\delta}$, additional assumptions need to be taken regarding the relation between the state transition $\dot{x}$ and its parameter $\theta$. Out of the various hypothesis classes that could represent $f_\theta$, we require one that provides confidence regions for regression. Thus, we make a first assumption that $f_\theta$ is linearly dependent on $\theta$, so as to leverage the statistical tools developed for non-asymptotic linear regression.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[trim={1cm 0 0 0}, clip, width=0.4\linewidth]{img/ellipsoid}
-	\caption{The model estimation procedure. The confidence region $C_{[N],\delta}$ shrinks with the number of samples $N$.}
-	\label{fig:estimation}
-\end{figure}
-
-\begin{assumption}[Structure II]
+\begin{assumption}[Structure \textsc{ii}]
 	\begin{leftbar}[assumptionbar]
 	We assume that $f_\theta$ takes the form
 	\begin{equation*}
@@ -76,15 +81,21 @@ In \textbf{\Cref{sec:estimation}}, having observed a history $\cD_{[N]} = \{(x_n
 % --- 3. We need to propagate model uncertainty to predicted trajectories -> linear dependency in the states
 \paragraph{Propagation of uncertainty}
 
-In order to inform the controls, we need to propagate the model uncertainty $C_{[N],\delta}$ to the trajectory.
-We wish to derive a predictor $X(t)$ which takes the information on the current state ${x}_N$, the confidence region $\cC_{[N],\delta}$, a planned control sequence $\bu$ and admissible perturbation bounds $[\underline{\omega}(t),\overline{\omega}(t)]$; and verifies the \emph{inclusion property}:
+\begin{figure}[ht]
+	\centering
+	\includegraphics[trim={0 0 0 0}, clip, width=0.5\linewidth]{img/interval-hull}
+	\caption{The state prediction procedure. At each time step, we bound \hlr{(in red)} the set of reachable states \hlg{(in green)} under model uncertainty \eqref{eq:confidence}}
+	\label{fig:prediction}
+\end{figure}
+
+In order to inform the controls, uncertainty about the dynamics $C_{[N],\delta}$ needs to be propagated to the induced trajectories. To that end, we wish to derive a predictor $X(t)$ which takes the information on the current state ${x}_N$, the confidence region $\cC_{[N],\delta}$, a planned control sequence $\bu$ and admissible perturbation bounds $[\underline{\omega}(t),\overline{\omega}(t)]$; and verifies the \emph{inclusion property} illustrated in \Cref{fig:prediction}:
 \begin{equation*}
 %\label{eq:inclusion-property}
 x(t)\in X(t), \forall t\geq t_N.
 \end{equation*}
-Yet, in order to obtain an closed-form for $X(t)$, we need to know how the uncertainty over $x(t)$ can affect the next state $x(t+dt)$, which requires further specifying the shape of the features $\phi$ and $\psi$. Again, we make a second assumption that $\phi$ and $\psi$ are linearly dependent on the states $x(t)$, controls $u(t)$ and perturbations $\omega(t)$, so as to leverage tools developed in the community of interval observers for linear systems.
+Yet, in order to obtain an closed-form for $X(t)$, we need to know how the uncertainty over $x(t)$ can affect that of the next state $x(t+dt)$, which requires further specifying the shape of the features $\phi$ and $\psi$. Again, we make an assumption that $\phi$ and $\psi$ are linearly dependent on the states $x(t)$, controls $u(t)$ and perturbations $\omega(t)$, so as to draw on the theory of interval observers for linear systems. Thus, in this chapter we will consider a dynamical system in the following form.
 
-\begin{assumption}[Structure III]
+\begin{assumption}[Structure \textsc{iii}]
 	\label{assumpt:structure}
 	\begin{leftbar}[assumptionbar]
 		There exists a known feature tensor $\phi\in \Real^{d \times p \times p}$ such that for all $\theta\in\Theta$,
@@ -98,96 +109,65 @@ Yet, in order to obtain an closed-form for $X(t)$, we need to know how the uncer
 		A(\theta) = A + %\theta^\transp \phi \eqdef A + 
 		\sum_{i=1}^d \theta_i\phi_i,
 		\end{equation}
-		where $A,\phi_1,\dots,\phi_d\in\Real^{p\times p}$ are known. For all $n$, we denote $\Phi_n = [\phi_1 x_n \dots \phi_d x_n]\in\Real^{p\times d}$.
-		
-		We also assume to know a bound $S$ such that $\theta\in[-S,S]^d$.
+		where $A,\phi_1,\dots,\phi_d\in\Real^{p\times p}$ are known. 
 	\end{leftbar}
 \end{assumption}
+For all $n$, we denote $\Phi_n = [\phi_1 x_n \dots \phi_d x_n]\in\Real^{p\times d}$.
+The control matrix $B\in\Real^{p\times q}$ and disturbance matrix $D\in\Real^{p\times r}$ are known. We also assume having access to the observation of $x(t)$ and to a noisy measurement of $\dot{x}(t)$ in the form $y(t)=\dot{x}(t) + C\nu(t)$, where $\nu(t)\in\Real^s$ is a measurement noise and $C\in\Real^{p\times s}$ is known. Assumptions over the disturbance $\omega$ and noise $\nu$ will be detailed further, and we denote $\eta(t) = C\nu(t) + D\omega(t)$. 
 
-In \Cref{sec:prediction}, we derive an \emph{interval predictor} $[\underline{x}(t),\overline{x}(t)]$ for the system \eqref{eq:dynamics}, illustrated in \Cref{fig:prediction}. 
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[trim={4cm 0 0 0}, clip, width=0.5\linewidth]{img/interval-hull}
-	\caption{The state prediction procedure. At each time step, we bound \hlr{(in red)} the set of reachable states \hlg{(in green)} under model uncertainty \eqref{eq:confidence}}
-	\label{fig:prediction}
-\end{figure}
+In \textbf{\Cref{sec:prediction}}, as a second contribution, we derive an \emph{interval predictor} $[\underline{x}(t),\overline{x}(t)]$ for the system \eqref{eq:dynamics}, and analyse its stability.
 
 % --- 4. First application: stabilisation and robust constraint satisfaction
 \paragraph{Robust stabilisation and constraint satisfaction}
 
+As a first application and third contribution, we consider the problem of robustly stabilising the system \eqref{eq:dynamics} at a vicinity of the origin, while ensuring that
+\begin{equation*}
+x(t)\in\X,\;u(t)\in\U\quad\forall t\geq0,
+\end{equation*}
+where $[\underline{x}_{0},\overline{x}_{0}]\subset\X\subset\Real^{p}$ and $\U\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
+In \textbf{\Cref{sec:robust-stabilisation}}, we introduce a Dual-\gls{MPC} scheme that achieves this result by relying on a stabilising control for the predicted intervals.
+
 % --- 5. Second application: minimax control of generic costs
 \paragraph{Minimax control beyond quadratic costs}
-The \emph{robust control objective} $V^r$ \citep{Bental2009,Bertsimas2011,Gorissen2015} aims to maximise the worst-case outcome with respect to this confidence region $\cC_{[N],\delta}$:
+Yet, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance). To allow for more flexible goal formulations, these tasks can be better formulated with the \emph{minimax control objective} \citep{Bental2009,Bertsimas2011,Gorissen2015}, that we consider as a second application. This objective aims to maximise the worst-case return $V^r$
 \begin{equation}
 \label{eq:robust-control}
-\sup_{\bu\in{(\Real^q)}^\Natural} {V^r(\bu)}, \qquad \text{ where }\qquad {V^r(\bu)} \eqdef \inf_{\substack{\theta \in \cC_{[N],\delta} \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right],
+\sup_{\bu\in{(\Real^q)}^\Natural} {V^r(\bu)}
 \end{equation}
-$\gamma\in(0,1)$ is a discount factor, and $x_n(\bu,\bom)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\bom$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$. 
+with respect to the confidence region $\cC_{[N],\delta}$
+\begin{equation}
+\label{eq:robust-control-obj}
+{V^r(\bu)} \eqdef \inf_{\substack{\theta \in \cC_{[N],\delta} \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right],
+\end{equation}
+where $x_n(\bu,\bom)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\bom$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$, and $\R$ is an \emph{arbitrary} bounded reward function. This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[e.g.][]{Kumar2013}.
 
+Unfortunately, minimax problems such as $\eqref{eq:robust-control}$ are already notoriously hard when the reward $\R$ has a simple form. Without a restriction on the shape of functions $\R$, solving the optimal -- not to mention the robust -- control objective is intractable and we cannot hope to derive an explicit solution. Thus, in \textbf{\Cref{sec:control}} we propose a robust \gls{MPC} algorithm for solving \eqref{eq:robust-control} numerically. Facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms studied in \Cref{chapter:6}.
+However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:robust-control-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:control-error}. This is our forth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
 
+\paragraph{Multi-model extension}
+In \textbf{\Cref{sec:multi-model}}, our fifth contribution extends the proposed framework to consider multiple modelling assumptions, while narrowing uncertainty through data-driven model rejection, and still ensuring safety via robust model-selection during planning.
 
-This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[e.g.][]{Kumar2013}.
-
-However, maximin problems such as $\eqref{eq:robust-control}$ are notoriously hard if the reward $R$ has a simple form. Without a restriction on the shape of functions $R$, we cannot hope to derive an explicit solution.
-In our second contribution, we propose a robust MPC algorithm for solving \eqref{eq:robust-control} numerically. 
-
-Since $R$ is generic, potentially non-smooth and non-convex, solving the optimal -- not to mention the robust -- control objective is intractable. In \Cref{sec:control}, facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms. Though there exist works addressing continuous actions \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision $(\Real^q)^\Natural$ space by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
-The robust objective \eqref{eq:robust-control} becomes $\sup_{\ba\in{\cA}^\Natural} V^r(\ba)$, where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
-However, tree-based planning algorithms are designed for a single known generative model rather than a confidence region for the system dynamics. Our third contribution adapts them to the robust objective \eqref{eq:robust-control} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions \eqref{eq:inclusion-property} to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:control-error}. This is the first result of this kind for maximin control with generic costs to the best of our knowledge. 
-
-
-
-
-
-% The control matrix $B\in\Real^{p\times q}$ and disturbance matrix $D\in\Real^{p\times r}$ are known. We also assume having access to the observation of $x(t)$ and to a noisy measurement of $\dot{x}(t)$ in the form $y(t)=\dot{x}(t) + C\nu(t)$, where $\nu(t)\in\Real^s$ is a measurement noise and $C\in\Real^{p\times s}$ is known. Assumptions over the disturbance $\omega$ and noise $\nu$ will be detailed further, and we denote $\eta(t) = C\nu(t) + D\omega(t)$. 
-
- 
-
-
-\Cref{alg:full} shows the full integration of the three procedures of estimation, prediction and control. 
-
-In \Cref{sec:multi-model}, our forth contribution extends the proposed framework to consider multiple modelling assumptions, while narrowing uncertainty through data-driven model rejection, and still ensuring safety via robust model-selection during planning.
-
-Finally, in \Cref{sec:experiments} we demonstrate the applicability of \Cref{alg:full} in two numerical experiments: a simple illustrative example and a more challenging simulation for safe autonomous driving.
-
-\paragraph{Notation}
-
-The system dynamics are described in continuous time, but sensing and control happen in discrete time with time-step $\dd t>0$. For any variable $z$, we use subscript to refer to these discrete times: $z_n = z(t_n)$ with $t_n = n\dd t$ and $n\in\Natural$. We use bold symbols to denote temporal sequences $\bz = (z_n)_{n\in\Natural}$. We denote $z^+ = \max(z,0)$, $z^- = z^+-z$, $|z| = z^++z^-$ and $[n]=\{1,\dots, n\}$.
-
-\begin{algorithm}[tb]
-	\caption{Robust Estimation, Prediction and Control}
-	\label{alg:full}
-%	\begin{algorithmic}
-%		\STATE {\bfseries Input:} confidence level $\delta$, structure $(A,\phi)$, reward $R$, $\cD_{[0]}\gets\emptyset,\, \ba_1\gets\emptyset$
-%		\FOR{$N = 0,1,2,\dots$} 
-%		\STATE $\cC_{[N],\delta} \gets$\textsc{Model Estimation}$(\cD_{[N]})$. \eqref{eq:polytope}
-%		\FOR{each planning step $k\in\{N,\dots,N+K\}=N+[K]$}
-%		\STATE $[\underline{x}_{k+1}, \overline{x}_{k+1}]\gets$ \textsc{Interval Prediction}($\cC_{[N],\delta}, \ba_kb$) for each action $b\in \cA$. \eqref{eq:interval-predictor}
-%		
-%		\STATE $\ba_{k+1}$ $\gets$\textsc{Pessimistic Planning}$(\underline{R_{k+1}}([\underline{x}_{k+1}, \overline{x}_{k+1}]))$.  \eqref{eq:opd}
-%		\ENDFOR
-%		\STATE Execute the recommended control $u_{N+1}$, and add the transition $(x_{N+1}, y_{N+1}, u_{N+1})$ to $\cD_{[N+1]}$.
-%		\ENDFOR
-%	\end{algorithmic}
-\end{algorithm}
+\paragraph{Numerical experiments}
+Finally, in \textbf{\Cref{sec:interval-experiments}} we demonstrate the applicability of our approach in two numerical experiments: a simple illustrative example and a more challenging simulation for safe autonomous driving on \textsc{highway-env}.
 
 \subsection{Related Work}
 
-The control of uncertain systems is a long-standing problem, to which a vast body of literature is dedicated. Existing work is mostly concerned with the problem of \emph{stabilisation} around a fixed reference state or trajectory, including approaches such as $\cH_\infty$ control \citep[][]{Basar1996}, sliding-mode control \citep{Lu1997} or system-level synthesis \citep{Dean2017,Dean2018}. This paper fits in the popular MPC framework, for which adaptive data-driven schemes have been developed to deal with model uncertainty \citep{Sastry1990,Tanaskovic2014,Amos2018}, but lack guarantees. The family of tube-MPC algorithms seeks to derive theoretical guarantees of \emph{robust constraint satisfaction}: the state $x$ is constrained in a safe region $\mathbb{X}$ around the origin, often chosen convex \citep{Fukushima2007,Adetola2009,Aswani2013,Turchetta2016,Lorenzen2017,Kohler2019,Lu2019}. %, their adaptive versions take also into account the possible parametric model uncertainty
-Yet, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance) and are better addressed with the minimax control objective, which can allow more flexible goal formulations. Minimax control has mostly been studied in two particular instances.
+The control of uncertain systems is a long-standing problem, to which a vast body of literature is dedicated. Existing work is mostly concerned with the problem of \emph{stabilisation} around a fixed reference state or trajectory, including approaches such as $\cH_\infty$ control \citep[][]{Basar1996}, sliding-mode control \citep{Lu1997} or system-level synthesis \citep{Dean2017,Dean2018}. This chapter fits in the popular MPC framework, for which adaptive data-driven schemes have been developed to deal with model uncertainty \citep{Sastry1990,Tanaskovic2014,Amos2018}, but lack guarantees. The family of tube-MPC algorithms seeks to derive theoretical guarantees of \emph{robust constraint satisfaction}: as in \Cref{sec:robust-stabilisation}, the state $x$ and control $u$ are constrained in a safe region $\X,\,\U$ around the origin, often chosen convex \citep{Fukushima2007,Adetola2009,Aswani2013,Turchetta2016,Lorenzen2017,Kohler2019,Lu2019}. Our work mainly differs in that it relies on intervals rather than zonotopes, for simplicity of implementation and computational efficiency.
 
-\textbf{Finite states} ~~ Minimax control of finite Markov Decision Processes with uncertain parameters was studied in \citep{Iyengar2005,Nilim2005,Wiesemann2013}, who showed that the main results of Dynamic Programming can be extended to their robust counterparts only when the dynamics ambiguity set verifies a certain rectangularity property. Since we consider continuous states, these methods do not apply.
+Yet, as we argue, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance) and are better addressed with the minimax control objective, which can allow more flexible goal formulations. Minimax control has mostly been studied in two particular instances.
 
-\textbf{Linear dynamics and quadratic costs} ~~ Several approaches have been proposed for cumulative regret minimisation in the LQ problem. In the \emph{Optimism in the Face of Uncertainty} paradigm, the best possible dynamics within a high-confidence region is selected under a controllability constraint, to compute the corresponding optimal control in closed-form by solving a Riccati equation. The results of 	\citep{abbasi-yadkori11a,Ibrahimi2013,Faradonbeh2017} show that this procedure achieves a $\tilde{\cO}\left(N^{1/2}\right)$ regret. Posterior sampling algorithms \citep{Ouyang2017,abeille18a} select candidate dynamics randomly instead, and obtain the same result. Other works use noise injection for exploration such as \citep{Dean2017,Dean2018}. However, neither optimism nor random exploration fit a critical setting, where ensuring safety requires instead to consider pessimistic outcomes. The work of \citet{Dean2017} is close to our setting: after an offline estimation phase, they estimate a simple regret between a minimax controller and the optimal performance. Our work differs in that it addresses a generic shape cost. 
-Another work of interest is \citep{Rosolia2019} where worst-case generic costs are considered. However, they assume the knowledge of the dynamics, and their rollout-based solution only produces inner-approximations and does not yield any guarantee. In this paper, interval prediction is used to produce oversets, while a near-optimal control is found using a tree-based planning procedure.
+\paragraph{Finite states} Minimax control of finite Markov Decision Processes with uncertain parameters was studied in \citep{Iyengar2005,Nilim2005,Wiesemann2013}, who showed that the main results of Dynamic Programming can be extended to their robust counterparts only when the dynamics ambiguity set verifies a certain rectangularity property. Since we consider continuous states, these methods do not apply.
+
+\paragraph{Linear dynamics and quadratic costs} Several approaches have been proposed for cumulative regret minimisation in the LQ problem. In the \emph{Optimism in the Face of Uncertainty} paradigm, the best possible dynamics within a high-confidence region is selected under a controllability constraint, to compute the corresponding optimal control in closed-form by solving a Riccati equation. The results of 	\citep{abbasi-yadkori11a,Ibrahimi2013,Faradonbeh2017} show that this procedure achieves a $\tilde{\cO}\left(N^{1/2}\right)$ regret. Posterior sampling algorithms \citep{Ouyang2017,abeille18a} select candidate dynamics randomly instead, and obtain the same result. Other works use noise injection for exploration such as \citep{Dean2017,Dean2018}. However, neither optimism nor random exploration fit a critical setting, where ensuring safety requires instead to consider pessimistic outcomes. The work of \citet{Dean2017} is close to our setting: after an offline estimation phase, they estimate a simple regret between a minimax controller and the optimal performance. Our work differs in that it addresses a generic shape cost. 
+Another work of interest is \citep{Rosolia2019} where worst-case generic costs are considered. However, they assume the knowledge of the dynamics, and their rollout-based solution only produces inner-approximations and does not yield any guarantee. In this chapter, interval prediction is used to produce oversets, while a near-optimal control is found using a tree-based planning procedure.
 
 
 \section{Confident model estimation}
 \label{sec:estimation}
 
-%To derive a confidence region \eqref{eq:confidence} for the dynamical parameters $\theta$, the functional relationship $A(\theta)$ must be specified.
+The goal of this section is to derive a confidence region \eqref{eq:confidence} for the parameters $\theta$ of the dynamics \eqref{eq:dynamics}.
 
+%TODO: S is a bound on theta
 
 We abuse notations and define a virtual measurement signal, still denoted $y(t)$, that includes additional known terms
 \begin{equation*}
@@ -199,7 +179,7 @@ $
 y_n = \Phi_n\theta + \eta_n.
 $
 
-\paragraph{Regularised least square} To derive an estimate on $\theta$, we consider the weighted $L_2$-regularised regression problem with weights  $\Sigma_p\in\Real^{p\times p}$ and parameter $\lambda\in\Real^+_*$:
+\paragraph{Regularised least square} To derive an estimate on $\theta$, we consider the weighted $L_2$-regularised regression problem with weights $\Sigma_p\in\Real^{p\times p}$ and parameter $\lambda\in\Real^+_*$:
 \begin{equation}
 \label{eq:regression_min}
 \min_{\theta\in\Real^d} \sum_{n=1}^N \|y_n -\Phi_n\theta\|_{\Sigma_p^{-1}}^2 + \lambda\|\theta\|_{}^2.
@@ -245,7 +225,7 @@ In particular, we denote the coefficient-wise bounds over perturbations as $\und
 \|\theta_{N,\lambda}\! -\! \theta\|_1\! \leq \! \|G_{N, \lambda}^{-1}\!\sum_{n=1}^N \!\Phi_n^\transp\! \Sigma_p^{-1}\!\|_1\|\eta\|_\infty\! +\!\lambda\|G_{N, \lambda}^{-1}\!\|_1S
 \end{equation}
 
-There may be cases where \autoref{assumpt:bounded-noise} does not hold. For instance, when the noise $\eta$ is Gaussian, then $\|\eta\|_\infty=+\infty$ which makes \eqref{eq:bounded-noise-polytope} uninformative. Then, another probabilistic assumption can be made.
+There may be cases where \Cref{assumpt:bounded-noise} does not hold. For instance, when the noise $\eta$ is Gaussian, then $\|\eta\|_\infty=+\infty$ which makes \eqref{eq:bounded-noise-polytope} uninformative. Then, another probabilistic assumption can be made.
 
 \subsection{Sub-Gaussian noise}
 
@@ -258,12 +238,12 @@ There may be cases where \autoref{assumpt:bounded-noise} does not hold. For inst
 	\end{equation*}
 	\end{leftbar}
 \end{assumption}
-For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with covariance matrices $\Sigma_r$ and $\Sigma_s$, with $\Sigma_p \eqdef C\Sigma_r C^\transp + D\Sigma_s D^\transp$. Note that \autoref{assumpt:bounded-noise} implies that $\eta$ is sub-Gaussian with covariance proxy $\Sigma_p=\|\eta\|_\infty I_p$.
+For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with covariance matrices $\Sigma_r$ and $\Sigma_s$, with $\Sigma_p \eqdef C\Sigma_r C^\transp + D\Sigma_s D^\transp$. Note that \Cref{assumpt:bounded-noise} implies that $\eta$ is sub-Gaussian with covariance proxy $\Sigma_p=\|\eta\|_\infty I_p$.
 
 \begin{theorem}[Confidence ellipsoid, a matricial version of \citealt{Abbasi2011}]
 	\label{thm:confidence_ellipsoid}
 	\begin{leftbar}[theorembar]
-	Under \autoref{assumpt:gaussian-noise}, it holds with probability at least $1-\delta$ that
+	Under \Cref{assumpt:gaussian-noise}, it holds with probability at least $1-\delta$ that
 	\begin{align}
 	\label{eq:confidence-ellipsoid}
 	\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} \leq \beta_N(\delta),
@@ -286,7 +266,7 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-	The robust objective \eqref{eq:robust-control} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \autoref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\delta_n$. By choosing $\delta_n = \frac{\delta}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\delta$.
+	The robust objective \eqref{eq:robust-control} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\delta_n$. By choosing $\delta_n = \frac{\delta}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\delta$.
 	\end{leftbar}
 \end{remark}
 
@@ -326,7 +306,7 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 %
 %\begin{proposition}[Enhanced predictor of \citealt{leurent2019interval}]
 %	\label{prop:predictor}
-%	Assuming that \eqref{eq:polytope} and \autoref{assumpt:metzler} are satisfied for the system \eqref{eq:dynamics}, then the interval predictor
+%	Assuming that \eqref{eq:polytope} and \Cref{assumpt:metzler} are satisfied for the system \eqref{eq:dynamics}, then the interval predictor
 %	\begin{eqnarray}
 %	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)\nonumber \\
 %	&  & +Bu(t)+D^{+}\underline{\omega}(t)-D^{-}\overline{\omega}(t),\nonumber\\
@@ -345,39 +325,41 @@ where $A_{0,N} = A + \theta_{N,\lambda}^\transp\phi, \Delta A_{i} = {h_i} \sqrt{
 %	\label{fig:predictor_example}
 %\end{figure}
 %
-%\autoref{fig:predictor_example} illustrates the difference of stability of the two predictors \eqref{eq:predictor-naive} and \eqref{eq:interval-predictor} with a simple example. It suggests to always prefer \eqref{eq:interval-predictor} whenever \autoref{assumpt:metzler} is verified, and only fallback to \eqref{eq:predictor-naive} as a last resort.
+%\Cref{fig:predictor_example} illustrates the difference of stability of the two predictors \eqref{eq:predictor-naive} and \eqref{eq:interval-predictor} with a simple example. It suggests to always prefer \eqref{eq:interval-predictor} whenever \Cref{assumpt:metzler} is verified, and only fallback to \eqref{eq:predictor-naive} as a last resort.
 
 
+%There are plenty of emerging application domains nowadays, where the decision algorithms have to operate in the conditions of a severe uncertainty. In most of these applications, even the nominal simplified models are nonlinear, and in order to solve the problem of estimation and control in nonlinear and uncertain systems, a popular approach is based on the Linear Parameter-Varying (LPV) representation of their dynamics \citep{Shamma2012,Marcos_Balas04,Shamma_Cloutier93,Tan97}, since it allows to reduce the problem to the linear context at the price of augmented parametric variation.
 
-There are plenty of emerging application domains nowadays, where the decision algorithms have to operate in the conditions of a severe uncertainty. To mention a few: the systems biology and control of bioreactors (where it is hard to establish detailed models and it is impossible to isolate and evaluate most of the external to the plant perturbations) and the path planning for self-driving cars (where despite of a large parametric variation of the models, the presence of humans in the loop introduces a lot of imprecision due to their spontaneous reactions). Therefore, the decision procedures need more information, then the estimation, identification and prediction algorithms come to the attention. In most of these applications, even the nominal simplified models are nonlinear, and in order to solve the problem of estimation and control in nonlinear and uncertain systems, a popular approach is based on the Linear Parameter-Varying (LPV) representation of their dynamics \citep{Shamma2012,Marcos_Balas04,Shamma_Cloutier93,Tan97}, since it allows to reduce the problem to the linear context at the price of augmented parametric variation.
+The goal of this section is to propose an interval predictor for Linear Parameter-Varying (LPV) systems, a popular representation of the dynamics \citep{Shamma2012,Marcos_Balas04,Shamma_Cloutier93,Tan97} for decision algorithms having to operate in the conditions of a severe uncertainty.
 
-In the presence of uncertainty (unknown parameters or/and external disturbances) the design of a conventional estimator or predictor, approaching the ideal value of the state, can be realized under restrictive assumptions only. However, an interval estimation/prediction remains frequently feasible: using input-output information an algorithm evaluates the set of admissible values (interval) for the state at each instant of time \citep{Efimov2016,Raiessi2018}. The interval length must be minimized via a parametric tuning of the system, and it is typically proportional to the size of the model uncertainty \citep{Chebotarev2015}. It is worth stressing that the interval estimation or prediction is not a relaxation of the original problem, in fact it is an improvement since the interval mean value can be used as the state pointwise estimate, while the interval bounds provide a simultaneous accuracy evaluation for given uncertainty.
+In the presence of uncertainty (unknown parameters $\params$ or/and external disturbances $\omega(t)$) the design of a conventional estimator or predictor, approaching the ideal value of the state, can be realized under restrictive assumptions only. However, an interval estimation/prediction remains frequently feasible: using input-output information an algorithm evaluates the set of admissible values (interval) for the state at each instant of time \citep{Efimov2016,Raiessi2018}. The interval length must be minimized via a parametric tuning of the system, and it is typically proportional to the size of the model uncertainty \citep{Chebotarev2015}. It is worth stressing that the interval estimation or prediction is not a relaxation of the original problem, in fact it is an improvement since the interval mean value can be used as the state pointwise estimate, while the interval bounds provide a simultaneous accuracy evaluation for given uncertainty.
 
-There are many approaches to design interval/set-membership estimators and predictors \citep{Jaulin02,Kieffer_Walter04,Bernard_Gouze04,Moisan_Bernard_Gouze09}, and this paper focuses on the design based on the monotone systems theory \citep{Bernard_Gouze04,Moisan_Bernard_Gouze09,RVZ10,REZ11,Efimov_a2012}.
+There are many approaches to design interval/set-membership estimators and predictors \citep{Jaulin02,Kieffer_Walter04,Bernard_Gouze04,Moisan_Bernard_Gouze09}, and this section focuses on the design based on the monotone systems theory \citep{Bernard_Gouze04,Moisan_Bernard_Gouze09,RVZ10,REZ11,Efimov_a2012}.
 In such a way the main difficulty for synthesis consists in ensuring cooperativity of the interval error dynamics by a proper design of the algorithm. As it has been shown in \citep{MazencBernard11,REZ11,Combastel2012}, such a complexity of the design can be handled by applying an additional transformation of coordinates, which maps a stable system into a stable and monotone one. An approach for selection of a constant similarity transformation matrix representing a given interval of matrices to an interval of Metzler matrices (providing monotonicity) has been developed in \citep{Efimov_a2013,Chebotarev2015}. 
 
-The objective of this paper is to propose an interval predictor for linear time-invariant (LTI) and LPV systems. The main difficulty to overcome is the predictor stability, which contrarily to an observer cannot be imposed by a proper design of the gains. An interval inclusion of the uncertain components can be restrictive and transform an initially stable system to an unstable one. In other words, an important problem is to keep the interval predictor stability in the presence of uncertainties and saving the interval inclusion property of the estimates, then an unstable system can definitely enclose the trajectories of a stable one, but at the price of the precision. To solve this problem, first, a generic predictor is proposed for an LPV system, whose estimates can be combined with the interval frequency based estimator presented earlier. To analyze stability of the predictor, which is modeled by a nonlinear Lipschitz dynamics, a novel non-conservative Lyapunov function is developed, whose features can be verified through solution of linear matrix inequalities (LMIs). Second, we revisit the case of LTI models and demonstrate an asymptotic accuracy improvement that can be achieved if an additional information about external signals are given: the admissible interval of frequency spectrum. Finally, the utility of the developed theory is demonstrated on the problem of path planning for a self-driving car by making comparison with earlier results from \citep{Leurent2018}.
+When designing a predictor, the main difficulty to overcome is the predictor stability, which contrarily to an observer cannot be imposed by a proper design of the gains. An interval inclusion of the uncertain components can be restrictive and transform an initially stable system to an unstable one. In other words, an important problem is to keep the interval predictor stability in the presence of uncertainties and saving the interval inclusion property of the estimates, then an unstable system can definitely enclose the trajectories of a stable one, but at the price of the precision. To solve this problem, first, a generic predictor is proposed for an LPV system, whose estimates can be combined with the interval frequency based estimator presented earlier. To analyze stability of the predictor, which is modeled by a nonlinear Lipschitz dynamics, a novel non-conservative Lyapunov function is developed, whose features can be verified through solution of linear matrix inequalities (LMIs). Second, we revisit the case of LTI models and demonstrate an asymptotic accuracy improvement that can be achieved if an additional information about external signals are given: the admissible interval of frequency spectrum. Finally, the utility of the developed theory is demonstrated on the problem of path planning for a self-driving car.
 
-The paper is organized as follows. An introduction to the theory of interval estimation for LTI systems is given in Section \ref{sec:Preliminaries}. The problem statement and a motivating example are introduced in Section \ref{sec:Problem-statement}. An improved interval predictor is presented in Section \ref{sec:Main-results}. The asymptotic accuracy is enhanced using frequency based estimation in Section \ref{sec:Frequency}. Application of the developed theory to the problem of path planning for an autonomous vehicle is shown in Section \ref{sec:Examples}.
+The section is organized as follows: we start by giving an introduction to the theory of interval estimation for LTI systems, before stating our prediction problem  introducing a motivating example. An improved interval predictor is presented in Section \ref{sec:Main-results}. The asymptotic accuracy is enhanced using frequency based estimation in Section \ref{sec:Frequency}. Application of the developed theory to the problem of path planning for an autonomous vehicle is shown in Section \ref{sec:Examples}.
 
-\subsubsection{Preliminaries}
-\label{sec:Preliminaries}
+%\subsubsection{Preliminaries}
+%\label{sec:Preliminaries}
 
-We denote the real numbers  by $\mathbb{R}$, the integers by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\cap\Real_{+}$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted as $|x|$, and for a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$ the symbol $||u||_{[t_{0},t_{1}]}$ denotes its $L_{\infty}$ norm
-\[
-||u||_{[t_{0},t_{1}]}=\text{ess}\sup_{t\in[t_{0},t_{1})}|u(t)|,
-\]
-if $t_{1}=+\infty$ then we will simply write $||u||$. We will denote as $\mathcal{L}_{\infty}$ the set of all inputs $u$ with the property $||u||<\infty$. 
-
-Denote the sequence of integers $1,...,k$ as $\overline{1,k}$. 
-
-The symbols $I_{n}$, $E_{n\times m}$ and $E_{p}$ denote the identity matrix with dimension $n\times n$, and the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively. The normal basis vectors in $\Real^{n}$ are denoted as $e_{i}=[0\dots0\;1\;\dots0]\tr$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position.
-
-For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues is denoted as $\lambda(A)$, $||A||_{max}=\max_{i=\overline{1,n},j=\overline{1,n}}|A_{i,j}|$ (the elementwise maximum norm, it is not sub-multiplicative) and $||A||_{2}=\sqrt{\max_{i=\overline{1,n}}\lambda_{i}(A\tr A)}$ (the induced $L_{2}$ matrix norm), the relation $||A||_{max}\le||A||_{2}\le n||A||_{max}$ is satisfied between these norms.
+%TODO: add to nomenclature
+%We denote the real numbers  by $\mathbb{R}$, the integers by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\cap\Real_{+}$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted as $|x|$, and for a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$ the symbol $||u||_{[t_{0},t_{1}]}$ denotes its $L_{\infty}$ norm
+%\[
+%||u||_{[t_{0},t_{1}]}=\text{ess}\sup_{t\in[t_{0},t_{1})}|u(t)|,
+%\]
+%if $t_{1}=+\infty$ then we will simply write $||u||$. We will denote as $\mathcal{L}_{\infty}$ the set of all inputs $u$ with the property $||u||<\infty$. 
+%
+%Denote the sequence of integers $1,...,k$ as $\overline{1,k}$. 
+%
+%The symbols $I_{n}$, $E_{n\times m}$ and $E_{p}$ denote the identity matrix with dimension $n\times n$, and the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively. The normal basis vectors in $\Real^{n}$ are denoted as $e_{i}=[0\dots0\;1\;\dots0]\tr$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position.
+%
+%For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues is denoted as $\lambda(A)$, $||A||_{max}=\max_{i=\overline{1,n},j=\overline{1,n}}|A_{i,j}|$ (the elementwise maximum norm, it is not sub-multiplicative) and $||A||_{2}=\sqrt{\max_{i=\overline{1,n}}\lambda_{i}(A\tr A)}$ (the induced $L_{2}$ matrix norm), the relation $||A||_{max}\le||A||_{2}\le n||A||_{max}$ is satisfied between these norms.
 
 \subsubsection{Interval arithmetic}
 
-For two vectors $x_{1},x_{2}\in\mathbb{R}^{n}$ or matrices $A_{1},A_{2}\in\Real^{n\times n}$, the relations $x_{1}\le x_{2}$ and $A_{1}\le A_{2}$ are understood elementwise. The relation $P\prec0$ ($P\succ0$) means that a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite. Given a matrix $A\in\Real^{m\times n}$, define $A^{+}=\max\{0,A\}$, $A^{-}=A^{+}-A$ (similarly for vectors) and denote the matrix of absolute values of all elements by $|A|=A^{+}+A^{-}$. 
+% For two vectors $x_{1},x_{2}\in\mathbb{R}^{n}$ or matrices $A_{1},A_{2}\in\Real^{n\times n}$, the relations $x_{1}\le x_{2}$ and $A_{1}\le A_{2}$ are understood elementwise. The relation $P\prec0$ ($P\succ0$) means that a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite. Given a matrix $A\in\Real^{m\times n}$, define $A^{+}=\max\{0,A\}$, $A^{-}=A^{+}-A$ (similarly for vectors) and denote the matrix of absolute values of all elements by $|A|=A^{+}+A^{-}$. 
 \begin{lemma}
 	\textup{\citep{EFRZS12}} \label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 	
@@ -420,11 +402,13 @@ In the last lemma, the existence of similarity transformation is proven for an i
 \subsubsection{Problem statement}
 \label{sec:Problem-statement}
 
+For the sake of generality, we consider a slightly more general setting that \Cref{assumpt:structure}: rather than specifying a linear relationship $A(\theta)$ (which was needed for estimation), we only require it to lie within a known polytope.
+
 Consider an LPV system
 \begin{equation}
-\dot{x}(t)=A(\theta(t))x(t)+Bd(t),\;t\geq0,\label{eq:LPV_syst}
+\dot{x}(t)=A(\theta(t))x(t)+B\omega(t),\;t\geq0,\label{eq:LPV_syst}
 \end{equation}
-where $x(t)\in\Real^{n}$ is the state, $\theta(t)\in\Pi\subset\Real^{r}$ is the vector of scheduling parameters with a known set of admissible values $\Pi$, $\theta\in\cL_{\infty}^{r}$; the signal $d:\Real_{+}\to\Real^{m}$ is the external input. The values of the scheduling vector $\theta(t)$ are not available for measurements, and only the set of admissible values $\Pi$ is known. The matrix $B\in\Real^{n\times m}$ is known, the matrix function $A:\Pi\to\Real^{n\times n}$ is locally bounded (continuous) and also known.
+where $x(t)\in\Real^{n}$ is the state, $\theta(t)\in\Pi\subset\Real^{r}$ is the vector of scheduling parameters with a known set of admissible values $\Pi$, $\theta\in\cL_{\infty}^{r}$; the signal $\omega:\Real_{+}\to\Real^{m}$ is the external input. The values of the scheduling vector $\theta(t)$ are not available for measurements, and only the set of admissible values $\Pi$ is known. The matrix $B\in\Real^{n\times m}$ is known, the matrix function $A:\Pi\to\Real^{n\times n}$ is locally bounded (continuous) and also known.
 
 The following assumptions will be used in this work.
 \begin{assumption}
@@ -437,10 +421,10 @@ The following assumptions will be used in this work.
 \begin{assumption}
 	\label{ass:a2}
 	\begin{leftbar}[assumptionbar]
-		There exists known signals $\underline{d},\overline{d}\in\cL_{\infty}^{n}$ such that $\underline{d}(t)\leq d(t)\leq\overline{d}(t)$ for all $t\geq0$.
+		There exists known signals $\underline{\omega},\overline{\omega}\in\cL_{\infty}^{n}$ such that $\underline{\omega}(t)\leq \omega(t)\leq\overline{\omega}(t)$ for all $t\geq0$.
 	\end{leftbar}
 \end{assumption}
-Assumption \ref{ass:a1} means that the system \eqref{eq:LPV_syst} generates stable trajectories with a bounded state $x$ for the applied class of inputs $d$, and the initial conditions $x(0)$ are constrained to belong to a given interval $[\underline{x}_{0},\overline{x}_{0}]$. In Assumption \ref{ass:a2}, it is supposed that the input $d(t)$ belongs to a known bounded interval $[\underline{d}(t),\overline{d}(t)]$ for all $t\in\Real_{+}$, which is the standard hypothesis for the interval estimation \citep{Efimov2016,Raiessi2018}.
+Assumption \ref{ass:a1} means that the system \eqref{eq:LPV_syst} generates stable trajectories with a bounded state $x$ for the applied class of inputs $d$, and the initial conditions $x(0)$ are constrained to belong to a given interval $[\underline{x}_{0},\overline{x}_{0}]$. In Assumption \ref{ass:a2}, it is supposed that the input $\omega(t)$ belongs to a known bounded interval $[\underline{\omega}(t),\overline{\omega}(t)]$ for all $t\in\Real_{+}$, which is the standard hypothesis for the interval estimation \citep{Efimov2016,Raiessi2018}.
 
 Note that since the function $A$ and the set $\Pi$ are known, and $\theta\in\Pi$, then there exist matrices $\underline{A},\overline{A}\in\Real^{n\times n}$, which can be easily computed, such that 
 \[
@@ -449,34 +433,34 @@ Note that since the function $A$ and the set $\Pi$ are known, and $\theta\in\Pi$
 
 \subsubsection{The goal}
 
-The objective of this work is to design an \emph{interval predictor} for the system \eqref{eq:LPV_syst}, which takes the information on the initial conditions $[\underline{x}_{0},\overline{x}_{0}]$, the admissible bounds on the values of the exogenous input $[\underline{d}(t),\overline{d}(t)]$, the information about $A$ and $\Pi$ (\emph{e.g}. the matrices $\underline{A},\overline{A}$, but not the instant value of $\theta(t)$) and generates bounded interval estimates $\underline{x}(t),\overline{x}(t)\in\Real^{n}$ such that
+The objective of this work is to design an \emph{interval predictor} for the system \eqref{eq:LPV_syst}, which takes the information on the initial conditions $[\underline{x}_{0},\overline{x}_{0}]$, the admissible bounds on the values of the exogenous input $[\underline{\omega}(t),\overline{\omega}(t)]$, the information about $A$ and $\Pi$ (\emph{e.g}. the matrices $\underline{A},\overline{A}$, but not the instant value of $\theta(t)$) and generates bounded interval estimates $\underline{x}(t),\overline{x}(t)\in\Real^{n}$ such that
 \begin{equation}
 \underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.\label{eq:inclusion-property}
 \end{equation}
 
-\subsubsection{A motivation example}
+\subsubsection{A motivating example}
 
-Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem used in \citep{Leurent2018}:
+Following the result of Lemma \ref{lem:interval}, there is a straightforward solution to the problem:
 \begin{eqnarray}
-\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:predictor-naive}\\
-\dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
+\dot{\underline{x}}(t) & = & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t)  +\overline{A}^{-}\overline{x}^{-}(t)+B^{+}\underline{\omega}(t)-B^{-}\overline{\omega}(t),\label{eq:predictor-naive}\\
+\dot{\overline{x}}(t) & = & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t)+B^{+}\overline{\omega}(t)-B^{-}\underline{\omega}(t),\nonumber \\
 &  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0},\nonumber 
 \end{eqnarray}
-then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{d}$ and $\overline{d}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
+then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{\omega}$ and $\overline{\omega}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
 \begin{example*}
 	[motivating] Consider a scalar system
 	\[
-	\dot{x}(t)=-\theta(t)x(t)+d(t),\;t\geq0,
+	\dot{x}(t)=-\theta(t)x(t)+\omega(t),\;t\geq0,
 	\]
-	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $d(t)\in[\underline{d},\overline{d}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:predictor-naive} takes the form
+	where $x(t)\in\Real$ with $x(0)\in[\underline{x}_{0},\overline{x}_{0}]=[1.0, 1.1]$, $\theta(t)\in\Pi=[\underline{\theta},\overline{\theta}]=[0.5,1.5]$ and $\omega(t)\in[\underline{\omega},\overline{\omega}]=[-0.1,0.1]$ for all $t\geq0$. Obviously, assumptions \ref{ass:a1} and \ref{ass:a2} are satisfied, and this uncertain dynamics produces bounded trajectories (to prove this consider a Lyapunov function $V(x)=x^{2}$). Then the interval predictor \eqref{eq:predictor-naive} takes the form
 	\begin{eqnarray*}
-		\dot{\underline{x}}(t) & = & -\overline{\theta}\overline{x}^{+}(t)+\underline{\theta}\overline{x}^{-}(t)+\underline{d},\\
-		\dot{\overline{x}}(t) & = & -\underline{\theta}\underline{x}^{+}(t)+\overline{\theta}\underline{x}^{-}(t)+\overline{d}.
+		\dot{\underline{x}}(t) & = & -\overline{\theta}\overline{x}^{+}(t)+\underline{\theta}\overline{x}^{-}(t)+\underline{\omega},\\
+		\dot{\overline{x}}(t) & = & -\underline{\theta}\underline{x}^{+}(t)+\overline{\theta}\underline{x}^{-}(t)+\overline{\omega}.
 	\end{eqnarray*}
 	The results of simulation are shown in Fig. \ref{fig:IP_Direct}. As we can conclude, additional consideration and design are needed to properly solve the posed problem.
 	\begin{figure}
 		\begin{centering}
-			\includegraphics[width=\linewidth]{img/observer}
+			\includegraphics[width=0.8\linewidth]{img/observer}
 			\par\end{centering}
 		\caption{\label{fig:IP_Direct} The results of prediction by \eqref{eq:predictor-naive}: even in such a simplistic setting, the predictor is unstable and diverges quickly.}
 	\end{figure}
@@ -499,7 +483,7 @@ We will additionally assume the following:
 \end{assumption}
 Therefore, it is assumed that the matrix $A(\theta)$ for any $\theta\in\Pi$ can be embedded in a polytope defined by $N$ known vertices $\Delta A_{i}$ with the given center $A_{0}$, which admits already useful properties. According to the results of lemmas \ref{lem:l2} and \ref{lem:l3}, the fulfillment of Assumption \ref{ass:a3} can be imposed by applying a properly designed similarity transformation, which maps a matrix (interval of matrices) to a Metzler one. Design of such a transformation is not considered in this work, and we will just suppose in Assumption \ref{ass:a3} that the system \eqref{eq:LPV_syst} has been already put in the right form:
 \[
-\dot{x}(t)=[A_{0}+\sum_{i=1}^{N}\lambda_{i}(\theta(t))\Delta A_{i}]x(t)+Bd(t).
+\dot{x}(t)=[A_{0}+\sum_{i=1}^{N}\lambda_{i}(\theta(t))\Delta A_{i}]x(t)+B\omega(t).
 \]
 Denote
 \[
@@ -511,8 +495,8 @@ then the following interval predictor can be designed:
 	\begin{leftbar}[theorembar]
 	Let assumptions \ref{ass:a1}\textendash \ref{ass:a3} be satisfied for the system \eqref{eq:LPV_syst}, then an interval predictor
 	\begin{eqnarray}
-	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)  +B^{+}\underline{d}(t)-B^{-}\overline{d}(t),\label{eq:interval-predictor}\\
-	\dot{\overline{x}}(t) & = & A_{0}\overline{x}(t)+\Delta A_{+}\overline{x}^{+}(t)+\Delta A_{-}\underline{x}^{-}(t)  +B^{+}\overline{d}(t)-B^{-}\underline{d}(t),\nonumber \\
+	\dot{\underline{x}}(t) & = & A_{0}\underline{x}(t)-\Delta A_{+}\underline{x}^{-}(t)-\Delta A_{-}\overline{x}^{+}(t)  +B^{+}\underline{\omega}(t)-B^{-}\overline{\omega}(t),\label{eq:interval-predictor}\\
+	\dot{\overline{x}}(t) & = & A_{0}\overline{x}(t)+\Delta A_{+}\overline{x}^{+}(t)+\Delta A_{-}\underline{x}^{-}(t)  +B^{+}\overline{\omega}(t)-B^{-}\underline{\omega}(t),\nonumber \\
 	&  & \underline{x}(0)=\underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0}\nonumber 
 	\end{eqnarray}
 	ensures the property \eqref{eq:inclusion-property}. If there exist diagonal matrices $P$, $Q$, $Q_{+}$, $Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2n\times2n}$ such that the following LMIs are satisfied:
@@ -542,7 +526,7 @@ then the following interval predictor can be designed:
 		-\Delta A_{-} & 0
 		\end{array}\right],
 		\end{gather*}
-	}then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{d}$, $\overline{d}$.
+	}then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{\omega}$, $\overline{\omega}$.
 \end{leftbar}
 \end{theorem}
 Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \citep{FarinaRinaldi2000}.
@@ -567,9 +551,9 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	where
 	\begin{gather*}
 	\underline{r}_{1}=\sum_{i=1}^{N}\lambda_{i}\Delta A_{i}x+\Delta A_{+}\underline{x}^{-}+\Delta A_{-}\overline{x}^{+},\\
-	\underline{r}_{2}=Bd-B^{+}\underline{d}+B^{-}\overline{d},\\
+	\underline{r}_{2}=Bd-B^{+}\underline{\omega}+B^{-}\overline{\omega},\\
 	\overline{r}_{1}=\Delta A_{+}\overline{x}^{+}+\Delta A_{-}\underline{x}^{-}-\sum_{i=1}^{N}\lambda_{i}\Delta A_{i}x,\\
-	\overline{r}_{2}=B^{+}\overline{d}-B^{-}\underline{d}-Bd.
+	\overline{r}_{2}=B^{+}\overline{\omega}-B^{-}\underline{\omega}-Bd.
 	\end{gather*}
 	Non-negativity or $\underline{r}_{2}$ and $\overline{r}_{2}$ follows from Assumption \ref{ass:a2} and Lemma \ref{lem:interval}. The signals $\underline{r}_{1}$ and $\overline{r}_{1}$ are also nonnegative provided that \eqref{eq:inclusion-property} holds and due to the calculations above. Note that the relations \eqref{eq:inclusion-property} are satisfied for $t=0$ by construction and Assumption \ref{ass:a1}, then since the matrix $A_{0}$ is Metzler by Assumption \ref{ass:a3}, we have that $\dot{\underline{e}}_{i}(0)\in\Real_{+}^{n}$ or $\dot{\overline{e}}_{i}(0)\in\Real_{+}^{n}$ provided that $e_{i}(0)=0$ or $e_{i}(0)=0$, respectively, for any $i=\overline{1,n}$ (the error cannot become negative). Next, repeating these arguments it is possible to show that $\underline{e}(t)\geq0$ and $\overline{e}(t)\geq0$ for all $t\geq0$ \citep{Smith95}, which confirms the relations \eqref{eq:inclusion-property}.
 	
@@ -583,12 +567,12 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	-B^{-} & B^{+}\\
 	B^{+} & -B^{-}
 	\end{array}\right]\left[\begin{array}{c}
-	\overline{d}(t)\\
-	\underline{d}(t)
+	\overline{\omega}(t)\\
+	\underline{\omega}(t)
 	\end{array}\right]
 	\end{gather*}
-	is a bounded input vector, whose norm is proportional to $\underline{d}$,
-	$\overline{d}$. Consider a candidate Lyapunov function
+	is a bounded input vector, whose norm is proportional to $\underline{\omega}$,
+	$\overline{\omega}$. Consider a candidate Lyapunov function
 	\begin{gather*}
 	V(X)=X^{\top}PX+X{}^{\top}Z_{+}X^{+}-X^{\top}Z_{-}X^{-}\\
 	=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}X_{k}X_{k}^{+}-(Z_{-})_{k,k}X_{k}X_{k}^{-}\\
@@ -634,7 +618,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	\[
 	\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
 	\]
-	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \citep{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{d},\overline{d})$).
+	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \citep{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{\omega},\overline{\omega})$).
 \end{proof}
 \begin{remark}
 	\begin{leftbar}[remarkbar]
@@ -652,12 +636,12 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-	Assume that $-\underline{d}=\overline{d}=const\ne0$ and the conditions of Theorem \ref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:interval-predictor} takes the form for sufficiently high values of $t\geq0$:
+	Assume that $-\underline{\omega}=\overline{\omega}=const\ne0$ and the conditions of Theorem \ref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:interval-predictor} takes the form for sufficiently high values of $t\geq0$:
 	\begin{eqnarray*}
 		\dot{\underline{x}}(t) & = & (A_{0}-\Delta A_{+})\underline{x}(t)-\Delta A_{-}\overline{x}(t)\\
-		&  & +B^{+}\underline{d}-B^{-}\overline{d},\\
+		&  & +B^{+}\underline{\omega}-B^{-}\overline{\omega},\\
 		\dot{\overline{x}}(t) & = & (A_{0}+\Delta A_{+})\overline{x}(t)+\Delta A_{-}\underline{x}(t)\\
-		&  & +B^{+}\overline{d}-B^{-}\underline{d},
+		&  & +B^{+}\overline{\omega}-B^{-}\underline{\omega},
 	\end{eqnarray*}
 	which is a linear system
 	\begin{eqnarray}
@@ -670,8 +654,8 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	-B^{-} & B^{+}\\
 	B^{+} & -B^{-}
 	\end{array}\right]\left[\begin{array}{c}
-	\overline{d}\\
-	\underline{d}
+	\overline{\omega}\\
+	\underline{\omega}
 	\end{array}\right],
 	\end{eqnarray}
 	where as before $X=[\underline{x}^{\top}\;\;\overline{x}^{\top}]^{\top}$.
@@ -681,13 +665,13 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	[motivating, continue] Let us apply the predictor \eqref{eq:interval-predictor}
 	to the motivation example:
 	\begin{eqnarray*}
-		\dot{\underline{x}}(t) & = & -\overline{\theta}\underline{x}(t)-(\overline{\theta}-\underline{\theta})\underline{x}^{-}(t)+\underline{d},\\
-		\dot{\overline{x}}(t) & = & -\overline{\theta}\overline{x}(t)+(\overline{\theta}-\underline{\theta})\overline{x}^{+}(t)+\overline{d},
+		\dot{\underline{x}}(t) & = & -\overline{\theta}\underline{x}(t)-(\overline{\theta}-\underline{\theta})\underline{x}^{-}(t)+\underline{\omega},\\
+		\dot{\overline{x}}(t) & = & -\overline{\theta}\overline{x}(t)+(\overline{\theta}-\underline{\theta})\overline{x}^{+}(t)+\overline{\omega},
 	\end{eqnarray*}
 	where $A_{0}=-\overline{\theta}$ is chosen, then $\Delta A_{+}=\overline{\theta}-\underline{\theta}$, $\Delta A_{-}=0$ and all conditions of Theorem \ref{thm:main} are verified. The results of simulation are shown in Fig.~\ref{fig:IP_New}. As we can see the new predictor generates very reasonable and bounded estimates. 
 	\begin{figure}
 		\begin{centering}
-			\includegraphics[width=\linewidth]{img/predictor}
+			\includegraphics[width=0.8\linewidth]{img/predictor}
 			\par\end{centering}
 		\caption{\label{fig:IP_New} The results of prediction by \eqref{eq:interval-predictor}: the new predictor is stable and produces tight bounds.}
 	\end{figure}
@@ -696,7 +680,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 
 \subsection{Frequency based interval estimation}
 \label{sec:Frequency}
-The domain of convergence of the linear system \eqref{eq:linear-asympt}, and hence of \eqref{eq:interval-predictor}, can be tightened under an additional hypothesis that $d(t)$ has a known and bounded frequency spectrum.
+The domain of convergence of the linear system \eqref{eq:linear-asympt}, and hence of \eqref{eq:interval-predictor}, can be tightened under an additional hypothesis that $\omega(t)$ has a known and bounded frequency spectrum.
 Assume that there exist two signals $\underline{\omega},\overline{\omega}:\Real_{+}\to\Real^{q}$ and two vectors $\underline{x}_{0},\overline{x}_{0}\in\Real^{n}$ such that
 \begin{gather*}
 \underline{\omega}(t)\leq\omega(t)\leq\overline{\omega}(t),\quad\forall t\geq0,\\
@@ -757,7 +741,7 @@ The interval observer \eqref{eq:IO_LTI}, if we assume that $\overline{\omega}(t)
 	then the system trajectories and intervals are shown in Fig. \ref{fig:IntFreq}. 
 	\begin{figure}
 		\begin{centering}
-			\includegraphics[width=\linewidth]{img/asymptotic}
+			\includegraphics[width=0.8\linewidth]{img/asymptotic}
 			\par\end{centering}
 		\caption{\label{fig:IntFreq} The results of prediction for different values
 			of the frequency. Taking $\tau=\frac{4}{\min_{i=\overline{1,n}}|\lambda_{i}(A)|}=5.85$ and $\epsilon=0.05,$ the trajectories of the interval observer \eqref{eq:IO_LTI} are presented for $t\leq0.5\tau$, and as we can conclude, these estimates are rather conservative. Next, for $t\in[0.5\tau,\tau]$ the estimates given in Lemma \ref{lem:IntFreq} for the case $s_{1}=s_{2}=0$ are shown, which are already more accurate. Finally, for $t\geq\tau$ the estimates of Lemma \ref{lem:IntFreq} are presented for $s_{1}=s_{2}=s$, which demonstrate a definite improvement. }
@@ -851,27 +835,27 @@ We use lemmas \ref{lem:l2} and \ref{lem:l3} to compute a similarity transformati
 
 \begin{figure}
 	\begin{center}
-	\begin{subfigure}[b]{0.8\linewidth}
+	\begin{subfigure}[b]{0.75\linewidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/driving_observer.png}
+		\includegraphics[width=\textwidth]{img/driving_observer.png}
 		\caption{The naive predictor \eqref{eq:predictor-naive} quickly diverges}
 		\label{sub:hw-a}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.8\linewidth}
+	\begin{subfigure}[b]{0.75\linewidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/driving_predictor.png}
+		\includegraphics[width=\textwidth]{img/driving_predictor.png}
 		\caption{The proposed predictor \eqref{eq:interval-predictor} remains stable}
 		\label{sub:hw-b}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.8\linewidth}
+	\begin{subfigure}[b]{0.75\linewidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/lane_change_predictor.png}
+		\includegraphics[width=\textwidth]{img/lane_change_predictor.png}
 		\caption{Prediction during a lane change maneuver}
 		\label{sub:hw-c}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.8\linewidth}
+	\begin{subfigure}[b]{0.75\linewidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/overtake.png}
+		\includegraphics[width=\textwidth]{img/overtake.png}
 		\caption{Prediction with uncertainty in the followed lane $L_i$}
 		\label{sub:hw-d}
 	\end{subfigure}
@@ -1327,7 +1311,6 @@ We illustrate the efficiency of the proposed \gls{MPC} approach by numerical
 experiments.
 
 \subsection{Numerical experiment}
-\label{sec:7-experiments}
 
 We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \citep{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
 Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with
@@ -1388,9 +1371,11 @@ The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\T
 
 \section{Minimax control with generic costs}
 
+Though there exist works addressing continuous actions \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision $(\Real^q)^\Natural$ space by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
+The robust objective \eqref{eq:robust-control} becomes $\sup_{\ba\in{\cA}^\Natural} V^r(\ba)$, where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
 
 \label{sec:control}
-In order to evaluate the robust objective $V^r$ \eqref{eq:robust-control}, we approximate it thanks to the interval prediction $[\underline{x}(t), \overline{x}(t)]$ of \autoref{sec:prediction}.
+In order to evaluate the robust objective $V^r$ \eqref{eq:robust-control}, we approximate it thanks to the interval prediction $[\underline{x}(t), \overline{x}(t)]$ of \Cref{sec:prediction}.
 
 \begin{definition}[Surrogate objective]
 	\begin{leftbar}[defnbar]
@@ -1427,6 +1412,24 @@ a_k = \argmax_{a\in\cL_k} B_a(k), \quad B_a(k) = \sum_{n=0}^{h(a)-1} \underline{
 \end{equation}
 where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the sequence $a$, and $\underline{R}_n(a)$ the pessimistic reward \eqref{eq:pessimistic-rewards} obtained at time $n$ by following the controls $u_n = \pi_{a_n}(x_n)$.
 
+\Cref{alg:full} shows the full integration of the three procedures of estimation, prediction and control. 
+\begin{algorithm}[th]
+	\caption{Robust Estimation, Prediction and Control}
+	\label{alg:full}
+	%	\begin{algorithmic}
+	%		\STATE {\bfseries Input:} confidence level $\delta$, structure $(A,\phi)$, reward $R$, $\cD_{[0]}\gets\emptyset,\, \ba_1\gets\emptyset$
+	%		\FOR{$N = 0,1,2,\dots$} 
+	%		\STATE $\cC_{[N],\delta} \gets$\textsc{Model Estimation}$(\cD_{[N]})$. \eqref{eq:polytope}
+	%		\FOR{each planning step $k\in\{N,\dots,N+K\}=N+[K]$}
+	%		\STATE $[\underline{x}_{k+1}, \overline{x}_{k+1}]\gets$ \textsc{Interval Prediction}($\cC_{[N],\delta}, \ba_kb$) for each action $b\in \cA$. \eqref{eq:interval-predictor}
+	%		
+	%		\STATE $\ba_{k+1}$ $\gets$\textsc{Pessimistic Planning}$(\underline{R_{k+1}}([\underline{x}_{k+1}, \overline{x}_{k+1}]))$.  \eqref{eq:opd}
+	%		\ENDFOR
+	%		\STATE Execute the recommended control $u_{N+1}$, and add the transition $(x_{N+1}, y_{N+1}, u_{N+1})$ to $\cD_{[N+1]}$.
+	%		\ENDFOR
+	%	\end{algorithmic}
+\end{algorithm}
+
 \begin{theorem}[Planning performance of \citealt{Hren2008}]
 	\label{theorem:opd-regret}
 	\begin{leftbar}[theorembar]
@@ -1462,7 +1465,7 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 		|D|^\transp P & -\rho I_r \\
 		\end{bmatrix}< 0;$
 	\end{enumerate}
-	we can bound the approximation error of \autoref{alg:full}:
+	we can bound the approximation error of \Cref{alg:full}:
 	\begin{equation*}
 	\hat{V}^r(\bu) \leq {V}^r(\bu) \leq V(\bu) \leq \hat{V}^r(\bu) + \Delta_\omega + \cO\left({\log N / N}\right)
 	\end{equation*}
@@ -1470,17 +1473,16 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	\end{leftbar}
 \end{theorem}
 
-
 \section{Multi-model selection}
 \label{sec:multi-model}
 
-The procedure we developed in sections \ref{sec:estimation}, \ref{sec:prediction} and \ref{sec:control} relies on strong modelling assumptions, such as the linear dynamics \eqref{eq:dynamics} and \autoref{assumpt:structure}. But what if they are wrong?
+The procedure we developed in sections \ref{sec:estimation}, \ref{sec:prediction} and \ref{sec:control} relies on strong modelling assumptions, such as the linear dynamics \eqref{eq:dynamics} and \Cref{assumpt:structure}. But what if they are wrong?
 
 \paragraph{Model adequacy}
 
 One of the major benefits of using the family of linear models, compared to richer model classes, is that they provide strict conditions allowing to quantify the adequacy of the modelling assumptions to the observations.
 
-Given $N-1$ observations, \autoref{sec:estimation} provides a polytopic confidence region \eqref{eq:polytope} that contains $A(\theta)$ with probability at least $1-\delta$. Since the dynamics are linear, we can propagate this confidence region to the next observation: $y_{N}$ must belong to the Minkowski sum of a polytope representing model uncertainty $\cP(A_{0} x_N + Bu_N, \Delta A_{1}x_N,\dots, \Delta A_{2^d}x_N)$ and a polytope $\cP(0_p, \underline{\eta}, \overline{\eta})$ bounding the perturbation and measurement noises. \citet{delos2015} provide a way to test this membership in polynomial time using linear programming. Whenever it is not verified, we can confidently reject the $(A,\phi)$-modelling \autoref{assumpt:structure}. This enables us to consider a rich set of potential features $\left((A^1, \phi^1), \dots, (A^M, \phi^M)\right)$ rather than relying on a single assumption, and only retain those that are consistent with the observations so far. Then, every remaining hypothesis must be considered during planning.
+Given $N-1$ observations, \Cref{sec:estimation} provides a polytopic confidence region \eqref{eq:polytope} that contains $A(\theta)$ with probability at least $1-\delta$. Since the dynamics are linear, we can propagate this confidence region to the next observation: $y_{N}$ must belong to the Minkowski sum of a polytope representing model uncertainty $\cP(A_{0} x_N + Bu_N, \Delta A_{1}x_N,\dots, \Delta A_{2^d}x_N)$ and a polytope $\cP(0_p, \underline{\eta}, \overline{\eta})$ bounding the perturbation and measurement noises. \citet{delos2015} provide a way to test this membership in polynomial time using linear programming. Whenever it is not verified, we can confidently reject the $(A,\phi)$-modelling \Cref{assumpt:structure}. This enables us to consider a rich set of potential features $\left((A^1, \phi^1), \dots, (A^M, \phi^M)\right)$ rather than relying on a single assumption, and only retain those that are consistent with the observations so far. Then, every remaining hypothesis must be considered during planning.
 
 \paragraph{Robust selection}
 
@@ -1501,7 +1503,7 @@ We want to adapt our planning algorithm in order to balance these concurrent hyp
 V^r = \sup_{a\in\cA^\Natural}\min_{m\in[M]} \sum_{n=N+1}^\infty \discount^n R_n^m
 \end{equation}
 where $R_n^m$ is the reward obtain by following the action sequence $a$ up to step $n$ under the dynamics $f^m$.
-This objective could be optimised in the same way as in \autoref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \autoref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \texttt{OPD} algorithm in the following way:
+This objective could be optimised in the same way as in \Cref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \Cref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \texttt{OPD} algorithm in the following way:
 
 \begin{definition}[Robust sequence upper bounds]
 	\begin{leftbar}[defnbar]
@@ -1523,7 +1525,7 @@ Note that it is not equivalent to solving each control problem independently and
 	U_{a}^{r}(k)=\min_{m\in[1,M]}U_{a}^{m}(k),
 	\]
 	
-	This would not recover the robust policy, as we show in \autoref{fig:min-max-order} with a simple counter-example.
+	This would not recover the robust policy, as we show in \Cref{fig:min-max-order} with a simple counter-example.
 \end{leftbar}
 	\begin{figure}[htp]
 	\centering
@@ -1545,17 +1547,17 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 \begin{theorem}[Robust planning performance]
 	\label{theorem:drop-regret}
 	\begin{leftbar}[theorembar]
-	The robust version of \texttt{OPD} \eqref{eq:robust-b-values} enjoys the same regret bound as \texttt{OPD} in \autoref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
+	The robust version of \texttt{OPD} \eqref{eq:robust-b-values} enjoys the same regret bound as \texttt{OPD} in \Cref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
 	\end{leftbar}
 \end{theorem}
 
-The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \autoref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $A(\theta)\in\cC_{[N],\delta}$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \autoref{thm:control-error}. Finally, the two approaches of Sections \ref{sec:control} and \ref{sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
+The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $A(\theta)\in\cC_{[N],\delta}$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of Sections \ref{sec:control} and \ref{sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
 \label{sec:interval-experiments}
 
 \paragraph{Obstacle avoidance with unknown friction}
-We first consider a simple illustrative example, shown in \autoref{fig:prediction}: the control of a 2D system with position $(p_x,p_y)$ and velocity $(v_x, v_y)$ moving by means of a force $(u_x, u_y)$ in an environment with unknown anisotropic friction.
+We first consider a simple illustrative example, shown in \Cref{fig:prediction}: the control of a 2D system with position $(p_x,p_y)$ and velocity $(v_x, v_y)$ moving by means of a force $(u_x, u_y)$ in an environment with unknown anisotropic friction.
 
 \begin{equation*}
 \begin{bmatrix}
@@ -1586,7 +1588,7 @@ We first consider a simple illustrative example, shown in \autoref{fig:predictio
 \end{equation*}
 
 
-% TODO: \autoref{assumpt:metzler}
+% TODO: \Cref{assumpt:metzler}
 Note that the Metzler assumption for $A_0$ is always verified. The reward is non-smooth and encodes the task of navigating to reach a goal state $x_g$ while avoiding collisions with obstacles: $R(x) = \delta(x)/(1 + \|x - x_g\|_2)$  where $\delta(x)$ is $0$ whenever $x$ collides with an obstacle, $1$ otherwise. The actions $\cA$ are constant controls in the up, down, left and right directions. The environment is illustrated in \Cref{fig:obstacle-env}.
 
 \begin{figure}[ht]
@@ -1596,7 +1598,7 @@ Note that the Metzler assumption for $A_0$ is always verified. The reward is non
 	\label{fig:obstacle-env}
 \end{figure}
 
-We run \autoref{alg:full} for 100 simulations, and compare in \autoref{tab:obstacle} its performances to that of the nominal agent, i.e. the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \discount^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \autoref{fig:regret}, along with its 95\% confidence interval. We see that \autoref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \autoref{thm:control-error}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all time. In contrast, the nominal agent has an even smaller regret but collided with obstacles in $4\%$ of simulations.
+We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} its performances to that of the nominal agent, i.e. the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \discount^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \Cref{fig:regret}, along with its 95\% confidence interval. We see that \Cref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \Cref{thm:control-error}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all time. In contrast, the nominal agent has an even smaller regret but collided with obstacles in $4\%$ of simulations.
 
 \begin{figure}[tp]
 	\centering
@@ -1619,15 +1621,15 @@ We run \autoref{alg:full} for 100 simulations, and compare in \autoref{tab:obsta
 		Oracle & 0\% & {11.6} & {$14.2 \pm 1.3$} \\
 		\midrule
 		{Nominal} & {4\%} & {2.8} & \textbf{$\mathbf{13.8} \pm 2.0$} \\
-		\autoref{alg:full} & \textbf{0\%} & \textbf{10.4} & {$13.0 \pm 1.5$} \\
+		\Cref{alg:full} & \textbf{0\%} & \textbf{10.4} & {$13.0 \pm 1.5$} \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
 \paragraph{Behavioural planning for an autonomous vehicle}
-We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $\chi_0\in\Real^4$ is approaching an intersection among $V$ other vehicles with states $\chi_i\in\Real^4$, resulting in a joint traffic state $x = [\chi_0, \dots,\chi_V]^\top\in\Real^{4V+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \autoref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5V}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16V^2}$.
+We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $\chi_0\in\Real^4$ is approaching an intersection among $V$ other vehicles with states $\chi_i\in\Real^4$, resulting in a joint traffic state $x = [\chi_0, \dots,\chi_V]^\top\in\Real^{4V+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5V}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16V^2}$.
 %This allows to scale to larger systems: in our experiments, we used a state space of dimension $44$ ($V=10$) where e.g. \citep{Dean2018,abeille18a} reported numerical experiments with states of dimensions 3 and 4, respectively.
-The system dynamics $f$, which describes the couplings and interactions between vehicles, can only be expressed in the form of \autoref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \autoref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. We compare \autoref{alg:full} to a nominal agent planning with the estimated parameter $\theta_{[N],\lambda}$, with two different modelling assumptions: we assume that Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks a model with minimal prediction error. Their performances are compared in \autoref{tab:driving}. Again, the robust approach is less efficient on average than planning with a nominal model, but it does better in terms of worst-case performance and manages to avoid collisions, contrary to the nominal baselines that suffer from model bias. We provide more details about the system and videos of the experiments in the Supplementary Material.
+The system dynamics $f$, which describes the couplings and interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. We compare \Cref{alg:full} to a nominal agent planning with the estimated parameter $\theta_{[N],\lambda}$, with two different modelling assumptions: we assume that Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks a model with minimal prediction error. Their performances are compared in \Cref{tab:driving}. Again, the robust approach is less efficient on average than planning with a nominal model, but it does better in terms of worst-case performance and manages to avoid collisions, contrary to the nominal baselines that suffer from model bias. We provide more details about the system and videos of the experiments in the Supplementary Material.
 
 \begin{figure}[t]
 	\centering
@@ -1650,7 +1652,7 @@ The system dynamics $f$, which describes the couplings and interactions between 
 		\midrule
 		{Nominal 1} & 4\% & {5.2} & $\mathbf{7.3} \pm 1.5$ \\
 		{Nominal 2} & 33\% & {3.5} & $6.4 \pm 0.26$ \\
-		\autoref{alg:full} & \textbf{0\%} & \textbf{6.8} & $7.1 \pm 0.29$ \\
+		\Cref{alg:full} & \textbf{0\%} & \textbf{6.8} & $7.1 \pm 0.29$ \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -1666,7 +1668,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\subsection{Proofs}
 	\label{sec:proof}
 	
-	\subsubsection{Proof of \autoref{prop:regularized_solution}}
+	\subsubsection{Proof of \Cref{prop:regularized_solution}}
 	
 	\begin{proof}
 		We differentiate $J(\theta) = \sum_{n=1}^N \|y_n -\Phi_n\theta\|_{\Sigma_p^{-1}}^2 + \lambda\|\theta\|_{}^2$ as in  \eqref{eq:regression_min} with respect to $\theta$:
@@ -1682,7 +1684,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{align*}
 	\end{proof}
 	
-	\subsection{Proof of \autoref{thm:confidence_ellipsoid}}
+	\subsection{Proof of \Cref{thm:confidence_ellipsoid}}
 	
 	We start by showing a preliminary proposition:
 	
@@ -1762,7 +1764,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		
 	\end{proof}
 	
-	Having shown this preliminary result, we move on to the proof of \autoref{thm:confidence_ellipsoid}.
+	Having shown this preliminary result, we move on to the proof of \Cref{thm:confidence_ellipsoid}.
 	
 	\begin{proof}
 		For all $x\in\Real^d$, \eqref{eq:vector_rls} gives
@@ -1783,7 +1785,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \left\|\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n\right\|_{G_{N, \lambda}^{-1}} + \lambda\|\theta\|_{G_{N, \lambda}^{-1}}
 		\end{align*}
 		
-		By applying \autoref{prop:concentration} with $G=\lambda I_d$, we obtain that with probability at least $1-\delta$,
+		By applying \Cref{prop:concentration} with $G=\lambda I_d$, we obtain that with probability at least $1-\delta$,
 		\begin{align*}
 		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\delta\det(\lambda I_d)^{1/2}}\right)}
 		+ \lambda\|\theta\|_{G_{N, \lambda}^{-1}}
@@ -1796,10 +1798,10 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\end{proof}
 	
 	
-	\subsection{Proof of \autoref{prop:lower-bound}}
+	\subsection{Proof of \Cref{prop:lower-bound}}
 	
 	\begin{proof}
-		The predictor designed in \autoref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $A(\theta)\in C_{[N],\delta}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
+		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $A(\theta)\in C_{[N],\delta}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
 		
 		Thus, by taking the min over $C_{[N],\delta}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$,
 		\begin{align*}
@@ -1809,7 +1811,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{align*}
 	\end{proof}
 	
-	\subsection{Proof of \autoref{thm:control-error}}
+	\subsection{Proof of \Cref{thm:control-error}}
 	
 	We first bound the model estimation error.
 	\begin{lemma}
@@ -1963,11 +1965,11 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{align*}
 		with $\Delta_\omega = L C_0\sum_{n>N} \discount^n C_{\omega}(t_n)$.
 		
-		Note that $\Delta_\omega$ is finite, since $C_{\omega}(t_n)$ is in the order of $\underline{\omega}(t_n)$, $\overline{\omega}(t_n)$, and these are either bounded in the case of \autoref{assumpt:bounded-noise}, or in the case of \autoref{assumpt:gaussian-noise} in the order of $\sqrt{2\log n / \delta_n}$, with $\delta_n = \delta/(n(n+1))$, which is dominated by $\discount^n$.
+		Note that $\Delta_\omega$ is finite, since $C_{\omega}(t_n)$ is in the order of $\underline{\omega}(t_n)$, $\overline{\omega}(t_n)$, and these are either bounded in the case of \Cref{assumpt:bounded-noise}, or in the case of \Cref{assumpt:gaussian-noise} in the order of $\sqrt{2\log n / \delta_n}$, with $\delta_n = \delta/(n(n+1))$, which is dominated by $\discount^n$.
 	\end{proof}
 	
 	
-	\subsection{Proof of \autoref{theorem:drop-regret}}
+	\subsection{Proof of \Cref{theorem:drop-regret}}
 	
 	We start by showing the following lemma:
 	
@@ -2062,10 +2064,10 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	\label{sec:attachments}
 %	
 %	\paragraph{Videos}
-%	The \texttt{video} folder contains videos comparing trajectories of the oracle planner and \autoref{alg:full}. The oracle planner has access to the true dynamics and follows aggressive trajectories that nearly saturate the collision constraints. In contrast, the \autoref{alg:full} produces more conservative trajectories. In the obstacle experiment, we show the confidence ellipsoid over $\theta = (\theta_x,\theta_y)$ in the right panel. In the driving experiment, we show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles.
+%	The \texttt{video} folder contains videos comparing trajectories of the oracle planner and \Cref{alg:full}. The oracle planner has access to the true dynamics and follows aggressive trajectories that nearly saturate the collision constraints. In contrast, the \Cref{alg:full} produces more conservative trajectories. In the obstacle experiment, we show the confidence ellipsoid over $\theta = (\theta_x,\theta_y)$ in the right panel. In the driving experiment, we show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles.
 %	
 %	\paragraph{Source code}
-%	The attached \texttt{code} directory contains an implementation of \autoref{alg:full}. We relate the algorithmic steps of this paper to their location in the source code.
+%	The attached \texttt{code} directory contains an implementation of \Cref{alg:full}. We relate the algorithmic steps of this paper to their location in the source code.
 %	\begin{enumerate}
 %		\item The confidence ellipsoid \eqref{eq:confidence-ellipsoid} is implemented in the \texttt{ellipsoid()} method in \url{code/rl_agents/agents/tree_search/robust_epc.py}
 %		\item The corresponding polytope \eqref{eq:polytope} is implemented in the \texttt{polytope()} method of \url{code/rl_agents/agents/tree_search/robust_epc.py}
@@ -2098,7 +2100,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		&G_{N,\lambda} = PDP^{-1}, \quad \Delta\theta_k = \beta_{N}(\delta)^{1/2} P^{-1}D^{-1/2} h_k, \\
 		&A_0 = A + \theta_{N,\lambda}^\transp\Phi, \quad \Delta A_k = \Delta\theta_k^\transp\Phi.
 		\end{align*}
-		This conversion is illustrated in \autoref{fig:ellipsoid_to_polytope}.
+		This conversion is illustrated in \Cref{fig:ellipsoid_to_polytope}.
 		\end{leftbar}
 	\end{lemma}
 	
@@ -2244,7 +2246,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	
 %	\paragraph{Change of coordinates}
 %	In both cases, the obtained polytope centre $A_0$ is non-Metzler.
-%	We use the similarity transformation of coordinates of \citet{Efimov2013}. Precisely, we choose $\Theta$ such that for any $\theta\in\Theta$, $A(\theta)$ is always diagonalisable with real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $Z$. The transformed system $X'=Z^{-1}(X-X_c)$ verifies \eqref{eq:confidence} with $A_0$ Metlzer as required to apply the interval predictor of \autoref{prop:predictor}. Finally, the obtained predictor is transformed back to the original coordinates $Z$ by using the following lemma:
+%	We use the similarity transformation of coordinates of \citet{Efimov2013}. Precisely, we choose $\Theta$ such that for any $\theta\in\Theta$, $A(\theta)$ is always diagonalisable with real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $Z$. The transformed system $X'=Z^{-1}(X-X_c)$ verifies \eqref{eq:confidence} with $A_0$ Metlzer as required to apply the interval predictor of \Cref{prop:predictor}. Finally, the obtained predictor is transformed back to the original coordinates $Z$ by using the following lemma:
 %	\begin{lemma}[Interval arithmetic of \citealt{Efimov2012}]
 %		\label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 %		
