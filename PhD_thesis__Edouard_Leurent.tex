@@ -57,7 +57,13 @@
 
 	% *************************** Nomenclature ****************************
 	\begin{spacing}{0.93}
-		\printglossaries
+		\glsaddallunused
+		\printglossary[type=main]
+		\newcommand*{\Agroupname}{Mathematics}
+		\newcommand*{\Bgroupname}{Markov Decision Processes}
+		\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
+		\printglossary[type=symbols]
+		%\printunsrtglossaries 
 		\label{chapter:nomenclature}
 	\end{spacing}
 

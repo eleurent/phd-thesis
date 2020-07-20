@@ -1,3 +1,6 @@
+
+
+
 \definecolor{symbolcolor}{rgb}{0.5,0.,0}
 \newcommand{\var}[1]{\ensuremath{#1}}
 
@@ -10,153 +13,167 @@
 
 % --- MDP
 
-\newglossaryentry{state}{name={\var{s}},description={State},type=symbols, category=symbol, sort=use}
-\newcommand{\s}{\gls{state}}
-
-\newglossaryentry{cS}{name={\var{\mathcal{S}}},description={Set of states},type=symbols, category=symbol, sort=use}
+\newglossaryentry{cS}{name={\var{\mathcal{S}}},description={set of states $s$},type=symbols, category=symbol, sort={bmdpa}}
 \newcommand{\cS}{\gls{cS}}
 
-\newglossaryentry{cA}{name={\var{\mathcal{A}}},description={Set of actions},type=symbols, category=symbol, sort=use}
+\newglossaryentry{cA}{name={\var{\mathcal{A}}},description={set of actions $a$},type=symbols, category=symbol, sort={bmdpb}}
 \newcommand{\cA}{\gls{cA}}
 
-\newglossaryentry{reward}{name={\var{R}},description={Reward function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{reward}{name={\var{R}},description={reward function $s,a\rightarrow R(s,a) \in [0, 1]$},type=symbols, category=symbol, sort={bmdpc}}
 \newcommand{\R}{\gls{reward}}
 
-\newglossaryentry{transition}{name={\var{P}},description={Transition distribution},type=symbols, category=symbol, sort=use}
+\newglossaryentry{transition}{name={\var{P}},description={transition distribution $s'\sim P\parentheses{s'\mid s,a}$},type=symbols, category=symbol, sort={bmdpd}}
 \newcommand{\Ps}{\gls{transition}}
 
-\newglossaryentry{discountfactor}{name={\var{\gamma}},description={Discount factor},type=symbols, category=symbol, sort=use}
+\newglossaryentry{discountfactor}{name={\var{\gamma}},description={discount factor in $[0, 1)$]},type=symbols, category=symbol, sort={bmdpe}}
 \newcommand{\discount}{{\gls{discountfactor}}}
 
 % --- RL
 
-\newglossaryentry{policy}{name={\var{\pi}},description={Policy},type=symbols, category=symbol, sort=use}
+\newglossaryentry{policy}{name={\var{\pi}},description={policy},type=symbols, category=symbol, sort={bmdpf}}
 \newcommand{\policy}{{\gls{policy}}}
 
-\newglossaryentry{optimalpolicy}{name={\var{\pi^\star}},description={Optimal policy},type=symbols, category=symbol, sort=use}
+\newglossaryentry{optimalpolicy}{name={\var{\pi^\star}},description={optimal policy},type=symbols, category=symbol, sort={bmdpg}}
 \newcommand{\optimalpolicy}{\gls{optimalpolicy}}
 
-\newglossaryentry{return}{name={\var{G}},description={Discounted return for the reward signal},type=symbols, category=symbol, sort=use}
+\newglossaryentry{return}{name={\var{G}},description={discounted return for the reward signal},type=symbols, category=symbol, sort={bmdph}}
 \newcommand{\return}{\gls{return}}
 
-\newglossaryentry{V}{name={\var{V}},description={State value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort=use}
+\newglossaryentry{V}{name={\var{V}},description={state value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpi}}
 \newcommand{\V}{\gls{V}}
 
-\newglossaryentry{Q}{name={\var{Q}},description={State-action value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Q}{name={\var{Q}},description={state-action value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpj}}
 \newcommand{\Q}{\gls{Q}}
 
-\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
+\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort={bmdpk}}
 \newcommand{\bo}{\gls{bo}}
 
-\newglossaryentry{params}{name={\var{\theta}},description={Parameters for a model},type=symbols, category=symbol, sort=use}
+\newglossaryentry{params}{name={\var{\theta}},description={parameters for a model},type=symbols, category=symbol}
 \newcommand{\params}{{\gls{params}}}
 
-\newglossaryentry{regret}{name={\var{r_n}},description={Simple regret of an algorithm},type=symbols, category=symbol, sort=use}
-\newcommand{\regret}{\gls{regret}}
+\newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm},type=symbols, category=symbol}
+\newcommand{\regret}{\gls{regret}, sort={bmdpl}}
 
-\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={Dataset},type=symbols, category=symbol, sort=use}
+\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
 \newcommand{\cD}{\gls{cD}}
 
-% Probas
-\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={Set of probability measures},type=symbols, category=symbol, sort=use}
+% --- Probas
+\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={set of probability measures},type=symbols, category=symbol, sort={ap}}
 \newcommand{\cM}{\gls{cM}}
 
-\newglossaryentry{uniform}{name={\var{\mathcal{U}}},description={Uniform distribution},type=symbols}
+\newglossaryentry{uniform}{name={\var{\mathcal{U}}},description={uniform distribution},type=symbols, sort={ap}}
 \newcommand{\uniform}{\gls{uniform}}
 
-\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac distribution},type=symbols, category=symbol, sort=use}
+\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac distribution},type=symbols, category=symbol, sort={ap}}
 \newcommand{\dirac}{\gls{dirac}}
 
-\newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols, category=symbol, sort=use}
+\newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols, category=symbol, sort={ap}}
 \newcommand{\normal}{\gls{normald}}
 
-\newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols, category=symbol, sort=use}
+\newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols, category=symbol, sort={ap}}
 \newcommand{\binomial}{\gls{binomiald}}
 
-\newglossaryentry{features}{name={\var{\phi}},description={Features},type=symbols, category=symbol, sort=use}
+\newglossaryentry{features}{name={\var{\phi}},description={features},type=symbols, category=symbol}
 \newcommand{\features}{\gls{features}}
 
-\newglossaryentry{maxit}{name={\var{K}},description={Number maximum of iterations},type=symbols, category=symbol, sort=use}
+\newglossaryentry{maxit}{name={\var{K}},description={number of iterations},type=symbols, category=symbol}
 \newcommand{\maxiteration}{\gls{maxit}}
 
-\newglossaryentry{Tt}{name={\var{N}},description={Number of transitions},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol}
 \newcommand{\T}{\gls{Tt}}
 
-\newglossaryentry{transpose}{name={\var{\top}},description={Matrix transposition},type=symbols, category=symbol, sort=use}
+\newglossaryentry{transpose}{name={\var{\top}},description={matrix transposition},type=symbols, category=symbol, sort={ap}}
 \newcommand{\transpose}{\gls{transpose}}
-
-\newglossaryentry{ttt}{name={\var{t}},description={Time index},type=symbols, category=symbol, sort=use}
-\newcommand{\indextransition}{\gls{ttt}}
 
 
 % --- Chapter 5
 
-\newglossaryentry{ocS}{name={\var{\overline{\mathcal{S}}}},description={Set of augmented states},type=symbols, category=symbol, sort=use}
+\newglossaryentry{ocS}{name={\var{\overline{\mathcal{S}}}},description={set of augmented states},type=symbols, category=symbol, sort={ebrla}}
 \newcommand{\ocS}{\gls{ocS}}
 
-\newglossaryentry{ocA}{name={\var{\overline{\mathcal{A}}}},description={Set of augmented actions},type=symbols, category=symbol, sort=use}
+\newglossaryentry{ocA}{name={\var{\overline{\mathcal{A}}}},description={set of augmented actions},type=symbols, category=symbol, sort={ebrlb}}
 \newcommand{\ocA}{\gls{ocA}}
 
-\newglossaryentry{cBB}{name={\var{\mathscr{B}}},description={Set of admissible budgets},type=symbols, category=symbol, sort=use}
+\newglossaryentry{cBB}{name={\var{\mathscr{B}}},description={set of admissible budgets},type=symbols, category=symbol, sort={ebrlc}}
 \newcommand{\budgetspace}{\gls{cBB}}
 
-\newglossaryentry{piii}{name={\var{\overline{\Pi}}},description={Set of budgeted policies},type=symbols, category=symbol, sort=use}
+\newglossaryentry{piii}{name={\var{\overline{\Pi}}},description={set of budgeted policies},type=symbols, category=symbol, sort={ebrld}}
 \newcommand{\policies}{\gls{piii}}
 
-\newglossaryentry{constraintx}{name={\var{C}},description={Cost function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{constraintx}{name={\var{C}},description={cost function},type=symbols, category=symbol, sort={ebrle}}
 \newcommand{\constraint}{\gls{constraintx}}
 
-\newglossaryentry{budget}{name={\var{\beta}},description={Budget},type=symbols, category=symbol, sort=use}
+\newglossaryentry{budget}{name={\var{\beta}},description={budget},type=symbols, category=symbol, sort={ebrlf}}
 \newcommand{\budget}{\gls{budget}}
 
-\newglossaryentry{nextbudget}{name={\var{\beta'}},description={Next budget},type=symbols, category=symbol, sort=use}
-\newcommand{\nextbudget}{\gls{nextbudget}}
-
-\newglossaryentry{budgetaction}{name={\var{\beta_a}},description={Budget allocated to an action},type=symbols, category=symbol, sort=use}
+\newglossaryentry{budgetaction}{name={\var{\beta_a}},description={budget allocated to an action},type=symbols, category=symbol, sort={ebrlg}}
 \newcommand{\budgetaction}{\gls{budgetaction}}
 
-\newglossaryentry{augmentedtransition}{name={\var{\overline{P}}},description={Augmented transition function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{augmentedtransition}{name={\var{\overline{P}}},description={augmented transition function},type=symbols, category=symbol, sort={ebrlh}}
 \newcommand{\augmentedtransition}{\gls{augmentedtransition}}
 
-\newglossaryentry{oR}{name={\var{\overline{R}}},description={Augmented reward function},type=symbols,category=symbol, sort=use}
+\newglossaryentry{oR}{name={\var{\overline{R}}},description={augmented reward function},type=symbols,category=symbol, sort={ebrli}}
 \newcommand{\oR}{\gls{oR}}
 
-\newglossaryentry{budgetedpolicy}{name={\var{\overline{\pi}}},description={Budgeted policy},type=symbols, category=symbol, sort=use}
+\newglossaryentry{budgetedpolicy}{name={\var{\overline{\pi}}},description={budgeted policy},type=symbols, category=symbol, sort={ebrlj}}
 \newcommand{\budgetedpolicy}{{\gls{budgetedpolicy}}}
 
-\newglossaryentry{optimalbudgetedpolicy}{name={\var{\overline{\pi}^\star}},description={Optimal budgeted policy},type=symbols, category=symbol, sort=use}
+\newglossaryentry{optimalbudgetedpolicy}{name={\var{\overline{\pi}^\star}},description={optimal budgeted policy},type=symbols, category=symbol, sort={ebrlk}}
 \newcommand{\optimalbudgetedpolicy}{\gls{optimalbudgetedpolicy}}
 
-\newglossaryentry{constraintreturn}{name={\var{G_c}},description={Discounted return for the cost signal},type=symbols, category=symbol, sort=use}
+\newglossaryentry{constraintreturn}{name={\var{G_c}},description={discounted return for the cost signal},type=symbols, category=symbol, sort={ebrll}}
 \newcommand{\constraintreturn}{\gls{constraintreturn}}
 
-\newglossaryentry{augmentedreturn}{name={\var{\overline{G}}},description={Augmented return},type=symbols, category=symbol, sort=use}
+\newglossaryentry{augmentedreturn}{name={\var{\overline{G}}},description={augmented return},type=symbols, category=symbol, sort={ebrlm}}
 \newcommand{\augmentedreturn}{\gls{augmentedreturn}}
 
-\newglossaryentry{oV}{name={\var{\overline{V}}},description={Augmented value function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{oV}{name={\var{\overline{V}}},description={augmented value function},type=symbols, category=symbol, sort={ebrln}}
 \newcommand{\oV}{\gls{oV}}
 
-\newglossaryentry{Vr}{name={\var{V_r}},description={Reward value function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Vr}{name={\var{V_r}},description={reward value function},type=symbols, category=symbol, sort={ebrln}}
 \newcommand{\Vr}{\gls{Vr}}
 
-\newglossaryentry{Vc}{name={\var{V_c}},description={Cost value function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Vc}{name={\var{V_c}},description={cost value function},type=symbols, category=symbol, sort={ebrln}}
 \newcommand{\Vc}{\gls{Vc}}
 
-\newglossaryentry{oQ}{name={\var{\overline{Q}}},description={Augmented Q-function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{oQ}{name={\var{\overline{Q}}},description={augmented Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\oQ}{\gls{oQ}}
 
-\newglossaryentry{Qr}{name={\var{Q_r}},description={Reward Q-function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Qr}{name={\var{Q_r}},description={reward Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\Qr}{\gls{Qr}}
 
-\newglossaryentry{Qc}{name={\var{Q_c}},description={Cost Q-function},type=symbols, category=symbol, sort=use}
+\newglossaryentry{Qc}{name={\var{Q_c}},description={Cost Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\Qc}{\gls{Qc}}
 
-\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={Augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort=use}
+\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort={ebrlp}}
 \newcommand{\abo}{{\gls{abo}}}
 
-\newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator},type=symbols, category=symbol, sort=use}
-\newcommand{\projection}{\gls{projection}}
+%\newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator}, type=symbols, category=symbol}
+%\newcommand{\projection}{\gls{projection}}
+%
+%\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols, category=symbol}
+%\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
 
-\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols, category=symbol, sort=use}
-\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
+% --- Mathematics
 
+\newglossaryentry{real}{name={$\mathbb{R}$},description={set of real numbers}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{natural}{name={$\mathbb{N}$},description={set of integers}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{realplus}{name={$\mathbb{R}_{+}$},description={set of positive reals $\{\tau\in\mathbb{R}:\tau\ge0\}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{naturalplus}{name={$\mathbb{N}_{+}$},description={set of positive integers $\mathbb{N}\cap\mathbb{R}_{+}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{euclideannorm}{name={$|x|$},description={Euclidean norm for a vector $x\in\mathbb{R}^{n}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{infinitynorm}{name={$\|u\|_{[t_{0},t_{1}]}$},description={$L_{\infty}$ norm on $[t_{0},t_{1})$ of a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{infinitynorm2}{name={$\|u\|$},description={$L_{\infty}$ norm $||u||_{[t_{0},t_{1}]}$ with $t_1=+\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{bounded}{name={$\mathcal{L}_{\infty}$},description={the set of all inputs $u$ with the property $||u||<\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{pos}{name={$z^+$},description={positive part $\max(z,0)$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{neg}{name={$z^-$},description={negative part $z^- = z^+-z$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{abs}{name={$|z|$},description={absolute value $|z| = z^++z^-$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{range}{name={$[n]$},description={range of integers $\{1,\dots, n\}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{identity}{name={$I_{n}$},description={the identity matrix with dimension $n\times n$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{ones}{name={$E_{n\times m}$ and $E_{p}$},description={the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{basis}{name={$e_{i}$},description={normal basis vectors $[0\dots0\;1\;\dots0]\tr$ in $\mathbb{R}^{n}$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{spectrum}{name={$\lambda(A)$},description={the vector of eigenvalues of a matrix $A\in\mathbb{R}^{n\times n}$}, type=symbols, category=symbol, sort={a}}
+
+% --- Chapter 7
+
+%
+%For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues is denoted as $\lambda(A)$, $||A||_{max}=\max_{i=\overline{1,n},j=\overline{1,n}}|A_{i,j}|$ (the elementwise maximum norm, it is not sub-multiplicative) and $||A||_{2}=\sqrt{\max_{i=\overline{1,n}}\lambda_{i}(A\tr A)}$ (the induced $L_{2}$ matrix norm), the relation $||A||_{max}\le||A||_{2}\le n||A||_{max}$ is satisfied between these norms.
