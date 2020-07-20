@@ -1137,7 +1137,7 @@ In \Cref{fig:suppl-trees}, we compare the trees $T_n$ expanded by \OPD and \KLOL
 \section*{Chapter conclusion}
 
 In this chapter, we studied the theoretical and practical performances of planning algorithms.
-We first introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Second, we studied the value how merging information between to similar states for planning. We showed that using a graph structure provides a benefit compared to tree structures in the deterministic setting, in the form of an improved regret bound that depends on a smaller problem difficulty. This improvement translates to an enhanced performance in practice, and can be adapted to stochastic problems as we demonstrate experimentally.
+We first introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Second, we studied the value of merging information between similar states during planning. We showed that using a graph structure provides a benefit compared to tree structures in the deterministic setting, in the form of an improved regret bound that depends on a smaller problem difficulty. This improvement translates to an enhanced performance in practice, and can be adapted to stochastic problems as we demonstrate experimentally.
 
 \FloatBarrier
 \begin{subappendices}
@@ -1215,7 +1215,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\label{prop:consistency}
 	\begin{leftbar}[propositionbar]
 		The set of sequences returned by \Cref{algo:lazy-kl-olop} is the same as the one returned by \Cref{algo:kl-olop}.
-		In particular, \Cref{algo:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret}.
+		In particular, \Cref{algo:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret-kl-olop}.
 	\end{leftbar}
 \end{proposition}
 
@@ -1230,6 +1230,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	To that end, we first introduce some useful notations:
 	
 	\begin{paragraph}{Definition}
+		\begin{leftbar}[defnbar]
 		% We remind that $\Tau$ refers to the whole search tree $\Tau = \sum_{h=0}^L \cA^h$.
 		Let $\Tau_m$ be the set of visited nodes after episode $m$:
 		\begin{equation*}
@@ -1252,14 +1253,19 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 		\LL_m &\eqdef \pi_m(\cA^L) \\
 		\LL_m^+ &\eqdef \pi_m^+(\cA^L) \}
 		\end{align*}
+		\end{leftbar}
 	\end{paragraph}
 	
 	\begin{remark}[About children extensions]
+		\begin{leftbar}[remarkbar]
 		We could frame \Cref{algo:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
+		\end{leftbar}
 	\end{remark}
 	
 	\begin{lemma}[Sets construction]
+		\begin{leftbar}[lemmabar]
 		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{algo:lazy-kl-olop}.
+		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		Note that for each episode $1 \leq m \leq M - 1$, we have:
@@ -1287,11 +1293,13 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\end{proof}
 	
 	\begin{lemma}[U-values conservation]
+		\begin{leftbar}[lemmabar]
 		\label{lemma:value-conservation}
 		For all $a \in \cA^*$,
 		\begin{equation*}
 		U_a(m) = U_{\pi_m(a)}(m) = U_{\pi_m^+(a)}(m)
 		\end{equation*}
+		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		Let $a \in \cA^*$, denote $h=|a|$ and $h'=|\pi_m(a)|$.
@@ -1328,6 +1336,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	\end{proof}
 	
 	\begin{lemma}[Inverse projection]
+		\begin{leftbar}[lemmabar]
 		\label{lemma:inverse-proj}
 		For all $a\in \LL_m^+$ of length $h\leq L$,
 		\begin{equation*}
@@ -1335,6 +1344,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 		\end{equation*}
 		
 		This allows to easily pick a sequence inside ${\pi_m^+}^{-1}(a)$: just continue the sequence $a$ with a default action of $A$ (e.g. the first) until it reaches length $L$.
+		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		Let $a\in \LL_m^+$. 
@@ -1400,7 +1410,9 @@ The bounds computation step $\cB_n^\infty$ (line 1 of \GBOPD) can converge in in
 \end{figure}
 
 \begin{proposition}[Time complexity of bounds computation]
+	\begin{leftbar}[propositionbar]
 	An $\varepsilon$-approximation of $(\cL_n, \cU_n)$ can be computed by applying $\cB_n$ for a finite number $k(\epsilon,\gamma)$ of iterations, with $$k(\epsilon,\gamma) = \log_\gamma\frac{1}{\varepsilon(1-\gamma)}.$$ 
+	\end{leftbar}
 \end{proposition}
 \begin{proof}
 	$\cB_n$ is a $\gamma$-contraction by Lemma \ref{lem:properties-b-graph}, and $\cU_n$ (resp $\cL_n$) is at a distance (in $\|\dot\|_\infty$) at most $V_{\max}$ of the initial value bound $V_{\max}$ (resp $0$). Thus, the $k^{\text{th}}$ application of $\cB_n$ decreases this error by a factor $\gamma^k$, which gives the result.
@@ -1408,6 +1420,7 @@ The bounds computation step $\cB_n^\infty$ (line 1 of \GBOPD) can converge in in
 
 The impact of using an $\varepsilon$-approximation of $(\cL_n, \cU_n)$ during planning is the following:
 \begin{proposition}[Effect of early stopping]
+	\begin{leftbar}[propositionbar]
 	\label{prop:early-stopping}
 	Denote the approximate bounds $(\hat{\cL}_n, \hat{\cU}_n)$ obtained by applying $\cB_n^{k(\varepsilon,\gamma)}$ instead of $\cB_n^\infty$, and likewise $(\hat{L}_n, \hat{U}_n)$ in their tree version obtained by applying $B_n^{k(\varepsilon,\gamma)}$ instead of $B_n^\infty$.
 	Then, running \GBOPD with $\hat{\cL}_n, \hat{\cU}_n$ gives the following regret:
@@ -1416,6 +1429,7 @@ The impact of using an $\varepsilon$-approximation of $(\cL_n, \cU_n)$ during pl
 	\end{align*}
 	with $$\hlgb{{\kappa}_\infty} \leq \hlob{\hat{\kappa}_\infty \eqdef \lim_{n\rightarrow\infty} \kappa(\hat{L}_n, \hat{U}_n)} \leq \hlrb{\kappa}.$$
 	Moreover, the approximation gap $\hlgb{\kappa_\infty} - \hlob{\hat{\kappa}_\infty}$ is non-increasing with respect to $\varepsilon$.
+	\end{leftbar}
 \end{proposition}
 It is difficult to control more explicitly the gap between $\hlgb{\kappa_\infty}$ and $\hlob{\hat{\kappa}_\infty}$, which might be discontinuous with $\varepsilon$.
 
@@ -1437,9 +1451,11 @@ Note that \OPD uses $d_n$ iterations of $B_n$, which corresponds to a tuning of 
 The sampling rule of \GBOPD (line 2 of \GBOPD) can yield an infinite sequence $b_n$. We propose to stop the sampling after a fixed depth $d^+_n$.
 
 \begin{proposition}[Time complexity of sampling]
+	\begin{leftbar}[propositionbar]
 	Consider the variant of \GBOPD where we stop the sampling rule when reaching a fixed depth $d^+_n$ chosen polynomial with $n$:
 	\[d^+_n = \ceil{\alpha n^\beta},\; \text{with }\alpha,\beta > 0\]
 	Then, the regret bound of \Cref{thm:regret-gbop} (or that of Proposition \ref{prop:early-stopping} when using early stopping in the bounds computation) still holds.
+	\end{leftbar}
 \end{proposition}
 
 Note that this is not too constraining compared to \OPD, for which the sampling rule complexity $d_n$ is upper-bounded by $n$. Hence, by choosing $\alpha=\beta=1$, \GBOPD preserve the same complexity as \OPD in the worst case.
@@ -1637,29 +1653,37 @@ Let $L_2\leq L_1\leq V\leq U_1\leq U_2$, then $\Tau_h^\infty(L_1,U_1) \subset \T
 In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \texttt{OPD}.
 
 \begin{remark}
+\begin{leftbar}[remarkbar]
 It no longer holds that $a_n$ must be of maximal depth $d_n$.  This is due to the fact the exploration bonus $\gamma^h U(a)$ is not depth-wise constant: consider two nodes $a,b$ at the same depth with $R(a) > R(b)$. In \texttt{OPD}, both get the same bonus $\gamma^h/(1-\gamma)$, and the node $a$ is expanded first. But with the local bonus, $b$ could be expanded in priority rather than $a$, if its own bonus is sufficiently higher than that of $a$, precisely if $R(a)+\gamma^h U(a) < R(b)+\gamma^h U(b)$. For instance, $U(a)=0$ when $a$ is known to be a terminal state while $b$ can lead to future rewards. If after expanding and exploring the subtree of $b$ we find out that $V(b) = 0$, we still return the recommendation $a$, which is of non-maximal depth.
+\end{leftbar}
 \end{remark}
 
 The regret bound still holds, however. First, notice that:
 \begin{lemma}[Expansion]
+\begin{leftbar}[lemmabar]
 \label{lem:expansion-bound-U}
 Whenever a node $a$ of depth $h$ is expanded by the optimistic algorithm, its first action $a_1$ enjoys a simple regret $V(a^\star)-V(a_1) \leq \gamma^h(U(a)-L(a))$. 
+\end{leftbar}
 \end{lemma}
 \begin{proof}
 Let $t$ be the time of expansion of $a$, it holds that $\overline{U}_t(b) \leq \overline{U}_t(a)$ for all $b\in \ext{\Tau}_t$, in particular those in a branch starting by an optimal action $a^\star$. Since $U=B(U)$ and $L=B(L)$, we also have $\overline{U}_t(a^\star) = \max_{b\in a^\star A^*} \overline{U}_t(b) \leq \overline{U}_t(a)$, and $\overline{L}_t(a_1) = \max{b\in a_1 A^*} \overline{L}_t(b) \geq  \overline{L}_t(a)$. Thus, $V(a^\star)-V(a_1) \leq \overline{U}_t(a^\star) - \overline{L}_t(a_1) \leq \overline{U}_t(a) - \overline{L}_t(a) = \gamma^h(U(a)-L(a))$.
 \end{proof}
  
 \begin{lemma}[Recommendation]
-	\label{lem:recommendation-bound-U}
+\begin{leftbar}[lemmabar]
+\label{lem:recommendation-bound-U}
 The recommended action $a_n$ has a simple regret $\regret \leq \frac{\gamma^{d_n}}{1-\gamma}$, where $d_n$ is the maximal depth of $\Tau_n$.
+\end{leftbar}
 \end{lemma}
 \begin{proof}
 Let $i$ a node of maximal depth $d_n$, and consider the recommended node $a_n$ at time $n$, of depth $d$. In particular, $\overline{L}_n(a_n) \geq \overline{L}_n(i)$, and since $(\overline{L}_t)_t$ is non-decreasing we also have $\overline{L}_n(i) \geq \overline{L}_t(i)$. At the time $t$ when $i$ is expanded, we have $\overline{U}_t(a_n) \leq \overline{U}_t(i)$, and since $(\overline{U}_t)_t$ is non-increasing we also have $\overline{U}_n(a_n) \leq \overline{U}_t(a_n)$. We can conclude with Lemma \ref{lem:expansion-bound-U} applied to $a_n$: $\regret \leq \gamma^d(U(a_n)-L(a_n) = \overline{U}_n(a_n) - \overline{L}_n(a_n)  \leq \overline{U}_t(a_n) - \overline{L}_n(i) \leq \overline{U}_t(i) - \overline{L}_t(i) = \gamma^{d_n}(U(i) - L(i)$, which yields the claimed bound since $U(i) - L(i) \leq V_{\max}-0$.
 \end{proof}
 
 \begin{lemma}[Near-optimal nodes]
+\begin{leftbar}[lemmabar]
 \label{lem:near-optimal-nodes-U}
 Every node expanded by \eqref{eq:sampling_rule} is in $$\Tau^\infty(L,U) = \bigcup_{h\geq 0} \Tau^\infty_h(L,U).$$
+\end{leftbar}
 \end{lemma}
 \begin{proof}
 Let $a$ be a node of depth $h$ expanded at round $n$, then $\overline{U}_n(a) \geq \overline{U}_n(b)$ for all $b\in\ext{\Tau}_n$. Thus, since $U = B(U)$, we have $\overline{U}(a) = \overline{B(U)}(\emptyset) = B(U)(s_1) \geq V(s_1) = V^\star$. Thus, $V^\star - V(a) \leq \overline{U}(a) - \overline{L}(a) = \gamma^h(U(a) - L(a))$.
@@ -1727,8 +1751,10 @@ By induction, for any $k>0$ $B_n^k(U)$ is equivalent to $\cB_n^k(\cU)$, and at t
 
 We start by showing a preliminary lemma.
 \begin{lemma}[Bounds of sequence values]
+	\begin{leftbar}[lemmabar]
 	\label{lem:bounds}
 	The bounds $(\overline{L}_n, \overline{U}_n)$ on the value of sequences of actions verify are respectively non-decreasing and non-increasing with respect to $n$, and verify: for all $a\in \cA^*$, $\overline{U_n}(a) = \max_{a'\in a A^\infty} \overline{U}(a')$.
+	\end{leftbar}
 \end{lemma}
 \begin{proof}
 	The second property can be easily shown by induction using the fact that $U_n$ and $L_n$ are fixed-points of $B_n$ by definition. Applying this equation at each depth $h$ gives the result. From this observation, we can deduce that $\overline{L}_n$ is increasing with $n$. Indeed, since when $T(\cG_n)$ is expanded with additional nodes compared to $T(\cG_{n-1})$, the leaves $a$ of $T(\cG_{n-1})$ with previous value $L_{n-1}(a)=0$ are updated to $L_n(a) = \max_b r(s(a), b) \geq 0 = L_{n-1}(a)$, and this increase at the leaves is then propagated through $\max_{a'\in a A^\infty}$ to any internal node $a$. Thus, $L_n$ is non-decreasing and likewise, $U_n$ is non-increasing with respect to $n$. The same is obtained directly of the bounds on sequence values $(\overline{L}_n, \overline{U}_n)$.
@@ -1770,7 +1796,9 @@ The \Cref{fig:mdp-tree} shows the planning tree corresponding to the MDP $\cM$. 
     \label{fig:mdp-tree}
 \end{figure}
 \begin{lemma}
+	\begin{leftbar}[lemmabar]
  Any sequence of actions in $A\setminus{a_1}$ is in $\Tau^\infty$.
+ \end{leftbar}
 \end{lemma}
 \begin{proof}
 Any such sequence of actions yields the sequence of rewards $r^-, r^+, \dots,r^+$. and end up in the state $s^+$ with value at least $V^\star$ (obtained by further taking $a_1$ indefinitely). Thus its value $V_h$ verifies, 
