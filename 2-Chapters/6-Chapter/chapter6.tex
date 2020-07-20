@@ -980,7 +980,7 @@ Note that even though $T(\cG_n)$ can be infinite, there is only one node $b_t$ t
 
 \subsubsection{Regret guarantee}
 
-In \Cref{thm:regret-bound-U}, we assumed that some bounds $(L,\,U)$ were revealed by an oracle and available from the onset for planning. In \eqref{eq:gbop-t-bounds}, we instead built a \emph{sequence} of bounds $(L_n,U_n)_{n\geq 0}$ \eqref{eq:gbop-t-bounds} that is non-increasing in the sense of inclusion, i.e. $0\leq \dots\leq L_{n-1}\leq L_n\leq V\leq U_n\leq U_{n-1}\leq \dots\leq V_{\max}$.
+In \Cref{thm:regret-bound-U}, we assumed that some bounds $(L,\,U)$ were revealed by an oracle and available from the onset for planning. In \eqref{eq:gbop-t-bounds}, we instead built a \emph{sequence} of bounds $(L_n,U_n)_{n\geq 0}$ \eqref{eq:gbop-t-bounds} that is non-increasing in the sense of inclusion, \ie $$0\leq \dots\leq L_{n-1}\leq L_n\leq V\leq U_n\leq U_{n-1}\leq \dots\leq V_{\max}.$$
 
 We can consider the sequence $\kappa_n = \kappa(L_n, U_n)$. It is non-increasing and lower-bounded by $1$, thus converges. Let $\hlgb{\kappa_\infty = \lim_{n\rightarrow\infty} \kappa(L_n, U_n)} \in[1,K]$.
 
@@ -1024,7 +1024,7 @@ This result confirms that \Cref{thm:regret-gbop} is non-trivial since we exhibit
 \subsection{Extension to Stochastic Systems}
 \label{sec:gbop-stochastic}
 
-The approach developed in \Cref{sec:gbopd,sec:analysis} consists in using state similarity to tighten a pair of lower and upper bounds $(L,\,U)$ for the value function $V$. Thus, any planning algorithm that is based on such bounds can benefit from this insight, and any theoretical result based on the validity and rate of convergence of these bounds will be preserved.  
+The approach developed in \Cref{sec:gbopd,sec:gbop-analysis} consists in using state similarity to tighten a pair of lower and upper bounds $(L,\,U)$ for the value function $V$. Thus, any planning algorithm that is based on such bounds can benefit from this insight, and any theoretical result based on the validity and rate of convergence of these bounds will be preserved.  
 
 \paragraph{Confidence intervals for rewards.}
 
@@ -1136,7 +1136,7 @@ In \Cref{fig:suppl-trees}, we compare the trees $T_n$ expanded by \OPD and \KLOL
 
 \section*{Chapter conclusion}
 
-In this chapter, we studied the theoretical and practical performances of planning algorithms.
+In this chapter, we studied the theoretical and practical performances of planning algorithms, that can be used to compute a near-optimal trajectory for a known stochastic non-linear system.
 We first introduced an enhanced version of the \OLOP algorithm for open-loop online planning, whose design was motivated by an investigation of the over-conservative search behaviours of \OLOP. We analysed its sample complexity and showed that the original regret bounds are preserved, while its empirical performances are increased by an order of magnitude in several numerical experiments. Second, we studied the value of merging information between similar states during planning. We showed that using a graph structure provides a benefit compared to tree structures in the deterministic setting, in the form of an improved regret bound that depends on a smaller problem difficulty. This improvement translates to an enhanced performance in practice, and can be adapted to stochastic problems as we demonstrate experimentally.
 
 \FloatBarrier
@@ -1144,7 +1144,7 @@ We first introduced an enhanced version of the \OLOP algorithm for open-loop onl
 \section{Technical details}
 
 \paragraph{Outline}
-We look into the time and memory complexity and propose efficient implementations of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, and of \GBOPD and \GBOP in \Cref{gbop-implementation}. We provide proofs for every claimed result about \KLOLOP in \Cref{sec:kl-olop-proofs}, and about \GBOP in \Cref{sec:gbop-proofs}.
+We look into the time and memory complexity and propose efficient implementations of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, and of \GBOPD and \GBOP in \Cref{sec:gbop-implementation}. We provide proofs for every claimed result about \KLOLOP in \Cref{sec:kl-olop-proofs}, and about \GBOP in \Cref{sec:gbop-proofs}.
 
 \subsection{Time and memory complexity of \KLOLOP}
 \label{sec:kl-olop-time}

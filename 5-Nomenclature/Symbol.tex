@@ -51,8 +51,8 @@
 \newglossaryentry{params}{name={\var{\theta}},description={parameters for a model},type=symbols, category=symbol}
 \newcommand{\params}{{\gls{params}}}
 
-\newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm},type=symbols, category=symbol}
-\newcommand{\regret}{\gls{regret}, sort={bmdpl}}
+\newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm},type=symbols, category=symbol, sort={bmdpl}}
+\newcommand{\regret}{\gls{regret}}
 
 \newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
 \newcommand{\cD}{\gls{cD}}
@@ -154,7 +154,7 @@
 %\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols, category=symbol}
 %\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
 
-% --- Mathematics
+% --- Mathematical notations
 
 \newglossaryentry{real}{name={$\mathbb{R}$},description={set of real numbers}, type=symbols, category=symbol, sort={a}}
 \newglossaryentry{natural}{name={$\mathbb{N}$},description={set of integers}, type=symbols, category=symbol, sort={a}}
@@ -172,8 +172,9 @@
 \newglossaryentry{ones}{name={$E_{n\times m}$ and $E_{p}$},description={the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively}, type=symbols, category=symbol, sort={a}}
 \newglossaryentry{basis}{name={$e_{i}$},description={normal basis vectors $[0\dots0\;1\;\dots0]\tr$ in $\mathbb{R}^{n}$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position}, type=symbols, category=symbol, sort={a}}
 \newglossaryentry{spectrum}{name={$\lambda(A)$},description={the vector of eigenvalues of a matrix $A\in\mathbb{R}^{n\times n}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{maximumnorm}{name={$\|A\|_{\max}$},description={the elementwise maximum norm $\|A\|_{max}=\max_{i\in[n],j\in[n]}|A_{i,j}|$, it is not sub-multiplicative}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{l2norm}{name={$\|A\|_{2}$}, description={the induced $L_{2}$ matrix norm $\max_{i\in[n]}\lambda_{i}(A^{\top} A)$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{vleq}{name={$x_{1}\le x_{2}$}, description={for two matrices $A_{1},A_{2}\in\Real^{n\times n}$, (including vectors), the relation $A_{1}\le A_{2}$ is understood elementwise}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{posdef}{name={$P\prec0$ ($P\succ0$)}, description={a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite}, type=symbols, category=symbol, sort={a}}
 
 % --- Chapter 7
-
-%
-%For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues is denoted as $\lambda(A)$, $||A||_{max}=\max_{i=\overline{1,n},j=\overline{1,n}}|A_{i,j}|$ (the elementwise maximum norm, it is not sub-multiplicative) and $||A||_{2}=\sqrt{\max_{i=\overline{1,n}}\lambda_{i}(A\tr A)}$ (the induced $L_{2}$ matrix norm), the relation $||A||_{max}\le||A||_{2}\le n||A||_{max}$ is satisfied between these norms.
