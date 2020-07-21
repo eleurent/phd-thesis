@@ -16,7 +16,7 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-Model-based algorithms often decouple estimation and control through \emph{certainty equivalence}: using a point estimate of the unknown dynamics as if it were the true value. Though \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build an entire \emph{confidence region} that contains the true dynamics with high probability, and optimise the decisions so as to maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.
+Model-based algorithms often assume\emph{certainty equivalence} to decouple estimation and control: they use a point estimate $\hat{\Ps}$ of the dynamics to plan as if it was the true value. Unfortunately, this \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build a \emph{confidence region} that contains the true dynamics with high probability, and maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.\footnote{This chapter is based on two articles published in the \emph{2019 and 2020 Conferences on Decision and Control} \citep{Leurent2019,Leurent2020robust} and one submitted to the \emph{2020 Conference on Neural Information Processing Systems} \citep{Leurent2020beyond}.}
 \minitocStartChapter{}
 
 \section{Motivation}
@@ -1304,7 +1304,7 @@ B =
 \end{bmatrix}.
 \]
 
-Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
+\noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
 
 \begin{figure}[th]
 	\centering

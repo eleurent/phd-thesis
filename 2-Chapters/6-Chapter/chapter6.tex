@@ -17,8 +17,8 @@
 
 \abstractStartChapter{}%
 
-This third part studies the design of model-based \gls{RL} algorithms, that estimate the \gls{MDP} dynamics $\Ps$ so as to \emph{plan} for the corresponding optimal policy.
-In this chapter, we focus on the planning step, and address our need to design provably and empirically sample-efficient algorithms for real-time behavioural planning. As our continuous state space $\cS$ precludes the use of Dynamic Programming, we consider tree-based planning algorithms under limited budget. First, in order to handle uncertain human behaviours modelled as \emph{stochastic} dynamics $\Ps$, we consider the \OLOP algorithm. We highlight its faulty behaviour in the low-budget regime, and propose a modified version that alleviates this issue. Second, we tackle a paradox: despite the underlying \gls{MDP} transitions having a graph structure, \gls{MCTS} algorithms rely on a tree structure that prevents them from merging information between similar states. We show that doing so with a graph-based structure enables to better exploit the dynamics structure in motion planning problems, where trajectories tend to overlap.
+This third part studies model-based \gls{RL} algorithms, that estimate the \gls{MDP} dynamics $\Ps$ so as to \emph{plan} for the corresponding optimal policy.
+In this chapter, we focus on this planning step under real-time requirements, which calls for provably and empirically sample-efficient algorithms. Since our continuous state space $\cS$ precludes the use of Dynamic Programming, we consider tree-based planning algorithms. First, to handle uncertain human behaviours modelled as \emph{stochastic} dynamics, we consider the \OLOP algorithm, highlight its faulty behaviour and propose a modified version that alleviates this issue. Second, we tackle a paradox: despite the \gls{MDP} transitions having a graph structure, \gls{MCTS} algorithms use a tree structure that prevents them from merging similar states. We show that doing so with a graph-based planner better exploits the structure of motion planning problems where trajectories tend to overlap.\footnote{This chapter is based on two articles, published and submitted to the \emph{2019 European} and \emph{2020 Asian Conferences on Machine Learning}, respectively \citep{Leurent2019practical,Leurent2020monte}.}
 \minitocStartChapter{}
 
 % TODO: revoir la biblio de ce chapitre, limiter les abbreviations
@@ -189,7 +189,7 @@ However, this property is only true if the upper-bound defined in \eqref{eq:u_mu
 \begin{lemma}[Monotony of $U_a(m)$ along a sequence]
 	\label{lemma:seq_values}
 	\begin{leftbar}[lemmabar]
-	~\\
+	\leavevmode\newline
 	\begin{itemize}
 	\item If it holds that $U^{\mu}_b(m) \in [0, 1]$ for all $b\in \cA^{\ast}$, then for any $a\in \cA^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-increasing, and we simply have $B_a(m) = U_a(m)$.
 	\item Conversely, if $U^{\mu}_b(m) > 1$ for all $b\in \cA^{\ast}$, then for any $a\in \cA^L$ the sequence $(U_{a_{1:h}}(m))_{1\leq h \leq L}$ is non-decreasing, and we have $B_a(m) = U_{a_{1:1}}(m)$.
