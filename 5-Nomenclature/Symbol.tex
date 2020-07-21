@@ -11,21 +11,78 @@
 \newcommand{\reward}{\R}
 \newcommand{\transition}{\Ps}
 
+
+% --- Mathematical notations
+
+\newglossaryentry{real}{name={$\mathbb{R}$},description={set of real numbers}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{natural}{name={$\mathbb{N}$},description={set of integers}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{realplus}{name={$\mathbb{R}_{+}$},description={set of positive reals $\{\tau\in\mathbb{R}:\tau\ge0\}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{naturalplus}{name={$\mathbb{N}_{+}$},description={set of positive integers $\mathbb{N}\cap\mathbb{R}_{+}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{euclideannorm}{name={$|x|$},description={Euclidean norm for a vector $x\in\mathbb{R}^{n}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{infinitynorm}{name={$\|u\|_{[t_{0},t_{1}]}$},description={$L_{\infty}$ norm on $[t_{0},t_{1})$ of a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{infinitynorm2}{name={$\|u\|$},description={$L_{\infty}$ norm $||u||_{[t_{0},t_{1}]}$ with $t_1=+\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{bounded}{name={$\mathcal{L}_{\infty}$},description={the set of all inputs $u$ with the property $||u||<\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
+\newglossaryentry{pos}{name={$z^+$},description={positive part $\max(z,0)$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{neg}{name={$z^-$},description={negative part $z^- = z^+-z$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{abs}{name={$|z|$},description={absolute value $|z| = z^++z^-$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{range}{name={$[n]$},description={range of integers $\{1,\dots, n\}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{identity}{name={$I_{n}$},description={the identity matrix with dimension $n\times n$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{ones}{name={$E_{n\times m},\;E_{p}$},description={the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{basis}{name={$e_{i}$},description={normal basis vectors $[0\dots0\;1\;\dots0]\tr$ in $\mathbb{R}^{n}$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{spectrum}{name={$\lambda(A)$},description={the vector of eigenvalues of a matrix $A\in\mathbb{R}^{n\times n}$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{maximumnorm}{name={$\|A\|_{\max}$},description={the elementwise maximum norm $\|A\|_{max}=\max_{i\in[n],j\in[n]}|A_{i,j}|$, it is not sub-multiplicative}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{l2norm}{name={$\|A\|_{2}$}, description={the induced $L_{2}$ matrix norm $\max_{i\in[n]}\lambda_{i}(A^{\top} A)$}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{vleq}{name={$x_{1}\le x_{2}$}, description={for two matrices $A_{1},A_{2}\in\Real^{n\times n}$, (including vectors), the relation $A_{1}\le A_{2}$ is understood elementwise}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{posdef}{name={$P\prec0$ ($P\succ0$)}, description={a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite}, type=symbols, category=symbol, sort={a}}
+\newglossaryentry{bigo}{name={$o(\cdot), \mathcal{O}(\cdot), \Omega(\cdot)$}, description={Landau notations for positive functions: $f(x)=o(g(x)$ means that $g(x)\neq0$ and $f(x)/g(x)\to 0$ for $x\to\infty$, $f(x)=\mathcal{O}(g(x))$ means that there exists $x_0,K>0$ such that $f(x)\leq K g(x)$ from $x\geq x_0$, and $f(x)=\Omega(g(x))$ means $g(x)=\mathcal{O}(f(x))$}, type=symbols, category=symbol, sort={a}}
+
+
+% --- Probabilities
+
+\newglossaryentry{expectedvalue}{name={\mathbb{E}},description={expectation under a probabilistic model},type=symbols, category=symbol, sort={ap}}
+\newglossaryentry{variance}{name={\mathbb{V}},description={variance under a probabilistic model},type=symbols, category=symbol, sort={ap}}
+
+\newglossaryentry{cM}{name={$\mathcal{M}(\cX)$}, text={\var{\mathcal{M}}},description={set of probability measures on a measurable space $\cX$},type=symbols, category=symbol, sort={ap}}
+\newcommand{\cM}{\gls{cM}}
+
+\newglossaryentry{uniform}{name={$\mathcal{U}(\cX)$}, text={\var{\mathcal{U}}}, description={uniform distribution on a measurable space $\cX$},type=symbols, sort={ap}}
+
+\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac distribution},type=symbols, category=symbol, sort={ap}}
+\newcommand{\dirac}{\gls{dirac}}
+
+\newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols, category=symbol, sort={ap}}
+\newcommand{\normal}{\gls{normald}}
+
+\newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols, category=symbol, sort={ap}}
+\newcommand{\binomial}{\gls{binomiald}}
+
+\newglossaryentry{features}{name={\var{\phi}},description={features},type=symbols, category=symbol}
+\newcommand{\features}{\gls{features}}
+
+\newglossaryentry{maxit}{name={\var{K}},description={number of iterations},type=symbols, category=symbol}
+\newcommand{\maxiteration}{\gls{maxit}}
+
+\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol}
+\newcommand{\T}{\gls{Tt}}
+
+\newglossaryentry{transpose}{name={$M^\top$}, text={\var{\top}},description={transpose of a matrix $M$},type=symbols, category=symbol, sort={ap}}
+\newcommand{\transpose}{\gls{transpose}}
+
 % --- MDP
 
-\newglossaryentry{cS}{name={\var{\mathcal{S}}},description={set of states $s$},type=symbols, category=symbol, sort={bmdpa}}
+\newglossaryentry{cS}{name={\var{\mathcal{S}}},description={set of states $s\in\mathcal{S}$},type=symbols, category=symbol, sort={bmdpa}}
 \newcommand{\cS}{\gls{cS}}
 
-\newglossaryentry{cA}{name={\var{\mathcal{A}}},description={set of actions $a$},type=symbols, category=symbol, sort={bmdpb}}
+\newglossaryentry{cA}{name={\var{\mathcal{A}}},description={set of actions $a\in\mathcal{A}$},type=symbols, category=symbol, sort={bmdpb}}
 \newcommand{\cA}{\gls{cA}}
 
-\newglossaryentry{reward}{name={\var{R}},description={reward function $s,a\rightarrow R(s,a) \in [0, 1]$},type=symbols, category=symbol, sort={bmdpc}}
+\newglossaryentry{reward}{name={$R(s,a)$}, text={\var{R}},description={reward function $R:s,a\rightarrow R(s,a) \in [0, 1]$},type=symbols, category=symbol, sort={bmdpc}}
 \newcommand{\R}{\gls{reward}}
 
-\newglossaryentry{transition}{name={\var{P}},description={transition distribution $s'\sim P\parentheses{s'\mid s,a}$},type=symbols, category=symbol, sort={bmdpd}}
+\newglossaryentry{transition}{name={$P\left(s'\mid s,a\right)$},text={\var{P}},description={transition distribution $s'\sim P\parentheses{s'\mid s,a}$},type=symbols, category=symbol, sort={bmdpd}}
 \newcommand{\Ps}{\gls{transition}}
 
-\newglossaryentry{discountfactor}{name={\var{\gamma}},description={discount factor in $[0, 1)$]},type=symbols, category=symbol, sort={bmdpe}}
+\newglossaryentry{discountfactor}{name={\var{\gamma}},description={discount factor in $[0, 1)$},type=symbols, category=symbol, sort={bmdpe}}
 \newcommand{\discount}{{\gls{discountfactor}}}
 
 % --- RL
@@ -56,35 +113,6 @@
 
 \newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
 \newcommand{\cD}{\gls{cD}}
-
-% --- Probas
-\newglossaryentry{cM}{name={\var{\mathcal{M}}},description={set of probability measures},type=symbols, category=symbol, sort={ap}}
-\newcommand{\cM}{\gls{cM}}
-
-\newglossaryentry{uniform}{name={\var{\mathcal{U}}},description={uniform distribution},type=symbols, sort={ap}}
-\newcommand{\uniform}{\gls{uniform}}
-
-\newglossaryentry{dirac}{name={\var{\delta}},description={Dirac distribution},type=symbols, category=symbol, sort={ap}}
-\newcommand{\dirac}{\gls{dirac}}
-
-\newglossaryentry{normald}{name={\var{\mathcal{N}}},description={Normal distribution},type=symbols, category=symbol, sort={ap}}
-\newcommand{\normal}{\gls{normald}}
-
-\newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols, category=symbol, sort={ap}}
-\newcommand{\binomial}{\gls{binomiald}}
-
-\newglossaryentry{features}{name={\var{\phi}},description={features},type=symbols, category=symbol}
-\newcommand{\features}{\gls{features}}
-
-\newglossaryentry{maxit}{name={\var{K}},description={number of iterations},type=symbols, category=symbol}
-\newcommand{\maxiteration}{\gls{maxit}}
-
-\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol}
-\newcommand{\T}{\gls{Tt}}
-
-\newglossaryentry{transpose}{name={\var{\top}},description={matrix transposition},type=symbols, category=symbol, sort={ap}}
-\newcommand{\transpose}{\gls{transpose}}
-
 
 % --- Chapter 5
 
@@ -154,27 +182,6 @@
 %\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols, category=symbol}
 %\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
 
-% --- Mathematical notations
 
-\newglossaryentry{real}{name={$\mathbb{R}$},description={set of real numbers}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{natural}{name={$\mathbb{N}$},description={set of integers}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{realplus}{name={$\mathbb{R}_{+}$},description={set of positive reals $\{\tau\in\mathbb{R}:\tau\ge0\}$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{naturalplus}{name={$\mathbb{N}_{+}$},description={set of positive integers $\mathbb{N}\cap\mathbb{R}_{+}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
-\newglossaryentry{euclideannorm}{name={$|x|$},description={Euclidean norm for a vector $x\in\mathbb{R}^{n}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
-\newglossaryentry{infinitynorm}{name={$\|u\|_{[t_{0},t_{1}]}$},description={$L_{\infty}$ norm on $[t_{0},t_{1})$ of a measurable and locally essentially bounded input $u:\mathbb{R}_{+}\to\mathbb{R}$}, type=symbols, category=symbol, nonumberlist, sort={a}}
-\newglossaryentry{infinitynorm2}{name={$\|u\|$},description={$L_{\infty}$ norm $||u||_{[t_{0},t_{1}]}$ with $t_1=+\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
-\newglossaryentry{bounded}{name={$\mathcal{L}_{\infty}$},description={the set of all inputs $u$ with the property $||u||<\infty$}, type=symbols, category=symbol, nonumberlist, sort={a}}
-\newglossaryentry{pos}{name={$z^+$},description={positive part $\max(z,0)$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{neg}{name={$z^-$},description={negative part $z^- = z^+-z$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{abs}{name={$|z|$},description={absolute value $|z| = z^++z^-$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{range}{name={$[n]$},description={range of integers $\{1,\dots, n\}$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{identity}{name={$I_{n}$},description={the identity matrix with dimension $n\times n$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{ones}{name={$E_{n\times m}$ and $E_{p}$},description={the matrices with all elements equal 1 with dimensions $n\times m$ and $p\times1$, respectively}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{basis}{name={$e_{i}$},description={normal basis vectors $[0\dots0\;1\;\dots0]\tr$ in $\mathbb{R}^{n}$ for $i=\overline{1,n}$, where $1$ appears in the $i^{\text{th}}$ position}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{spectrum}{name={$\lambda(A)$},description={the vector of eigenvalues of a matrix $A\in\mathbb{R}^{n\times n}$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{maximumnorm}{name={$\|A\|_{\max}$},description={the elementwise maximum norm $\|A\|_{max}=\max_{i\in[n],j\in[n]}|A_{i,j}|$, it is not sub-multiplicative}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{l2norm}{name={$\|A\|_{2}$}, description={the induced $L_{2}$ matrix norm $\max_{i\in[n]}\lambda_{i}(A^{\top} A)$}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{vleq}{name={$x_{1}\le x_{2}$}, description={for two matrices $A_{1},A_{2}\in\Real^{n\times n}$, (including vectors), the relation $A_{1}\le A_{2}$ is understood elementwise}, type=symbols, category=symbol, sort={a}}
-\newglossaryentry{posdef}{name={$P\prec0$ ($P\succ0$)}, description={a symmetric matrix $P\in\Real^{n\times n}$ is negative (positive) definite}, type=symbols, category=symbol, sort={a}}
 
 % --- Chapter 7

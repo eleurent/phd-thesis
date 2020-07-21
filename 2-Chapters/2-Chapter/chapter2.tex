@@ -70,7 +70,7 @@ The first application of imitation learning to autonomous driving is the ALVINN 
 	\label{fig:alvinn}
 \end{figure}
 
-\paragraph{Compounding errors} Unfortunately, the behavioural cloning paradigm is known to suffer from \emph{compounding errors}: since the future states depend on previous predictions (actions), the \iid assumption made in statistical learning does not hold. Therefore, small mistakes will place the system into states that are outside the training data distribution, as illustrated in \Cref{fig:compounding}, and resulting policies struggle to maintain high performances on long time horizons. This effect was identified and tackled in \citep{Ross2011}, who proposed to iteratively request expert labels (actions) from the states encountered by the current trained policy, rather than from the initial expert distribution. However, this can only be accomplished at the cost of a significant labelling effort. 
+\paragraph{Compounding errors} Unfortunately, the behavioural cloning paradigm is known to suffer from \emph{compounding errors}: since the future states depend on previous predictions (actions), the assumption made in statistical learning that input variables are \iid does not hold. Therefore, small mistakes will place the system into states that are outside the training data distribution, as illustrated in \Cref{fig:compounding}, and resulting policies struggle to maintain high performances on long time horizons. This effect was identified and tackled in \citep{Ross2011}, who proposed to iteratively request expert labels (actions) from the states encountered by the current trained policy, rather than from the initial expert distribution. However, this can only be accomplished at the cost of a significant labelling effort. 
 \begin{figure}[th]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/cp4}
@@ -220,10 +220,11 @@ This questioning has lead researchers and practitioners to consider alternative 
 
 \subsection{Risk-sensitive Criterion}
 
-Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} with weight $\alpha > 0$, which takes the form
+Risk-sensitive methods augment the traditional expected performance criterion with a measure of \textit{variability}. For instance, in the above example of \Cref{tab:risky-problem} the two decisions are equivalent in terms of expected return, but \texttt{Merge} has a significantly higher variance than \texttt{Wait}.  A first instance of risk-sensitive objective is the \emph{variance-penalized} criterion \citep{Markowitz59} which takes the form
 \begin{equation*}
-\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[\sum_t \discount^t R_t \right].
+\max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t\right] - \alpha\mathop{\mathbb{V}}_{\pi, P} \left[\sum_t \discount^t R_t \right],
 \end{equation*}
+where the weight $\alpha > 0$ is often tuned manually and allows to trade-off expected performance for consistency (higher $\alpha$ means lower variance in the outcomes).
 
 Many other risk measures have been investigated such as the \gls{VaR}, the \gls{CVaR} and percentile performance, in both the \glsxtrlong{MAB} setting \citet{Torossian19a} and the \glsxtrlong{RL} setting \citep{Moody2001,Tamar2012,Prashanth2013,Delage2010}. In their seminal paper, \citet{Artzner1999} identified a set of properties deemed necessary for a risk measure to be \emph{coherent}, and policy gradient methods have been designed to optimise this class of measures \citep{Tamar2015}.
 In the context of \glsxtrlong{AD}, the variance-penalised objective has been applied in \eg \citep{Naghshvar2018} to highway ramp scenarios with occlusions and limited sensor range.

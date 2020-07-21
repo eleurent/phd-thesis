@@ -521,38 +521,47 @@
 }
 
 @inproceedings{Altche2016,
-	abstract = {In this paper, we address the problem of timeoptimal coordination of mobile robots under kinodynamic constraints along specified paths. We propose a novel approach based on time discretization that leads to a mixed-integer linear programming (MILP) formulation. This problem can be solved using general-purpose MILP solvers in a reasonable time, resulting in a resolution-optimal solution. Moreover, unlike previous work found in the literature, our formulation allows an exact linear modeling (up to the discretization resolution) of second-order dynamic constraints. Extensive simulations are performed to demonstrate the effectiveness of our approach.},
-	archivePrefix = {arXiv},
-	arxivId = {1603.04610},
-	author = {Altch{\'{e}}, Florent and Qian, Xiangjun and {De La Fortelle}, Arnaud},
-	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
-	doi = {10.1109/IROS.2016.7759737},
-	eprint = {1603.04610},
-	isbn = {9781509037629},
-	issn = {21530866},
-	title = {{Time-optimal coordination of mobile robots along specified paths}},
-	year = {2016}
+  author    = {Florent Altch{\'{e}} and
+               Xiangjun Qian and
+               Arnaud de La Fortelle},
+  title     = {Time-optimal coordination of mobile robots along specified paths},
+  booktitle = {2016 {IEEE/RSJ} International Conference on Intelligent Robots and
+               Systems, {IROS} 2016, October 9-14, 2016},
+  address  = {Daejeon, South Korea},
+  pages     = {5020--5026},
+  publisher = {{IEEE}},
+  year      = {2016},
+  url       = {https://doi.org/10.1109/IROS.2016.7759737},
+  doi       = {10.1109/IROS.2016.7759737},
+  timestamp = {Wed, 16 Oct 2019 14:14:51 +0200},
+  biburl    = {https://dblp.org/rec/conf/iros/AltcheQF16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @inproceedings{Altche2016b,
-	abstract = {The deployment of Cooperative Intelligent Transportation Systems (C-ITS) raises the question of future traffic management systems, which will be operating with an increasing amount of information and control over the infrastructure and the vehicles. This topic of research shares some similarities with robot coordination problems, inspiring our research on autonomous intersection management. In this article, we use a mixed-integer linear programming formulation for time-optimal robots coordination along specified paths and apply it to intersection management for autonomous vehicles. Our formulation allows to simultaneously solve a discrete optimal vehicle ordering problem, and a (discretized) continuous optimal velocity planning problem taking into account kinodynamics constraints. This allows faster pruning of the decision tree for the discrete problem, thus reducing computation time. A possible application for ITS is to evaluate the efficiency loss from a given vehicle ordering policy, or dynamically adapt policies to improve their efficiency. Moreover, any intermediary solution found by the solver can be used as a heuristically good policy, with proved bounds on sub-optimality.},
-	author = {Altch{\'{e}}, Florent and {De La Fortelle}, Arnaud},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
-	doi = {10.1109/IVS.2016.7535369},
-	isbn = {9781509018215},
-	title = {{Analysis of optimal solutions to robot coordination problems to improve autonomous intersection management policies}},
-	year = {2016}
+  author    = {Florent Altch{\'{e}} and
+               Arnaud de La Fortelle},
+  title     = {Analysis of optimal solutions to robot coordination problems to improve
+               autonomous intersection management policies},
+  booktitle = {2016 {IEEE} Intelligent Vehicles Symposium, {IV} 2016, June 19-22},
+  address  = {Gotenburg, Sweden},
+  pages     = {86--91},
+  publisher = {{IEEE}},
+  year      = {2016},
+  doi       = {10.1109/IVS.2016.7535369},
+  timestamp = {Wed, 16 Oct 2019 14:14:57 +0200},
+  biburl    = {https://dblp.org/rec/conf/ivs/AltcheF16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@article{Altche2017,
-	abstract = {Before reaching full autonomy, vehicles will gradually be equipped with more and more advanced driver assistance systems (ADAS), effectively rendering them semi-autonomous. However, current ADAS technologies seem unable to handle complex traffic situations, notably when dealing with vehicles arriving from the sides, either at intersections or when merging on highways. The high rate of accidents in these settings proves that they constitute difficult driving situations. Moreover, intersections and merging lanes are often the source of important traffic congestion and, sometimes, deadlocks. In this paper, we propose a cooperative framework to safely coordinate semi-autonomous vehicles in such settings, removing the risk of collision or deadlocks while remaining compatible with human driving. More specifically, we present a supervised coordination scheme that overrides control inputs from human drivers when they would result in an unsafe or blocked situation. To avoid unnecessary intervention and remain compatible with human driving, overriding only occurs when collisions or deadlocks are imminent. In this case, safe overriding controls are chosen while ensuring they deviate minimally from those originally requested by the drivers. Simulation results based on a realistic physics simulator show that our approach is scalable to real-world scenarios, and computations can be performed in real time on a standard computer for up to a dozen simultaneous vehicles.},
-	author = {Altch{\'{e}}, Florent and Qian, Xiangjun and {De La Fortelle}, Arnaud},
-	doi = {10.1109/TITS.2017.2736532},
-	issn = {15249050},
-	journal = {IEEE Transactions on Intelligent Transportation Systems},
-	keywords = {Semi-autonomous driving,safety,supervised driving,supervisor},
-	title = {{An Algorithm for Supervised Driving of Cooperative Semi-Autonomous Vehicles}},
-	year = {2017}
+@ARTICLE{Altche2017,
+  author={Altch{\'{e}}, Florent and Qian, Xiangjun and {De La Fortelle}, Arnaud},
+  journal={IEEE Transactions on Intelligent Transportation Systems}, 
+  title={An Algorithm for Supervised Driving of Cooperative Semi-Autonomous Vehicles}, 
+  year={2017},
+  volume={18},
+  number={12},
+  pages={3527-3539},
 }
 
 
@@ -1471,17 +1480,23 @@ year = {2017}
 	publisher = {Chapman and Hall/CRC},
 }
 
-@inproceedings{Achiam2017,
-	abstract = {For many applications of reinforcement learning it can be more convenient to specify both a reward function and constraints, rather than trying to design behavior through the reward function. For example, systems that physically interact with or around humans should satisfy safety constraints. Recent advances in policy search algorithms (Mnih et al., 2016; Schulman et al., 2015; Lillicrap et al., 2016; Levine et al., 2016) have enabled new capabilities in high-dimensional control, but do not consider the constrained setting. We propose Constrained Policy Optimization (CPO), the first generalpurpose policy search algorithm for constrained reinforcement learning with guarantees for nearconstraint satisfaction at each iteration. Our method allows us to train neural network policies for high-dimensional control while making guarantees about policy behavior all throughout training. Our guarantees are based on a new theoretical result, which is of independent interest: we prove a bound relating the expected returns of two policies to an average divergence between them. We demonstrate the effectiveness of our approach on simulated robot locomotion tasks where the agent must satisfy constraints motivated by safety.},
-	archivePrefix = {arXiv},
-	arxivId = {1705.10528},
-	author = {Achiam, Joshua and Held, David and Tamar, Aviv and Abbeel, Pieter},
-	booktitle = {34th International Conference on Machine Learning, ICML 2017},
-	eprint = {1705.10528},
-	isbn = {9781510855144},
-	title = {{Constrained policy optimization}},
-	year = {2017}
+@InProceedings{Achiam2017,
+  title = 	 {Constrained Policy Optimization},
+  author = 	 {Joshua Achiam and David Held and Aviv Tamar and Pieter Abbeel},
+  booktitle = 	 {Proceedings of the 34th International Conference on Machine Learning},
+  pages = 	 {22--31},
+  year = 	 {2017},
+  editor = 	 {Doina Precup and Yee Whye Teh},
+  volume = 	 {70},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {International Convention Centre, Sydney, Australia},
+  month = 	 {06--11 Aug},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v70/achiam17a/achiam17a.pdf},
+  url = 	 {http://proceedings.mlr.press/v70/achiam17a.html},
+  abstract = 	 {For many applications of reinforcement learning it can be more convenient to specify both a reward function and constraints, rather than trying to design behavior through the reward function. For example, systems that physically interact with or around humans should satisfy safety constraints. Recent advances in policy search algorithms (Mnih et al., 2016, Schulman et al., 2015, Lillicrap et al., 2016, Levine et al., 2016) have enabled new capabilities in high-dimensional control, but do not consider the constrained setting. We propose Constrained Policy Optimization (CPO), the first general-purpose policy search algorithm for constrained reinforcement learning with guarantees for near-constraint satisfaction at each iteration. Our method allows us to train neural network policies for high-dimensional control while making guarantees about policy behavior all throughout training. Our guarantees are based on a new theoretical result, which is of independent interest: we prove a bound relating the expected returns of two policies to an average divergence between them. We demonstrate the effectiveness of our approach on simulated robot locomotion tasks where the agent must satisfy constraints motivated by safety.}
 }
+
 
 @inproceedings{Tessler2019,
 	abstract = {Solving tasks in Reinforcement Learning is no easy feat. As the goal of the agent is to maximize the accumulated reward, it often learns to exploit loopholes and misspecifications in the reward signal resulting in unwanted behavior. While constraints may solve this issue, there is no closed form solution for general constraints. In this work, we present a novel multi-timescale approach for constrained policy optimization, called 'Reward Constrained Policy Optimization' (RCPO), which uses an alternative penalty signal to guide the policy towards a constraint satisfying one. We prove the convergence of our approach and provide empirical evidence of its ability to train constraint satisfying policies.},
@@ -1570,16 +1585,19 @@ year = {2017}
 	year = {2007}
 }
 
-
 @article{Adetola2009,
-	abstract = {In this paper, a method is proposed for the adaptive model predictive control of constrained nonlinear system. Rather than relying on the inherent robustness properties of standard NMPC, the developed technique explicitly account for the transient effect of parametric estimation error by combining a parameter adjustment mechanism with robust MPC algorithms. The parameter estimation routine employed guarantees non-increase of the estimation error vector. This means that the controller employs a process model which approaches that of the true system over time. These estimates are used to update the parameter uncertainty set at every time step, resulting in a gradual reduction in the conservative and/or computational effects of the incorporated robust features. {\textcopyright} 2008 Elsevier B.V. All rights reserved.},
-	author = {Adetola, Veronica and DeHaan, Darryl and Guay, Martin},
-	doi = {10.1016/j.sysconle.2008.12.002},
-	issn = {01676911},
-	journal = {Systems and Control Letters},
-	keywords = {Adaptive control,Model predictive control,Nonlinear systems,Robust control},
-	title = {{Adaptive model predictive control for constrained nonlinear systems}},
-	year = {2009}
+title = "Adaptive Model Predictive Control for Constrained Nonlinear Systems",
+journal = "IFAC Proceedings Volumes",
+volume = "41",
+number = "2",
+pages = "1946 - 1951",
+year = "2008",
+note = "17th IFAC World Congress",
+issn = "1474-6670",
+doi = "https://doi.org/10.3182/20080706-5-KR-1001.00331",
+url = "http://www.sciencedirect.com/science/article/pii/S1474667016392369",
+author = "Veronica Adetola and Martin Guay",
+abstract = "A true adaptive nonlinear model predictive control (MPC) algorithm must address the issue of robustness to model uncertainty while the estimator is evolving. Unfortunately, this may not be achieved without introducing extra degree of conservativeness and/or computational complexity in the controller calculations. To attenuate this problem, we employ a finite time identifier and propose an adaptive predictive control structure that reduces to a nominal MPC problem when exact parameter estimates are obtained. The adaptive MPC is formulated in such a way that useful excitation is automatically injected into the closed loop system to decrease the identification period."
 }
 
 

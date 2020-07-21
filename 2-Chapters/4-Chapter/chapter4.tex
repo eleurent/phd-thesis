@@ -64,7 +64,10 @@ The optimal action-value function $Q^\star$ satisfies the Bellman Optimality Equ
 \begin{equation*}
 \Q^\star(s, a) = (\bo \Q^{\star}) (s, a) \eqdef \expectedvalueover{s'\sim \Ps(s'|s, a)} \max_{a'\in \cA} \left[\R(s, a) + \discount \Q^\star(s', a')\right].
 \end{equation*}
-Moreover, $\bo$ is a $\discount$-contraction.
+Moreover, $\bo$ is a $\discount$-contraction for the $\|\cdot\|_\infty$ norm:
+\begin{equation*}
+\forall Q_1, \Q_2\in \Real^{\cS\times\cA},\; \|\bo Q_1 - \bo Q_2\|_\infty \leq \gamma \|Q_1 - Q_2\|_\infty.
+\end{equation*}
 \end{leftbar}
 \end{theorem}
 
@@ -87,7 +90,7 @@ This description was appropriate to simply describe the system dynamics. However
 s = \left(s_i \right)_{i \in [0, N_v]}\qquad
 \text{where}\qquad
 s_i = \begin{bmatrix}
-x_i & y_i & v^x_i & v^y_i & \cos\psi_i & \sin \psi_i
+x_i & y_i & \dot{x}_i & \dot{y}_i & \cos\psi_i & \sin \psi_i
 \end{bmatrix}
 \label{eq:coordinates}
 \end{equation}
@@ -104,11 +107,12 @@ x_i & y_i & v^x_i & v^y_i & \cos\psi_i & \sin \psi_i
 This representation, that we call \emph{list of features}, is illustrated in \Cref{fig:representation} (left) and was used for instance in \citep{Bai2015, Gindele2015, Song2016, Sunberg2017, Paxton2017, Galceran2017, Chen2017}.
 
 
-This encoding is efficient in the sense that it uses the smallest quantity of information necessary to represent the scene. However, it lacks two important properties. First, its size varies with the number of vehicles which can be problematic for the sake of function approximation which often expects constant-sized inputs. Second, we expect a driving policy $\policy$ to be \emph{permutation invariant}, i.e. not to be dependent on the order in which other traffic participants are listed. Ideally, this property should be enforced and not approximated by relying on the coverage of the $N_v!$ possible permutations $\tau$ of any given traffic state. Formally, we require that
+This encoding is efficient in the sense that it uses the smallest quantity of information necessary to represent the scene. However, it lacks two important properties. First, its size varies with the number of vehicles which can be problematic for the sake of function approximation which often expects constant-sized inputs. Second, we expect a driving policy $\policy$ to be \emph{permutation invariant}, i.e. not to be dependent on the order in which other traffic participants are listed. Ideally, this property should be enforced and not approximated by relying on the coverage of the $N_v!$ possible permutations $\tau$ of any given traffic state in the dataset. Formally, we require that
 \begin{equation}
 \label{eq:permutation}
-\policy(\cdot|(s_0, s_1,\dotsc,s_{N_v})) = \policy(\cdot|(s_0, s_{\tau(1)},\dotsc,s_{\tau(N_v)})), \quad\quad\quad \forall\tau \in \mathfrak{S}_{N_v}.
+\policy(\cdot|(s_0, s_1,\dotsc,s_{N_v})) = \policy(\cdot|(s_0, s_{\tau(1)},\dotsc,s_{\tau(N_v)})), \quad\quad\quad \forall\tau \in \mathfrak{S}_{N_v},
 \end{equation}
+where $\mathfrak{S}_{N_v}$ is the \emph{symmetric} group of permutations of the integer range $[1,N_v]$.
 A popular way to address this limitations is to use a \emph{spatial grid} representation. Instead of explicitly representing spatial information as variables $x, y$ along with other features $f$ directly inside a state $\{s_i=(x_i,y_i,f_i)\}_{i\in[0,N]}$ indexed on the vehicles, they are instead represented implicitly through the layout of several feature variables $f_{ij}$ organised in a tensor structure, where the $(i,j)$ indexes refer to a quantisation of the 2D-space. This representation is illustrated in \Cref{fig:representation} (right). Note that the size of this tensor is related to the area covered divided by the quantisation step, which reflects a trade-off between accuracy and dimensionality.
 In an occupancy grid, the $f$ features contains presence information (0-1) and additional channels such as velocity and heading, as in \citep[e.g.][]{Isele2018, Fridman2018, Bansal2018, Rehder2017c}. Another example is the use of top-view RGB images \citep[e.g.][]{Bagnell2010, Rehder2017, Rehder2017c, Liu2018}.
 

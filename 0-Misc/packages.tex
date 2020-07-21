@@ -90,11 +90,12 @@
 \usepackage[binary-units,detect-all]{siunitx}
 
 % --- Glossaries
-\usepackage[acronym,toc,symbols,style=indexgroup]{glossaries-extra}
+\usepackage[acronym,toc,symbols,style=alttreegroup]{glossaries-extra}
+\glssetwidest{app this width}
 \makeglossaries
 \setabbreviationstyle{long-short}
 %\glssetcategoryattribute{general}{textformat}{textsf}
-%\glssetcategoryattribute{general}{textformat}{emph}
+\glssetcategoryattribute{locutions}{textformat}{emph}
 \glssetcategoryattribute{algorithm}{textformat}{texttt}
 \glsxtrabbreviationfont
 \GlsXtrEnableInitialTagging{acronym,abbreviation}{\itag}

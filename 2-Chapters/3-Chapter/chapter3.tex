@@ -78,7 +78,7 @@ We also assume knowledge of the road network, comprising:
 	s \rightarrow (x_{L}(s), y_{L}(s))\in \Real^2,
 	$
 	\noindent and heading $\psi_L:s \rightarrow \tan^{-1}\left({\odv{y_L}{s}(s)}/{\odv{x_L}{s}(s)}\right) \in \Real$
-	where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
+	(tangent to the curve) where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
 \end{enumerate}
 
 However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, \gls{model-free} algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, \gls{model-based} algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
@@ -101,7 +101,7 @@ Thus, the purpose of the Behavioural Planning layer is to specify short-term ins
 \end{array}\right\}
 \end{equation}
 
-Meta-actions are executed at a frequency of $\SI{1}{\hertz}$. Their influence on the evolution of the state $s\in\cS$ is described next.
+Meta-actions are rather slow to affect the state of the vehicle, and are thus executed at a low frequency of $\SI{1}{\hertz}$. We will consider a behavioural planning horizon of a dozen seconds (enough to \eg take/give way to a vehicle and merge in traffic), which corresponds to a dozen of decision points. We describe next how these meta-actions influence the evolution of the state $s\in\cS$.
 
 \section{Traffic dynamics}
 

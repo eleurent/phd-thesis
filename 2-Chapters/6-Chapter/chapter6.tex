@@ -277,6 +277,9 @@ Let us denote the proportion of near-optimal nodes $\kappa_2$ as
 	\end{equation*}
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide the proof in \Cref{sec:regret-proof}.
+\end{proof}
 
 We provide a time and memory efficient implementation of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, bringing an exponential speedup that allows to scale these algorithms to high sample budgets.
 
@@ -1152,10 +1155,10 @@ We look into the time and memory complexity and propose efficient implementation
 After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
 
 The \Cref{algo:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
-Hence, its time and memory complexities are 
-\begin{equation}
-C(\KLOLOP) = O(M|\Tau|) = O(MK^L).
-\end{equation}
+Hence, its time and memory complexities $C(\KLOLOP)$ are 
+\begin{equation*}
+C(\KLOLOP) = \cO(M|\Tau|) = \cO(MK^L).
+\end{equation*}
 
 The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
 
