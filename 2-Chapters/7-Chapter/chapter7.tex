@@ -1689,7 +1689,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		&\leq 1
 		\end{align*}
 		Finally, an application of Fatou's lemma show that 
-		$\expectedvalue[M_\tau^z] = \expectedvalue[\liminf_{t\to\infty} M_{\min(\tau,t)}^z] \leq \liminf_{t\to\infty} \expectedvalue[M_{\min(\tau,t)}^z] \leq 1.$
+		$$\expectedvalue[M_\tau^z] = \expectedvalue[\liminf_{t\to\infty} M_{\min(\tau,t)}^z] \leq \liminf_{t\to\infty} \expectedvalue[M_{\min(\tau,t)}^z] \leq 1.$$
 		
 		This results allows to apply a result from \citep{pena2008self}.
 		\begin{lemma}[Theorem 14.7 of \citep{pena2008self}]
@@ -2060,7 +2060,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		&\implies \sum_{i=1}^d D_{i,i}(\theta'_i-\theta'_{N,\lambda,i})^2\leq \beta_{N}(\delta)\\
 		&\implies\forall i, |\theta'_i-\theta'_{N,\lambda,i}|\leq \beta_{N}(\delta)^{1/2}D_{i,i}^{-1/2}
 		\end{align*}
-		This describes a $\Real^d$ box containing $\theta' = P\theta$, whose $k^\text{th}$ vertex is represented by $\theta_{N,\lambda}' + \beta_{N}(\delta)^{1/2}D^{-1/2} h_k$. We obtain the corresponding box on $\theta$ by transforming each vertex of the box with $P^{-1}$.
+		This describes a $\Real^d$ box containing $\theta' = P\theta$, whose $k^\text{th}$ vertex is represented by $$\theta_{N,\lambda}' + \beta_{N}(\delta)^{1/2}D^{-1/2} h_k.$$ We obtain the corresponding box on $\theta$ by transforming each vertex of the box with $P^{-1}$.
 	\end{proof}
 	
 	\begin{figure}

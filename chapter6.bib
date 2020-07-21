@@ -30,7 +30,6 @@ year = {1960}
 	HAL_VERSION = {v1},
 }
 
-
 @incollection{Wang2009,
 	title = {Algorithms for Infinitely Many-Armed Bandits},
 	author = {Yizao Wang and Jean-yves Audibert and R\'{e}mi Munos},
@@ -42,12 +41,14 @@ year = {1960}
 	url = {http://papers.nips.cc/paper/3452-algorithms-for-infinitely-many-armed-bandits.pdf}
 }
 
-
 @inproceedings{Bubeck2010,
-author = {Bubeck, S{\'{e}}bastien and Munos, R{\'{e}}mi},
-booktitle = {Proc. of COLT},
-title = {{Open Loop Optimistic Planning}},
-year = {2010}
+	author = {Bubeck, S{\'{e}}bastien and Munos, R{\'{e}}mi},
+	booktitle = {COLT 2010 - The 23rd Conference on Learning Theory, June 27--29},
+	title = {{Open Loop Optimistic Planning}},
+	year = {2010},
+	pages = {477-489},
+	month = jun,
+	address = {Haifa, Israel},
 }
 
 @inproceedings{Garivier2011,
@@ -120,20 +121,26 @@ year = {2014}
 
 @article{Busoniu2013,
 author = {Buşoniu, Lucian and Daniels, Alexander and Munos, Remi and Babuska, Robert},
-journal = {IEEE Symposium on Adaptive Dynamic Programming and Reinforcement Learning, ADPRL},
+journal = {2013 IEEE Symposium on Adaptive Dynamic Programming and Reinforcement Learning (ADPRL),  16-19 April},
+month = apr,
+address = {Singapore},
 title = {{Optimistic planning for continuous-action deterministic systems}},
-year = {2013}
+year = {2013},
+pages={69-76},
 }
 
 @article{Busoniu2018,
-author = {Buşoniu, Lucian and P{\'{a}}ll, Előd and Munos, R{\'{e}}mi},
-issn = {00051098},
-journal = {Automatica},
-number = {December},
-pages = {100--108},
-title = {{Continuous-action planning for discounted infinite-horizon nonlinear optimal control with Lipschitz values}},
-volume = {92},
-year = {2018}
+title = "Continuous-action planning for discounted infinite-horizon nonlinear optimal control with Lipschitz values",
+journal = "Automatica",
+volume = "92",
+pages = "100 - 108",
+year = "2018",
+issn = "0005-1098",
+doi = "https://doi.org/10.1016/j.automatica.2018.03.009",
+url = "http://www.sciencedirect.com/science/article/pii/S000510981830089X",
+author = "Lucian Buşoniu and Előd Páll and Rémi Munos",
+keywords = "Optimal control, Planning, Nonlinear systems, Near-optimality analysis",
+abstract = "We consider discrete-time, infinite-horizon optimal control problems with discounted rewards. The value function must be Lipschitz continuous over action (input) sequences, the actions are in a scalar interval, while the dynamics and rewards can be nonlinear/nonquadratic. Exploiting ideas from artificial intelligence, we propose two optimistic planning methods that perform an adaptive-horizon search over the infinite-dimensional space of action sequences. The first method optimistically refines regions with the largest upper bound on the optimal value, using the Lipschitz constant to find the bounds. The second method simultaneously refines all potentially optimistic regions, without explicitly using the bounds. Our analysis proves convergence rates to the global infinite-horizon optimum for both algorithms, as a function of computation invested and of a measure of problem complexity. It turns out that the second, simultaneous algorithm works nearly as well as the first, despite not needing to know the (usually difficult to find) Lipschitz constant. We provide simulations showing the algorithms are useful in practice, compare them with value iteration and model predictive control, and give a real-time example."
 }
 
 @article{Silver2016,
@@ -299,12 +306,21 @@ volume	= {529}
 	booktitle={Proc. of ECML-PKDD}
 }
 
-@inproceedings{Busoniu2012optimistic,
-	title={Optimistic planning for Markov decision processes},
-	author={Busoniu, Lucian and Munos, R{\'e}mi},
-	booktitle={Artificial Intelligence and Statistics},
-	pages={182--189},
-	year={2012}
+@InProceedings{Busoniu2012optimistic,
+  title = 	 {Optimistic planning for Markov decision processes},
+  author = 	 {Lucian Buşoniu and Remi Munos},
+  booktitle = 	 {Proceedings of the Fifteenth International Conference on Artificial Intelligence and Statistics},
+  pages = 	 {182--189},
+  year = 	 {2012},
+  editor = 	 {Neil D. Lawrence and Mark Girolami},
+  volume = 	 {22},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {La Palma, Canary Islands},
+  month = 	 {21--23 Apr},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v22/busoniu12/busoniu12.pdf},
+  url = 	 {http://proceedings.mlr.press/v22/busoniu12.html},
+  abstract = 	 {The reinforcement learning community has recently intensified its interest in online planning methods, due to their relative independence on the state space size. However, tight near-optimality guarantees are not yet available for the general case of stochastic Markov decision processes and closed-loop, state-dependent planning policies. We therefore consider an algorithm related to AO* that optimistically explores a tree representation of the space of closed-loop policies, and we analyze the near-optimality of the action it returns after n tree node expansions. While this optimistic planning requires a finite number of actions and possible next states for each transition, its asymptotic performance does not depend directly on these numbers, but only on the subset of nodes that significantly impact near-optimal policies. We characterize this set by introducing a novel measure of problem complexity, called the near-optimality exponent. Specializing the exponent and performance bound for some interesting classes of MDPs illustrates the algorithm works better when there are fewer near-optimal policies and less uniform transition probabilities.}
 }
 
 @inproceedings{Filippi2010optimism,
@@ -325,8 +341,12 @@ volume	= {529}
 @inproceedings{Bubeck2009,
 	title = {Online Optimization in X-Armed Bandits},
 	author = {S\'{e}bastien Bubeck and Gilles Stoltz and Csaba Szepesv\'{a}ri and R\'{e}mi Munos},
-	booktitle = {Advances in NIPS},
+	booktitle = {Advances in Neural Information Processing Systems 21},
+	editor = {D. Koller and D. Schuurmans and Y. Bengio and L. Bottou},
+	pages = {201--208},
 	year = {2009},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/3605-online-optimization-in-x-armed-bandits.pdf}
 }
 
 @inproceedings{Munos2011,

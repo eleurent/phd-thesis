@@ -313,12 +313,15 @@
 }
 
 @article{Bohren2008,
-	abstract = {This paper describes "Little Ben," an autonomous ground vehicle constructed by the Ben Franklin Racing Team for the 2007 DARPA Urban Challenge in under a year and for less than {\$}250,000. The sensing, planning, navigation, and actuation systems for Little Ben were carefully designed to meet the performance demands required of an autonomous vehicle traveling in an uncertain urban environment. We incorporated an array of a global positioning system (GPS)/inertial navigation system, LIDARs, and stereo cameras to provide timely information about the surrounding environment at the appropriate ranges. This sensor information was integrated into a dynamic map that could robustly handle GPS dropouts and errors. Our planning algorithms consisted of a high-level mission planner that used information from the provided route network definition and mission data files to select routes, whereas the lower level planner used the latest dynamic map information to optimize a feasible trajectory to the next waypoint. The vehicle was actuated by a cost-based controller that efficiently handled steering, throttle, and braking maneuvers in both forward and reverse directions. Our software modules were integrated within a hierarchical architecture that allowed rapid development and testing of the system performance. The resulting vehicle was one of six to successfully finish the Urban Challenge. {\textcopyright} 2008 Wiley Periodicals, Inc.},
 	author = {Bohren, Jonathan and Foote, Tully and Keller, Jim and Kushleyev, Alex and Lee, Daniel and Stewart, Alex and Vernaza, Paul and Derenick, Jason and Spletzer, John and Satterfield, Brian},
-	doi = {10.1002/rob.20260},
-	issn = {15564959},
+	title = {Little Ben: The Ben Franklin Racing Team's entry in the 2007 DARPA Urban Challenge},
 	journal = {Journal of Field Robotics},
-	title = {{Little Ben: The Ben Franklin Racing Team's entry in the 2007 DARPA Urban Challenge}},
+	volume = {25},
+	number = {9},
+	pages = {598-614},
+	doi = {10.1002/rob.20260},
+	eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/rob.20260},
+	abstract = {Abstract This paper describes “Little Ben,” an autonomous ground vehicle constructed by the Ben Franklin Racing Team for the 2007 DARPA Urban Challenge in under a year and for less than \$250,000. The sensing, planning, navigation, and actuation systems for Little Ben were carefully designed to meet the performance demands required of an autonomous vehicle traveling in an uncertain urban environment. We incorporated an array of a global positioning system (GPS)/inertial navigation system, LIDARs, and stereo cameras to provide timely information about the surrounding environment at the appropriate ranges. This sensor information was integrated into a dynamic map that could robustly handle GPS dropouts and errors. Our planning algorithms consisted of a high-level mission planner that used information from the provided route network definition and mission data files to select routes, whereas the lower level planner used the latest dynamic map information to optimize a feasible trajectory to the next waypoint. The vehicle was actuated by a cost-based controller that efficiently handled steering, throttle, and braking maneuvers in both forward and reverse directions. Our software modules were integrated within a hierarchical architecture that allowed rapid development and testing of the system performance. The resulting vehicle was one of six to successfully finish the Urban Challenge. © 2008 Wiley Periodicals, Inc.},
 	year = {2008}
 }
 
@@ -609,30 +612,13 @@
 	year = {2011}
 }
 
-@article{Bojarski2016,
-	author    = {Mariusz Bojarski and
-	Davide Del Testa and
-	Daniel Dworakowski and
-	Bernhard Firner and
-	Beat Flepp and
-	Prasoon Goyal and
-	Lawrence D. Jackel and
-	Mathew Monfort and
-	Urs Muller and
-	Jiakai Zhang and
-	Xin Zhang and
-	Jake Zhao and
-	Karol Zieba},
-	title     = {End to End Learning for Self-Driving Cars},
-	journal   = {CoRR},
-	volume    = {abs/1604.07316},
-	year      = {2016},
-	url       = {http://arxiv.org/abs/1604.07316},
-	archivePrefix = {arXiv},
-	eprint    = {1604.07316},
-	timestamp = {Mon, 13 Aug 2018 16:47:06 +0200},
-	biburl    = {https://dblp.org/rec/journals/corr/BojarskiTDFFGJM16.bib},
-	bibsource = {dblp computer science bibliography, https://dblp.org}
+@misc{Bojarski2016,
+    title={End to End Learning for Self-Driving Cars},
+    author={Mariusz Bojarski and Davide Del Testa and Daniel Dworakowski and Bernhard Firner and Beat Flepp and Prasoon Goyal and Lawrence D. Jackel and Mathew Monfort and Urs Muller and Jiakai Zhang and Xin Zhang and Jake Zhao and Karol Zieba},
+    year={2016},
+    eprint={1604.07316},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
 }
 
 @inproceedings{Xu2017,
@@ -691,7 +677,6 @@
   pages     = {1534--1539},
   publisher = {{IEEE}},
   year      = {2018},
-  url       = {https://doi.org/10.1109/IROS.2018.8593758},
   doi       = {10.1109/IROS.2018.8593758},
   timestamp = {Wed, 16 Oct 2019 14:14:51 +0200},
   biburl    = {https://dblp.org/rec/conf/iros/BhattacharyyaPW18.bib},
@@ -703,13 +688,16 @@
 	archivePrefix = {arXiv},
 	arxivId = {1710.02410},
 	author = {Codevilla, Felipe and Miiller, Matthias and Lopez, Antonio and Koltun, Vladlen and Dosovitskiy, Alexey},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2018 IEEE International Conference on Robotics and Automation (ICRA), 21-25 May},
+	month = may,
+	address = {Brisbane, QLD, Australia},
 	doi = {10.1109/ICRA.2018.8460487},
 	eprint = {1710.02410},
 	isbn = {9781538630815},
 	issn = {10504729},
 	title = {{End-to-End Driving Via Conditional Imitation Learning}},
-	year = {2018}
+	year = {2018},
+    pages={4693-4700},
 }
 
 @inproceedings{Rhinehart2019,
@@ -782,17 +770,30 @@
 	year = {2010}
 }
 
-@inproceedings{Brechtel2013,
-	abstract = {Discrete POMDPs of medium complexity can be approximately solved in reasonable time. However, most applications have a continuous and thus uncountably infinite state space. We propose the novel concept of learning a discrete representation of the continuous state space to solve the integrals in continuous POMDPs efficiently and generalize sparse calculations over the continuous space. The representation is iteratively refined as part of a novel Value Iteration step and does not depend on prior knowledge. Consistency for the learned generalization is asserted by a self-correction algorithm. The presented concept is implemented for continuous state and observation spaces based on Monte Carlo approximation to allow for arbitrary POMDP models. In an experimental comparison it yields higher values in significantly shorter time than state of the art algorithms and solves higher-dimensional problems. Copyright 2013 by the author(s).},
-	author = {Brechtel, Sebastian and Gindele, Tobias and Dillmann, R{\"{u}}diger},
-	booktitle = {30th International Conference on Machine Learning, ICML 2013},
-	title = {{Solving continuous POMDPs: Value iteration with incremental learning of an efficient space representation}},
-	year = {2013}
+@InProceedings{Brechtel2013,
+  title = 	 {Solving Continuous POMDPs: Value Iteration with Incremental Learning of an Efficient Space Representation},
+  author = 	 {Sebastian Brechtel and Tobias Gindele and Rüdiger Dillmann},
+  booktitle = 	 {Proceedings of the 30th International Conference on Machine Learning, 7--19 Jun},
+  pages = 	 {370--378},
+  year = 	 {2013},
+  editor = 	 {Sanjoy Dasgupta and David McAllester},
+  volume = 	 {28},
+  number =       {3},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Atlanta, Georgia, USA},
+  month = 	 {17--19 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v28/brechtel13.pdf},
+  url = 	 {http://proceedings.mlr.press/v28/brechtel13.html},
+  abstract = 	 {Discrete POMDPs of medium complexity can be approximately solved in reasonable time. However, most applications have a continuous and thus uncountably infinite state space. We propose the novel concept of learning a discrete representation of the continuous state space to solve the integrals in continuous POMDPs efficiently and generalize sparse calculations over the continuous space. The representation is iteratively refined as part of a novel Value Iteration step and does not depend on prior knowledge. Consistency for the learned generalization is asserted by a self-correction algorithm. The presented concept is implemented for continuous state and observation spaces based on Monte Carlo approximation to allow for arbitrary POMDP models. In an experimental comparison it yields higher values in significantly shorter time than state of the art algorithms and solves higher-dimensional problems.}
 }
+
 
 @inproceedings{Bouton2018,
 	author={M. {Bouton} and A. {Nakhaei} and K. {Fujimura} and M. J. {Kochenderfer}},
-	booktitle={2018 IEEE International Conference on Robotics and Automation (ICRA)}, 
+	booktitle={2018 IEEE International Conference on Robotics and Automation (ICRA), 21-25 May 2018},
+	month = may,
+	address = {Brisbane, QLD, Australia},
 	title={Scalable Decision Making with Sensor Occlusions for Autonomous Driving}, 
 	year={2018},
 	volume={},
@@ -814,11 +815,14 @@
 @inproceedings{Brechtel2014,
 	abstract = {This paper presents a generic approach for tactical decision-making under uncertainty in the context of driving. The complexity of this task mainly stems from the fact that rational decision-making in this context must consider several sources of uncertainty: The temporal evolution of situations cannot be predicted without uncertainty because other road users behave stochastically and their goals and plans cannot be measured. Even more important, road users are only able to perceive a tiny part of the current situation with their sensors because measurements are noisy and most of the environment is occluded. In order to anticipate the consequences of decisions a probabilistic approach, considering both forms of uncertainty, is necessary. We address this by formulating the task of driving as a continuous Partially Observable Markov Decision Process (POMDP) that can be automatically optimized for different scenarios. As driving is a continuous-space problem, the belief space is infinite-dimensional. We do not use a symbolic representation or discretize the state space a priori because there is no representation of the state space that is optimal for every situation. Instead, we employ a continuous POMDP solver that learns a good representation of the specific situation.},
 	author = {Brechtel, Sebastian and Gindele, Tobias and Dillmann, Rudiger},
-	booktitle = {2014 17th IEEE International Conference on Intelligent Transportation Systems, ITSC 2014},
+	booktitle = {17th International IEEE Conference on Intelligent Transportation Systems (ITSC), 8-11 Oct},
+	month = oct,
+	address = {Qingdao, China},
 	doi = {10.1109/ITSC.2014.6957722},
 	isbn = {9781479960781},
 	title = {{Probabilistic decision-making under uncertainty for autonomous driving using continuous POMDPs}},
-	year = {2014}
+	year = {2014},
+    pages={392-399}
 }
 
 @InProceedings{Bandyopadhyay2013,
@@ -857,18 +861,16 @@ isbn="978-3-642-36279-8"
 }
 
 @inproceedings{Bouton2017,
-	abstract = {Urban intersections represent a complex environment for autonomous vehicles with many sources of uncertainty. The vehicle must plan in a stochastic environment with potentially rapid changes in driver behavior. Providing an efficient strategy to navigate through urban intersections is a difficult task. This paper frames the problem of navigating unsignalized intersections as a partially observable Markov decision process (POMDP) and solves it using a Monte Carlo sampling method. Empirical results in simulation show that the resulting policy outperforms a threshold-based heuristic strategy on several relevant metrics that measure both safety and efficiency.},
-	archivePrefix = {arXiv},
-	arxivId = {1704.04322},
-	author = {Bouton, Maxime and Cosgun, Akansel and Kochenderfer, Mykel J.},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
-	doi = {10.1109/IVS.2017.7995818},
-	eprint = {1704.04322},
-	isbn = {9781509048045},
-	title = {{Belief state planning for autonomously navigating urban intersections}},
-	year = {2017}
+  author={M. {Bouton} and A. {Cosgun} and M. J. {Kochenderfer}},
+  booktitle={2017 IEEE Intelligent Vehicles Symposium (IV), 11-14 June 2017},
+  month = jun,
+  address = {Los Angeles, CA, USA},
+  title={Belief state planning for autonomously navigating urban intersections},
+  year={2017},
+  volume={},
+  number={},
+  pages={825-830},
 }
-
 
 @inproceedings{Sunberg2017,
 	abstract = {Safe interaction with human drivers is one of the primary challenges for autonomous vehicles. In order to plan driving maneuvers effectively, the vehicle's control system must infer and predict how humans will behave based on their latent internal state (e.g., intentions and aggressiveness). This research uses a simple model for human behavior with unknown parameters that make up the internal states of the traffic participants and presents a method for quantifying the value of estimating these states and planning with their uncertainty explicitly modeled. An upper performance bound is established by an omniscient Monte Carlo Tree Search (MCTS) planner that has perfect knowledge of the internal states. A baseline lower bound is established by planning with MCTS assuming that all drivers have the same internal state. MCTS variants are then used to solve a partially observable Markov decision process (POMDP) that models the internal state uncertainty to determine whether inferring the internal state offers an advantage over the baseline. Applying this method to a freeway lane changing scenario reveals that there is a significant performance gap between the upper bound and baseline. POMDP planning techniques come close to closing this gap, especially when important hidden model parameters are correlated with measurable parameters.},
@@ -887,12 +889,15 @@ isbn="978-3-642-36279-8"
 @inproceedings{Bry2011,
 	abstract = {In this paper we address the problem of motion planning in the presence of state uncertainty, also known as planning in belief space. The work is motivated by planning domains involving nontrivial dynamics, spatially varying measurement properties, and obstacle constraints. To make the problem tractable, we restrict the motion plan to a nominal trajectory stabilized with a linear estimator and controller. This allows us to predict distributions over future states given a candidate nominal trajectory. Using these distributions to ensure a bounded probability of collision, the algorithm incrementally constructs a graph of trajectories through state space, while efficiently searching over candidate paths through the graph at each iteration. This process results in a search tree in belief space that provably converges to the optimal path. We analyze the algorithm theoretically and also provide simulation results demonstrating its utility for balancing information gathering to reduce uncertainty and finding low cost paths. {\textcopyright} 2011 IEEE.},
 	author = {Bry, Adam and Roy, Nicholas},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2011 IEEE International Conference on Robotics and Automation, 9-13 May},
+	month = may,
+	address = {Shanghai, China},
 	doi = {10.1109/ICRA.2011.5980508},
 	isbn = {9781612843865},
 	issn = {10504729},
 	title = {{Rapidly-exploring random belief trees for motion planning under uncertainty}},
-	year = {2011}
+	year = {2011},
+    pages={723-730},
 }
 
 @inproceedings{Xu2014,
@@ -1343,16 +1348,18 @@ year = {2017}
 }
 
 @article{Chow2018,
-	abstract = {In many sequential decision-making problems one is interested in minimizing an expected cumulative cost while taking into account risk, i.e., increased awareness of events of small probability and high consequences. Accordingly, the objective of this paper is to present efficient reinforcement learning algorithms for risk-constrained Markov decision processes (MDPs), where risk is represented via a chance constraint or a constraint on the conditional value-at-risk (CVaR) of the cumulative cost. We collectively refer to such problems as percentile risk-constrained MDPs. Specifically, we first derive a formula for computing the gradient of the Lagrangian function for percentile risk-constrained MDPs. Then, we devise policy gradient and actor-critic algorithms that (1) estimate such gradient, (2) update the policy in the descent direction, and (3) update the Lagrange multiplier in the ascent direction. For these algorithms we prove convergence to locally optimal policies. Finally, we demonstrate the effectiveness of our algorithms in an optimal stopping problem and an online marketing application.},
-	archivePrefix = {arXiv},
-	arxivId = {1512.01629},
 	author = {Chow, Yinlam and Ghavamzadeh, Mohammad and Janson, Lucas and Pavone, Marco},
-	eprint = {1512.01629},
-	issn = {15337928},
-	journal = {Journal of Machine Learning Research},
-	keywords = {Actor-Critic Algorithms,Chance-Constrained Optimization,Conditional Value-at-Risk,Markov Decision Process,Policy Gradient Algorithms,Reinforcement Learning},
-	title = {{Risk-constrained reinforcement learning with percentile risk criteria}},
-	year = {2018}
+	title = {Risk-Constrained Reinforcement Learning with Percentile Risk Criteria},
+	year = {2017},
+	publisher = {JMLR.org},
+	volume = {18},
+	number = {1},
+	issn = {1532-4435},
+	journal = {J. Mach. Learn. Res.},
+	month = jan,
+	pages = {6070–6120},
+	numpages = {51},
+	keywords = {policy gradient algorithms, actor-critic algorithms, Markov decision process, chance-constrained optimization, reinforcement learning, conditional value-at-risk}
 }
 
 @ARTICLE{Artzner1999,
@@ -1438,7 +1445,19 @@ year = {2017}
 	year = {2019}
 }
 
-@article{Bouton2019workshop,
+@inproceedings{Bouton2019,
+  author={M. {Bouton} and A. {Nakhaei} and K. {Fujimura} and M. J. {Kochenderfer}},
+  booktitle={2019 IEEE Intelligent Vehicles Symposium (IV), 9-12 June},
+  month = jun,
+  address = {Paris, France},
+  title={Safe Reinforcement Learning with Scene Decomposition for Navigating Complex Urban Environments},
+  year={2019},
+  volume={},
+  number={},
+  pages={1469-1476},
+}
+
+@misc{Bouton2019workshop,
 	title={Reinforcement learning with probabilistic guarantees for autonomous driving},
 	author={Bouton, Maxime and Karlsson, Jesper and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J and Tumova, Jana},
 	journal={Workshop on Safety Risk and Uncertainty in Reinforcement Learning, Conference on Uncertainty in Artificial Intelligence (UAI)},
@@ -1693,25 +1712,34 @@ abstract = "A true adaptive nonlinear model predictive control (MPC) algorithm m
 	year = {2009}
 }
 
-@article{Bouraine2012,
-	abstract = {This paper addresses the problem of navigating in a provably safe manner a mobile robot with a limited field-of-view placed in a unknown dynamic environment. In such a situation, absolute motion safety (in the sense that no collision will ever take place whatever happens in the environment) is impossible to guarantee in general. It is therefore settled for a weaker level of motion safety dubbed passive motion safety: it guarantees that, if a collision takes place, the robot will be at rest. The primary contribution of this paper is the concept of Braking Inevitable Collision States (ICS), i.e. a version of the ICS corresponding to passive motion safety. Braking ICS are defined as states such that, whatever the future braking trajectory followed by the robot, a collision occurs before it is at rest. Passive motion safety is obtained by avoiding Braking ICS at all times. It is shown that Braking ICS verify properties that allow the design of an efficient Braking ICS-Checking algorithm, i.e. an algorithm that determines whether a given state is a Braking ICS or not. To validate the Braking ICS concept and demonstrate its usefulness, the Braking ICS-Checking algorithm is integrated in a reactive navigation scheme called PASSAVOID. It is formally established that PASSAVOID is provably passively safe in the sense that it is guaranteed that the robot will always stay away from Braking ICS no matter what happens in the environment. {\textcopyright} 2011 Springer-Verlag.},
-	author = {Bouraine, Sara and Fraichard, Thierry and Salhi, Hassen},
-	doi = {10.1007/s10514-011-9258-8},
-	issn = {09295593},
-	journal = {Autonomous Robots},
-	keywords = {Autonomous navigation,Collision avoidance,Dynamic environments,Inevitable collision states,Mobile robots,Motion safety},
-	title = {{Provably safe navigation for mobile robots with limited field-of-views in dynamic environments}},
-	year = {2012}
+﻿@article{Bouraine2012,
+	author={Bouraine, Sara
+	and Fraichard, Thierry
+	and Salhi, Hassen},
+	title={Provably safe navigation for mobile robots with limited field-of-views in dynamic environments},
+	journal={Autonomous Robots},
+	year={2012},
+	month=apr,
+	day={01},
+	volume={32},
+	number={3},
+	pages={267-283},
+	abstract={This paper addresses the problem of navigating in a provably safe manner a mobile robot with a limited field-of-view placed in a unknown dynamic environment. In such a situation, absolute motion safety (in the sense that no collision will ever take place whatever happens in the environment) is impossible to guarantee in general. It is therefore settled for a weaker level of motion safety dubbed passive motion safety: it guarantees that, if a collision takes place, the robot will be at rest.},
+	issn={1573-7527},
+	doi={10.1007/s10514-011-9258-8},
 }
 
 @inproceedings{Bouraine2014,
 	abstract = {This paper addresses the problem of planning the motion of a mobile robot with a limited sensory field-of-view in an unknown dynamic environment. In such a situation, the upper-bounded planning time prevents from computing a complete motion to the goal, partial motion planning is in order. Besides the presence of moving obstacles whose future behaviour is unknown precludes absolute motion safety (in the sense that no collision will ever take place whatever happens) is impossible to guarantee. The stance taken herein is to settle for a weaker level of motion safety called passive motion safety: it guarantees that, if a collision takes place, the robot will be at rest. The primary contribution of this paper is PassPMP, a partial motion planner enforcing passive motion safety. PassPMP periodically computes a passively safe partial trajectory designed to drive the robot towards its goal state. Passive motion safety is handled using a variant of the Inevitable Collision State (ICS) concept called Braking ICS, i.e. states such that, whatever the future braking trajectory of the robot, a collision occurs before it is at rest. Simulation results demonstrate how PassPMP operates and handles limited sensory field-of-views, occlusions and moving obstacles with unknown future behaviour. More importantly, PassPMP is provably passively safe.},
 	author = {Bouraine, S. and Fraichard, Th and Azouaoui, O. and Salhi, Hassen},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2014 IEEE International Conference on Robotics and Automation (ICRA), 31 May--7 June},
+	month = jun,
+	address = {Hong Kong, China},
 	doi = {10.1109/ICRA.2014.6907375},
 	issn = {10504729},
 	title = {{Passively safe partial motion planning for mobile robots with limited field-of-views in unknown dynamic environments}},
-	year = {2014}
+	year = {2014},
+    pages={3576-3582}
 }
 
 @article{Mitsch2017,
