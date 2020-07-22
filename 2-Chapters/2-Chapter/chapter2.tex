@@ -232,7 +232,6 @@ In the context of \glsxtrlong{AD}, the variance-penalised objective has been app
 \subsection{Worst-case criterion}
 
 In \gls{model-based} \glsxtrlong{RL}, the model parameters are typically estimated from noisy interaction data, which can lead to modelling errors that may have fatal consequences in real, physical systems. To address this issue, robust control community has formulated to optimise the outcome of a policy $\pi$ with respect to an \emph{ambiguity set} $\cP$ of likely dynamics:
-
 \begin{equation*}
 \max_\pi \min_{P\in\cP} \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t\right]
 \end{equation*}
@@ -246,7 +245,6 @@ The case of finite \glspl{MDP} with uncertain parameters was studied by \citet{I
 \label{sec:constrained-criterion}
 
 Another approach is to formulate safety as constrained optimisation: the task is to maximise a target function $f(x)$ while satisfying an inequality constraint $g(x)\leq \beta$. For instance, \citet{Berkenkamp2016} apply this principle to safe blackbox optimisation using Gaussian Process regression. This idea is extended to a sequential decision-making in the \gls{CMDP} framework \citep{Altman1999,Achiam2017}, a variant of \glspl{MDP} augmented with a cost function $C$, and such that the return maximisation objective is subjected to a constraint on the maximum expected cumulative discounted cost:
-
 \begin{equation*}
 \max_\pi \expectedvalue_{\pi, P} \left[\sum_t \discount^t R_t \right] \text{ subject to } \expectedvalue_{\pi, P} \left[\sum_t \discount^t C_t \right] \leq \beta.
 \end{equation*}

@@ -138,7 +138,7 @@ B_a(m) \eqdef \inf_{1 \leq t \leq L} U_{a_{1:t}}(m)
 \end{equation}
 
 
-The general algorithm structure is shown in \Cref{algo:kl-olop}.
+The general algorithm structure is shown in \Cref{alg:kl-olop}.
 We now discuss two specific implementations that differ in their choice of divergence $d$ and non-decreasing function $f$. They are compared in \Cref{tab:comparison}.
 
 \begin{algorithm}[tp]
@@ -150,11 +150,11 @@ We now discuss two specific implementations that differ in their choice of diver
 	}
 	\Return the most played sequence $a(n) \in \argmax_{a\in \cA^L} N_a(m)$
 	\caption{General structure for Open-Loop Optimistic Planning}
-	\label{algo:kl-olop}
+	\label{alg:kl-olop}
 \end{algorithm}
 
 \begin{table}[tp]
-	\caption{Different implementations of \Cref{algo:kl-olop} in \OLOP and \KLOLOP}
+	\caption{Different implementations of \Cref{alg:kl-olop} in \OLOP and \KLOLOP}
 	\label{tab:comparison}
 	\centering
 	\begin{tabular}{ccc}
@@ -170,7 +170,7 @@ We now discuss two specific implementations that differ in their choice of diver
 
 \subsubsection{\gls*{OLOP}}
 \label{sec:kl-olop-olop}
-To recover the original \OLOP algorithm of \citet{Bubeck2010} from \Cref{algo:kl-olop}, we can use a quadratic divergence $\dquad$ on $I=\mathbb{R}$ and a constant function $f_4$ defined as follows:
+To recover the original \OLOP algorithm of \citet{Bubeck2010} from \Cref{alg:kl-olop}, we can use a quadratic divergence $\dquad$ on $I=\mathbb{R}$ and a constant function $f_4$ defined as follows:
 \begin{equation*}
 \dquad(p,q) \eqdef 2(p-q)^2,\qquad
 f_4(m) \eqdef 4 \log M
@@ -221,7 +221,7 @@ This consideration motivates us to leverage the recent developments in the Multi
 \label{sec:kl-olop-kl-olop}
 
 \noindent
-We propose a novel implementation of \Cref{algo:kl-olop} where we leverage the analysis of the kl-UCB algorithm from \citep{Cappe2013} for multi-armed bandits with general bounded rewards.
+We propose a novel implementation of \Cref{alg:kl-olop} where we leverage the analysis of the kl-UCB algorithm from \citep{Cappe2013} for multi-armed bandits with general bounded rewards.
 Likewise, we use the Bernoulli Kullback-Leibler divergence defined on the interval $I=[0,1]$ by
 
 \begin{equation*}
@@ -247,7 +247,7 @@ Moreover, we use the constant function $f_2: m \rightarrow 2 \log M + 2 \log\log
 \begin{remark}[Upper bounds sharpening]
 	\label{rmk:sharpen}
 	\begin{leftbar}[remarkbar]
-	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By \Cref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of \Cref{algo:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in \cA^L$.
+	The introduction of the B-values $B_a(m)$ was made necessary in \OLOP by the use of Chernoff-Hoeffding confidence bounds which are not guaranteed to belong to [0, 1]. On the contrary, we have in \KLOLOP that $U^\mu_a(m) \in I = [0,1]$ by construction. By \Cref{lemma:seq_values}, the upper bounds sharpening step in line \ref{alg:b_values_compute} of \Cref{alg:kl-olop} is now superfluous as we trivially have $B_a(m) = U_a(m)$ for all $a\in \cA^L$.
 	\end{leftbar}
 \end{remark}
 
@@ -349,7 +349,7 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{leftbar}
 \end{lemma}
 \begin{proof}
-	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see \Cref{rmk:sharpen} and \Cref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by \Cref{algo:kl-olop}, we have $a^{m+1} = \argmax_{a \in \cA^L}  U_a(m)$ and $a^{\star}\in \cA^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
+	As $a^{m+1}_{1:h} = a$ and \diff{because the U-values are monotonically increasing along sequences of actions} (see \Cref{rmk:sharpen} and \Cref{lemma:seq_values}), we have $U_a(m) \geq U_{a^{m+1}}(m)$. Moreover, by \Cref{alg:kl-olop}, we have $a^{m+1} = \argmax_{a \in \cA^L}  U_a(m)$ and $a^{\star}\in \cA^L$, so $U_{a^{m+1}}(m) \geq U_{a^{\star}}(m)$ and finally $U_a(m) \geq U_{a^{\star}}(m)$.
 	
 	Assume that \eqref{eq:cond-ukl} is false, then
 	\begin{equation}
@@ -1154,7 +1154,7 @@ We look into the time and memory complexity and propose efficient implementation
 
 After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
 
-The \Cref{algo:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
+The \Cref{alg:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
 Hence, its time and memory complexities $C(\KLOLOP)$ are 
 \begin{equation*}
 C(\KLOLOP) = \cO(M|\Tau|) = \cO(MK^L).
@@ -1162,7 +1162,7 @@ C(\KLOLOP) = \cO(M|\Tau|) = \cO(MK^L).
 
 The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
 
-We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in \Cref{fig:tree}, while preserving the inner workings of the original algorithm.
+We propose in \Cref{alg:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in \Cref{fig:tree}, while preserving the inner workings of the original algorithm.
 
 \begin{figure}[ht]
 	\centering
@@ -1191,18 +1191,18 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	}
 	\Return the most played sequence $a(n) \in \argmax_{a\in \LL_m^+} N_a(m)$
 	\caption{Lazy Open Loop Optimistic Planning}
-	\label{algo:lazy-kl-olop}
+	\label{alg:lazy-kl-olop}
 \end{algorithm}
 
 
 \begin{proposition}[Time and memory complexity]
 	\begin{leftbar}[propositionbar]
-		\Cref{algo:lazy-kl-olop} has time and memory complexities of
+		\Cref{alg:lazy-kl-olop} has time and memory complexities of
 		\begin{equation*}
 		C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
 		\end{equation*}
 		
-		The corresponding complexity gain compared to the original \Cref{algo:kl-olop} is: 
+		The corresponding complexity gain compared to the original \Cref{alg:kl-olop} is: 
 		\begin{equation*}
 		\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
 		\end{equation*}
@@ -1217,13 +1217,13 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 \begin{proposition}[Consistency]
 	\label{prop:consistency}
 	\begin{leftbar}[propositionbar]
-		The set of sequences returned by \Cref{algo:lazy-kl-olop} is the same as the one returned by \Cref{algo:kl-olop}.
-		In particular, \Cref{algo:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret-kl-olop}.
+		The set of sequences returned by \Cref{alg:lazy-kl-olop} is the same as the one returned by \Cref{alg:kl-olop}.
+		In particular, \Cref{alg:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret-kl-olop}.
 	\end{leftbar}
 \end{proposition}
 
 \begin{proof}
-	To prove consistency of \Cref{algo:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in \Cref{algo:lazy-kl-olop}.
+	To prove consistency of \Cref{alg:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in \Cref{alg:lazy-kl-olop}.
 	Namely, 
 	
 	\begin{equation*}
@@ -1261,13 +1261,13 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	
 	\begin{remark}[About children extensions]
 		\begin{leftbar}[remarkbar]
-		We could frame \Cref{algo:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
+		We could frame \Cref{alg:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
 		\end{leftbar}
 	\end{remark}
 	
 	\begin{lemma}[Sets construction]
 		\begin{leftbar}[lemmabar]
-		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{algo:lazy-kl-olop}.
+		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{alg:lazy-kl-olop}.
 		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
@@ -1286,7 +1286,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 		&= \Tau_{m}^+ + a^{m+1}_{1:0} + \sum_{t=0}^L a^{m+1}_{1:t}A &\text{ as } \sum_{t=1}^L a^{m+1}_{1:t} \subset \sum_{t=0}^L a^{m+1}_{1:t}A\\
 		&=  \Tau_{m}^+ + \sum_{t=0}^L a^{m+1}_{1:t}A  &\text{ as }a^{m+1}_{1:0}=\emptyset \in \Tau_{0} \subset \Tau_{m} \subset \Tau_m^+
 		\end{align*}
-		This recursion is the one implemented in \Cref{algo:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
+		This recursion is the one implemented in \Cref{alg:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
 		
 		Finally, we highlight that $\LL_m^+ = \pi^+(\cA^L)$ is the set of leaves of $\Tau_{m}^+$.
 		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
@@ -1380,7 +1380,7 @@ We propose in \Cref{algo:lazy-kl-olop} a lazy version of \KLOLOP which only stor
 	&= \left\{b\in \cA \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by \Cref{lemma:inverse-proj}} 
 	\end{align*}
 	
-	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{algo:lazy-kl-olop} could have been sampled by \Cref{algo:kl-olop} as well.
+	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{alg:lazy-kl-olop} could have been sampled by \Cref{alg:kl-olop} as well.
 	
 	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
 	% 

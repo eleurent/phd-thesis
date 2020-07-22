@@ -1,4 +1,4 @@
-
+% --- Locutions
 \newglossaryentry{model-based}{name={model-based},description={refers to algorithms that \emph{do} estimate the \gls{MDP} parameters $\Ps$ and $\R$.}}
 \newglossaryentry{model-free}{name={model-free},description={refers to algorithms that \emph{do not} estimate the \gls{MDP} parameters $\Ps$ and $\R$.}}
 \newabbreviation[category={locutions}]{iid}{i.i.d.}{independent and identically distributed}
@@ -16,7 +16,6 @@
 \newabbreviation{MORL}{MORL}{\itag{M}ulti-\itag{O}bjective \itag{R}einforcement \itag{L}earning}
 \newabbreviation{DP}{DP}{\itag{D}ynamic \itag{P}rogramming}
 \newabbreviation{ADP}{ADP}{\itag{A}pproximate \itag{D}ynamic \itag{P}rogramming}
-\newabbreviation{MPC}{MPC}{\itag{M}odel \itag{P}redictive \itag{C}ontrol}
 \newabbreviation{PAC}{PAC}{\itag{P}robably \itag{A}pproximately \itag{C}orrect}
 \newabbreviation{MLE}{MLE}{\itag{M}aximum \itag{L}ikelihood \itag{E}stimation}
 \newabbreviation{NN}{NN}{\itag{N}eural \itag{N}etwork}
@@ -28,12 +27,17 @@
 \newabbreviation{RRT}{RRT}{\itag{R}apidly-\itag{e}xploring \itag{R}andom \itag{T}rees}
 \newabbreviation{VaR}{VaR}{\itag{V}alue-\itag{a}t-\itag{R}isk}
 \newabbreviation{CVaR}{CVaR}{\itag{C}onditional \itag{V}alue-\itag{a}t-\itag{R}isk}
-\newabbreviation{LQ}{LQ}{\itag{L}inear-\itag{Q}uadratic}
-\newabbreviation{HJI}{HJI}{\itag{H}amilton-\itag{J}acobi-\itag{I}saacs}
 \newabbreviation{OFU}{OFU}{\itag{O}ptimism in the \itag{F}ace of \itag{U}ncertainty}
 
+% --- Control
+\newabbreviation[longplural={linear matrix inequalities}]{LMI}{LMI}{\itag{l}inear \itag{m}atrix \itag{i}nequality}
+\newabbreviation{MPC}{MPC}{\itag{M}odel \itag{P}redictive \itag{C}ontrol}
+\newabbreviation{HJI}{HJI}{\itag{H}amilton-\itag{J}acobi-\itag{I}saacs}
+\newabbreviation{LPV}{LPV}{\itag{L}inear \itag{P}arameter-\itag{V}arying}
+\newabbreviation{LTI}{LTI}{\itag{L}inear \itag{T}ime-\itag{I}nvariant}
+\newabbreviation{LQ}{LQ}{\itag{L}inear \itag{Q}uadratic}
 
-% --- Driving
+% --- Autonomous Driving
 \newabbreviation{AD}{AD}{\itag{A}utonomous \itag{D}riving}
 \newabbreviation{ADAS}{ADAS}{\itag{A}dvanced \itag{D}river-\itag{A}ssistance \itag{S}ystems}
 \newabbreviation{ACC}{ACC}{\itag{A}daptive \itag{C}ruise \itag{C}ontrol}
@@ -43,7 +47,7 @@
 \newabbreviation{IDM}{IDM}{\itag{I}ntelligent \itag{D}river \itag{M}odel}
 \newabbreviation{MOBIL}{MOBIL}{\itag{M}inimizing \itag{O}verall \itag{B}raking \itag{I}nduced by \itag{L}ane change}
 
-% Algorithms
+% --- Algorithms
 \newabbreviation[category=algorithm]{OLOP}{OLOP}{\itag{O}pen-\itag{L}oop \itag{O}ptimistic \itag{P}lanning}
 \newabbreviation[category=algorithm]{OPD}{OPD}{\itag{O}ptimistic \itag{P}lanning of \itag{D}eterministic Systems}
 \newabbreviation[category=algorithm]{KLOLOP}{KL-OLOP}{\itag{K}ullback-\itag{L}eibler OLOP}
@@ -57,11 +61,3 @@
 \newabbreviation[category=algorithm]{BRUE}{BRUE}{\itag{B}est \itag{R}ecommendation with \itag{U}niform \itag{E}stimation}
 \newabbreviation[category=algorithm]{MDPGapE}{MDPGapE}{\itag{MDP} \itag{G}ap-based \itag{E}stimation}
 \newabbreviation[category=algorithm]{StOP}{StOP}{\itag{Sto}chastic \itag{O}ptimistic \itag{P}lanning}
-
-
-\newcommand{\OLOP}{\gls{OLOP}\xspace}
-\newcommand{\OPD}{\gls{OPD}\xspace}
-\newcommand{\KLOLOP}{\gls{KLOLOP}\xspace}
-\newcommand{\FTQ}{\gls{FTQ}\xspace}
-\newcommand{\FTQl}{\gls{FTQ}$(\lambda)$\xspace}
-\newcommand{\BFTQ}{\gls{BFTQ}\xspace}
