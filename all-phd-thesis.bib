@@ -111,7 +111,7 @@
 	title={Le prix d'une vie humaine dans les d{\'e}cisions {\'e}conomiques},
 	author={Abraham, C. and Th{\'e}di{\'e}, J.},
 	journal={Revue Française de Recherche Op{\'e}rationnelle},
-	number={6},
+	volume={16},
 	pages={157-168},
 	year={1960}
 }
@@ -161,7 +161,7 @@
 	title={La valeur de la vie humaine},
 	author={Arthur Charpentier and Béatrice Cherrier},
 	journal={Risques},
-	number={118},
+	volume={118},
 	pages={107--111},
 	year={2019},
 	month={June}
@@ -1158,19 +1158,27 @@ year = {2017}
 	year={2019}
 }
 
-@article{Nadjahi2019,
-	abstract = {Batch Reinforcement Learning (Batch RL) consists in training a policy using trajectories collected with another policy, called the behavioural policy. Safe policy improvement (SPI) provides guarantees with high probability that the trained policy performs better than the behavioural policy, also called baseline in this setting. Previous work shows that the SPI objective improves mean performance as compared to using the basic RL objective, which boils down to solving the MDP with maximum likelihood. Here, we build on that work and improve more precisely the SPI with Baseline Bootstrapping algorithm (SPIBB) by allowing the policy search over a wider set of policies. Instead of binarily classifying the state-action pairs into two sets (the $\backslash$textit{\{}uncertain{\}} and the $\backslash$textit{\{}safe-to-train-on{\}} ones), we adopt a softer strategy that controls the error in the value estimates by constraining the policy change according to the local model uncertainty. The method can take more risks on uncertain actions all the while remaining provably-safe, and is therefore less conservative than the state-of-the-art methods. We propose two algorithms (one optimal and one approximate) to solve this constrained optimization problem and empirically show a significant improvement over existing SPI algorithms both on finite MDPs and on infinite MDPs with a neural network function approximation.},
-	archivePrefix = {arXiv},
-	arxivId = {1907.05079},
-	author = {Nadjahi, Kimia and Laroche, Romain and des Combes, R{\'{e}}mi Tachet},
-	eprint = {1907.05079},
-	file = {:D$\backslash$:/Downloads/339.pdf:pdf},
-	mendeley-groups = {Safety},
-	pages = {1--17},
-	title = {{Safe Policy Improvement with Soft Baseline Bootstrapping}},
-	url = {http://arxiv.org/abs/1907.05079},
-	year = {2019}
+@InProceedings{Nadjahi2019,
+	author="Nadjahi, Kimia
+	and Laroche, Romain
+	and Tachet des Combes, R{\'e}mi",
+	editor="Brefeld, Ulf
+	and Fromont, Elisa
+	and Hotho, Andreas
+	and Knobbe, Arno
+	and Maathuis, Marloes
+	and Robardet, C{\'e}line",
+	title="Safe Policy Improvement with Soft Baseline Bootstrapping",
+	booktitle="European Conference on Machine Learning and Knowledge Discovery in Databases",
+	year="2020",
+	publisher="Springer International Publishing",
+	address="Cham",
+	pages="53--68",
+	abstract="Batch Reinforcement Learning (Batch RL) consists in training a policy using trajectories collected with another policy, called the behavioural policy. Safe policy improvement (SPI) provides guarantees with high probability that the trained policy performs better than the behavioural policy, also called baseline in this setting. Previous work shows that the SPI objective improves mean performance as compared to using the basic RL objective, which boils down to solving the MDP with maximum likelihood (Laroche et al. 2019). Here, we build on that work and improve more precisely the SPI with Baseline Bootstrapping algorithm (SPIBB) by allowing the policy search over a wider set of policies. Instead of binarily classifying the state-action pairs into two sets (the uncertain and the safe-to-train-on ones), we adopt a softer strategy that controls the error in the value estimates by constraining the policy change according to the local model uncertainty. The method can take more risks on uncertain actions all the while remaining provably-safe, and is therefore less conservative than the state-of-the-art methods. We propose two algorithms (one optimal and one approximate) to solve this constrained optimization problem and empirically show a significant improvement over existing SPI algorithms both on finite MDPS and on infinite MDPs with a neural network function approximation.",
+	isbn="978-3-030-46133-1"
 }
+
+
 
 @article{Kakade2002,
 	abstract = {Abstract In order to solve realistic reinforcement learning problems, it is critical that approximate algorithms be used. In this paper, we present the conservative policy iteration algorithm which finds an" approximately" optimal policy, given access to a restart ... $\backslash$n},
@@ -1490,7 +1498,7 @@ year = {2017}
   pages={1469-1476},
 }
 
-@inproceedinges{Bouton2019workshop,
+@inproceedings{Bouton2019workshop,
 	title={Reinforcement learning with probabilistic guarantees for autonomous driving},
 	author={Bouton, Maxime and Karlsson, Jesper and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J and Tumova, Jana},
 	booktitle={Workshop on Safety Risk and Uncertainty in Reinforcement Learning, Conference on Uncertainty in Artificial Intelligence (UAI)},
@@ -1520,13 +1528,14 @@ year = {2017}
 	year = {2018}
 }
 
-@article{Naghshvar2018,
+@misc{Naghshvar2018,
 	archivePrefix = {arXiv},
 	arxivId = {arXiv:1812.01254v1},
 	author = {Naghshvar, Mohammad and Sadek, Ahmed K and Wiggers, Auke J},
 	eprint = {arXiv:1812.01254v1},
 	title = {{Risk-averse Behavior Planning for Autonomous Driving under Uncertainty}},
-	year = {2018}
+	year = {2018},
+	note = {preprint}
 }
 
 @inproceedings{Berkenkamp2016,

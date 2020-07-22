@@ -884,7 +884,7 @@ Due to \eqref{eq:inclusion-generic}, the boundedness of $\xi(t)$
 implies the same property of $x(t)$. Therefore, in order to regulate
 \eqref{eq:dynamics} it is required to design a state feedback $u(t)$
 minimizing the asymptotic amplitude of the state $\xi(t)$ for given
-input $\delta(t)$ \citep{Efimov2013a}. In other words, it is necessary
+input $\delta(t)$ \citep{Efimov_tac2013}. In other words, it is necessary
 to design a control $u(t)$ that input-to-state stabilises \eqref{eq:predictor}.
 It is proposed to look for such a control in the form
 \begin{equation}
@@ -931,7 +931,7 @@ Note that the requirement that the matrix $P$ has to be diagonal is not
 restrictive, since for a Metzler matrix $\cD_{0}$ (the case of \eqref{eq:predictor-naive}
 and \eqref{eq:interval-predictor}), its stability is equivalent to
 existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P\cD_{0}\prec0$
-\citep{Positive}.
+\citep{FarinaRinaldi2000}.
 \begin{proof}
 	Consider a candidate Lyapunov function
 	\begin{gather*}
@@ -1152,7 +1152,7 @@ any $t_{i}\geq0$:
 	where $K_{0},K_{1},K_{2}$ are taken from Assumption \ref{assu:ctrl}.
 \end{enumerate}
 As we can conclude, the idea of the proposed dual \gls{MPC} scheme (see
-also \citep{Michalska1993,MPC1,MPC:Tube2}) is to use an open-loop
+also \citep{Michalska1993,Mayne2000,Mayne2009}) is to use an open-loop
 optimal control to reach a neighborhood of the origin $\X_{f}$ ensuring
 a robust constraint satisfaction \eqref{eq:constraints}, where a
 closed-loop control \eqref{eq:control_pr} can be applied, which provides
