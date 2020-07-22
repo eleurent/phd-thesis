@@ -176,13 +176,17 @@
 	edition = {1st}
 }
 
-@misc{janai2017computer,
-	title={Computer Vision for Autonomous Vehicles: Problems, Datasets and State of the Art},
-	author={Joel Janai and Fatma Güney and Aseem Behl and Andreas Geiger},
-	year={2017},
-	eprint={1704.05519},
-	archivePrefix={arXiv},
-	primaryClass={cs.CV}
+@article{janai2017computer,
+	url = {http://dx.doi.org/10.1561/0600000079},
+	year = {2020},
+	volume = {12},
+	journal = {Foundations and Trends® in Computer Graphics and Vision},
+	title = {Computer Vision for Autonomous Vehicles: Problems, Datasets and State of the Art},
+	doi = {10.1561/0600000079},
+	issn = {1572-2740},
+	number = {1–3},
+	pages = {1-308},
+	author = {Joel Janai and Fatma Güney and Aseem Behl and Andreas Geiger}
 }
 
 @phdthesis{Polack2018,
@@ -304,7 +308,10 @@
 	issn = {21682887},
 	journal = {IEEE Transactions on Systems Science and Cybernetics},
 	title = {{A Formal Basis for the Heuristic Determination of Minimum Cost Paths}},
-	year = {1968}
+	year = {1968},
+	volume={4},
+	number={2},
+	pages={100-107},
 }
 
 @inproceedings{Stentz1994,
@@ -365,12 +372,16 @@
 }
 
 @article{Kammel2008,
-	abstract = {This paper reports on AnnieWAY, an autonomous vehicle that is capable of driving through urban scenarios and that successfully entered the finals of the 2007 DARPA Urban Challenge competition. After describing the main challenges imposed and the major hardware components, we outline the underlying software structure and focus on selected algorithms. Environmental perception mainly relies on a recent laser scanner that delivers both range and reflectivity measurements. Whereas range measurements are used to provide three-dimensional scene geometry, measuring reflectivity allows for robust lane marker detection. Mission and maneuver planning is conducted using a hierarchical state machine that generates behavior in accordance with California traffic laws. We conclude with a report of the results achieved during the competition. {\textcopyright} 2008 Wiley Periodicals, Inc.},
-	author = {Kammel, S{\"{o}}ren and Ziegler, Julius and Pitzer, Benjamin and Werling, Moritz and Gindele, Tobias and Jagzent, Daniel and Schr{\"{o}}der, Joachim and Thuy, Michael and Goebl, Matthias and von Hundelshausen, Felix and Pink, Oliver and Frese, Christian and Stiller, Christoph},
-	doi = {10.1002/rob.20252},
-	issn = {15564959},
+	author = {Kammel, Sören and Ziegler, Julius and Pitzer, Benjamin and Werling, Moritz and Gindele, Tobias and Jagzent, Daniel and Schröder, Joachim and Thuy, Michael and Goebl, Matthias and Hundelshausen, Felix von and Pink, Oliver and Frese, Christian and Stiller, Christoph},
+	title = {Team AnnieWAY's autonomous system for the 2007 DARPA Urban Challenge},
 	journal = {Journal of Field Robotics},
-	title = {{Team AnnieWAY's autonomous system for the 2007 DARPA Urban Challenge}},
+	volume = {25},
+	number = {9},
+	pages = {615-639},
+	doi = {10.1002/rob.20252},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/rob.20252},
+	eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/rob.20252},
+	abstract = {Abstract This paper reports on AnnieWAY, an autonomous vehicle that is capable of driving through urban scenarios and that successfully entered the finals of the 2007 DARPA Urban Challenge competition. After describing the main challenges imposed and the major hardware components, we outline the underlying software structure and focus on selected algorithms. Environmental perception mainly relies on a recent laser scanner that delivers both range and reflectivity measurements. Whereas range measurements are used to provide three-dimensional scene geometry, measuring reflectivity allows for robust lane marker detection. Mission and maneuver planning is conducted using a hierarchical state machine that generates behavior in accordance with California traffic laws. We conclude with a report of the results achieved during the competition. © 2008 Wiley Periodicals, Inc.},
 	year = {2008}
 }
 
@@ -669,17 +680,17 @@
 	year={2017},
 }
 
-@inproceedings{Ho2016,
-	abstract = {Consider learning a policy from example expert behavior, without interaction with the expert or access to a reinforcement signal. One approach is to recover the expert's cost function with inverse reinforcement learning, then extract a policy from that cost function with reinforcement learning. This approach is indirect and can be slow. We propose a new general framework for directly extracting a policy from data as if it were obtained by reinforcement learning following inverse reinforcement learning. We show that a certain instantiation of our framework draws an analogy between imitation learning and generative adversarial networks, from which we derive a model-free imitation learning algorithm that obtains significant performance gains over existing model-free methods in imitating complex behaviors in large, high-dimensional environments.},
-	archivePrefix = {arXiv},
-	arxivId = {1606.03476},
+@incollection{Ho2016,
+	title = {Generative Adversarial Imitation Learning},
 	author = {Ho, Jonathan and Ermon, Stefano},
-	booktitle = {Advances in Neural Information Processing Systems},
-	eprint = {1606.03476},
-	issn = {10495258},
-	title = {{Generative adversarial imitation learning}},
-	year = {2016}
+	booktitle = {Advances in Neural Information Processing Systems 29},
+	editor = {D. D. Lee and M. Sugiyama and U. V. Luxburg and I. Guyon and R. Garnett},
+	pages = {4565--4573},
+	year = {2016},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/6391-generative-adversarial-imitation-learning.pdf}
 }
+
 
 @inproceedings{Kuefler2017,
 	author={A. {Kuefler} and J. {Morton} and T. {Wheeler} and M. {Kochenderfer}},
@@ -968,13 +979,13 @@ isbn="978-3-642-36279-8"
 }
 
 @article{Kalman1960,
-	abstract = {The classical filtering and prediction problem is re-examined using the Bode-Sliannon representation of random processes and the “state-transition” method of analysis of dynamic systems. New results are: (1) The formulation and methods of solution of the problem apply without modification to stationary and nonstationary statistics and to growing-memory and infinitememory filters. (2) A nonlinear difference (or differential) equation is derived for the covariance matrix of the optimal estimation error. From the solution of this equation the coefficients of the difference (or differential) equation of the optimal linear filter are obtained without further calculations. (3) The filtering problem is shown to be the dual of the noise-free regulator problem. The new method developed here is applied to two well-known problems, confirming and extending earlier results. The discussion is largely self-contained and proceeds from first principles; basic concepts of the theory of random processes are reviewed in the Appendix. {\textcopyright} 1960 by ASME.},
-	author = {Kalman, R. E.},
-	doi = {10.1115/1.3662552},
-	issn = {1528901X},
-	journal = {Journal of Fluids Engineering, Transactions of the ASME},
-	title = {{A new approach to linear filtering and prediction problems}},
-	year = {1960}
+  author = {Kalman, Rudolph Emil and Others},
+  journal = {Journal of basic Engineering},
+  number = {1},
+  pages = {35--45},
+  title = {A new approach to linear filtering and prediction problems},
+  volume = {82},
+  year = {1960}
 }
 
 @inproceedings{VanDenBerg2017,
@@ -1088,7 +1099,8 @@ year = {2017}
     year={2016},
     eprint={1610.05182},
     archivePrefix={arXiv},
-    primaryClass={cs.RO}
+    primaryClass={cs.RO},
+    note={preprint}
 }
 
 @Comment{Chap2_4,
@@ -1178,15 +1190,18 @@ year = {2017}
 	isbn="978-3-030-46133-1"
 }
 
-
-
-@article{Kakade2002,
-	abstract = {Abstract In order to solve realistic reinforcement learning problems, it is critical that approximate algorithms be used. In this paper, we present the conservative policy iteration algorithm which finds an" approximately" optimal policy, given access to a restart ... $\backslash$n},
+@inproceedings{Kakade2002,
 	author = {Kakade, Sham and Langford, John},
-	isbn = {1-55860-873-7},
-	journal = {Proceedings of the 19th International Conference on Machine Learning},
-	title = {{Approximately Optimal Approximate Reinforcement Learning}},
-	year = {2002}
+	title = {Approximately Optimal Approximate Reinforcement Learning},
+	year = {2002},
+	isbn = {1558608737},
+	publisher = {Morgan Kaufmann Publishers Inc.},
+	month = jul,
+	address = {San Francisco, CA, USA},
+	booktitle = {Proceedings of the Nineteenth International Conference on Machine Learning},
+	pages = {267–274},
+	numpages = {8},
+	series = {ICML ’02}
 }
 
 @inproceedings{Schulman2015,
@@ -1200,7 +1215,6 @@ year = {2017}
 	title = {{Trust region policy optimization}},
 	year = {2015}
 }
-
 
 @inproceedings{Pan2017,
 	abstract = {Reinforcement learning is considered as a promising direction for driving policy learning. However, training autonomous driving vehicle with reinforcement learning in real environment involves non-affordable trial-and-error. It is more desirable to first train in a virtual environment and then transfer to the real environment. In this paper, we propose a novel realistic translation network to make model trained in virtual environment be workable in real world. The proposed network can convert non-realistic virtual image input into a realistic one with similar scene structure. Given realistic frames as input, driving policy trained by reinforcement learning can nicely adapt to real world driving. Experiments show that our proposed virtual to real (VR) reinforcement learning (RL) works pretty well. To our knowledge, this is the first successful case of driving policy trained by reinforcement learning that can adapt to real world driving data.},
@@ -1333,17 +1347,14 @@ year = {2017}
 }
 
 @article{Garcia2015,
-	abstract = {Safe Reinforcement Learning can be defined as the process of learning policies that maxi-mize the expectation of the return in problems in which it is important to ensure reasonable system performance and/or respect safety constraints during the learning and/or deploy-ment processes. We categorize and analyze two approaches of Safe Reinforcement Learning. The first is based on the modification of the optimality criterion, the classic discounted fi-nite/infinite horizon, with a safety factor. The second is based on the modification of the exploration process through the incorporation of external knowledge or the guidance of a risk metric. We use the proposed classification to survey the existing literature, as well as suggesting future directions for Safe Reinforcement Learning.},
-	author = {Garc{\'{i}}a, Javier and Fern{\'{a}}ndez, Fernando},
-	doi = {10.1109/TNNLS.2017.2654539},
-	file = {::},
-	issn = {15337928},
-	journal = {Journal of Machine Learning Research},
-	keywords = {reinforcement learning,risk sensitivity,safe exploration,teacher advice},
-	pages = {1437--1480},
-	title = {{A Comprehensive Survey on Safe Reinforcement Learning}},
-	volume = {16},
-	year = {2015}
+  author  = {Javier Garc{{\'i}}a and Fern and o Fern{{\'a}}ndez},
+  title   = {A Comprehensive Survey on Safe Reinforcement Learning},
+  journal = {Journal of Machine Learning Research},
+  year    = {2015},
+  volume  = {16},
+  number  = {42},
+  pages   = {1437-1480},
+  url     = {http://jmlr.org/papers/v16/garcia15a.html}
 }
 
 @book{Markowitz59,
