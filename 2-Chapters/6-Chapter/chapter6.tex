@@ -18,7 +18,7 @@
 \abstractStartChapter{}%
 
 This third part studies model-based \gls{RL} algorithms, that estimate the \gls{MDP} dynamics $\Ps$ so as to \emph{plan} for the corresponding optimal policy.
-In this chapter, we focus on this planning step under real-time requirements, which calls for provably and empirically sample-efficient algorithms. Since our continuous state space $\cS$ precludes the use of Dynamic Programming, we consider tree-based planning algorithms. First, to handle uncertain human behaviours modelled as \emph{stochastic} dynamics, we consider the \OLOP algorithm, highlight its faulty behaviour and propose a modified version that alleviates this issue. Second, we tackle a paradox: despite the \gls{MDP} transitions having a graph structure, \gls{MCTS} algorithms use a tree structure that prevents them from merging similar states. We show that doing so with a graph-based planner better exploits the structure of motion planning problems where trajectories tend to overlap.\footnote{This chapter is based on two articles, published and submitted to the \emph{2019 European} and \emph{2020 Asian Conferences on Machine Learning}, respectively \citep{Leurent2019practical,Leurent2020monte}.}
+In this chapter, we focus on this planning step under real-time requirements, which calls for provably and empirically sample-efficient algorithms. Since our continuous state space $\cS$ precludes the use of Dynamic Programming, we consider tree-based planning algorithms. First, to handle uncertain human behaviours modelled as \emph{stochastic} dynamics, we consider the \OLOP algorithm, highlight its faulty behaviour and propose a modified version that alleviates this issue. Second, we tackle a paradox: despite the \gls{MDP} transitions having a graph structure, \gls{MCTS} algorithms use a tree structure that prevents them from merging similar states. We show that doing so with a graph-based planner better exploits the structure of motion planning problems where trajectories tend to overlap.\footnote{This chapter is based on two articles, published and submitted to the \emph{2019 European} and \emph{2020 Asian Conferences on Machine Learning}, respectively \citep{Leurent2020practical,Leurent2020monte}.}
 \minitocStartChapter{}
 
 % TODO: revoir la biblio de ce chapitre, limiter les abbreviations
@@ -54,8 +54,8 @@ In a real-time scenario, decisions need to be taken at a given frequency, even i
 \gls{MCTS} algorithms were a breakthrough for online decision-making in \glspl{MDP}, that lead to key successes in the domain, including Computer Go \citep{Coulom2006,Silver18}. They enjoy two main benefits: first, they do not require the knowledge of the \gls{MDP} parameters contrary to \textit{e.g.} \gls{DP} algorithms, but only the access to a \emph{generative model} that allows to sample trajectories from the current state. Second, the theoretical performance bounds of \gls{MCTS} algorithms are typically independent of the size of the state space $\cS$. Instead, they depend on the maximum depth at which an optimal node in the search tree can be reached within the allowed budget $n$ of trajectory samples. This translates as an \emph{effective branching factor} in the regret bounds, related to the notion of near-optimality dimension in multi-armed bandits.
 
 \paragraph{Related work}
-Algorithms for planning with a generative model date back at least to the seminal work of \citet{Kearns02SS} who proposed the \texttt{Sparse} \texttt{Sampling} algorithm using a tree structure to represent the value estimate and uniform sampling of trajectories. This strategy was further analysed more recently in \citep{Feldman14BRUE}, where the \gls{BRUE} algorithm provides an enhanced value estimation. Another family of algorithms rely on the principle of \gls*{OFU} \citep[surveyed by][]{Munos14}, inspired from the \gls*{MAB} problem. This principle was first used in the context of planning in the \texttt{CrazyStone} software \citep{Coulom2006} for computer Go. It was later formalised with the \gls{UCT} algorithm \citep{Kocsis06UCT}, but was shown by \citet{Coquelin2007} to have a doubly-exponential complexity in the worst case. The \OPD algorithm introduced by \citet{Hren2008optimistic} was the first to provide a polynomial regret bound, but was limited to systems with deterministic rewards and dynamics. It was then extended to stochastic rewards and dynamics with the \glsxtrfull+{OLOP} algorithm \citep{Bubeck2010}, but only in the \emph{open-loop} setting of state-independent policies (\ie sequences of actions), a restriction of the policy class that causes a loss of optimality.
-Known stochastic transitions were handled by \citet{Busoniu2012optimistic}. For \glspl{MDP} with stochastic and unknown transitions, polynomial sample complexities have been obtained for \gls{StOP} \citep{Szorenyi14}, \texttt{TrailBlazer} \citep{Grill16} and \texttt{SmoothCruiser} \citep{Grill19}, but despite their theoretical merits these algorithms are intractable in practice: \gls{StOP} requires the expensive storage of policies, while \texttt{TrailBlazer} and \texttt{SmoothCruiser} only terminate after a prohibitive amount of samples, even for very small \glspl{MDP}. %\citep{Huang2017,Kaufmann2017} proposed two algorithms for planning in a maxmin game with stochastic rewards in the leaves of a known game tree.
+Algorithms for planning with a generative model date back at least to the seminal work of \citet{Kearns02SS} who proposed the \texttt{Sparse} \texttt{Sampling} algorithm using a tree structure to represent the value estimate and uniform sampling of trajectories. This strategy was further analysed more recently in \citep{Feldman14BRUE}, where the \gls{BRUE} algorithm provides an enhanced value estimation. Another family of algorithms rely on the principle of \gls*{OFU} \citep[surveyed by][]{Munos2014}, inspired from the \gls*{MAB} problem. This principle was first used in the context of planning in the \texttt{CrazyStone} software \citep{Coulom2006} for computer Go. It was later formalised with the \gls{UCT} algorithm \citep{Kocsis06UCT}, but was shown by \citet{Coquelin2007} to have a doubly-exponential complexity in the worst case. The \OPD algorithm introduced by \citet{Hren2008} was the first to provide a polynomial regret bound, but was limited to systems with deterministic rewards and dynamics. It was then extended to stochastic rewards and dynamics with the \glsxtrfull+{OLOP} algorithm \citep{Bubeck2010}, but only in the \emph{open-loop} setting of state-independent policies (\ie sequences of actions), a restriction of the policy class that causes a loss of optimality.
+Known stochastic transitions were handled by \citet{Busoniu2012optimistic}. For \glspl{MDP} with stochastic and unknown transitions, polynomial sample complexities have been obtained for \gls{StOP} \citep{Szorenyi2014}, \texttt{TrailBlazer} \citep{Grill2016} and \texttt{SmoothCruiser} \citep{Grill2019}, but despite their theoretical merits these algorithms are intractable in practice: \gls{StOP} requires the expensive storage of policies, while \texttt{TrailBlazer} and \texttt{SmoothCruiser} only terminate after a prohibitive amount of samples, even for very small \glspl{MDP}. %\citep{Huang2017,Kaufmann2017} proposed two algorithms for planning in a maxmin game with stochastic rewards in the leaves of a known game tree.
 
 \paragraph{Contributions} This chapter focuses on two questions. First, in \Cref{sec:olop}, we exhibit a faulty behaviour of the \OLOP algorithm when applied to numerical problems, and propose a modified version that addresses it, leading to an improved performance with a retained guarantee. Second, in \Cref{sec:gbop} we look into how \gls{MCTS} can benefit from merging overlapping trajectories, to better exploit the underlying graphical structure of the dynamics.
 
@@ -651,7 +651,7 @@ A planning algorithm is typically composed of two main rules:
 \end{enumerate}
 
 These rules can be chosen with the goal of minimising the simple regret $\regret$.
-A popular approach is to follow the principle of \glsxtrfull{OFU} \citep[see][]{Munos14}, which consists in exploring the option that maximises an upper-bound of the true objective. In the context of planning, it has been applied by forming bounds on the state value function $\V^\star$, that we simply denote $\V$ for brevity.
+A popular approach is to follow the principle of \glsxtrfull{OFU} \citep[see][]{Munos2014}, which consists in exploring the option that maximises an upper-bound of the true objective. In the context of planning, it has been applied by forming bounds on the state value function $\V^\star$, that we simply denote $\V$ for brevity.
 
 \begin{definition}[Value bounds]
 	\begin{leftbar}[defnbar]
@@ -667,7 +667,7 @@ A popular approach is to follow the principle of \glsxtrfull{OFU} \citep[see][]{
 	\end{leftbar}
 \end{definition}
 
-Following the \gls{OFU} principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008optimistic, Bubeck2010, Busoniu2012optimistic}.
+Following the \gls{OFU} principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[e.g.][]{Kocsis06UCT, Hren2008, Bubeck2010, Busoniu2012optimistic}.
 
 For instance, since we assume that the rewards are bounded in [0, 1], trivial bounds on $V(s)$ are
 $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. But these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. However, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
@@ -714,7 +714,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 	\label{fig:bellman}
 \end{figure}
 
-\citet{Hren2008optimistic} used this Bellman operator $B_n$ in their \OPD algorithm to define a pair of bounds $(L_n,\, U_n)$ at each iteration $n$. They use trivial bounds at the leaves, and backup these estimates up to the root by iteratively applying $B_n$. We can show that, under a \textit{monotonicity} condition (satisfied by the trivial bounds $0$ and $V_{max}$), applying $B_n$ can only tighten a bound and converges in a finite time.
+\citet{Hren2008} used this Bellman operator $B_n$ in their \OPD algorithm to define a pair of bounds $(L_n,\, U_n)$ at each iteration $n$. They use trivial bounds at the leaves, and backup these estimates up to the root by iteratively applying $B_n$. We can show that, under a \textit{monotonicity} condition (satisfied by the trivial bounds $0$ and $V_{max}$), applying $B_n$ can only tighten a bound and converges in a finite time.
 
 \begin{definition}[Monotonicity]
 	\begin{leftbar}[defnbar]
@@ -737,7 +737,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
-This enables \citet{Hren2008optimistic} to define\footnote{We use an iteration of operators while a recursive definition was used originally.} non-trivial valid bounds on $V$:
+This enables \citet{Hren2008} to define\footnote{We use an iteration of operators while a recursive definition was used originally.} non-trivial valid bounds on $V$:
 \begin{align}
 \label{eq:opd-bounds}
 L_n \eqdef B_n^{d_n}(0), \qquad U_n \eqdef B_n^{d_n}(V_{\max}),
@@ -746,7 +746,7 @@ where $0$ is the null function.
 The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}.
 
 \begin{algorithm}[!ht]
-	\caption{The \emph{Optimistic Planning of Deterministic Systems} (\OPD) algorithm from \citep{Hren2008optimistic}.}
+	\caption{The \emph{Optimistic Planning of Deterministic Systems} (\OPD) algorithm from \citep{Hren2008}.}
 	\label{alg:opd}
 	\DontPrintSemicolon
 	\For{each iteration $n$}{
@@ -818,11 +818,11 @@ Though both algorithms share a similar design, we claim that using graphs provid
 \subsection{Analysis}
 \label{sec:gbop-analysis}
 
-Comparing \OPD and \GBOPD directly is difficult since they do not involve the same structure, which implies implicit differences in their behaviours. Studying them under a common framework makes these differences explicit. To leverage the analysis of \OPD by \citet{Hren2008optimistic}, we will frame \GBOPD as a tree-based planning algorithm: the graph operator $\cB$ will be represented as tree backup $B$ applied on an \emph{unrolled} tree $T(\cG_n)$, defined below.
+Comparing \OPD and \GBOPD directly is difficult since they do not involve the same structure, which implies implicit differences in their behaviours. Studying them under a common framework makes these differences explicit. To leverage the analysis of \OPD by \citet{Hren2008}, we will frame \GBOPD as a tree-based planning algorithm: the graph operator $\cB$ will be represented as tree backup $B$ applied on an \emph{unrolled} tree $T(\cG_n)$, defined below.
 
 \subsubsection{Background on the sample complexity of \OPD}
 
-First, we recall the analysis of \citet{Hren2008optimistic} and introduce some notations.
+First, we recall the analysis of \citet{Hren2008} and introduce some notations.
 
 \begin{lemma}[Sequence values]
 	\begin{leftbar}[defnbar]
@@ -850,7 +850,7 @@ This enables to define a measure of the difficulty of a planning problem.
 This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the subtree $T^\infty=\bigcup_h T_h^\infty$ of near-optimal nodes that can be sampled by \OPD, and acts as an effective branching factor as opposed to the true branching factor $K$. When $\hlrb{\kappa}$ is small, fewer nodes must be explored at a given depth allowing the algorithm to plan deeper for a given budget $n$. Thus, it directly impacts the simple regret that can be achieved by \OPD when run on a given MDP.
 
 
-\begin{theorem}[Regret bound of \citealt{Hren2008optimistic}]
+\begin{theorem}[Regret bound of \citealt{Hren2008}]
 	\begin{leftbar}[theorembar]
 	\label{thm:regret-opd}
 	The \Cref{alg:opd} enjoys the following regret bound:
@@ -1033,7 +1033,7 @@ The approach developed in \Cref{sec:gbopd,sec:gbop-analysis} consists in using s
 
 % TODO: say that rewards can be stochastic
 When the reward kernel $P\left(r \condbar s,a\right)$ is stochastic, deviation inequalities can be used to design a confidence interval $[\ell_t(s,a), u_t(s,a)]$ over its expected value $\expectedvalue\left[r | s,a\right]$. For instance, the Chernoff-Hoeffding deviation inequality was used to design confidence intervals in \citep{Kocsis06UCT,Bubeck2010,Kaufmann2017}.
-In recent works \citep{Leurent2019practical, Jonsson2020planning}, the tighter Kullback-Leibler confidence interval is preferred:
+In recent works \citep{Leurent2020practical, Jonsson2020planning}, the tighter Kullback-Leibler confidence interval is preferred:
 \begin{align*}
 u_t(s,a) &\eqdef \max \left\{v : \kl\!\big(\hat{r}_t(s,a),v\big) \leq \frac {\beta^r(n_t(s,a), n)} {n_t(s,a)} \right\},\\
 \ell_t(s,a) &\eqdef\min \left\{v : \kl\!\big(\hat{r}_t(s,a),v\big) \leq \frac {\beta^r(n_t(s,a), n)} {n_t(s,a)} \right\},
@@ -1048,7 +1048,7 @@ where $\hp_t(\cdot|s,a) \eqdef n_t(s,a,\cdot) / n_t(s,a)$ is the empirical distr
 
 \paragraph{Bellman operator with stochasticity.}
 
-In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2019practical, Jonsson2020planning}. We modify the \Cref{def:bellman} of the Bellman operator on graphs $\cB_t$ as
+In this work, we do not discuss the tuning of $\beta^r$, $\beta^p$, but simply assume that they are chosen such that the rewards and transitions belong to their confidence regions with sufficiently high probability to obtain performance guarantees for the  planning algorithm. For more details on such a choice, refer to \citep[e.g.][]{Leurent2020practical, Jonsson2020planning}. We modify the \Cref{def:bellman} of the Bellman operator on graphs $\cB_t$ as
 \begin{align*}
 \cB_t^+(\cU)(s) &= \max_{a\in \cA} \left[u_t(s,a) + \gamma \max_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a) \cU(s')\right], \\
 \cB_t^-(\cL)(s) &= \max_{a\in \cA} \left[\ell_t(s,a) + \gamma \min_{q \in \cC_t(s,a)} \sum_{s'} q(s'|s,a)\cL(s')\right],
@@ -1057,7 +1057,7 @@ for all $s\in\inte{\cG_n}$, where the maximum and minimum over these Kullback-Le
 
 \paragraph{Structure of the planning algorithm}
 
-In the deterministic setting, once a transition has been observed, it is known with certainty and doesn't need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt and episodic setting where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[e.g.][]{Kearns02SS,Kocsis06UCT,Bubeck2010,Feldman14BRUE,Leurent2019practical,Jonsson2020planning}. We also follow this scheme in our proposed \Cref{alg:gbop}.
+In the deterministic setting, once a transition has been observed, it is known with certainty and doesn't need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt and episodic setting where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[e.g.][]{Kearns02SS,Kocsis06UCT,Bubeck2010,Feldman14BRUE,Leurent2020practical,Jonsson2020planning}. We also follow this scheme in our proposed \Cref{alg:gbop}.
 
 \begin{algorithm}[ht]
 	\caption{\emph{Graph-Based Optimistic Planning} (\GBOP) algorithm.}
@@ -1629,7 +1629,7 @@ The contraction property is standard for the Bellman Operator, see e.g. Puterman
 \end{proof}
 
 \subsubsection{Proof of \Cref{thm:regret-opd}}
-We recall the main steps of the proof of \citet{Hren2008optimistic}.\\
+We recall the main steps of the proof of \citet{Hren2008}.\\
 
 \begin{enumerate}
 	\item The recommendation $a_n$ has a maximal depth $d_n$ in the tree, and its gap $\regret = V^\star - V({a_{n,1}})$ is bounded by $\regret \leq \frac{\gamma^{d_n}}{1-\gamma}$. We need to relate $d_n$ to $n$.

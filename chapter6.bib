@@ -1,8 +1,8 @@
 @book{Howard1960,
-author = {R. A. Howard},
-title = {Dynamic Programming and Markov Processes},
-publisher = {MIT},
-year = {1960}
+	author = {R. A. Howard},
+	title = {Dynamic Programming and Markov Processes},
+	publisher = {MIT},
+	year = {1960}
 }
 
 @article{Chaslot2008,
@@ -12,6 +12,7 @@ year = {1960}
 	pages = {343-357},
 	title = {Progressive Strategies for Monte-Carlo Tree Search},
 	volume = {04},
+	number = {3},
 	journal = {New Mathematics and Natural Computation},
 	doi = {10.1142/S1793005708001094}
 }
@@ -43,7 +44,7 @@ year = {1960}
 
 @inproceedings{Bubeck2010,
 	author = {Bubeck, S{\'{e}}bastien and Munos, R{\'{e}}mi},
-	booktitle = {COLT 2010 - The 23rd Conference on Learning Theory, June 27--29},
+	booktitle = {The 23rd Conference on Learning Theory (COLT 2010), June 27--29},
 	title = {{Open Loop Optimistic Planning}},
 	year = {2010},
 	pages = {477-489},
@@ -51,119 +52,212 @@ year = {1960}
 	address = {Haifa, Israel},
 }
 
-@inproceedings{Garivier2011,
-  title={The KL-UCB algorithm for bounded stochastic bandits and beyond},
-  author={Garivier, Aur{\'e}lien and Capp{\'e}, Olivier},
-  booktitle={Proc. of COLT},
-  year={2011}
+@InProceedings{Garivier2011,
+  title = 	 {The KL-UCB Algorithm for Bounded Stochastic Bandits and Beyond},
+  author = 	 {Aurélien Garivier and Olivier Cappé},
+  booktitle = 	 {Proceedings of the 24th Annual Conference on Learning Theory},
+  pages = 	 {359--376},
+  year = 	 {2011},
+  editor = 	 {Sham M. Kakade and Ulrike von Luxburg},
+  volume = 	 {19},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Budapest, Hungary},
+  month = 	 {09--11 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v19/garivier11a/garivier11a.pdf},
+  url = 	 {http://proceedings.mlr.press/v19/garivier11a.html},
+  abstract = 	 {This paper presents a finite-time analysis of the KL-UCB algorithm, an online, horizon-free  index policy for stochastic bandit problems.  We prove two distinct results: first, for arbitrary bounded rewards, the KL-UCB algorithm  satisfies a uniformly better regret bound than UCB and its variants; second, in the special case of  Bernoulli rewards, it reaches the lower bound of Lai and Robbins.  Furthermore, we show that simple adaptations of the KL-UCB algorithm are also optimal for  specific classes of (possibly unbounded) rewards, including those generated from exponential  families of distributions.  A large-scale numerical study comparing KL-UCB with its main competitors (UCB, MOSS,  UCB-Tuned, UCB-V, DMED) shows that KL-UCB is remarkably efficient and stable, including for short time horizons. KL-UCB is also the only method that always performs better  than the basic UCB policy.  Our regret bounds rely on deviations results of independent interest which are stated and proved  in the Appendix. As a by-product, we also obtain an improved regret bound for the standard UCB  algorithm.}
 }
 
 @article{Cappe2013,
-author = {Capp{\'{e}}, Olivier and Garivier, Aur{\'{e}}lien and Maillard, Odalric-Ambrym and Munos, R{\'{e}}mi and Stoltz, Gilles},
-journal = {The Annals of Statistics},
-number = {3},
-pages = {1516--1541},
-title = {{Kullback-Leibler Upper Confidence Bounds for Optimal Sequential Allocation}},
-volume = {41},
-year = {2013}
+	author = {Capp{\'{e}}, Olivier and Garivier, Aur{\'{e}}lien and Maillard, Odalric-Ambrym and Munos, R{\'{e}}mi and Stoltz, Gilles},
+	journal = {The Annals of Statistics},
+	number = {3},
+	pages = {1516--1541},
+	title = {{Kullback-Leibler Upper Confidence Bounds for Optimal Sequential Allocation}},
+	volume = {41},
+	year = {2013}
 }
 
 @book{Bellman1957,
-author = {Bellman, Richard},
-title = {Dynamic Programming},
-year = {2010},
-isbn = {0691146683},
-publisher = {Princeton University Press},
-address = {USA}
+	author = {Bellman, Richard},
+	title = {Dynamic Programming},
+	year = {2010},
+	isbn = {0691146683},
+	publisher = {Princeton University Press},
+	address = {USA}
 }
 
-@inproceedings{Kearns2002,
-author = {Kearns, Michael and Mansour, Yishay and Ng, Andrew Y.},
-booktitle = {Proc. of IJCAI},
-title = {{A sparse sampling algorithm for near-optimal planning in large Markov decision processes}},
-year = {2002}
+﻿@Article{Kearns2002,
+	author={Kearns, Michael
+	and Mansour, Yishay
+	and Ng, Andrew Y.},
+	title={A Sparse Sampling Algorithm for Near-Optimal Planning in Large Markov Decision Processes},
+	journal={Machine Learning},
+	year={2002},
+	month={Nov},
+	day={01},
+	volume={49},
+	number={2},
+	pages={193-208},
+	abstract={A critical issue for the application of Markov decision processes (MDPs) to realistic problems is how the complexity of planning scales with the size of the MDP. In stochastic environments with very large or infinite state spaces, traditional planning and reinforcement learning algorithms may be inapplicable, since their running time typically grows linearly with the state space size in the worst case. In this paper we present a new algorithm that, given only a generative model (a natural and common type of simulator) for an arbitrary MDP, performs on-line, near-optimal planning with a per-state running time that has no dependence on the number of states. The running time is exponential in the horizon time (which depends only on the discount factor $\gamma$ and the desired degree of approximation to the optimal policy). Our algorithm thus provides a different complexity trade-off than classical algorithms such as value iteration---rather than scaling linearly in both horizon time and state space size, our running time trades an exponential dependence on the former in exchange for no dependence on the latter.},
+	issn={1573-0565},
+	doi={10.1023/A:1017932429737},
+	url={https://doi.org/10.1023/A:1017932429737}
 }
 
-@article{Hren2008,
-author = {Hren, Jean Fran{\c{c}}ois and Munos, R{\'{e}}mi},
-journal = {Lecture Notes in Computer Science},
-title = {{Optimistic planning of deterministic systems}},
-year = {2008}
+@InProceedings{Hren2008,
+	author="Hren, Jean-Fran{\c{c}}ois
+	and Munos, R{\'e}mi",
+	editor="Girgin, Sertan
+	and Loth, Manuel
+	and Munos, R{\'e}mi
+	and Preux, Philippe
+	and Ryabko, Daniil",
+	title="Optimistic Planning of Deterministic Systems",
+	booktitle="Recent Advances in Reinforcement Learning",
+	year="2008",
+	publisher="Springer Berlin Heidelberg",
+	address="Berlin, Heidelberg",
+	pages="151--164",
+	abstract="If one possesses a model of a controlled deterministic system, then from any state, one may consider the set of all possible reachable states starting from that state and using any sequence of actions. This forms a tree whose size is exponential in the planning time horizon. Here we ask the question: given finite computational resources (e.g. CPU time), which may not be known ahead of time, what is the best way to explore this tree, such that once all resources have been used, the algorithm would be able to propose an action (or a sequence of actions) whose performance is as close as possible to optimality? The performance with respect to optimality is assessed in terms of the regret (with respect to the sum of discounted future rewards) resulting from choosing the action returned by the algorithm instead of an optimal action. In this paper we investigate an optimistic exploration of the tree, where the most promising states are explored first, and compare this approach to a naive uniform exploration. Bounds on the regret are derived both for uniform and optimistic exploration strategies. Numerical simulations illustrate the benefit of optimistic planning.",
+	isbn="978-3-540-89722-4"
 }
 
-@inproceedings{Szorenyi2014,
-author = {Szorenyi, B. and Kedenburg, G. and Munos, R.},
-booktitle = {Proc. of NeurIPS},
-title = {{Optimistic planning in Markov decision processes using a generative model}},
-year = {2014}
+@incollection{Szorenyi2014,
+	title = {Optimistic Planning in Markov Decision Processes Using a Generative Model},
+	author = {Sz\"{o}r\'{e}nyi, Bal\'{a}zs and Kedenburg, Gunnar and Munos, Remi},
+	booktitle = {Advances in Neural Information Processing Systems 27},
+	editor = {Z. Ghahramani and M. Welling and C. Cortes and N. D. Lawrence and K. Q. Weinberger},
+	pages = {1035--1043},
+	year = {2014},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/5368-optimistic-planning-in-markov-decision-processes-using-a-generative-model.pdf}
 }
 
-@inproceedings{Grill2016,
-author = {Grill, Jean-Bastien and Valko, Michal and Munos, R{\'{e}}mi},
-booktitle = {Proc. of NeurIPS},
-title = {{Blazing the trails before beating the path: Sample-efficient Monte-Carlo planning}},
-year = {2016}
+
+@incollection{Grill2016,
+	title = {Blazing the trails before beating the path: Sample-efficient Monte-Carlo planning},
+	author = {Grill, Jean-Bastien and Valko, Michal and Munos, Remi},
+	booktitle = {Advances in Neural Information Processing Systems 29},
+	editor = {D. D. Lee and M. Sugiyama and U. V. Luxburg and I. Guyon and R. Garnett},
+	pages = {4680--4688},
+	year = {2016},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/6253-blazing-the-trails-before-beating-the-path-sample-efficient-monte-carlo-planning.pdf}
 }
 
 @misc{gym_minigrid,
-  author = {Chevalier-Boisvert, Maxime and Willems, Lucas and Pal, Suman},
-  title = {Minimalistic Gridworld Environment for OpenAI Gym},
-  year = {2018},
-  howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
+	author = {Chevalier-Boisvert, Maxime and Willems, Lucas and Pal, Suman},
+	title = {Minimalistic Gridworld Environment for OpenAI Gym},
+	year = {2018},
+	howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
 }
 
-@article{Munos2014,
-author = {Munos, Remi},
-journal = {Foundations and Trends{\textregistered} in Machine Learning},
-title = {{From Bandits to Monte-Carlo Tree Search: The Optimistic Principle Applied to Optimization and Planning}},
-year = {2014}
+@book{Munos2014,
+	author = {Rémi Munos},
+	title = {From Bandits to Monte-Carlo Tree Search: The Optimistic Principle Applied to Optimization and Planning},
+	publisher = {Foundations and Trends{\textregistered} in Machine Learning},
+	year = {2014},
+	volume = {7},
+	doi = {10.1561/2200000038},
+	issn = {1935-8237},
+	number = {1},
+	pages = {1-129},
 }
 
 @article{Busoniu2013,
-author = {Buşoniu, Lucian and Daniels, Alexander and Munos, Remi and Babuska, Robert},
-journal = {2013 IEEE Symposium on Adaptive Dynamic Programming and Reinforcement Learning (ADPRL),  16-19 April},
-month = apr,
-address = {Singapore},
-title = {{Optimistic planning for continuous-action deterministic systems}},
-year = {2013},
-pages={69-76},
+	author = {Buşoniu, Lucian and Daniels, Alexander and Munos, Remi and Babuska, Robert},
+	journal = {2013 IEEE Symposium on Adaptive Dynamic Programming and Reinforcement Learning (ADPRL),  16-19 April},
+	month = apr,
+	address = {Singapore},
+	title = {{Optimistic planning for continuous-action deterministic systems}},
+	year = {2013},
+	pages={69-76},
 }
 
 @article{Busoniu2018,
-title = "Continuous-action planning for discounted infinite-horizon nonlinear optimal control with Lipschitz values",
-journal = "Automatica",
-volume = "92",
-pages = "100 - 108",
-year = "2018",
-issn = "0005-1098",
-doi = "https://doi.org/10.1016/j.automatica.2018.03.009",
-url = "http://www.sciencedirect.com/science/article/pii/S000510981830089X",
-author = "Lucian Buşoniu and Előd Páll and Rémi Munos",
-keywords = "Optimal control, Planning, Nonlinear systems, Near-optimality analysis",
-abstract = "We consider discrete-time, infinite-horizon optimal control problems with discounted rewards. The value function must be Lipschitz continuous over action (input) sequences, the actions are in a scalar interval, while the dynamics and rewards can be nonlinear/nonquadratic. Exploiting ideas from artificial intelligence, we propose two optimistic planning methods that perform an adaptive-horizon search over the infinite-dimensional space of action sequences. The first method optimistically refines regions with the largest upper bound on the optimal value, using the Lipschitz constant to find the bounds. The second method simultaneously refines all potentially optimistic regions, without explicitly using the bounds. Our analysis proves convergence rates to the global infinite-horizon optimum for both algorithms, as a function of computation invested and of a measure of problem complexity. It turns out that the second, simultaneous algorithm works nearly as well as the first, despite not needing to know the (usually difficult to find) Lipschitz constant. We provide simulations showing the algorithms are useful in practice, compare them with value iteration and model predictive control, and give a real-time example."
+	title = "Continuous-action planning for discounted infinite-horizon nonlinear optimal control with Lipschitz values",
+	journal = "Automatica",
+	volume = "92",
+	pages = "100 - 108",
+	year = "2018",
+	issn = "0005-1098",
+	doi = "https://doi.org/10.1016/j.automatica.2018.03.009",
+	url = "http://www.sciencedirect.com/science/article/pii/S000510981830089X",
+	author = "Lucian Buşoniu and Előd Páll and Rémi Munos",
+	keywords = "Optimal control, Planning, Nonlinear systems, Near-optimality analysis",
+	abstract = "We consider discrete-time, infinite-horizon optimal control problems with discounted rewards. The value function must be Lipschitz continuous over action (input) sequences, the actions are in a scalar interval, while the dynamics and rewards can be nonlinear/nonquadratic. Exploiting ideas from artificial intelligence, we propose two optimistic planning methods that perform an adaptive-horizon search over the infinite-dimensional space of action sequences. The first method optimistically refines regions with the largest upper bound on the optimal value, using the Lipschitz constant to find the bounds. The second method simultaneously refines all potentially optimistic regions, without explicitly using the bounds. Our analysis proves convergence rates to the global infinite-horizon optimum for both algorithms, as a function of computation invested and of a measure of problem complexity. It turns out that the second, simultaneous algorithm works nearly as well as the first, despite not needing to know the (usually difficult to find) Lipschitz constant. We provide simulations showing the algorithms are useful in practice, compare them with value iteration and model predictive control, and give a real-time example."
 }
 
-@article{Silver2016,
-title	= {Mastering the game of Go with deep neural networks and tree search},
-author	= {David Silver and Aja Huang and Christopher J. Maddison and Arthur Guez and Laurent Sifre and George van den Driessche and Julian Schrittwieser and Ioannis Antonoglou and Veda Panneershelvam and Marc Lanctot and Sander Dieleman and Dominik Grewe and John Nham and Nal Kalchbrenner and Ilya Sutskever and Timothy Lillicrap and Madeleine Leach and Koray Kavukcuoglu and Thore Graepel and Demis Hassabis},
-year	= {2016},
-journal	= {Nature},
-pages	= {484--503},
-volume	= {529}
+﻿@Article{Silver2016,
+	author={Silver, David
+	and Huang, Aja
+	and Maddison, Chris J.
+	and Guez, Arthur
+	and Sifre, Laurent
+	and van den Driessche, George
+	and Schrittwieser, Julian
+	and Antonoglou, Ioannis
+	and Panneershelvam, Veda
+	and Lanctot, Marc
+	and Dieleman, Sander
+	and Grewe, Dominik
+	and Nham, John
+	and Kalchbrenner, Nal
+	and Sutskever, Ilya
+	and Lillicrap, Timothy
+	and Leach, Madeleine
+	and Kavukcuoglu, Koray
+	and Graepel, Thore
+	and Hassabis, Demis},
+	title={Mastering the game of Go with deep neural networks and tree search},
+	journal={Nature},
+	year={2016},
+	month={Jan},
+	day={01},
+	volume={529},
+	number={7587},
+	pages={484-489},
+	abstract={The game of Go has long been viewed as the most challenging of classic games for artificial intelligence owing to its enormous search space and the difficulty of evaluating board positions and moves. Here we introduce a new approach to computer Go that uses `value networks' to evaluate board positions and `policy networks' to select moves. These deep neural networks are trained by a novel combination of supervised learning from human expert games, and reinforcement learning from games of self-play. Without any lookahead search, the neural networks play Go at the level of state-of-the-art Monte Carlo tree search programs that simulate thousands of random games of self-play. We also introduce a new search algorithm that combines Monte Carlo simulation with value and policy networks. Using this search algorithm, our program AlphaGo achieved a 99.8{\%} winning rate against other Go programs, and defeated the human European Go champion by 5 games to 0. This is the first time that a computer program has defeated a human professional player in the full-sized game of Go, a feat previously thought to be at least a decade away.},
+	issn={1476-4687},
+	doi={10.1038/nature16961},
+	url={https://doi.org/10.1038/nature16961}
 }
 
-@article{Silver2017,
-  title={Mastering the game of go without human knowledge},
-  author={Silver, David and Schrittwieser, Julian and Simonyan, Karen and Antonoglou, Ioannis and Huang, Aja and Guez, Arthur and Hubert, Thomas and Baker, Lucas and Lai, Matthew and Bolton, Adrian and others},
-  journal={Nature},
-  volume={550},
-  number={7676},
-  pages={354},
-  year={2017},
-  publisher={Nature Publishing Group}
+﻿@Article{Silver2017,
+	author={Silver, David
+	and Schrittwieser, Julian
+	and Simonyan, Karen
+	and Antonoglou, Ioannis
+	and Huang, Aja
+	and Guez, Arthur
+	and Hubert, Thomas
+	and Baker, Lucas
+	and Lai, Matthew
+	and Bolton, Adrian
+	and Chen, Yutian
+	and Lillicrap, Timothy
+	and Hui, Fan
+	and Sifre, Laurent
+	and van den Driessche, George
+	and Graepel, Thore
+	and Hassabis, Demis},
+	title={Mastering the game of Go without human knowledge},
+	journal={Nature},
+	year={2017},
+	month={Oct},
+	day={01},
+	volume={550},
+	number={7676},
+	pages={354-359},
+	abstract={A long-standing goal of artificial intelligence is an algorithm that learns, tabula rasa, superhuman proficiency in challenging domains. Recently, AlphaGo became the first program to defeat a world champion in the game of Go. The tree search in AlphaGo evaluated positions and selected moves using deep neural networks. These neural networks were trained by supervised learning from human expert moves, and by reinforcement learning from self-play. Here we introduce an algorithm based solely on reinforcement learning, without human data, guidance or domain knowledge beyond game rules. AlphaGo becomes its own teacher: a neural network is trained to predict AlphaGo's own move selections and also the winner of AlphaGo's games. This neural network improves the strength of the tree search, resulting in higher quality move selection and stronger self-play in the next iteration. Starting tabula rasa, our new program AlphaGo Zero achieved superhuman performance, winning 100--0 against the previously published, champion-defeating AlphaGo.},
+	issn={1476-4687},
+	doi={10.1038/nature24270},
+	url={https://doi.org/10.1038/nature24270}
 }
 
-@article {Silver2018,
+@article{Silver2018,
 	author = {Silver, David and Hubert, Thomas and Schrittwieser, Julian and Antonoglou, Ioannis and Lai, Matthew and Guez, Arthur and Lanctot, Marc and Sifre, Laurent and Kumaran, Dharshan and Graepel, Thore and Lillicrap, Timothy and Simonyan, Karen and Hassabis, Demis},
 	title = {A general reinforcement learning algorithm that masters chess, shogi, and Go through self-play},
 	volume = {362},
@@ -203,18 +297,20 @@ volume	= {529}
 	isbn="978-3-540-75538-8"
 }
 
-@inproceedings{Hren2008optimistic,
-	title = {{Optimistic planning of deterministic systems}},
-	year = {2008},
-	booktitle = {Proc. of EWRL},
-	author = {Hren, Jean-Francois and Munos, Rémi},
-}
-
-@inproceedings{Kocsis06UCT,
-	title                    = {Bandit Based Monte-carlo Planning},
-	author                   = {Kocsis, Levente and Szepesv\'{a}ri, Csaba},
-	booktitle                = {Proc. of ECML},
-	year                     = {2006}
+@InProceedings{Kocsis06UCT,
+	author="Kocsis, Levente
+	and Szepesv{\'a}ri, Csaba",
+	editor="F{\"u}rnkranz, Johannes
+	and Scheffer, Tobias
+	and Spiliopoulou, Myra",
+	title="Bandit Based Monte-Carlo Planning",
+	booktitle="European Conference on Machine Learning (ECML)",
+	year="2006",
+	publisher="Springer Berlin Heidelberg",
+	address="Berlin, Heidelberg",
+	pages="282--293",
+	abstract="For large state-space Markovian Decision Problems Monte-Carlo planning is one of the few viable approaches to find near-optimal solutions. In this paper we introduce a new algorithm, UCT, that applies bandit ideas to guide Monte-Carlo planning. In finite-horizon or discounted MDPs the algorithm is shown to be consistent and finite sample bounds are derived on the estimation error due to sampling. Experimental results show that in several domains, UCT is significantly more efficient than its alternatives.",
+	isbn="978-3-540-46056-5"
 }
 
 @inproceedings{Coquelin2007,
@@ -232,14 +328,6 @@ volume	= {529}
 	series = {UAI’07}
 }
 
-@book{Munos14,
-	title                    = {From bandits to Monte-Carlo Tree Search: The optimistic principle applied to optimization and planning.},
-	author                   = {Munos, R.},
-	publisher                = {Foundations and Trends in Machine Learning},
-	year                     = {2014},
-	volume                   = {7}
-}
-
 @article{Browne12,
 	title                    = {A Survey of Monte Carlo Tree Search Methods},
 	author                   = {Browne, C. and Powley, E. and Whitehouse, D. and Lucas, S. and Cowling, P. and Rohlfshagen, P. and Tavener, S. and Perez, D. and Samothrakis, S. and Colton, S.},
@@ -248,13 +336,6 @@ volume	= {529}
 	number                   = {1},
 	pages                    = {1-49},
 	volume                   = {4}
-}
-
-@InProceedings{Szorenyi14,
-	Title                    = {Optimistic Planning in Markov Decision Processes using a generative model},
-	Author                   = {Szorenyi, B. and Kedenburg, G. and Munos, R.},
-	Booktitle                = {Advances in NIPS},
-	Year                     = {2014}
 }
 
 @article{Feldman14BRUE,
@@ -266,59 +347,15 @@ volume	= {529}
 	year      = {2014}
 }
 
-@InProceedings{Grill16,
-	Title                    = {Blazing the trails before beating the path: Sample-efficient Monte-Carlo planning},
-	Author                   = {Grill, J.-B. and Valko, M. and Munos, R.},
-	Booktitle                = {Advances in NIPS},
-	Year                     = {2016}
-}
-
-@inproceedings{Grill19,
-	author    = {Jean{-}Bastien Grill and
-	Omar Darwiche Domingues and
-	Pierre M{\'{e}}nard and
-	R{\'{e}}mi Munos and
-	Michal Valko},
-	title     = {Planning in entropy-regularized Markov decision processes and games},
-	booktitle = {Advances in NeurIPS},
-	year      = {2019}
-}
-
-@article{Silver18,
-	author    = {David Silver and
-	Thomas Hubert and
-	Julian Schrittwieser and
-	Ioannis Antonoglou and
-	Matthew Lai and
-	Arthur Guez and
-	Marc Lanctot and
-	Laurent Sifre and
-	Dharshan Kumaran and
-	Thore Graepel and
-	Timothy P. Lillicrap and
-	Karen Simonyan and
-	Demis Hassabis},
-	title     = {A general reinforcement learning algorithm that masters chess, shogi, and Go through self-play},
-	journal   = {Science},
-	volume    = {362},
-	issue = {6419},
-	page = {1140-1144},
-	year      = {2018},
-}
-
-@inproceedings{Kaufmann2017,
+@incollection{Kaufmann2017,
 	title = {Monte-Carlo Tree Search by Best Arm Identification},
 	author = {Kaufmann, Emilie and Koolen, Wouter M},
-	booktitle = {Advances in NIPS},
+	booktitle = {Advances in Neural Information Processing Systems 30},
+	editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
 	pages = {4897--4906},
 	year = {2017},
-}
-
-@inproceedings{Leurent2019practical,
-	title={Practical Open-Loop Optimistic Planning},
-	author={Edouard Leurent and Odalric-Ambrym Maillard},
-	year={2019},
-	booktitle={Proc. of ECML-PKDD}
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/7075-monte-carlo-tree-search-by-best-arm-identification.pdf}
 }
 
 @InProceedings{Busoniu2012optimistic,
@@ -350,10 +387,11 @@ volume	= {529}
 
 @misc{Vanderbei1996,
 	author = {Vanderbei, Robert},
-	title = {Optimal sailing strategies, statistics and operations research program},
+	title = {Optimal sailing strategies. Statistics and operations research program},
 	year = {1996},
 	publisher={University of Princeton},
-	howpublished = {\url{https://vanderbei.princeton.edu/sail/sail.html}}
+	howpublished = {\url{https://vanderbei.princeton.edu/sail/sail.html}},
+	note = {accessed July 22, 2020}
 }
 
 @inproceedings{Bubeck2009,
@@ -367,34 +405,44 @@ volume	= {529}
 	url = {http://papers.nips.cc/paper/3605-online-optimization-in-x-armed-bandits.pdf}
 }
 
-@inproceedings{Munos2011,
+@incollection{Munos2011,
 	title = {Optimistic Optimization of a Deterministic Function without the Knowledge of its Smoothness},
 	author = {R\'{e}mi Munos},
-	booktitle = {Advances in NIPS},
+	booktitle = {Advances in Neural Information Processing Systems 24},
+	editor = {J. Shawe-Taylor and R. S. Zemel and P. L. Bartlett and F. Pereira and K. Q. Weinberger},
+	pages = {783--791},
 	year = {2011},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/4304-optimistic-optimization-of-a-deterministic-function-without-the-knowledge-of-its-smoothness.pdf}
 }
 
 @InProceedings{Huang2017,
-	title = 	 {Structured Best Arm Identification with Fixed Confidence},
-	author = 	 {Ruitong Huang and Mohammad M. Ajallooeian and Csaba Szepesvári and Martin Müller},
-	booktitle = {Proc. of ALT},
-	pages = 	 {593--616},
-	year = 	 {2017},
-	volume = 	 {76},
-	publisher = 	 {PMLR},
+  title = 	 {Structured Best Arm Identification with Fixed Confidence},
+  author = 	 {Ruitong Huang and Mohammad M. Ajallooeian and Csaba Szepesvári and Martin Müller},
+  booktitle = 	 {Proceedings of the 28th International Conference on Algorithmic Learning Theory},
+  pages = 	 {593--616},
+  year = 	 {2017},
+  editor = 	 {Steve Hanneke and Lev Reyzin},
+  volume = 	 {76},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Kyoto University, Kyoto, Japan},
+  month = 	 {15--17 Oct},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v76/huang17a/huang17a.pdf},
+  url = 	 {http://proceedings.mlr.press/v76/huang17a.html},
+  abstract = 	 {We study the problem of identifying the best action among a set of possible options when the value of each action is given by a mapping from a number of noisy micro-observables in the so-called fixed confidence setting. Our main motivation is the application to minimax game search, which has been a major topic of interest in artificial intelligence. In this paper we introduce an abstract setting to clearly describe the essential properties of the problem. While previous work only considered a two-move-deep game tree search problem, our abstract setting can be applied to the general minimax games where the depth can be non-uniform and arbitrary, and transpositions are allowed. We introduce a new algorithm (LUCB-micro) for the abstract setting, and give its lower and upper sample complexity results. Our bounds recover some previous results, achieved in more limited settings, and also shed further light on how the structure of minimax problems influences sample complexity.}
 }
 
-@inproceedings{Grill2019,
-	author    = {Jean{-}Bastien Grill and
-	Omar Darwiche Domingues and
-	Pierre M{\'{e}}nard and
-	R{\'{e}}mi Munos and
-	Michal Valko},
-	title     = "{Planning in entropy-regularized Markov decision processes and games}",
-	booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-	year      = {2019}
+@incollection{Grill2019,
+	title = {Planning in entropy-regularized Markov decision processes and games},
+	author = {Grill, Jean-Bastien and Darwiche Domingues, Omar and Menard, Pierre and Munos, Remi and Valko, Michal},
+	booktitle = {Advances in Neural Information Processing Systems 32},
+	editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
+	pages = {12404--12413},
+	year = {2019},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/9405-planning-in-entropy-regularized-markov-decision-processes-and-games.pdf}
 }
-
 
 @inproceedings{Hostetler14,
 	author = {Hostetler, Jesse and Fern, Alan and Dietterich, Tom},
@@ -403,10 +451,26 @@ volume	= {529}
 	booktitle = {Proceedings of AAAI},
 }
 
+@inproceedings{Hostetler14,
+	author = {Hostetler, Jesse and Fern, Alan and Dietterich, Tom},
+	title = {State Aggregation in Monte Carlo Tree Search},
+	year = {2014},
+	publisher = {AAAI Press},
+	booktitle = {Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence},
+	month= jul,
+	pages = {2446–2452},
+	numpages = {7},
+	address = {Qu\'{e}bec City, Qu\'{e}bec, Canada},
+	series = {AAAI’14}
+}
+
 @inproceedings{Ballesteros2013,
 	abstract = {In this paper, we introduce an approach called FSBS (Forward Search in Belief Space) for online planning in POMDPs. The approach is based on the RTBSS (Real-Time Belief Space Search) algorithm of [1]. The main departure from the algorithm is the introduction of similarity measures in the belief space. By considering statistical divergence measures, the similarity between belief points in the forward search tree can be computed. Therefore, it is possible to determine if a certain belief point (or one very similar) has been already visited. This way, it is possible to reduce the complexity of the search by not expanding similar nodes already visited in the same depth. This reduction of complexity makes possible the real-time implementation of more complex problems in robots. The paper describes the algorithm, and analyzes different divergence measures. Benchmark problems are used to show how the approach can obtain a ten-fold reduction in the computation time for similar obtained rewards when compared to the original RTBSS. The paper also presents experiments with a quadrotor in a search application. {\textcopyright} 2013 IEEE.},
 	author = {Ballesteros, Joaquin and Merino, Luis and Trujillo, Miguel Angel and Viguria, Antidio and Ollero, Anibal},
-	booktitle = {Proceedings of ICRA},
-	title = {{Improving the efficiency of online POMDPs by using belief similarity measures}},
-	year = {2013}
+	booktitle={2013 IEEE International Conference on Robotics and Automation}, 
+  	title={Improving the efficiency of online POMDPs by using belief similarity measures}, 
+  	month = {6-10 May},
+  	address = {Karlsruhe, Germany},
+  	year={2013},
+  	pages={1792-1798},
 }
