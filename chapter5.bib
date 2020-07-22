@@ -320,15 +320,21 @@ series = {KDD ’10}
   year={2013},
 }
 
-@inproceedings{Dann2018,
-  author    = {Christoph Dann and
-               Lihong Li and
-               Wei Wei and
-               Emma Brunskill},
-  title     = {Policy Certificates: Towards Accountable Reinforcement Learning},
-  booktitle={Proceedings of the International Conference on Machine Learning (ICML)},
-  year      = {2019},
-
+@InProceedings{Dann2018,
+  title =    {Policy Certificates: Towards Accountable Reinforcement Learning},
+  author =   {Dann, Christoph and Li, Lihong and Wei, Wei and Brunskill, Emma},
+  booktitle =    {Proceedings of the 36th International Conference on Machine Learning},
+  pages =    {1507--1516},
+  year =   {2019},
+  editor =   {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+  volume =   {97},
+  series =   {Proceedings of Machine Learning Research},
+  address =    {Long Beach, California, USA},
+  month =    {09--15 Jun},
+  publisher =    {PMLR},
+  pdf =    {http://proceedings.mlr.press/v97/dann19a/dann19a.pdf},
+  url =    {http://proceedings.mlr.press/v97/dann19a.html},
+  abstract =   {The performance of a reinforcement learning algorithm can vary drastically during learning because of exploration. Existing algorithms provide little information about the quality of their current policy before executing it, and thus have limited use in high-stakes applications like healthcare. We address this lack of accountability by proposing that algorithms output policy certificates. These certificates bound the sub-optimality and return of the policy in the next episode, allowing humans to intervene when the certified quality is not satisfactory. We further introduce two new algorithms with certificates and present a new framework for theoretical analysis that guarantees the quality of their policies and certificates. For tabular MDPs, we show that computing certificates can even improve the sample-efficiency of optimism-based exploration. As a result, one of our algorithms is the first to achieve minimax-optimal PAC bounds up to lower-order terms, and this algorithm also matches (and in some settings slightly improves upon) existing minimax regret bounds.}
 }
 
 @inproceedings{Mausser2003,

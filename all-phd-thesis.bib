@@ -88,7 +88,8 @@
 	publisher={PsyArXiv},
 	author={De Freitas, Julian and Anthony, Sam E and Alvarez, George and Censi, Andrea},
 	year={2019},
-	month={Jan}
+	month={Jan},
+	note={preprint}
 }
 
 @misc{trolley2009,
@@ -253,13 +254,19 @@
 	bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@article{Dijkstra1959,
-	author = {Dijkstra, E. W.},
-	doi = {10.1007/BF01386390},
-	issn = {0029599X},
-	journal = {Numerische Mathematik},
-	title = {{A note on two problems in connexion with graphs}},
-	year = {1959}
+﻿@Article{Dijkstra1959,
+	author={Dijkstra, E. W.},
+	title={A note on two problems in connexion with graphs},
+	journal={Numerische Mathematik},
+	year={1959},
+	month={Dec},
+	day={01},
+	volume={1},
+	number={1},
+	pages={269-271},
+	issn={0945-3245},
+	doi={10.1007/BF01386390},
+	url={https://doi.org/10.1007/BF01386390}
 }
 
 @INPROCEEDINGS{Fraichard1993,
@@ -269,7 +276,10 @@
 	year={1993},
 	volume={2},
 	number={},
-	pages={1393-1400 vol.2},}
+	month={26-30 July},
+	address = {Yokohama, Japan},
+	pages={1393-1400 vol.2},
+}
 
 @ARTICLE{Laumond1994,
 	author={J. -. {Laumond} and P. E. {Jacobs} and M. {Taix} and R. M. {Murray}},
@@ -407,6 +417,9 @@
 	isbn = {9781538630815},
 	issn = {10504729},
 	title = {{PRM-RL: Long-range robotic navigation tasks by combining reinforcement learning and sampling-based planning}},
+	month = {21-25 May},
+	address = {Brisbane, QLD, Australia},
+    pages={5113-5120},
 	year = {2018}
 }
 
@@ -495,11 +508,14 @@
 @inproceedings{Funke2012,
 	abstract = {This paper presents a novel approach to autonomous driving at the vehicle's handling limits. Such a system requires a high speed, consistent control signal as well as numerous safety features capable of monitoring and stopping the vehicle. When operating, the system's high level controller utilizes a highly accurate differential GPS and known friction values to drive a precomputed path at the friction limits of the vehicle. The system was tested in a variety of road conditions, including the challenging Pikes Peak Hill climb. Results from this work can be extended to improve driving safety and accident avoidance in vehicles. {\textcopyright} 2012 IEEE.},
 	author = {Funke, Joseph and Theodosis, Paul and Hindiyeh, Rami and Stanek, Ganymed and Kritatakirana, Krisada and Gerdes, Chris and Langer, Dirk and Hernandez, Marcial and M{\"{u}}ller-Bessler, Bernhard and Huhnke, Burkhard},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	booktitle = {2012 IEEE Intelligent Vehicles Symposium},
 	doi = {10.1109/IVS.2012.6232212},
 	isbn = {9781467321198},
 	title = {{Up to the limits: Autonomous Audi TTS}},
-	year = {2012}
+	year = {2012},
+	month = {3-7 June},
+	address = {Alcala de Henares, Spain},
+	pages={541-547},
 }
 
 @article{Pivtoraiko2005,
@@ -634,13 +650,16 @@
 	year = {2017}
 }
 
-@misc{Eraqi2017,
+@inproceedings{Eraqi2017,
 	title={End-to-End Deep Learning for Steering Autonomous Vehicles Considering Temporal Dependencies},
 	author={Hesham M. Eraqi and Mohamed N. Moustafa and Jens Honer},
-	year={2017},
+	booktitle={Machine Learning for Intelligent Transportation Systems Workshop in the 31st Conference on Neural Information Processing Systems (NIPS), December},
+	month=dec,
+	address = {Montreal, Canada},
 	eprint={1710.03804},
 	archivePrefix={arXiv},
-	primaryClass={cs.LG}
+	primaryClass={cs.LG},
+	year={2017},
 }
 
 @inproceedings{Ho2016,
@@ -762,10 +781,12 @@
 	year = {2013}
 }
 
-@article{Du2010,
+@InProceedings{Du2010,
 	abstract = {Motion planning in uncertain and dynamic environments is critical for reliable operation of autonomous robots. Partially observable Markov decision processes (POMDPs) provide a principled general framework for such planning tasks and have been successfully applied to several moderately complex robotic tasks, including navigation, manipulation, and target tracking. The challenge now is to scale up POMDP planning algorithms and handle more complex, realistic tasks. This paper outlines ideas aimed at overcoming two major obstacles to the efficiency of POMDP planning: the “curse of dimensionality” and the “curse of history”. Our main objective is to show that using these ideas along with others POMDP algorithms can be used successfully for motion planning under uncertainty for robotic tasks with a large number of states or a long time horizon. We implemented some of our algorithms as a software package Ap- proximate POMDP Planning Library (APPL), now available for download at http://motion.comp.nus.edu.sg/ projects/pomdp/pomdp.html. Introduction},
 	author = {Du, Yanzhu and Hsu, David and Kurniawati, Hanna and Lee, Wee and Ong, Sylvie and Png, Shao},
-	journal = {ICAPS POMDP Practitioners Workshop},
+	booktitle = {Workshop on Solving Real-World POMDP Problems at the Conference on Automated Planning and Scheduling},
+	month=may,
+	address={Toronto, Canada},
 	title = {{A POMDP Approach to Robot Motion Planning Under Uncertainty}},
 	year = {2010}
 }
@@ -773,12 +794,11 @@
 @InProceedings{Brechtel2013,
   title = 	 {Solving Continuous POMDPs: Value Iteration with Incremental Learning of an Efficient Space Representation},
   author = 	 {Sebastian Brechtel and Tobias Gindele and Rüdiger Dillmann},
-  booktitle = 	 {Proceedings of the 30th International Conference on Machine Learning, 7--19 Jun},
+  booktitle = 	 {Proceedings of the 30th International Conference on Machine Learning},
   pages = 	 {370--378},
   year = 	 {2013},
   editor = 	 {Sanjoy Dasgupta and David McAllester},
   volume = 	 {28},
-  number =       {3},
   series = 	 {Proceedings of Machine Learning Research},
   address = 	 {Atlanta, Georgia, USA},
   month = 	 {17--19 Jun},
@@ -1063,7 +1083,6 @@ year = {2017}
     primaryClass={cs.RO}
 }
 
-
 @Comment{Chap2_4,
 	title = {Inverse Reinforcement Learning},
 }
@@ -1280,13 +1299,16 @@ year = {2017}
 	archivePrefix = {arXiv},
 	arxivId = {1604.01685},
 	author = {Cordts, Marius and Omran, Mohamed and Ramos, Sebastian and Rehfeld, Timo and Enzweiler, Markus and Benenson, Rodrigo and Franke, Uwe and Roth, Stefan and Schiele, Bernt},
-	booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+	booktitle = {2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 27-30 June},
+	month = jun,
+	address = {Las Vegas, NV, USA},
 	doi = {10.1109/CVPR.2016.350},
 	eprint = {1604.01685},
 	isbn = {9781467388504},
 	issn = {10636919},
 	title = {{The Cityscapes Dataset for Semantic Urban Scene Understanding}},
-	year = {2016}
+	year = {2016},
+    pages={3213-3223},
 }
 
 
@@ -1374,15 +1396,24 @@ year = {2017}
 }
 
 @article{Delage2010,
-	abstract = {Markov decision processes are an effective tool in modeling decision making in uncertain dynamic environments. Because the parameters of these models typically are estimated from data or learned from experience, it is not surprising that the actual performance of a chosen strategy often differs significantly from the designer's initial expectations due to unavoidable modeling ambiguity. In this paper, we present a set of percentile criteria that are conceptually natural and representative of the trade-off between optimistic and pessimistic views of the question. We study the use of these criteria under different forms of uncertainty for both the rewards and the transitions. Some forms are shown to be efficiently solvable and others highly intractable. In each case, we outline solution concepts that take parametric uncertainty into account in the process of decision making. {\textcopyright} 2010 INFORMS.},
 	author = {Delage, Erick and Mannor, Shie},
+	title = {Percentile Optimization for Markov Decision Processes with Parameter Uncertainty},
+	year = {2010},
+	issue_date = {January 2010},
+	publisher = {INFORMS},
+	address = {Linthicum, MD, USA},
+	volume = {58},
+	number = {1},
+	issn = {0030-364X},
+	url = {https://doi.org/10.1287/opre.1080.0685},
 	doi = {10.1287/opre.1080.0685},
-	issn = {0030364X},
-	journal = {Operations Research},
-	keywords = {Chance-constrained optimization,Finite state,Markov decision processes,Parameter uncertainty,Stochastic model applications,Stochastic programming,Value at risk},
-	title = {{Percentile optimization for Markov decision processes with parameter uncertainty}},
-	year = {2010}
+	journal = {Oper. Res.},
+	month = jan,
+	pages = {203–213},
+	numpages = {11},
+	keywords = {stochastic model applications, parameter uncertainty, value at risk, stochastic programming, finite state, chance-constrained optimization, Markov decision processes}
 }
+
 
 @incollection{Tamar2015,
 	title = {Policy Gradient for Coherent Risk Measures},
@@ -1396,16 +1427,19 @@ year = {2017}
 }
 
 @article{Geibel2005,
-	abstract = {In this paper, we consider Markov Decision Processes (MDPs) with error states. Error states are those states entering which is undesirable or dangerous. We define the risk with respect to a policy as the probability of entering such a state when the policy is pursued. We consider the problem of finding good policies whose risk is smaller than some user-specified threshold, and formalize it as a constrained MDP with two criteria. The first criterion corresponds to the value function originally given. We will show that the risk can be formulated as a second criterion function based on a cumulative return, whose definition is independent of the original value function. We present a model free, heuristic reinforcement learning algorithm that aims at finding good deterministic policies. It is based on weighting the original value function and the risk. The weight parameter is adapted in order to find a feasible solution for the constrained problem that has a good performance with respect to the value function. The algorithm was successfully applied to the control of a feed tank with stochastic inflows that lies upstream of a distillation column. This control task was originally formulated as an optimal control problem with chance constraints, and it was solved under certain assumptions on the model to obtain an optimal solution. The power of our learning algorithm is that it can be used even when some of these restrictive assumptions are relaxed. {\textcopyright}2005 AI Access Foundation. All rights reserved.},
-	archivePrefix = {arXiv},
-	arxivId = {1109.2147},
 	author = {Geibel, Peter and Wysotzki, Fritz},
-	doi = {10.1613/jair.1666},
-	eprint = {1109.2147},
-	issn = {10769757},
+	title = {Risk-Sensitive Reinforcement Learning Applied to Control under Constraints},
+	year = {2005},
+	issue_date = {July 2005},
+	publisher = {AI Access Foundation},
+	address = {El Segundo, CA, USA},
+	volume = {24},
+	number = {1},
+	issn = {1076-9757},
 	journal = {Journal of Artificial Intelligence Research},
-	title = {{Risk-sensitive reinforcement learning applied to control under constraints}},
-	year = {2005}
+	month = jul,
+	pages = {81–108},
+	numpages = {28}
 }
 
 @inproceedings{Berkenkamp2015,
@@ -1431,27 +1465,18 @@ year = {2017}
 	year = {2014}
 }
 
-
 @inproceedings{Bouton2019,
-	abstract = {Navigating urban environments represents a complex task for automated vehicles. They must reach their goal safely and efficiently while considering a multitude of traffic participants. We propose a modular decision making algorithm to autonomously navigate intersections, addressing challenges of existing rule-based and reinforcement learning (RL) approaches. We first present a safe RL algorithm relying on a model-checker to ensure safety guarantees. To make the decision strategy robust to perception errors and occlusions, we introduce a belief update technique using a learning based approach. Finally, we use a scene decomposition approach to scale our algorithm to environments with multiple traffic participants. We empirically demonstrate that our algorithm outperforms rule-based methods and reinforcement learning techniques on a complex intersection scenario.},
-	archivePrefix = {arXiv},
-	arxivId = {1904.11483},
-	author = {Bouton, Maxime and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J.},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
-	doi = {10.1109/IVS.2019.8813803},
-	eprint = {1904.11483},
-	isbn = {9781728105604},
-	title = {{Safe reinforcement learning with scene decomposition for navigating complex urban environments}},
-	year = {2019}
-}
-
-@inproceedings{Bouton2019,
-  author={M. {Bouton} and A. {Nakhaei} and K. {Fujimura} and M. J. {Kochenderfer}},
+  author={Bouton, Maxime and Nakhaei, Alireza and Fujimura, Kikuo and Kochenderfer, Mykel J.},
   booktitle={2019 IEEE Intelligent Vehicles Symposium (IV), 9-12 June},
   month = jun,
   address = {Paris, France},
   title={Safe Reinforcement Learning with Scene Decomposition for Navigating Complex Urban Environments},
   year={2019},
+  archivePrefix = {arXiv},
+  arxivId = {1904.11483},
+  doi = {10.1109/IVS.2019.8813803},
+  eprint = {1904.11483},
+  isbn = {9781728105604},
   volume={},
   number={},
   pages={1469-1476},
@@ -1577,7 +1602,10 @@ year = {2017}
 	journal = {IEEE Transactions on Automatic Control},
 	keywords = {Gaussian processes,Safety,autonomous systems,robot learning,robust optimal control},
 	title = {{A General Safety Framework for Learning-Based Control in Uncertain Robotic Systems}},
-	year = {2019}
+	year = {2019},
+	volume={64},
+    number={7},
+    pages={2737-2752},
 }
 
 @inproceedings{Le2019,
@@ -1623,31 +1651,34 @@ year = {2017}
 	HAL_VERSION = {v2},
 }
 
-
 @article{Fukushima2007,
-	abstract = {This paper proposes an adaptive model predictive control (MPC) algorithm for a class of constrained linear systems, which estimates system parameters on-line and produces the control input satisfying input/state constraints for possible parameter estimation errors. The key idea is to combine the robust MPC method based on the comparison model with an adaptive parameter estimation method suitable for MPC. To this end, first, a new parameter update method based on the moving horizon estimation is proposed, which allows to predict an estimation error bound over the prediction horizon. Second, an adaptive MPC algorithm is developed by combining the on-line parameter estimation with an MPC method based on the comparison model, suitably modified to cope with the time-varying case. This method guarantees feasibility and stability of the closed-loop system in the presence of state/input constraints. A numerical example is given to demonstrate its effectiveness. {\textcopyright} 2006 Elsevier Ltd. All rights reserved.},
-	author = {Fukushima, Hiroaki and Kim, Tae Hyoung and Sugie, Toshiharu},
-	doi = {10.1016/j.automatica.2006.08.026},
-	issn = {00051098},
-	journal = {Automatica},
-	keywords = {Adaptive estimation,Comparison principle,Constrained systems,Model predictive control,Robust stability},
-	title = {{Adaptive model predictive control for a class of constrained linear systems based on the comparison model}},
-	year = {2007}
+	title = "Adaptive model predictive control for a class of constrained linear systems based on the comparison model",
+	journal = "Automatica",
+	volume = "43",
+	number = "2",
+	pages = "301 - 308",
+	year = "2007",
+	issn = "0005-1098",
+	doi = "https://doi.org/10.1016/j.automatica.2006.08.026",
+	url = "http://www.sciencedirect.com/science/article/pii/S000510980600375X",
+	author = "Hiroaki Fukushima and Tae-Hyoung Kim and Toshiharu Sugie",
+	keywords = "Model predictive control, Adaptive estimation, Constrained systems, Robust stability, Comparison principle",
+	abstract = "This paper proposes an adaptive model predictive control (MPC) algorithm for a class of constrained linear systems, which estimates system parameters on-line and produces the control input satisfying input/state constraints for possible parameter estimation errors. The key idea is to combine the robust MPC method based on the comparison model with an adaptive parameter estimation method suitable for MPC. To this end, first, a new parameter update method based on the moving horizon estimation is proposed, which allows to predict an estimation error bound over the prediction horizon. Second, an adaptive MPC algorithm is developed by combining the on-line parameter estimation with an MPC method based on the comparison model, suitably modified to cope with the time-varying case. This method guarantees feasibility and stability of the closed-loop system in the presence of state/input constraints. A numerical example is given to demonstrate its effectiveness."
 }
 
 @article{Adetola2009,
-title = "Adaptive Model Predictive Control for Constrained Nonlinear Systems",
-journal = "IFAC Proceedings Volumes",
-volume = "41",
-number = "2",
-pages = "1946 - 1951",
-year = "2008",
-note = "17th IFAC World Congress",
-issn = "1474-6670",
-doi = "https://doi.org/10.3182/20080706-5-KR-1001.00331",
-url = "http://www.sciencedirect.com/science/article/pii/S1474667016392369",
-author = "Veronica Adetola and Martin Guay",
-abstract = "A true adaptive nonlinear model predictive control (MPC) algorithm must address the issue of robustness to model uncertainty while the estimator is evolving. Unfortunately, this may not be achieved without introducing extra degree of conservativeness and/or computational complexity in the controller calculations. To attenuate this problem, we employ a finite time identifier and propose an adaptive predictive control structure that reduces to a nominal MPC problem when exact parameter estimates are obtained. The adaptive MPC is formulated in such a way that useful excitation is automatically injected into the closed loop system to decrease the identification period."
+	title = "Adaptive Model Predictive Control for Constrained Nonlinear Systems",
+	journal = "IFAC Proceedings Volumes",
+	volume = "41",
+	number = "2",
+	pages = "1946 - 1951",
+	year = "2008",
+	note = "17th IFAC World Congress",
+	issn = "1474-6670",
+	doi = "https://doi.org/10.3182/20080706-5-KR-1001.00331",
+	url = "http://www.sciencedirect.com/science/article/pii/S1474667016392369",
+	author = "Veronica Adetola and Martin Guay",
+	abstract = "A true adaptive nonlinear model predictive control (MPC) algorithm must address the issue of robustness to model uncertainty while the estimator is evolving. Unfortunately, this may not be achieved without introducing extra degree of conservativeness and/or computational complexity in the controller calculations. To attenuate this problem, we employ a finite time identifier and propose an adaptive predictive control structure that reduces to a nominal MPC problem when exact parameter estimates are obtained. The adaptive MPC is formulated in such a way that useful excitation is automatically injected into the closed loop system to decrease the identification period."
 }
 
 

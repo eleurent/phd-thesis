@@ -58,7 +58,7 @@
 @ARTICLE{Doyle1978,
 	author={J. {Doyle}},
 	journal={IEEE Transactions on Automatic Control}, 
-	title={Guaranteed margins for LQG regulators}, 
+	title={Guaranteed margins for {LQG} regulators}, 
 	year={1978},
 	volume={23},
 	number={4},	
@@ -131,22 +131,31 @@ publisher = {Curran Associates, Inc.},
   abstract = 	 {Thompson sampling (TS) is an effective approach to trade off exploration and exploration in reinforcement learning. Despite its empirical success and recent advances, its theoretical analysis is often limited to the Bayesian setting, finite state-action spaces, or finite-horizon problems. In this paper, we study an instance of TS in the challenging setting of the infinite-horizon linear quadratic (LQ) control, which models problems with continuous state-action variables, linear dynamics, and quadratic cost. In particular, we analyze the regret in the frequentist sense (i.e., for a fixed unknown environment) in one-dimensional systems. We derive the first $O(\sqrt{T})$ frequentist regret bound for this problem, thus significantly improving the $O(T^{2/3})$ bound of Abeille & Lazaric (2017) and matching the frequentist performance derived by Abbasi-Yadkori & Szepesvári (2011) for an optimistic approach and the Bayesian result Ouyang et al. (2017) We obtain this result by developing a novel bound on the regret due to policy switches, which holds for LQ systems of any dimensionality and it allows updating the parameters and the policy at each step, thus overcoming previous limitations due to lazy updates. Finally, we report numerical simulations supporting the conjecture that our result extends to multi-dimensional systems.}
 }
 
-@article{Dean2017,
-  title={On the Sample Complexity of the Linear Quadratic Regulator},
-  author={Sarah Dean and Horia Mania and Nikolai Matni and Benjamin Recht and Stephen Tu},
-  journal={ArXiv},
-  year={2017},
-  volume={abs/1710.01688}
+﻿@Article{Dean2019,
+	author={Dean, Sarah
+	and Mania, Horia
+	and Matni, Nikolai
+	and Recht, Benjamin
+	and Tu, Stephen},
+	title={On the Sample Complexity of the Linear Quadratic Regulator},
+	journal={Foundations of Computational Mathematics},
+	year={2019},
+	month={Aug},
+	day={05},
+	abstract={This paper addresses the optimal control problem known as the linear quadratic regulator in the case when the dynamics are unknown. We propose a multistage procedure, called Coarse-ID control, that estimates a model from a few experimental trials, estimates the error in that model with respect to the truth, and then designs a controller using both the model and uncertainty estimate. Our technique uses contemporary tools from random matrix theory to bound the error in the estimation procedure. We also employ a recently developed approach to control synthesis called System Level Synthesis that enables robust control design by solving a quasi-convex optimization problem. We provide end-to-end bounds on the relative error in control cost that are optimal in the number of parameters and that highlight salient properties of the system to be controlled such as closed-loop sensitivity and optimal control magnitude. We show experimentally that the Coarse-ID approach enables efficient computation of a stabilizing controller in regimes where simple control schemes that do not take the model uncertainty into account fail to stabilize the true system.},
+	issn={1615-3383},
+	doi={10.1007/s10208-019-09426-y},
+	url={https://doi.org/10.1007/s10208-019-09426-y}
 }
 
 @incollection{Dean2018,
-title = {Regret Bounds for Robust Adaptive Control of the Linear Quadratic Regulator},
-author = {Dean, Sarah and Mania, Horia and Matni, Nikolai and Recht, Benjamin and Tu, Stephen},
-booktitle = {Advances in Neural Information Processing Systems 31},
-editor = {S. Bengio and H. Wallach and H. Larochelle and K. Grauman and N. Cesa-Bianchi and R. Garnett},
-pages = {4188--4197},
-year = {2018},
-publisher = {Curran Associates, Inc.},
+	title = {Regret Bounds for Robust Adaptive Control of the Linear Quadratic Regulator},
+	author = {Dean, Sarah and Mania, Horia and Matni, Nikolai and Recht, Benjamin and Tu, Stephen},
+	booktitle = {Advances in Neural Information Processing Systems 31},
+	editor = {S. Bengio and H. Wallach and H. Larochelle and K. Grauman and N. Cesa-Bianchi and R. Garnett},
+	pages = {4188--4197},
+	year = {2018},
+	publisher = {Curran Associates, Inc.},
 }
 
 
@@ -318,25 +327,29 @@ year = {1997}
 	TYPE = {Theses}
 }
 
-@article{Ibrahimi2013,
-	author = {Ibrahimi, Morteza and Javanmard, Adel and Roy, Benjamin},
-	year = {2013},
-	month = {03},
+
+@incollection{Ibrahimi2013,
 	title = {Efficient Reinforcement Learning for High Dimensional Linear Quadratic Systems},
-	volume = {4},
-	journal = {Advances in Neural Information Processing Systems}
+	author = {Morteza Ibrahimi and Javanmard, Adel and Benjamin V. Roy},
+	booktitle = {Advances in Neural Information Processing Systems 25},
+	editor = {F. Pereira and C. J. C. Burges and L. Bottou and K. Q. Weinberger},
+	pages = {2636--2644},
+	year = {2012},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/4679-efficient-reinforcement-learning-for-high-dimensional-linear-quadratic-systems.pdf}
 }
 
-@article{Faradonbeh2017,
+@article{Faradonbeh2020,
 	author    = {Mohamad Kazem Shirani Faradonbeh and Ambuj Tewari and George Michailidis},
-	title     = {Finite Time Analysis of Optimal Adaptive Policies for Linear-Quadratic
+	title     = {Optimism-based adaptive regulation of linear-quadratic systems
 	Systems},
-	journal   = {CoRR},
-	volume    = {abs/1711.07230},
-	year      = {2017},
-	archivePrefix = {arXiv},
-	eprint    = {1711.07230},
+	doi = {10.1109/TAC.2020.2998952},
+	journal = {IEEE Transactions on Automatic Control},
+	volume= {early access},
+	year = {2020}
 }
+
+@ARTICLE{9104873,  author={M. K. {Shirani Faradonbeh} and A. {Tewari} and G. {Michailidis}},  journal={IEEE Transactions on Automatic Control},   title={Optimism-Based Adaptive Regulation of Linear-Quadratic Systems},   year={2020},  volume={},  number={},  pages={1-1},}
 
 @article{Ouyang2017,
 	author    = {Yi Ouyang and
