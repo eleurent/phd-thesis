@@ -53,10 +53,10 @@
 
 	\newpage
 
-	\begin{small}   % XXX
+%	\begin{small}   % XXX
 
 	% *************************** Nomenclature ****************************
-	\begin{spacing}{0.93}
+%	\begin{spacing}{0.93}
 		\glsaddallunused
 		\printglossary[type=main]
 		\newcommand*{\Agroupname}{Mathematical notations}
@@ -65,11 +65,11 @@
 		\printglossary[type=symbols]
 		%\printunsrtglossaries 
 		\label{chapter:nomenclature}
-	\end{spacing}
+%	\end{spacing}
 
 	% \input{4-Listofpublications/Listofpublications}
 	% **************** Listes *****************
-	\begin{spacing}{1.00}%
+%	\begin{spacing}{1.00}%
 	{% group, to change the \cleardoublepage
 		% FIXME force to not have a blank (even numbered) page between lists
 		% https://tex.stackexchange.com/questions/69184/remove-blank-page-between-list-of-figures-and-list-of-tables#69218
@@ -81,10 +81,10 @@
 		\let\cleardoublepage\clearpage%
 		\listoftables
 	}
-	\end{spacing}
+%	\end{spacing}
 
 	% *************** Bibliography ****************
-	\begin{spacing}{0.93}
+%	\begin{spacing}{0.93}
 		% TODO use apacite instead
 		\bibliographystyle{apalike}
 %		\bibliographystyle{alpha}
@@ -102,9 +102,9 @@
 %				Konstantinos Kavafis, \emph{Ithaki}.
 %			\end{quote}
 %		\end{small}
-	\end{spacing}
+%	\end{spacing}
 
-	\end{small}
+%	\end{small}
 
 	% \printthesisindex
 
