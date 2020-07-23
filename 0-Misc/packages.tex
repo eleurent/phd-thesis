@@ -116,8 +116,22 @@
 
 % --- Bibliography
 % Add `custombib' in the document class option to use this section
+
+	
 \ifuseCustomBib
-	\usepackage[square,sort,authoryear]{natbib}
+
+	\usepackage[backend=biber, style=authoryear,
+		sorting=nyt, natbib=true,doi=false,isbn=false,url=false,eprint=false]{biblatex}
+	\setlength\bibitemsep{0.5\baselineskip}
+
+	\DeclareFieldFormat[article, inbook]{title}{#1} 
+  \renewcommand*{\intitlepunct}{\addspace\nopunct}
+	\renewbibmacro{in:}{%
+		\ifentrytype{article}
+		{}
+		{\printtext{\bibstring{in}\intitlepunct}}}
+		
+%	\usepackage[square,sort,authoryear]{natbib}
 %	\usepackage[style=apa, backend=biber,natbib=true]{biblatex}
     %\usepackage[sort,numbers]{natbib}
 	%\usepackage[backend=bibtex,style=alphabetic,natbib=true]{biblatex}

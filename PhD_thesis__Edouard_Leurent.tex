@@ -5,7 +5,7 @@
 % *******************************************************************************
 
 % Class (remove "print" for digital version, remove "draft" for final version)
- \documentclass[a4paper,12pt,twoside,PageStyleII,authoryear,draft]{0-Misc/PhDThesisPSnPDF}
+ \documentclass[a4paper,12pt,twoside,PageStyleII,draft,custombib]{0-Misc/PhDThesisPSnPDF}
 % \documentclass[a4paper,12pt,twoside,index,PageStyleII]{0-Misc/PhDThesisPSnPDF}
 %\documentclass[a4paper,12pt,twoside,index,PageStyleII,print]{0-Misc/PhDThesisPSnPDF}
 
@@ -30,6 +30,10 @@
 
 % Packages (add your own packages here)
 \input{0-Misc/packages}
+
+\addbibresource{all-phd-thesis.bib}
+\addbibresource{chapter*.bib}
+\addbibresource{contributions.bib}
 
 \begin{document}
 
@@ -84,14 +88,17 @@
 %	\end{spacing}
 
 	% *************** Bibliography ****************
-%	\begin{spacing}{0.93}
+	\begin{spacing}{0.93}
 		% TODO use apacite instead
-		\bibliographystyle{apalike}
+%		\bibliographystyle{apalike}
+%		\bibliographystyle{apacite}
 %		\bibliographystyle{alpha}
 %		\bibliographystyle{plainnat}
 		\cleardoublepage
 		% \nocite{*}
-		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2,contributions}
+%		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2,contributions}
+
+		\printbibliography
 
 %		\vfill{}
 %		\hr{}		
@@ -102,7 +109,7 @@
 %				Konstantinos Kavafis, \emph{Ithaki}.
 %			\end{quote}
 %		\end{small}
-%	\end{spacing}
+	\end{spacing}
 
 %	\end{small}
 
