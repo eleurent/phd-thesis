@@ -73,7 +73,7 @@ Moreover, $\bo$ is a $\discount$-contraction for the $\|\cdot\|_\infty$ norm:
 \end{leftbar}
 \end{theorem}
 
-Thus, since $Q^{\star}$ is a fixed-point of a contracting operator, it can be computed by iteratively applying $\bo$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\bo$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The  \gls{DQN} algorithm \citep{Mnih2015} implements this idea by using a neural network model to represent the action-value function $Q$.
+Thus, since $Q^{\star}$ is a fixed-point of a contracting operator, it can be computed by iteratively applying $\bo$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\bo$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The  \gls{DQN} algorithm \citep{Mnih2015humanlevel} implements this idea by using a neural network model to represent the action-value function $Q$.
 
 \subsection{Common traffic state representations}
 

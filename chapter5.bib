@@ -9,11 +9,15 @@
   doi = {10.1287/moor.1040.0129},
 }
 
-@inproceedings{Nilim2005,
-    author = {Nilim, Arnab and {El Ghaoui} , Laurent},
-    booktitle = {Operations Research},
-    title = {{ Robust Control of Markov Decision Processes with Uncertain Transition Matrices }},
-    year = {2005}
+@article{Nilim2005,
+  author = {Nilim, Arnab and El Ghaoui, Laurent},
+  title = {Robust Control of Markov Decision Processes with Uncertain Transition Matrices},
+  journal = {Operations Research},
+  volume = {53},
+  number = {5},
+  pages = {780-798},
+  year = {2005},
+  doi = {10.1287/opre.1050.0216},
 }
 
 @inproceedings{Wiesemann2013,
@@ -43,13 +47,6 @@ url = {http://papers.nips.cc/paper/6014-risk-sensitive-and-robust-decision-makin
     year = {2018}
 }
 
-@inproceedings{Leurent2018,
-    author = {Leurent, Edouard and Blanco, Yann and Efimov, Denis and Maillard, Odalric-Ambrym},
-    booktitle = {Neural Information Processing Systems (NeurIPS), Workshop on Machine Learning for Intelligent Transportation Systems },
-    title = {{ Approximate Robust Control of Uncertain Dynamical Systems }},
-    year = {2018}
-}
-
 @inproceedings{Riedmiller2005,
 author = {Riedmiller, Martin},
 booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
@@ -71,12 +68,14 @@ year = {2005}
     year = {2015}
 }
 
-
-@inproceedings{Liu2014,
-author = {Liu, Chunming and Xu, Xin and Hu, Dewen},
-booktitle = {IEEE Transactions on Systems, Man, and Cybernetics: Systems},
-title = {{Multiobjective Reinforcement Learning: A Comprehensive Overview}},
-year = {2014}
+@article{Liu2014,
+  author = {Liu, Chunming and Xu, Xin and Hu, Dewen},
+  journal = {IEEE Transactions on Systems, Man, and Cybernetics: Systems},
+  title = {{Multiobjective Reinforcement Learning: A Comprehensive Overview}},
+  year = {2014},
+  volume={45},
+  number={3},
+  pages={385-398},
 }
 
 @misc{Bertsekas1999,
@@ -130,7 +129,10 @@ abstract = "The time average reward for a discrete-time controlled Markov proces
 @inproceedings{Li2009ReinforcementLF,
   title={Reinforcement learning for dialog management using least-squares Policy iteration and fast feature selection},
   author={Lihong Li and Jason D. Williams and Suhrid Balakrishnan},
-  booktitle={Conference of the International Speech Communication Association (InterSpeech)},
+  booktitle={Conference of the International Speech Communication Association (InterSpeech 2009)},
+  month={6-10 September},
+  address={Brighton, United Kingdom},
+  pages={2447--2451},
   year={2009}
 }
 
@@ -216,24 +218,34 @@ year = {2000}
 }
 
 @inproceedings{Massoud2009,
-author = {Massoud, Amir and Ghavamzadeh, Farahmand Mohammad and Szepesv{\'{a}}ri, Csaba and Mannor, Shie},
-title = {{Regularized Fitted Q-iteration for Planning in Continuous-Space Markovian Decision Problems}},
-year={2009},
-booktitle={American Control Conference (ACC)}
+  author = {Massoud, Amir and Ghavamzadeh, Farahmand Mohammad and Szepesv{\'{a}}ri, Csaba and Mannor, Shie},
+  title = {{Regularized Fitted Q-iteration for Planning in Continuous-Space Markovian Decision Problems}},
+  year={2009},
+  booktitle={American Control Conference (ACC)}
 }
 
-@inproceedings{Petrik2016,
-  title={Safe policy improvement by minimizing robust baseline regret},
-  author={Petrik, Marek Ghavamzadeh, Mohammad and and Chow, Yinlam},
-  booktitle={Advances in Neural Information Processing Systems (NIPS)},
-  year={2016}
+@incollection{Ghavamzadeh2016,
+  title = {Safe Policy Improvement by Minimizing Robust Baseline Regret},
+  author = {Ghavamzadeh, Mohammad and Petrik, Marek and Chow, Yinlam},
+  booktitle = {Advances in Neural Information Processing Systems 29},
+  editor = {D. D. Lee and M. Sugiyama and U. V. Luxburg and I. Guyon and R. Garnett},
+  pages = {2298--2306},
+  year = {2016},
+  publisher = {Curran Associates, Inc.},
+  url = {http://papers.nips.cc/paper/6294-safe-policy-improvement-by-minimizing-robust-baseline-regret.pdf}
 }
 
-@inproceedings{Santana:2016:RAC:3016100.3016366,
- author = {Santana, Pedro and Thi{\'e}baux, Sylvie and Williams, Brian},
- title = {RAO*: An Algorithm for Chance-constrained POMDP's},
- booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence (AAAI)},
- year = {2016}
+@inproceedings{Santana2016,
+  author = {Santana, Pedro and Thi\'{e}baux, Sylvie and Williams, Brian},
+  title = {RAO*: An Algorithm for Chance-Constrained POMDP’s},
+  year = {2016},
+  publisher = {AAAI Press},
+  booktitle = {Proceedings of the Thirtieth AAAI Conference on Artificial Intelligence},
+  month = {February 12–17},
+  pages = {3308–3314},
+  numpages = {7},
+  address = {Phoenix, Arizona},
+  series = {AAAI’16}
 }
 
 @book{SuttonBarto,
@@ -256,25 +268,34 @@ title = {{Transfer Learning for Reinforcement Learning Domains : A Survey}},
 year = {2009}
 }
 
-@inproceedings{Thomas2015,
-  title={High confidence policy improvement},
-  author={Thomas, Philip and Theocharous, Georgios and Ghavamzadeh, Mohammad},
-  booktitle={Proceedings of the International Conference on Machine Learning (ICML)},
-  year={2015}
+@InProceedings{Thomas2015,
+  title =    {High Confidence Policy Improvement},
+  author =   {Philip Thomas and Georgios Theocharous and Mohammad Ghavamzadeh},
+  booktitle =    {Proceedings of the 32nd International Conference on Machine Learning},
+  pages =    {2380--2388},
+  year =   {2015},
+  editor =   {Francis Bach and David Blei},
+  volume =   {37},
+  series =   {Proceedings of Machine Learning Research},
+  address =    {Lille, France},
+  month =    {07--09 Jul},
+  publisher =    {PMLR},
+  pdf =    {http://proceedings.mlr.press/v37/thomas15.pdf},
+  url =    {http://proceedings.mlr.press/v37/thomas15.html},
+  abstract =   {We present a batch reinforcement learning (RL) algorithm that provides probabilistic guarantees about the quality of each policy that it proposes, and which has no hyper-parameter that requires expert tuning. Specifically, the user may select any performance lower-bound and confidence level and our algorithm will ensure that the probability that it returns a policy with performance below the lower bound is at most the specified confidence level. We then propose an incremental algorithm that executes our policy improvement algorithm repeatedly to generate multiple policy improvements. We show the viability of our approach with a simple 4 x 4 gridworld and the standard mountain car problem, as well as with a digital marketing application that uses real world data.}
 }
 
-@inproceedings{Tikhonov1963,  
+@inproceedings{Tikhonov1963,
   title={Regularization of incorrectly posed problems},
   author={Tikhonov, Andrei Nikolaevich},
   booktitle={Doklady Akademii Nauk SSSR},
   year={1963}
 }
 
-
-@inproceedings{Undurti,
+@techreport{Undurti2011,
   title={Function Approximation for Continuous Constrained MDPs},
   author={Aditya Undurti and Alborz Geramifard and Jonathan P. How},
-  booktitle={Tech Report},
+  institution = {MIT Computer Science \& Artificial Intelligence Lab},
   year={2011}
 }
 
@@ -285,7 +306,6 @@ year = {2009}
     author = {Undurti, Aditya and How, Jonathan P.},
 }
 
-
 @inproceedings{carrara2018safe,
     title = {Safe transfer learning for dialogue applications},
     author = {Carrara, Nicolas and Laroche, Romain and Bouraoui, Jean-Léon and Urvoy, Tanguy and Pietquin, Olivier},
@@ -293,7 +313,7 @@ year = {2009}
     year = {2018},
 }
 
- @inproceedings{abs-1109-2147,
+@inproceedings{abs-1109-2147,
   title={Risk-sensitive reinforcement learning applied to control under constraints.},
   author={Geibel, Peter and Wysotzki, Fritz},
   booktitle={Journal of Artificial Intelligence Research (JAIR)},
@@ -326,18 +346,24 @@ series = {KDD ’10}
  }
 
 @inproceedings{Poupart2015,
-	author = {Pascal Poupart and Aarti Malhotra and Pei Pei and Kee-Eung Kim and Bongseok Goh and Michael Bowling},
-	title = {Approximate Linear Programming for Constrained Partially Observable Markov Decision Processes},
-	booktitle = {Proceedings of the Association for the Advancement of Artificial Intelligence Conference (AAAI)},
-	year = {2015},
+  author = {Poupart, Pascal and Malhotra, Aarti and Pei, Pei and Kim, Kee-Eung and Goh, Bongseok and Bowling, Michael},
+  title = {Approximate Linear Programming for Constrained Partially Observable Markov Decision Processes},
+  year = {2015},
+  isbn = {0262511290},
+  publisher = {AAAI Press},
+  booktitle = {Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  pages = {3342–3348},
+  numpages = {7},
+  month=jan,
+  address = {Austin, Texas},
+  series = {AAAI’15}
 }
 
-
-
-@inproceedings{Roijers2013ASO,
+@article{Roijers2013ASO,
   title={A Survey of Multi-Objective Sequential Decision-Making},
   author={Diederik M. Roijers and Peter Vamplew and Shimon Whiteson and Richard Dazeley},
-  booktitle={Journal of Artificial Intelligence Research (JAIR)},
+  journal={Journal of Artificial Intelligence Research (JAIR)},
+  volume={48},
   year={2013},
 }
 
@@ -359,8 +385,11 @@ series = {KDD ’10}
 }
 
 @inproceedings{Mausser2003,
-author = {Mausser, H. and Rosen, D.},
-title = {{Beyond VaR: from measuring risk to managing risk}},
-booktitle = {Proceedings of the IEEE Conference on Computational Intelligence for Financial Engineering},
-year = {2003}
+  author={H. {Mausser} and D. {Rosen}},
+  booktitle={Proceedings of the IEEE/IAFE 1999 Conference on Computational Intelligence for Financial Engineering (CIFEr) (IEEE Cat. No.99TH8408)}, 
+  title={Beyond VaR: from measuring risk to managing risk},
+  year={1999},
+  month={27-27 April},
+  address={New York, NY, USA},
+  pages={163-178},
 }

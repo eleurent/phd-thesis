@@ -11,10 +11,10 @@
 	author = {Philippa Foot}
 }
 
-@Inbook{Lin2015,
+@incollection{Lin2015,
 	author={Lin, Patrick},
 	title={Why Ethics Matters for Autonomous Cars},
-	bookTitle={Autonomes Fahren: Technische, rechtliche und gesellschaftliche Aspekte},
+	booktitle={Autonomes Fahren: Technische, rechtliche und gesellschaftliche Aspekte},
 	year={2015},
 	publisher={Springer Berlin Heidelberg},
 	address={Berlin, Heidelberg},
@@ -81,11 +81,30 @@
 }
 
 @inproceedings{Noothigattu2018,
-	title={A voting-based system for ethical decision making},
-	author={Noothigattu, Ritesh and Gaikwad, Snehalkumar S and Awad, Edmond and Dsouza, Sohan and Rahwan, Iyad and Ravikumar, Pradeep and Procaccia, Ariel D},
-	booktitle={Thirty-Second AAAI Conference on Artificial Intelligence},
-	year={2018}
+  author    = {Ritesh Noothigattu and
+               Snehalkumar (Neil) S. Gaikwad and
+               Edmond Awad and
+               Sohan Dsouza and
+               Iyad Rahwan and
+               Pradeep Ravikumar and
+               Ariel D. Procaccia},
+  editor    = {Sheila A. McIlraith and
+               Kilian Q. Weinberger},
+  title     = {A Voting-Based System for Ethical Decision Making},
+  booktitle = {Proceedings of the Thirty-Second {AAAI} Conference on Artificial Intelligence,
+               (AAAI-18)},
+  month     = {February 2-7},
+  address   = {New Orleans, Louisiana, USA},
+  pages     = {1587--1594},
+  publisher = {{AAAI} Press},
+  year      = {2018},
+  url       = {https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/view/17052},
+  timestamp = {Tue, 23 Oct 2018 06:42:15 +0200},
+  biburl    = {https://dblp.org/rec/conf/aaai/NoothigattuGADR18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
+
+
 
 @misc{DeFreitas2019,
 	title={Doubting Driverless Dilemmas},
@@ -127,11 +146,15 @@
 }
 
 @article{Schelling1968life,
-	title={The life you save may be your own},
-	author={Schelling, Thomas C},
-	journal={Problems in public expenditure},
-	pages={127--162},
-	year={1968}
+	title = {The life you save may be your own},
+	journal = {Problems in Public Expenditure.},
+	pages = {127--162},
+	series= {Studies of Government Finance.},
+	author = {Schelling, Thomas C. and Bailey, Martin J. and Fromm, Gary},
+	address = {Washington, DC},
+	month = {September 15 - 16},
+	publisher = {Brookings Institution},
+	year = {1968},
 }
 
 @article{Banzhaf2014,
@@ -224,11 +247,14 @@
 @inproceedings{Trautman2010,
 	abstract = {In this paper, we study the safe navigation of a mobile robot through crowds of dynamic agents with uncertain trajectories. Existing algorithms suffer from the "freezing robot" problem: once the environment surpasses a certain level of complexity, the planner decides that all forward paths are unsafe, and the robot freezes in place (or performs unnecessary maneuvers) to avoid collisions. Since a feasible path typically exists, this behavior is suboptimal. Existing approaches have focused on reducing the predictive uncertainty for individual agents by employing more informed models or heuristically limiting the predictive covariance to prevent this overcautious behavior. In this work, we demonstrate that both the individual prediction and the predictive uncertainty have little to do with the frozen robot problem. Our key insight is that dynamic agents solve the frozen robot problem by engaging in "joint collision avoidance": They cooperatively make room to create feasible trajectories. We develop IGP, a nonparametric statistical model based on dependent output Gaussian processes that can estimate crowd interaction from data. Our model naturally captures the non-Markov nature of agent trajectories, as well as their goal-driven navigation. We then show how planning in this model can be efficiently implemented using particle based inference. Lastly, we evaluate our model on a dataset of pedestrians entering and leaving a building, first comparing the model with actual pedestrians, and find that the algorithm either outperforms human pedestrians or performs very similarly to the pedestrians. We also present an experiment where a covariance reduction method results in highly overcautious behavior, while our model performs desirably. {\textcopyright}2010 IEEE.},
 	author = {Trautman, Peter and Krause, Andreas},
-	booktitle = {IEEE/RSJ 2010 International Conference on Intelligent Robots and Systems, IROS 2010 - Conference Proceedings},
+	booktitle = {2010 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
 	doi = {10.1109/IROS.2010.5654369},
 	isbn = {9781424466757},
 	title = {{Unfreezing the robot: Navigation in dense, interacting crowds}},
-	year = {2010}
+	year = {2010},
+	month={18-22 Oct},
+	address={Taipei, Taiwan},
+	pages={797-803},
 }
 
 @Comment{Chap2_1,
@@ -245,23 +271,18 @@
 	pages={1135-1145},
 }
 
-@article{Paden2016,
-	author    = {Brian Paden and
+@ARTICLE{Paden2016,
+  author={Brian Paden and
 	Michal C{\'{a}}p and
 	Sze Zheng Yong and
 	Dmitry S. Yershov and
 	Emilio Frazzoli},
-	title     = {A Survey of Motion Planning and Control Techniques for Self-driving
-	Urban Vehicles},
-	journal   = {CoRR},
-	volume    = {abs/1604.07446},
-	year      = {2016},
-	url       = {http://arxiv.org/abs/1604.07446},
-	archivePrefix = {arXiv},
-	eprint    = {1604.07446},
-	timestamp = {Mon, 13 Aug 2018 16:49:15 +0200},
-	biburl    = {https://dblp.org/rec/journals/corr/PadenCYYF16.bib},
-	bibsource = {dblp computer science bibliography, https://dblp.org}
+  journal={IEEE Transactions on Intelligent Vehicles},
+  title={A Survey of Motion Planning and Control Techniques for Self-Driving Urban Vehicles},
+  year={2016},
+  volume={1},
+  number={1},
+  pages={33-55},
 }
 
 ﻿@Article{Dijkstra1959,
@@ -317,12 +338,15 @@
 @inproceedings{Stentz1994,
 	abstract = {The task of planning trajectories for a mobile robot has received considerable attention in the research literature. Most of the work assumes the robot has a complete and accurate model of its environment before it begins to move; less attention has been paid to the problem of partially known environments. This situation occurs for an exploratory robot or one that must move to a goal location without the benefit of a floorplan or terrain map. Existing approaches plan an initial path based on known information and then modify the plan locally or replan the entire path as the robot discovers obstacles with its sensors, sacrificing optimality or computational efficiency respectively. This paper introduces a new algorithm, D, capable of planning paths in unknown, partially known, and changing environments in an efficient, optimal, and complete manner.},
 	author = {Stentz, Anthony},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {Proceedings of the 1994 IEEE International Conference on Robotics and Automation (ICRA)},
 	doi = {10.1109/robot.1994.351061},
 	isbn = {0818653329},
 	issn = {10504729},
 	title = {{Optimal and efficient path planning for partially-known environments}},
-	year = {1994}
+	year = {1994},
+	pages={3310-3317 vol.4},
+	month={8-13 May},
+	address={San Diego, CA, USA}
 }
 
 @inproceedings{Ziegler2009,
@@ -362,12 +386,16 @@
 }
 
 @article{Montemerlo2008,
-	abstract = {This article presents the architecture of Junior, a robotic vehicle capable of navigating urban environments autonomously. In doing so, the vehicle is able to select its own routes, perceive and interact with other traffic, and execute various urban driving skills including lane changes, U-turns, parking, and merging into moving traffic. The vehicle successfully finished and won second place in the DARPA Urban Challenge, a robot competition organized by the U.S. Government. {\textcopyright} 2008 Wiley Periodicals, Inc.},
-	author = {Montemerlo, Michael and Becker, Jan and Shat, Suhrid and Dahlkamp, Hendrik and Dolgov, Dmitri and Ettinger, Scott and Haehnel, Dirk and Hilden, Tim and Hoffmann, Gabe and Huhnke, Burkhard and Johnston, Doug and Klumpp, Stefan and Langer, Dirk and Levandowski, Anthony and Levinson, Jesse and Marcil, Julien and Orenstein, David and Paefgen, Johannes and Penny, Isaac and Petrovskaya, Anna and Pflueger, Mike and Stanek, Ganymed and Stavens, David and Vogt, Antone and Thrun, Sebastian},
-	doi = {10.1002/rob.20258},
-	issn = {15564959},
+	author = {Montemerlo, Michael and Becker, Jan and Bhat, Suhrid and Dahlkamp, Hendrik and Dolgov, Dmitri and Ettinger, Scott and Haehnel, Dirk and Hilden, Tim and Hoffmann, Gabe and Huhnke, Burkhard and Johnston, Doug and Klumpp, Stefan and Langer, Dirk and Levandowski, Anthony and Levinson, Jesse and Marcil, Julien and Orenstein, David and Paefgen, Johannes and Penny, Isaac and Petrovskaya, Anna and Pflueger, Mike and Stanek, Ganymed and Stavens, David and Vogt, Antone and Thrun, Sebastian},
+	title = {Junior: The Stanford entry in the Urban Challenge},
 	journal = {Journal of Field Robotics},
-	title = {{Junior: The Stanford entry in the urban challenge}},
+	volume = {25},
+	number = {9},
+	pages = {569-597},
+	doi = {10.1002/rob.20258},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/rob.20258},
+	eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/rob.20258},
+	abstract = {Abstract This article presents the architecture of Junior, a robotic vehicle capable of navigating urban environments autonomously. In doing so, the vehicle is able to select its own routes, perceive and interact with other traffic, and execute various urban driving skills including lane changes, U-turns, parking, and merging into moving traffic. The vehicle successfully finished and won second place in the DARPA Urban Challenge, a robot competition organized by the U.S. Government. © 2008 Wiley Periodicals, Inc.},
 	year = {2008}
 }
 
@@ -386,12 +414,16 @@
 }
 
 @article{Urmson2008,
-	abstract = {Boss is an autonomous vehicle that uses on-board sensors (global positioning system, lasers, radars, and cameras) to track other vehicles, detect static obstacles, and localize itself relative to a road model. A three-layer planning system combines mission, behavioral, and motion planning to drive in urban environments. The mission planning layer considers which street to take to achieve a mission goal. The behavioral layer determines when to change lanes and precedence at intersections and performs error recovery maneuvers. The motion planning layer selects actions to avoid obstacles while making progress toward local goals. The system was developed from the ground up to address the requirements of the DARPA Urban Challenge using a spiral system development process with a heavy emphasis on regular, regressive system testing. During the National Qualification Event and the 85-km Urban Challenge Final Event, Boss demonstrated some of its capabilities, qualifying first and winning the challenge. {\textcopyright} 2008 Wiley Periodicals, Inc.},
-	author = {Urmson, Chris and Anhalt, Joshua and Bagnell, Drew and Baker, Christopher and Bittner, Robert and Clark, M. N. and Dolan, John and Duggins, Dave and Galatali, Tugrul and Geyer, Chris and Gittleman, Michele and Harbaugh, Sam and Hebert, Martial and Howard, Thomas M. and Kolski, Sascha and Kelly, Alonzo and Likhachev, Maxim and McNaughton, Matt and Miller, Nick and Peterson, Kevin and Pilnick, Brian and Rajkumar, Raj and Rybski, Paul and Salesky, Bryan and Seo, Young Woo and Singh, Sanjiv and Snider, Jarrod and Stentz, Anthony and Whittaker, William and Wolkowicki, Ziv and Ziglar, Jason and Bae, Hong and Brown, Thomas and Demitrish, Daniel and Litkouhi, Bakhtiar and Nickolaou, Jim and Sadekar, Varsha and Zhang, Wende and Struble, Joshua and Taylor, Michael and Darms, Michael and Ferguson, Dave},
-	doi = {10.1002/rob.20255},
-	issn = {15564959},
+	author = {Urmson, Chris and Anhalt, Joshua and Bagnell, Drew and Baker, Christopher and Bittner, Robert and Clark, M. N. and Dolan, John and Duggins, Dave and Galatali, Tugrul and Geyer, Chris and Gittleman, Michele and Harbaugh, Sam and Hebert, Martial and Howard, Thomas M. and Kolski, Sascha and Kelly, Alonzo and Likhachev, Maxim and McNaughton, Matt and Miller, Nick and Peterson, Kevin and Pilnick, Brian and Rajkumar, Raj and Rybski, Paul and Salesky, Bryan and Seo, Young-Woo and Singh, Sanjiv and Snider, Jarrod and Stentz, Anthony and Whittaker, William “Red” and Wolkowicki, Ziv and Ziglar, Jason and Bae, Hong and Brown, Thomas and Demitrish, Daniel and Litkouhi, Bakhtiar and Nickolaou, Jim and Sadekar, Varsha and Zhang, Wende and Struble, Joshua and Taylor, Michael and Darms, Michael and Ferguson, Dave},
+	title = {Autonomous driving in urban environments: Boss and the Urban Challenge},
 	journal = {Journal of Field Robotics},
-	title = {{Autonomous driving in urban environments: Boss and the urban challenge}},
+	volume = {25},
+	number = {8},
+	pages = {425-466},
+	doi = {10.1002/rob.20255},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/rob.20255},
+	eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/rob.20255},
+	abstract = {Abstract Boss is an autonomous vehicle that uses on-board sensors (global positioning system, lasers, radars, and cameras) to track other vehicles, detect static obstacles, and localize itself relative to a road model. A three-layer planning system combines mission, behavioral, and motion planning to drive in urban environments. The mission planning layer considers which street to take to achieve a mission goal. The behavioral layer determines when to change lanes and precedence at intersections and performs error recovery maneuvers. The motion planning layer selects actions to avoid obstacles while making progress toward local goals. The system was developed from the ground up to address the requirements of the DARPA Urban Challenge using a spiral system development process with a heavy emphasis on regular, regressive system testing. During the National Qualification Event and the 85-km Urban Challenge Final Event, Boss demonstrated some of its capabilities, qualifying first and winning the challenge. © 2008 Wiley Periodicals, Inc.},
 	year = {2008}
 }
 
@@ -402,15 +434,15 @@
 	year = {1998}
 }
 
-@inproceedings{Karaman2011,
-	abstract = {During the last decade, sampling-based path planning algorithms, such as probabilistic roadmaps (PRM) and rapidly exploring random trees (RRT), have been shown to work well in practice and possess theoretical guarantees such as probabilistic completeness. However, little effort has been devoted to the formal analysis of the quality of the solution returned by such algorithms, e.g. as a function of the number of samples. The purpose of this paper is to fill this gap, by rigorously analyzing the asymptotic behavior of the cost of the solution returned by stochastic sampling-based algorithms as the number of samples increases. A number of negative results are provided, characterizing existing algorithms, e.g. showing that, under mild technical conditions, the cost of the solution returned by broadly used sampling-based algorithms converges almost surely to a non-optimal value. The main contribution of the paper is the introduction of new algorithms, namely, PRM* and RRT*, which are provably asymptotically optimal, i.e. such that the cost of the returned solution converges almost surely to the optimum. Moreover, it is shown that the computational complexity of the new algorithms is within a constant factor of that of their probabilistically complete (but not asymptotically optimal) counterparts. The analysis in this paper hinges on novel connections between stochastic sampling-based path planning algorithms and the theory of random geometric graphs. {\textcopyright} The Author(s) 2011.},
-	author = {Karaman, Sertac and Frazzoli, Emilio},
-	booktitle = {International Journal of Robotics Research},
+@article{Karaman2011,
+	author = {Sertac Karaman and Emilio Frazzoli},
+	title ={Sampling-based algorithms for optimal motion planning},
+	journal = {The International Journal of Robotics Research},
+	volume = {30},
+	number = {7},
+	pages = {846-894},
+	year = {2011},
 	doi = {10.1177/0278364911406761},
-	issn = {02783649},
-	keywords = {Motion planning,Optimal path planning,Random geometric graphs,Sampling-based algorithms},
-	title = {{Sampling-based algorithms for optimal motion planning}},
-	year = {2011}
 }
 
 @article{Kavraki1996,
@@ -420,7 +452,10 @@
 	issn = {1042296X},
 	journal = {IEEE Transactions on Robotics and Automation},
 	title = {{Probabilistic roadmaps for path planning in high-dimensional configuration spaces}},
-	year = {1996}
+	year = {1996},
+	volume={12},
+	number={4},
+	pages={566-580}
 }
 
 @inproceedings{Faust2018,
@@ -443,32 +478,46 @@
 @inproceedings{Lenz2016,
 	abstract = {Human drivers use nonverbal communication and anticipation of other drivers' actions to master conflicts occurring in everyday driving situations. Without a high penetration of vehicle-to-vehicle communication an autonomous vehicle has to have the possibility to understand intentions of others and share own intentions with the surrounding traffic participants. This paper proposes a cooperative combinatorial motion planning algorithm without the need for inter vehicle communication based on Monte Carlo Tree Search (MCTS). We motivate why MCTS is particularly suited for the autonomous driving domain. Furthermore, adoptions to the MCTS algorithm are presented as for example simultaneous decisions, the usage of the Intelligent Driver Model as microscopic traffic simulation, and a cooperative cost function. We further show simulation results of merging scenarios in highway-like situations to underline the cooperative nature of the approach.},
 	author = {Lenz, David and Kessler, Tobias and Knoll, Alois},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	booktitle = {2016 IEEE Intelligent Vehicles Symposium (IV)},
 	doi = {10.1109/IVS.2016.7535424},
+	month = {19-22 June},
 	isbn = {9781509018215},
 	title = {{Tactical cooperative planning for autonomous highway driving using Monte-Carlo Tree Search}},
-	year = {2016}
+	address = {Gothenburg, Sweden},
+	year = {2016},
+	pages={447-453},
 }
 
-@article{Latombe1991,
-	abstract = {A car-like indoor mobile robot is a kinematically$\backslash$r$\backslash$nconstrained robot that can be modelled as a 2D$\backslash$r$\backslash$nobject translating and rotating in the horizontal$\backslash$r$\backslash$nplane among well-defined obstacles. The kinematic$\backslash$r$\backslash$nconstraints impose that the linear velocity of the$\backslash$r$\backslash$nrobot point along its main axis (no sidewise motion$\backslash$r$\backslash$nis possible) and restrict the range of admissible$\backslash$r$\backslash$nvalues for the steering angle. In this paper' we$\backslash$r$\backslash$ndescribe a fast path planner for such a robot. This$\backslash$r$\backslash$nplanner is one to two orders of magnitude faster$\backslash$r$\backslash$nthan previously implemented planners for the same$\backslash$r$\backslash$ntype of robot. In addition, it has an anytime flavor$\backslash$r$\backslash$nthat allows it to return a path in a short amount$\backslash$r$\backslash$nof time, and to improve that path through iterative$\backslash$r$\backslash$noptimization according to the amount of time$\backslash$r$\backslash$nthat is devoted to path planning, The planner is$\backslash$r$\backslash$nessentially a combination of preexisting ideas. Its$\backslash$r$\backslash$nefficiency derives from the good match between$\backslash$r$\backslash$nthese ideas and from various technical improvements$\backslash$r$\backslash$nbrought to them. },
-	author = {Latombe, J.C.},
-	journal = {Proceedings of the ninth National conference on Artificial intelligence},
-	title = {{A Fast Path Planner for a Car-Like Indoor Mobile Robot}},
-	year = {1991}
+@inproceedings{Latombe1991,
+	author = {Latombe, Jean-Claude},
+	title = {A Fast Path Planner for a Car-like Indoor Mobile Robot},
+	year = {1991},
+	isbn = {0262510596},
+	publisher = {AAAI Press},
+	booktitle = {Proceedings of the Ninth National Conference on Artificial Intelligence - Volume 2},
+	pages = {659–665},
+	numpages = {7},
+	address = {Anaheim, California},
+	series = {AAAI’91},
+	month = jul
 }
 
-@inproceedings{Sanchez2002,
-	author = {L., Abraham S\'{a}nchez and Zapata, Ren\'{e} and B., J. Abraham Arenas},
-	title = {Motion Planning for Car-Like Robots Using Lazy Probabilistic Roadmap Method},
-	year = {2002},
-	isbn = {3540434755},
-	publisher = {Springer-Verlag},
-	address = {Berlin, Heidelberg},
-	booktitle = {Proceedings of the Second Mexican International Conference on Artificial Intelligence: Advances in Artificial Intelligence},
-	pages = {1–10},
-	numpages = {10},
-	series = {MICAI ’02}
+@InProceedings{Sanchez2002,
+	author="S{\'a}nchez L., Abraham
+	and Zapata, Ren{\'e}
+	and Arenas B., J. Abraham",
+	editor="Coello Coello, Carlos A.
+	and de Albornoz, Alvaro
+	and Sucar, Luis Enrique
+	and Battistutti, Osvaldo Cair{\'o}",
+	title="Motion Planning for Car-Like Robots Using Lazy Probabilistic Roadmap Method",
+	booktitle="MICAI 2002: Advances in Artificial Intelligence",
+	year="2002",
+	publisher="Springer Berlin Heidelberg",
+	address="Berlin, Heidelberg",
+	pages="1--10",
+	abstract="In this paper we describe an approach to probabilistic roadmap method. Our algorithm builds initially a roadmap in the configuration space considering that all nodes and edges are collision-free, and searches the roadmap for the shortest path between start and goal nodes. If a collision with the obstacles occurs, the corresponding nodes and edges are removed from the roadmap or the planner updates the roadmap with new nodes and edges, and then searches for a shortest path. The procedure is repeated until a collision-free path is found. The goal of our approach is to minimize the number of collision checks and calls to the local method. Experimental results presented in this paper show that our approach is very efficient in practice.",
+	isbn="978-3-540-46016-9"
 }
 
 @ARTICLE{Lamiraux2001,	
@@ -478,38 +527,34 @@
 	year={2001},
 	volume={17},
 	number={4},
-	pages={498-501},}
-
-@inproceedings{Kocsis2006,
-	abstract = {For large state-space Markovian Decision Problems Monte-Carlo planning is one of the few viable approaches to find near-optimal solutions. In this paper we introduce a new algorithm, UCT, that applies bandit ideas to guide Monte-Carlo planning. In finite-horizon or discounted MDPs the algorithm is shown to be consistent and finite sample bounds are derived on the estimation error due to sampling. Experimental results show that in several domains, UCT is significantly more efficient than its alternatives. {\textcopyright} Springer-Verlag Berlin Heidelberg 2006.},
-	author = {Kocsis, Levente and Szepesv{\'{a}}ri, Csaba},
-	booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
-	doi = {10.1007/11871842_29},
-	isbn = {354045375X},
-	issn = {16113349},
-	title = {{Bandit based Monte-Carlo planning}},
-	year = {2006}
+	pages={498-501},
 }
 
 @article{Reeds1990,
-	abstract = {The path taken by a car with a given minimum turning radius has a lower bound on its radius of curvature at each point, but the path has cusps if the car shifts into or out of reverse gear. What is the shortest such path a car can travel between two points if its starting and ending directions are specified? One need consider only paths with at most 2 cusps or reversals. We give a set of paths which is sufficient in the sense that it always contains a shortest path and small in the sense that there are at most 68, but usually many fewer paths in the set for any pair of endpoints and directions. We give these paths by explicit formula. Calculating the length of each of these paths and selecting the (not necessarily unique) path with smallest length yields a simple algorithm for a shortest path in each case. These optimal paths or geodesies may be described as follows: If C is an arc of a circle of the minimal turning radius and S is a line segment, then it is sufficient to consider only certain paths of the form CCSCC where arcs and segments fit smoothly, one or more of the arcs or segments may vanish, and where reversals, or equivalently cusps, between arcs or segments are allowed. This contrasts with the case when cusps are not allowed, where Dubins (1957) has shown that paths of the form CCC and CSC suffice. {\textcopyright} 1990 by Pacific Journal of Mathematics.},
-	author = {Reeds, J. A. and Shepp, L. A.},
-	doi = {10.2140/pjm.1990.145.367},
-	issn = {00308730},
-	journal = {Pacific Journal of Mathematics},
-	title = {{Optimal paths for a car that goes both forwards and backwards}},
-	year = {1990}
+	author = "Reeds, J. A. and Shepp, L. A.",
+	fjournal = "Pacific Journal of Mathematics",
+	journal = "Pacific J. Math.",
+	number = "2",
+	pages = "367--393",
+	publisher = "Pacific Journal of Mathematics, A Non-profit Corporation",
+	title = "Optimal paths for a car that goes both forwards and backwards.",
+	url = "https://projecteuclid.org:443/euclid.pjm/1102645450",
+	volume = "145",
+	year = "1990"
 }
 
 @inproceedings{Xu2012,
 	abstract = {In this paper, an efficient real-time autonomous driving motion planner with trajectory optimization is proposed. The planner first discretizes the plan space and searches for the best trajectory based on a set of cost functions. Then an iterative optimization is applied to both the path and speed of the resultant trajectory. The post-optimization is of low computational complexity and is able to converge to a higher-quality solution within a few iterations. Compared with the planner without optimization, this framework can reduce the planning time by 52{\%} and improve the trajectory quality. The proposed motion planner is implemented and tested both in simulation and on a real autonomous vehicle in three different scenarios. Experiments show that the planner outputs high-quality trajectories and performs intelligent driving behaviors. {\textcopyright} 2012 IEEE.},
 	author = {Xu, Wenda and Wei, Junqing and Dolan, John M. and Zhao, Huijing and Zha, Hongbin},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+  	booktitle={2012 IEEE International Conference on Robotics and Automation (ICRA)},
 	doi = {10.1109/ICRA.2012.6225063},
 	isbn = {9781467314039},
 	issn = {10504729},
 	title = {{A real-time motion planner with trajectory optimization for autonomous vehicles}},
-	year = {2012}
+	year = {2012},
+	month = {14-18 May},
+	address = {Saint Paul, MN, USA},
+	pages={2061-2067},
 }
 
 @inproceedings{Gonzalez2014,
@@ -535,17 +580,22 @@
 	pages={541-547},
 }
 
-@article{Pivtoraiko2005,
-	abstract = {We propose a novel approach to constrained path planning that is based on a special search space which efficiently encodes feasible paths. The paths are encoded implicitly as connections between states, but only feasible and local connections are included. Once this search space is developed, we systematically generate a near-minimal set of spatially distinct path primitives. This set expresses the local connectivity of constrained motions and also eliminates redundancies. The set of primitives is used to define heuristic search, and thereby create a very efficient path planner at the chosen resolution. We also discuss a wide variety of space and terrestrial robotics applications where this motion planner can be especially useful.},
-	author = {Pivtoraiko, Mihail and Kelly, Alonzo},
-	issn = {03796566},
-	journal = {European Space Agency, (Special Publication) ESA SP},
-	keywords = {Control set,Differential constraints,Lattice,Nonholonomic,Path planning,Path/motion primitives},
-	title = {{Efficient constrained path planning via search in state lattices}},
-	year = {2005}
+@INPROCEEDINGS{Pivtoraiko2005,
+       author = {{Pivtoraiko}, M. and {Kelly}, A.},
+        title = {Efficient Constrained Path Planning via Search in State Lattices},
+    booktitle = {The 8th International Symposium on Artificial Intelligence, Robotics and Automation in Space (i-SAIRAS 2005)},
+         year = {2005},
+       series = {ESA Special Publication},
+       volume = {603},
+        month = {5-8 September},
+      address = {Munich, Germany},
+          eid = {33},
+        pages = {33},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2005ESASP.603E..33P},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@ARTICLE{LaValle1998,	
+@ARTICLE{LaValle1998,
 	author={S. M. {LaValle} and S. A. {Hutchinson}},
 	journal={IEEE Transactions on Robotics and Automation}, 
 	title={Optimal motion planning for multiple robots having independent goals}, 
@@ -623,17 +673,20 @@
 	pages = {305--313},
 	year = {1989},
 	publisher = {Morgan-Kaufmann},
+	address = {Denver, Colorado, USA},
+	month = dec,
 	url = {http://papers.nips.cc/paper/95-alvinn-an-autonomous-land-vehicle-in-a-neural-network.pdf}
 }
 
-@misc{Levine2016,
-	abstract = {Policy search methods can allow robots to learn control policies for a wide range of tasks, but practical applications of policy search often require hand-engineered components for perception, state estimation, and low-level control. In this paper, we aim to answer the following question: does training the perception and control systems jointly end-to-end provide better performance than training each component separately? To this end, we develop a method that can be used to learn policies that map raw image observations directly to torques at the robot's motors. The policies are represented by deep convolutional neural networks (CNNs) with 92,000 parameters, and are trained using a guided policy search method, which transforms policy search into supervised learning, with supervision provided by a simple trajectory-centric reinforcement learning method. We evaluate our method on a range of real-world manipulation tasks that require close coordination between vision and control, such as screwing a cap onto a bottle, and present simulated comparisons to a range of prior policy search methods.},
-	author = {Levine, Sergey and Finn, Chelsea and Darrell, Trevor and Abbeel, Pieter},
-	booktitle = {Journal of Machine Learning Research},
-	issn = {15337928},
-	keywords = {Neural networks,Optimal control,Reinforcement learning,Vision},
-	title = {{End-to-end training of deep visuomotor policies}},
-	year = {2016}
+@article{Levine2016,
+  author  = {Sergey Levine and Chelsea Finn and Trevor Darrell and Pieter Abbeel},
+  title   = {End-to-End Training of Deep Visuomotor Policies},
+  journal = {Journal of Machine Learning Research},
+  year    = {2016},
+  volume  = {17},
+  number  = {39},
+  pages   = {1-40},
+  url     = {http://jmlr.org/papers/v17/15-522.html}
 }
 
 @inproceedings{Ross2011,
@@ -660,12 +713,15 @@
 	archivePrefix = {arXiv},
 	arxivId = {1612.01079},
 	author = {Xu, Huazhe and Gao, Yang and Yu, Fisher and Darrell, Trevor},
-	booktitle = {Proceedings - 30th IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2017},
+	booktitle = {30th IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
 	doi = {10.1109/CVPR.2017.376},
 	eprint = {1612.01079},
 	isbn = {9781538604571},
 	title = {{End-to-end learning of driving models from large-scale video datasets}},
-	year = {2017}
+	year = {2017},
+	pages = {3530-3538},
+	month = {21-26 July},
+	address = {Honolulu, HI, USA}
 }
 
 @inproceedings{Eraqi2017,
@@ -691,11 +747,12 @@
 	url = {http://papers.nips.cc/paper/6391-generative-adversarial-imitation-learning.pdf}
 }
 
-
 @inproceedings{Kuefler2017,
 	author={A. {Kuefler} and J. {Morton} and T. {Wheeler} and M. {Kochenderfer}},
 	booktitle={2017 IEEE Intelligent Vehicles Symposium (IV)},
 	title={Imitating driver behavior with generative adversarial networks},
+	month={11--14 June},
+	address={Los Angeles, CA, USA},
 	year={2017},
 	pages={204-211},
 }
@@ -740,19 +797,24 @@
 @inproceedings{Rhinehart2019,
 	abstract = {For autonomous vehicles (AVs) to behave appropriately on roads populated by human-driven vehicles, they must be able to reason about the uncertain intentions and decisions of other drivers from rich perceptual information. Towards these capabilities, we present a probabilistic forecasting model of future interactions between a variable number of agents. We perform both standard forecasting and the novel task of conditional forecasting, which reasons about how all agents will likely respond to the goal of a controlled agent (here, the AV). We train models on real and simulated data to forecast vehicle trajectories given past positions and LIDAR. Our evaluation shows that our model is substantially more accurate in multi-agent driving scenarios compared to existing state-of-the-art. Beyond its general ability to perform conditional forecasting queries, we show that our model's predictions of all agents improve when conditioned on knowledge of the AV's goal, further illustrating its capability to model agent interactions.},
 	author = {Rhinehart, Nicholas and McAllister, Rowan and Kitani, Kris and Levine, Sergey},
-	booktitle = {Proceedings of the IEEE International Conference on Computer Vision},
+	booktitle = {2019 IEEE/CVF International Conference on Computer Vision (ICCV)},
 	doi = {10.1109/ICCV.2019.00291},
+	month = {27 Oct.-2 Nov.},
+	address = {Seoul, Korea (South)},
 	isbn = {9781728148038},
 	issn = {15505499},
 	title = {{PRECOG: Prediction conditioned on goals in visual multi-agent settings}},
-	year = {2019}
+	year = {2019},
+	pages={2821-2830},
 }
 
 @inproceedings{Rhinehart2020,
 	title={Deep Imitative Models for Flexible Inference, Planning, and Control},
 	author={Nicholas Rhinehart and Rowan McAllister and Sergey Levine},
 	year={2020},
-	booktitle={International Conference on Learning Representations (ICLR)}
+	booktitle={International Conference on Learning Representations (ICLR)},
+	address={Virtual Conference, formerly Addis Ababa, Ethiopa},
+	month = may,
 }
 
 @misc{Bansal2018,
@@ -793,11 +855,14 @@
 @inproceedings{Ulbrich2013,
 	abstract = {The Stadtpilot project aims at fully automated driving on Braunschweig's inner city ring road. The TU Braunschweig's research vehicle 'Leonie' is one of the first vehicles having the ability of fully automated driving in real urban traffic scenarios. This paper shows our decision making approach for performing lane changes while driving fully automated in urban environments. We apply an online Partially Observable Markov Decision Process (POMDP) to accommodate inevitable sensor noise to be faced in urban traffic scenarios. In this paper we propose a two step algorithm to keep the complexity of the POMDP low enough for real-time decision making while driving. The presented approach has been integrated in our vehicle and was evaluated in real urban traffic. {\textcopyright} 2013 IEEE.},
 	author = {Ulbrich, Simon and Maurer, Markus},
-	booktitle = {IEEE Conference on Intelligent Transportation Systems, Proceedings, ITSC},
+	booktitle = {16th International IEEE Conference on Intelligent Transportation Systems (ITSC 2013)},
 	doi = {10.1109/ITSC.2013.6728533},
 	isbn = {9781479929146},
 	title = {{Probabilistic online POMDP decision making for lane changes in fully automated driving}},
-	year = {2013}
+	year = {2013},
+	pages = {2063-2067},
+	month = {6-9 Oct},
+	address = {The Hague, Netherlands}
 }
 
 @InProceedings{Du2010,
@@ -840,15 +905,15 @@
 	pages={2076-2081},
 }
 
-@inproceedings{VanDenBerg2011,
-	abstract = {In this paper we present LQG-MP (linear-quadratic Gaussian motion planning), a new approach to robot motion planning that takes into account the sensors and the controller that will be used during the execution of the robot's path. LQG-MP is based on the linear-quadratic controller with Gaussian models of uncertainty, and explicitly characterizes in advance (i.e. before execution) the a priori probability distributions of the state of the robot along its path. These distributions can be used to assess the quality of the path, for instance by computing the probability of avoiding collisions. Many methods can be used to generate the required ensemble of candidate paths from which the best path is selected; in this paper we report results using rapidly exploring random trees (RRT). We study the performance of LQG-MP with simulation experiments in three scenarios: (A) a kinodynamic car-like robot, (B) multi-robot planning with differential-drive robots, and (C) a 6-DOF serial manipulator. We also present a method that applies Kalman smoothing to make paths Ck-continuous and apply LQG-MP to precomputed roadmaps using a variant of Dijkstra's algorithm to efficiently find high-quality paths. {\textcopyright} The Author(s) 2011.},
-	author = {{Van Den Berg}, Jur and Abbee, Pieter and Goldberg, Ken},
-	booktitle = {International Journal of Robotics Research},
+@article{VanDenBerg2011,
+	author = {{van den Berg}, Jur and Abbee, Pieter and Goldberg, Ken},
+	title ={LQG-MP: Optimized path planning for robots with motion uncertainty and imperfect state information},
+	journal = {The International Journal of Robotics Research},
+	volume = {30},
+	number = {7},
+	pages = {895-913},
+	year = {2011},
 	doi = {10.1177/0278364911406562},
-	issn = {02783649},
-	keywords = {Control,Planning,Uncertainty},
-	title = {{LQG-MP: Optimized path planning for robots with motion uncertainty and imperfect state information}},
-	year = {2011}
 }
 
 @inproceedings{Brechtel2014,
@@ -916,13 +981,16 @@ isbn="978-3-642-36279-8"
 	archivePrefix = {arXiv},
 	arxivId = {1702.00858},
 	author = {Sunberg, Zachary N. and Ho, Christopher J. and Kochenderfer, Mykel J.},
-	booktitle = {Proceedings of the American Control Conference},
+	booktitle = {2017 American Control Conference (ACC)},
 	doi = {10.23919/ACC.2017.7963408},
 	eprint = {1702.00858},
 	isbn = {9781509059928},
 	issn = {07431619},
 	title = {{The value of inferring the internal state of traffic participants for autonomous freeway driving}},
-	year = {2017}
+	year = {2017},
+	pages={3004-3010},
+	month={24-26 May},
+	address={Seattle, WA, USA}
 }
 
 @inproceedings{Bry2011,
@@ -942,40 +1010,55 @@ isbn="978-3-642-36279-8"
 @inproceedings{Xu2014,
 	abstract = {We present a motion planning framework for autonomous on-road driving considering both the uncertainty caused by an autonomous vehicle and other traffic participants. The future motion of traffic participants is predicted using a local planner, and the uncertainty along the predicted trajectory is computed based on Gaussian propagation. For the autonomous vehicle, the uncertainty from localization and control is estimated based on a Linear-Quadratic Gaussian (LQG) framework. Compared with other safety assessment methods, our framework allows the planner to avoid unsafe situations more efficiently, thanks to the direct uncertainty information feedback to the planner. We also demonstrate our planner's ability to generate safer trajectories compared to planning only with a LQG framework.},
 	author = {Xu, Wenda and Pan, Jia and Wei, Junqing and Dolan, John M.},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2014 IEEE International Conference on Robotics and Automation (ICRA)},
 	doi = {10.1109/ICRA.2014.6907209},
 	issn = {10504729},
 	title = {{Motion planning under uncertainty for on-road autonomous driving}},
-	year = {2014}
+	year = {2014},
+	pages = {2507-2512},
+	month = {31 May--7 June},
+	address = {Hong Kong, China}
 }
 
 @inproceedings{Pineau2003,
-	abstract = {This paper introduces the Point-Based Value Iteration (PBVI) algorithm for POMDP planning. PBVI approximates an exact value iteration solution by selecting a small set of representative belief points and then tracking the value and its derivative for those points only. By using stochastic trajectories to choose belief points, and by maintaining only one value hyper-plane per point, PBVI successfully solves large problems: we present results on a robotic laser tag problem as well as three test domains from the literature.},
 	author = {Pineau, Joelle and Gordon, Geoff and Thrun, Sebastian},
-	booktitle = {IJCAI International Joint Conference on Artificial Intelligence},
-	issn = {10450823},
-	title = {{Point-based value iteration: An anytime algorithm for POMDPs}},
-	year = {2003}
+	title = {Point-Based Value Iteration: An Anytime Algorithm for POMDPs},
+	year = {2003},
+	publisher = {Morgan Kaufmann Publishers Inc.},
+	address = {San Francisco, CA, USA},
+	booktitle = {Proceedings of the 18th International Joint Conference on Artificial Intelligence},
+	month=aug,
+	pages = {1025–1030},
+	numpages = {6},
+	location = {Acapulco, Mexico},
+	series = {IJCAI’03}
 }
 
 @article{Porta2006,
-	abstract = {We propose a novel approach to optimize Partially Observable Markov Decisions Processes (POMDPs) defined on continuous spaces. To date, most algorithms for model-based POMDPs are restricted to discrete states, actions, and observations, but many real-world problems such as, for instance, robot navigation, are naturally defined on continuous spaces. In this work, we demonstrate that the value function for continuous POMDPs is convex in the beliefs over continuous state spaces, and piecewise-linear convex for the particular case of discrete observations and actions but still continuous states. We also demonstrate that continuous Bellman backups are contracting and isotonic ensuring the monotonic convergence of value-iteration algorithms. Relying on those properties, we extend the PERSEUS algorithm, originally developed for discrete POMDPs, to work in continuous state spaces by representing the observation, transition, and reward models using Gaussian mixtures, and the beliefs using Gaussian mixtures or particle sets. With these representations, the integrals that appear in the Bellman backup can be computed in closed form and, therefore, the algorithm is computationally feasible. Finally, we further extend PERSEUS to deal with continuous action and observation sets by designing effective sampling approaches.},
 	author = {Porta, Josep M. and Vlassis, Nikos and Spaan, Matthijs T.J. and Poupart, Pascal},
-	doi = {10.13039/501100000780},
-	issn = {15337928},
+	title = {Point-Based Value Iteration for Continuous POMDPs},
+	year = {2006},
+	issue_date = {12/1/2006},
+	publisher = {JMLR.org},
+	volume = {7},
+	issn = {1532-4435},
 	journal = {Journal of Machine Learning Research},
-	keywords = {Continuous action space,Continuous observation space,Continuous state space,Partially observable Markov decision processes,Planning under uncertainty,Point-based value iteration},
-	title = {{Point-based value iteration for continuous POMDPs}},
-	year = {2006}
+	month = dec,
+	pages = {2329–2367},
+	numpages = {39}
 }
 
-@inproceedings{Silver2010,
-	abstract = {This paper introduces a Monte-Carlo algorithm for online planning in large POMDPs. The algorithm combines a Monte-Carlo update of the agent's belief state with a Monte-Carlo tree search from the current belief state. The new algorithm, POMCP, has two important properties. First, Monte-Carlo sampling is used to break the curse of dimensionality both during belief state updates and during planning. Second, only a black box simulator of the POMDP is required, rather than explicit probability distributions. These properties enable POMCP to plan effectively in significantly larger POMDPs than has previously been possible. We demonstrate its effectiveness in three large POMDPs. We scale up a well-known benchmark problem, rocksample, by several orders of magnitude. We also introduce two challenging new POMDPs: 10 × 10 battleship and partially observable PacMan, with approximately 10 18 and 10 56 states respectively. Our Monte-Carlo planning algorithm achieved a high level of performance with no prior knowledge, and was also able to exploit simple domain knowledge to achieve better results with less search. POMCP is the first general purpose planner to achieve high performance in such large and unfactored POMDPs.},
+@incollection{Silver2010,
+	title = {Monte-Carlo Planning in Large POMDPs},
 	author = {Silver, David and Veness, Joel},
-	booktitle = {Advances in Neural Information Processing Systems 23: 24th Annual Conference on Neural Information Processing Systems 2010, NIPS 2010},
-	isbn = {9781617823800},
-	title = {{Monte-Carlo planning in large POMDPs}},
-	year = {2010}
+	booktitle = {Advances in Neural Information Processing Systems 23},
+	editor = {J. D. Lafferty and C. K. I. Williams and J. Shawe-Taylor and R. S. Zemel and A. Culotta},
+	pages = {2164--2172},
+	year = {2010},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/4031-monte-carlo-planning-in-large-pomdps.pdf},
+	month=dec,
+	address = {Vancouver, Canada}
 }
 
 @article{Kalman1960,
@@ -988,15 +1071,20 @@ isbn="978-3-642-36279-8"
   year = {1960}
 }
 
-@inproceedings{VanDenBerg2017,
-	abstract = {We present an approach to motion planning under motion and sensing un-certainty, formally described as a continuous partially-observable Markov decision process (POMDP). Our approach is designed for non-linear dynamics and observation models, and follows the general POMDP solution framework in which we represent beliefs by Gaussian distributions, approximate the belief dynamics using an extended Kalman filter (EKF), and represent the value function by a quadratic function that is valid in the vicinity of a nominal trajectory through belief space. Using a variant of differential dynamic programming, our approach iterates with second-order convergence towards a linear control policy over the belief space that is locally-optimal with respect to a user-defined cost function. Unlike previous work, our approach does not assume maximum-likelihood observations, does not assume fixed estimator or control gains, takes into account obstacles in the environment, and does not require discretization of the belief space. The running time of the algorithm is polynomial in the dimension of the state space. We demonstrate the potential of our approach in several continuous partially-observable planning domains with obstacles for robots with non-linear dynamics and observation models.},
-	author = {{Van Den Berg}, Jur and Patil, Sachin and Alterovitz, Ron},
-	booktitle = {Springer Tracts in Advanced Robotics},
-	doi = {10.1007/978-3-319-29363-9_27},
-	isbn = {9783319293622},
-	issn = {1610742X},
-	title = {{Motion planning under uncertainty using differential dynamic programming in belief space}},
-	year = {2017}
+@Inbook{VanDenBerg2017,
+	author="van den Berg, Jur
+	and Patil, Sachin
+	and Alterovitz, Ron",
+	title="Motion Planning Under Uncertainty Using Differential Dynamic Programming in Belief Space",
+	bookTitle="Robotics Research : The 15th International Symposium ISRR",
+	year="2017",
+	publisher="Springer International Publishing",
+	address="Cham",
+	pages="473--490",
+	abstract="We present an approach to motion planning under motion and sensing un-certainty, formally described as a continuous partially-observable Markov decision process (POMDP). Our approach is designed for non-linear dynamics and observation models, and follows the general POMDP solution framework in which we represent beliefs by Gaussian distributions, approximate the belief dynamics using an extended Kalman filter (EKF), and represent the value function by a quadratic function that is valid in the vicinity of a nominal trajectory through belief space. Using a variant of differential dynamic programming, our approach iterates with second-order convergence towards a linear control policy over the belief space that is locally-optimal with respect to a user-defined cost function. Unlike previous work, our approach does not assume maximum-likelihood observations, does not assume fixed estimator or control gains, takes into account obstacles in the environment, and does not require discretization of the belief space. The running time of the algorithm is polynomial in the dimension of the state space. We demonstrate the potential of our approach in several continuous partially-observable planning domains with obstacles for robots with non-linear dynamics and observation models.",
+	isbn="978-3-319-29363-9",
+	doi="10.1007/978-3-319-29363-9_27",
+	url="https://doi.org/10.1007/978-3-319-29363-9_27"
 }
 
 @inproceedings{Brechtel2011,
@@ -1014,12 +1102,15 @@ isbn="978-3-642-36279-8"
 	archivePrefix = {arXiv},
 	arxivId = {1905.00988},
 	author = {Sun, Liting and Zhan, Wei and Chan, Ching Yao and Tomizuka, Masayoshi},
-	booktitle = {IEEE Intelligent Vehicles Symposium, Proceedings},
+	booktitle = {2019 IEEE Intelligent Vehicles Symposium (IV)},
 	doi = {10.1109/IVS.2019.8814223},
 	eprint = {1905.00988},
 	isbn = {9781728105604},
-	title = {{Behavior planning of autonomous cars with social perception}},
-	year = {2019}
+	title = {{Behavior Planning of Autonomous Cars with Social Perception}},
+	year = {2019},
+	pages={207-213},
+	month={9-12 June},
+	address={Paris, France},
 }
 
 @Comment{Chap2_3,
@@ -1027,13 +1118,18 @@ isbn="978-3-642-36279-8"
 }
 
 @article{Sutton1999,
-	abstract = {Learning, planning, and representing knowledge at multiple levels of temporal abstraction are key, longstanding challenges in AI. The ways how to address these challenges within the mathematical framework of reinforcement learning and Markov decision processes (MDP) are discussed. A set options defined over an MDP constitutes a semi-MDP (SMDP), and the theory of SMDPs provides the foundation for the theory of options.},
-	author = {Sutton, Richard S. and Precup, Doina and Singh, Satinder},
-	doi = {10.1016/S0004-3702(99)00052-1},
-	issn = {00043702},
-	journal = {Artificial Intelligence},
-	title = {{Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning}},
-	year = {1999}
+	title = "Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning",
+	journal = "Artificial Intelligence",
+	volume = "112",
+	number = "1",
+	pages = "181 - 211",
+	year = "1999",
+	issn = "0004-3702",
+	doi = "https://doi.org/10.1016/S0004-3702(99)00052-1",
+	url = "http://www.sciencedirect.com/science/article/pii/S0004370299000521",
+	author = "Richard S. Sutton and Doina Precup and Satinder Singh",
+	keywords = "Temporal abstraction, Reinforcement learning, Markov decision processes, Options, Macros, Macroactions, Subgoals, Intra-option learning, Hierarchical planning, Semi-Markov decision processes",
+	abstract = "Learning, planning, and representing knowledge at multiple levels of temporal abstraction are key, longstanding challenges for AI. In this paper we consider how these challenges can be addressed within the mathematical framework of reinforcement learning and Markov decision processes (MDPs). We extend the usual notion of action in this framework to include options—closed-loop policies for taking action over a period of time. Examples of options include picking up an object, going to lunch, and traveling to a distant city, as well as primitive actions such as muscle twitches and joint torques. Overall, we show that options enable temporally abstract knowledge and action to be included in the reinforcement learning framework in a natural and general way. In particular, we show that options may be used interchangeably with primitive actions in planning methods such as dynamic programming and in learning methods such as Q-learning. Formally, a set of options defined over an MDP constitutes a semi-Markov decision process (SMDP), and the theory of SMDPs provides the foundation for the theory of options. However, the most interesting issues concern the interplay between the underlying MDP and the SMDP and are thus beyond SMDP theory. We present results for three such cases: (1) we show that the results of planning with options can be used during execution to interrupt options and thereby perform even better than planned, (2) we introduce new intra-option methods that are able to learn about an option from fragments of its execution, and (3) we propose a notion of subgoal that can be used to improve the options themselves. All of these results have precursors in the existing literature; the contribution of this paper is to establish them in a simpler and more general setting with fewer changes to the existing reinforcement learning framework. In particular, we show that these results can be obtained without committing to (or ruling out) any particular approach to state abstraction, hierarchy, function approximation, or the macro-utility problem."
 }
 
 @misc{ShalevShwartz2017,
@@ -1042,7 +1138,8 @@ isbn="978-3-642-36279-8"
     year={2017},
     eprint={1708.06374},
     archivePrefix={arXiv},
-    primaryClass={cs.RO}
+    primaryClass={cs.RO},
+    note={preprint}
 }
 
 @misc{ShalevShwartz2016,
@@ -1051,7 +1148,8 @@ isbn="978-3-642-36279-8"
     year={2016},
     eprint={1610.03295},
     archivePrefix={arXiv},
-    primaryClass={cs.AI}
+    primaryClass={cs.AI},
+    note={preprint}
 }
 
 @inproceedings{Paxton2017,
@@ -1059,13 +1157,16 @@ isbn="978-3-642-36279-8"
 	archivePrefix = {arXiv},
 	arxivId = {1703.07887},
 	author = {Paxton, Chris and Raman, Vasumathi and Hager, Gregory D. and Kobilarov, Marin},
-	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
+  	booktitle={2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
 	doi = {10.1109/IROS.2017.8206505},
 	eprint = {1703.07887},
 	isbn = {9781538626825},
 	issn = {21530866},
 	title = {{Combining neural networks and tree search for task and motion planning in challenging environments}},
-	year = {2017}
+	year = {2017},
+	pages={6059-6066},
+	month={24-28 Sept},
+	address = {Vancouver, BC, Canada}
 }
 
 @inproceedings{Bacon2017,
@@ -1082,15 +1183,16 @@ isbn="978-3-642-36279-8"
 }
 
 @inproceedings{Vezhnevets2017,
-abstract = {We introduce FeUdal Networks (FuNs): a novel architecture for hierarchical reinforcement learning. Our approach is inspired by the feudal reinforcement learning proposal of Dayan and Hinton, and gains power and efficacy by decoupling end-to-end learning across multiple levels-allowing it to utilise different resolutions of time. Our framework employs a Manager module and a Worker module. The Manager operates at a lower temporal resolution and sets abstract goals which are conveyed to and enacted by the Worker. The Worker generates primitive actions at every tick of the environment. The decoupled structure of FuN conveys several benefits-in ad-dition to facilitating very long timescale credit assignment it also encourages the emergence of sub-policies associated with different goals set by the Manager. These properties allow FuN to dramatically outperform a strong baseline agent on tasks that involve long-term credit assignment or memorisation.},
-archivePrefix = {arXiv},
-arxivId = {1703.01161},
-author = {Vezhnevets, Alexander Sasha and Osindero, Simon and Schaul, Tom and Heess, Nicolas and Jaderberg, Max and Silver, David and Kavukcuoglu, Koray},
-booktitle = {34th International Conference on Machine Learning, ICML 2017},
-eprint = {1703.01161},
-isbn = {9781510855144},
-title = {{FeUdal networks for hierarchical reinforcement learning}},
-year = {2017}
+	author = {Vezhnevets, Alexander Sasha and Osindero, Simon and Schaul, Tom and Heess, Nicolas and Jaderberg, Max and Silver, David and Kavukcuoglu, Koray},
+	title = {FeUdal Networks for Hierarchical Reinforcement Learning},
+	year = {2017},
+	publisher = {JMLR},
+	booktitle = {Proceedings of the 34th International Conference on Machine Learning - Volume 70},
+	month = aug,
+	pages = {3540–3549},
+	numpages = {10},
+	address = {Sydney, NSW, Australia},
+	series = {ICML’17}
 }
 
 @misc{Heess2016,
@@ -1110,44 +1212,54 @@ year = {2017}
 @inproceedings{Kuderer2015,
 	abstract = {It is expected that autonomous vehicles capable of driving without human supervision will be released to market within the next decade. For user acceptance, such vehicles should not only be safe and reliable, they should also provide a comfortable user experience. However, individual perception of comfort may vary considerably among users. Whereas some users might prefer sporty driving with high accelerations, others might prefer a more relaxed style. Typically, a large number of parameters such as acceleration profiles, distances to other cars, speed during lane changes, etc., characterize a human driver's style. Manual tuning of these parameters may be a tedious and error-prone task. Therefore, we propose a learning from demonstration approach that allows the user to simply demonstrate the desired style by driving the car manually. We model the individual style in terms of a cost function and use feature-based inverse reinforcement learning to find the model parameters that fit the observed style best. Once the model has been learned, it can be used to efficiently compute trajectories for the vehicle in autonomous mode. We show that our approach is capable of learning cost functions and reproducing different driving styles using data from real drivers.},
 	author = {Kuderer, Markus and Gulati, Shilpa and Burgard, Wolfram},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2015 IEEE International Conference on Robotics and Automation (ICRA)},
+	month = {26-30 May},
+	address = {Seattle, WA, USA},
 	doi = {10.1109/ICRA.2015.7139555},
 	issn = {10504729},
 	title = {{Learning driving styles for autonomous vehicles from demonstration}},
+	pages={2641-2646},
 	year = {2015}
 }
 
-@inproceedings{Ziebart2008,
-	abstract = {We present PROCAB, an efficient method for Probabilistically Reasoning from Observed Context-Aware Behavior. It models the context-dependent utilities and underlying reasons that people take different actions. The model generalizes to unseen situations and scales to incorporate rich contextual information. We train our model using the route preferences of 25 taxi drivers demonstrated in over 100,000 miles of collected data, and demonstrate the performance of our model by inferring: (1) decision at next intersection, (2) route to known destination, and (3) destination given partially traveled route. {\textcopyright} 2008 ACM.},
+@inbook{Ziebart2008,
 	author = {Ziebart, Brian D. and Maas, Andrew L. and Dey, Anind K. and Bagnell, J. Andrew},
-	booktitle = {UbiComp 2008 - Proceedings of the 10th International Conference on Ubiquitous Computing},
-	doi = {10.1145/1409635.1409678},
+	title = {Navigate like a Cabbie: Probabilistic Reasoning from Observed Context-Aware Behavior},
+	year = {2008},
 	isbn = {9781605581361},
-	keywords = {Decision modeling,Route prediction,Vehicle navigation},
-	title = {{Navigate like a cabbie: Probabilistic reasoning from observed context-aware behavior}},
-	year = {2008}
+	publisher = {Association for Computing Machinery},
+	address = {New York, NY, USA},
+	url = {https://doi.org/10.1145/1409635.1409678},
+	booktitle = {Proceedings of the 10th International Conference on Ubiquitous Computing (UbiComp)},
+	pages = {322–331},
+	month = sep,
+	numpages = {10}
 }
 
 @inproceedings{Ziebart2009,
 	abstract = {We present a novel approach for determining robot movements that efficiently accomplish the robot's tasks while not hindering the movements of people within the environment. Our approach models the goal-directed trajectories of pedestrians using maximum entropy inverse optimal control. The advantage of this modeling approach is the generality of its learned cost function to changes in the environment and to entirely different environments. We employ the predictions of this model of pedestrian trajectories in a novel incremental planner and quantitatively show the improvement in hindrance-sensitive robot trajectory planning provided by our approach. {\textcopyright} 2009 IEEE.},
 	author = {Ziebart, Brian D. and Ratliff, Nathan and Gallagher, Garratt and Mertz, Christoph and Peterson, Kevin and Bagnell, J. Andrew and Hebert, Martial and Dey, Anind K. and Srinivasa, Siddhartha},
-	booktitle = {2009 IEEE/RSJ International Conference on Intelligent Robots and Systems, IROS 2009},
+	booktitle = {2009 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
 	doi = {10.1109/IROS.2009.5354147},
 	isbn = {9781424438044},
 	title = {{Planning-based prediction for pedestrians}},
-	year = {2009}
+	year = {2009},
+	pages = {3931-3936},
+	month = {10-15 Oct.},
+	address = {St. Louis, MO, USA}
 }
-
 
 @inproceedings{Sadigh2016,
 	abstract = {Traditionally, autonomous cars make predictions about other drivers' future trajectories, and plan to stay out of their way. This tends to result in defensive and opaque behaviors. Our key insight is that an autonomous car's actions will actually affect what other cars will do in response, whether the car is aware of it or not. Our thesis is that we can leverage these responses to plan more efficient and communicative behaviors. We model the interaction between an autonomous car and a human driver as a dynamical system, in which the robot's actions have immediate consequences on the state of the car, but also on human actions. We model these consequences by approximating the human as an optimal planner, with a reward function that we acquire through Inverse Reinforcement Learning. When the robot plans with this reward function in this dynamical system, it comes up with actions that purposefully change human state: it merges in front of a human to get them to slow down or to reach its own goal faster; it blocks two lanes to get them to switch to a third lane; or it backs up slightly at an intersection to get them to proceed first. Such behaviors arise from the optimization, without relying on hand-coded signaling strategies and without ever explicitly modeling communication. Our user study results suggest that the robot is indeed capable of eliciting desired changes in human state by planning using this dynamical system.},
 	author = {Sadigh, Dorsa and Sastry, Shankar and Seshia, Sanjit A. and Dragan, Anca D.},
-	booktitle = {Robotics: Science and Systems},
+    booktitle = {Proceedings of Robotics: Science and Systems},
 	doi = {10.15607/rss.2016.xii.029},
 	isbn = {9780992374723},
 	issn = {2330765X},
 	title = {{Planning for autonomous cars that leverage effects on human actions}},
-	year = {2016}
+	year = {2016},
+    address = {AnnArbor, Michigan},
+    month = {June},
 }
 
 @Comment{Chap2_5,
@@ -1160,14 +1272,25 @@ year = {2017}
 	year={2020},
 	eprint={2005.01643},
 	archivePrefix={arXiv},
-	primaryClass={cs.LG}
+	primaryClass={cs.LG},
+	note={preprint}
 }
 
-@inproceedings{Laroche2019,
-	title={Safe Policy Improvement with Baseline Bootstrapping},
-	author={Laroche, Romain and Trichelair, Paul and Tachet des Combes, R\'emi},
-	booktitle={Proceedings of the International Conference on Machine Learning (ICML)},
-	year={2019}
+@InProceedings{Laroche2019,
+  title = 	 {Safe Policy Improvement with Baseline Bootstrapping},
+  author = 	 {Laroche, Romain and Trichelair, Paul and Combes, Remi Tachet Des},
+  booktitle = 	 {Proceedings of the 36th International Conference on Machine Learning},
+  pages = 	 {3652--3661},
+  year = 	 {2019},
+  editor = 	 {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+  volume = 	 {97},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Long Beach, California, USA},
+  month = 	 {09--15 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v97/laroche19a/laroche19a.pdf},
+  url = 	 {http://proceedings.mlr.press/v97/laroche19a.html},
+  abstract = 	 {This paper considers Safe Policy Improvement (SPI) in Batch Reinforcement Learning (Batch RL): from a fixed dataset and without direct access to the true environment, train a policy that is guaranteed to perform at least as well as the baseline policy used to collect the data. 	 Our approach, called SPI with Baseline Bootstrapping (SPIBB), is inspired by the knows-what-it-knows paradigm: it bootstraps the trained policy with the baseline when the uncertainty is high. 	 Our first algorithm, $\Pi_b$-SPIBB, comes with SPI theoretical guarantees. 	 We also implement a variant, $\Pi_{\leq b}$-SPIBB, that is even more efficient in practice. 	 We apply our algorithms to a motivational stochastic gridworld domain and further demonstrate on randomly generated MDPs the superiority of SPIBB with respect to existing algorithms, not only in safety but also in mean performance. 	 Finally, we implement a model-free version of SPIBB and show its benefits on a navigation task with deep RL implementation called SPIBB-DQN, which is, to the best of our knowledge, the first RL algorithm relying on a neural network representation able to train efficiently and reliably from batch data, without any interaction with the environment.}
 }
 
 @InProceedings{Nadjahi2019,
@@ -1184,7 +1307,8 @@ year = {2017}
 	booktitle="European Conference on Machine Learning and Knowledge Discovery in Databases",
 	year="2020",
 	publisher="Springer International Publishing",
-	address="Cham",
+	address="Würzburg, Germany",
+	month="16-20 Sep",
 	pages="53--68",
 	abstract="Batch Reinforcement Learning (Batch RL) consists in training a policy using trajectories collected with another policy, called the behavioural policy. Safe policy improvement (SPI) provides guarantees with high probability that the trained policy performs better than the behavioural policy, also called baseline in this setting. Previous work shows that the SPI objective improves mean performance as compared to using the basic RL objective, which boils down to solving the MDP with maximum likelihood (Laroche et al. 2019). Here, we build on that work and improve more precisely the SPI with Baseline Bootstrapping algorithm (SPIBB) by allowing the policy search over a wider set of policies. Instead of binarily classifying the state-action pairs into two sets (the uncertain and the safe-to-train-on ones), we adopt a softer strategy that controls the error in the value estimates by constraining the policy change according to the local model uncertainty. The method can take more risks on uncertain actions all the while remaining provably-safe, and is therefore less conservative than the state-of-the-art methods. We propose two algorithms (one optimal and one approximate) to solve this constrained optimization problem and empirically show a significant improvement over existing SPI algorithms both on finite MDPS and on infinite MDPs with a neural network function approximation.",
 	isbn="978-3-030-46133-1"
@@ -1204,29 +1328,38 @@ year = {2017}
 	series = {ICML ’02}
 }
 
-@inproceedings{Schulman2015,
-	abstract = {In this article, we describe a method for optimizing control policies, with guaranteed monotonic improvement. By making several approximations to the theoretically-justified scheme, we develop a practical algorithm, called Trust Region Policy Optimization (TRPO). This algorithm is effective for optimizing large nonlinear policies such as neural networks. Our experiments demonstrate its robust performance on a wide variety of tasks: learning simulated robotic swimming, hopping, and walking gaits; and playing Atari games using images of the screen as input. Despite its approximations that deviate from the theory, TRPO tends to give monotonic improvement, with little tuning of hyperparameters.},
-	archivePrefix = {arXiv},
-	arxivId = {1502.05477},
-	author = {Schulman, John and Levine, Sergey and Moritz, Philipp and Jordan, Michael and Abbeel, Pieter},
-	booktitle = {32nd International Conference on Machine Learning, ICML 2015},
-	eprint = {1502.05477},
-	isbn = {9781510810587},
-	title = {{Trust region policy optimization}},
-	year = {2015}
+@InProceedings{Schulman2015,
+  title = 	 {Trust Region Policy Optimization},
+  author = 	 {John Schulman and Sergey Levine and Pieter Abbeel and Michael Jordan and Philipp Moritz},
+  booktitle = 	 {Proceedings of the 32nd International Conference on Machine Learning},
+  pages = 	 {1889--1897},
+  year = 	 {2015},
+  editor = 	 {Francis Bach and David Blei},
+  volume = 	 {37},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Lille, France},
+  month = 	 {07--09 Jul},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v37/schulman15.pdf},
+  url = 	 {http://proceedings.mlr.press/v37/schulman15.html},
+  abstract = 	 {In this article, we describe a method for optimizing control policies, with guaranteed monotonic improvement. By making several approximations to the theoretically-justified scheme, we develop a practical algorithm, called Trust Region Policy Optimization (TRPO). This algorithm is effective for optimizing large nonlinear policies such as neural networks. Our experiments demonstrate its robust performance on a wide variety of tasks: learning simulated robotic swimming, hopping, and walking gaits; and playing Atari games using images of the screen as input. Despite its approximations that deviate from the theory, TRPO tends to give monotonic improvement, with little tuning of hyperparameters.}
 }
 
 @inproceedings{Pan2017,
-	abstract = {Reinforcement learning is considered as a promising direction for driving policy learning. However, training autonomous driving vehicle with reinforcement learning in real environment involves non-affordable trial-and-error. It is more desirable to first train in a virtual environment and then transfer to the real environment. In this paper, we propose a novel realistic translation network to make model trained in virtual environment be workable in real world. The proposed network can convert non-realistic virtual image input into a realistic one with similar scene structure. Given realistic frames as input, driving policy trained by reinforcement learning can nicely adapt to real world driving. Experiments show that our proposed virtual to real (VR) reinforcement learning (RL) works pretty well. To our knowledge, this is the first successful case of driving policy trained by reinforcement learning that can adapt to real world driving data.},
-	archivePrefix = {arXiv},
-	arxivId = {1704.03952},
-	author = {Pan, Xinlei and You, Yurong and Wang, Ziyan and Lu, Cewu},
-	booktitle = {British Machine Vision Conference 2017, BMVC 2017},
-	doi = {10.5244/c.31.11},
-	eprint = {1704.03952},
-	isbn = {190172560X},
-	title = {{Virtual to real reinforcement learning for autonomous driving}},
-	year = {2017}
+    title={Virtual to Real Reinforcement Learning for Autonomous Driving},
+    author={Xinlei Pan, Yurong You, Ziyan Wang and Cewu Lu},
+    year={2017},
+    month=sep,
+    pages={11.1-11.13},
+    articleno={11},
+    numpages={13},
+    booktitle={Proceedings of the British Machine Vision Conference (BMVC)},
+    address={London, United Kingdom},
+    publisher={BMVA Press},
+    editor={Tae-Kyun Kim, Stefanos Zafeiriou, Gabriel Brostow and Krystian Mikolajczyk},
+    doi={10.5244/C.31.11},
+    isbn={1-901725-60-X},
+    url={https://dx.doi.org/10.5244/C.31.11}
 }
 
 @misc{Liang2019,
@@ -1235,7 +1368,8 @@ year = {2017}
 	year={2019},
 	eprint={1910.06001},
 	archivePrefix={arXiv},
-	primaryClass={cs.LG}
+	primaryClass={cs.LG},
+	note={preprint}
 }
 
 @inproceedings{Tobin2017,
@@ -1243,13 +1377,16 @@ year = {2017}
 	archivePrefix = {arXiv},
 	arxivId = {1703.06907},
 	author = {Tobin, Josh and Fong, Rachel and Ray, Alex and Schneider, Jonas and Zaremba, Wojciech and Abbeel, Pieter},
-	booktitle = {IEEE International Conference on Intelligent Robots and Systems},
+	booktitle = {2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
 	doi = {10.1109/IROS.2017.8202133},
 	eprint = {1703.06907},
 	isbn = {9781538626825},
 	issn = {21530866},
 	title = {{Domain randomization for transferring deep neural networks from simulation to the real world}},
-	year = {2017}
+	year = {2017},
+	pages={23-30},
+	month={24-28 Sept},
+	address={Vancouver, BC, Canada}
 }
 
 @misc{openai2019solving,
@@ -1258,7 +1395,8 @@ year = {2017}
 	year={2019},
 	eprint={1910.07113},
 	archivePrefix={arXiv},
-	primaryClass={cs.LG}
+	primaryClass={cs.LG},
+	note={preprint}
 }
 
 @inproceedings{Prakash2019,
@@ -1266,24 +1404,30 @@ year = {2017}
 	archivePrefix = {arXiv},
 	arxivId = {1810.10093},
 	author = {Prakash, Aayush and Boochoon, Shaad and Brophy, Mark and Acuna, David and Cameracci, Eric and State, Gavriel and Shapira, Omer and Birchfield, Stan},
-	booktitle = {Proceedings - IEEE International Conference on Robotics and Automation},
+	booktitle = {2019 International Conference on Robotics and Automation (ICRA)},
+	month = {20-24 May},
+	address = {Montreal, QC, Canada},
 	doi = {10.1109/ICRA.2019.8794443},
 	eprint = {1810.10093},
 	isbn = {9781538660263},
 	issn = {10504729},
 	title = {{Structured domain randomization: Bridging the reality gap by context-aware synthetic data}},
-	year = {2019}
+	year = {2019},
+	pages={7249-7255},
 }
 
 @inproceedings{Pouyanfar2019,
 	abstract = {End-to-end deep learning has emerged as a simple and promising approach for autonomous driving recently. However, collecting large-scale real-world data representing the full spectrum of road scenarios and rare events remains the main hurdle in this area. For this purpose, this paper addresses the problem of end-to-end collision-free deep driving using only simulation data. It extends the idea of domain randomization to bridge the reality gap between simulation and the real world. Using a range of domain randomization flavors in a primitive simulation, it is shown that a model can learn to drive in realistic environments without seeing any real or photo-realistic images. The proposed work dramatically reduces the need for collecting large real-world or high-fidelity simulated datasets, along with allowing for the creation of rare events in the simulation. Finally, this is the first time domain randomization is used for the application of 'deep driving' which can avoid obstacles. The effectiveness of the proposed method is demonstrated with extensive experiments on both simulation and real-world datasets.},
 	author = {Pouyanfar, Samira and Saleem, Muneeb and George, Nikhil and Chen, Shu Ching},
-	booktitle = {IEEE Computer Society Conference on Computer Vision and Pattern Recognition Workshops},
+	booktitle={2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)},
 	doi = {10.1109/CVPRW.2019.00166},
 	isbn = {9781728125060},
 	issn = {21607516},
 	title = {{ROADS: Randomization for obstacle avoidance and driving in simulation}},
-	year = {2019}
+	year = {2019},
+	pages={1267-1276},
+	month = {16-17 June},
+	address = {Long Beach, CA, USA}
 }
 
 @InProceedings{Mueller2018,
@@ -1295,7 +1439,7 @@ year = {2017}
 	editor = 	 {Billard, Aude and Dragan, Anca and Peters, Jan and Morimoto, Jun},
 	volume = 	 {87},
 	series = 	 {Proceedings of Machine Learning Research},
-	address = 	 {},
+	address = 	 {Zürich, Switzerland},
 	month = 	 {29--31 Oct},
 	publisher =  {PMLR},
 	pdf = 	 {http://proceedings.mlr.press/v87/mueller18a/mueller18a.pdf},
@@ -1319,8 +1463,8 @@ year = {2017}
 	booktitle={2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, 
 	title={The SYNTHIA Dataset: A Large Collection of Synthetic Images for Semantic Segmentation of Urban Scenes}, 
 	year={2016},
-	volume={},
-	number={},
+	month={27-30 June},
+	address={Las Vegas, NV, USA},
 	pages={3234-3243},
 }
 
@@ -1368,32 +1512,39 @@ year = {2017}
 }
 
 @article{Moody2001,
-	abstract = {We present methods for optimizing portfolios, asset allocations, and trading systems based on direct reinforcement (DR). In this approach, investment decision making is viewed as a stochastic control problem, and strategies are discovered directly. We present an adaptive algorithm called recurrent reinforcement learning (RRL) for discovering investment policies. The need to build forecasting models is eliminated, and better trading performance is obtained. The direct reinforcement approach differs from dynamic programming and reinforcement algorithms such as TD-learning and Q-learning, which attempt to estimate a value function for the control problem. We find that the RRL direct reinforcement framework enables a simpler problem representation, avoids Bellman's curse of dimensionality and offers compelling advantages in efficiency. We demonstrate how direct reinforcement can be used to optimize risk-adjusted investment returns (including the differential Sharpe ratio), while accounting for the effects of transaction costs. In extensive simulation work using real financial data, we find that our approach based on RRL produces better trading strategies than systems utilizing Q-Learning (a value function method). Real-world applications include an intra-daily currency trader and a monthly asset allocation system for the S{\&}P 500 Stock Index and T-Bills.},
-	author = {Moody, John and Saffell, Matthew},
-	doi = {10.1109/72.935097},
-	issn = {10459227},
-	journal = {IEEE Transactions on Neural Networks},
-	keywords = {Differential Sharpe ratio,Direct reinforcement (DR),Downside deviation,Policy gradient,Q-learning,Recurrent reinforcement learning,Risk,TD-learning,Trading,Value function},
-	title = {{Learning to trade via direct reinforcement}},
-	year = {2001}
+	author={J. {Moody} and M. {Saffell}},
+	journal={IEEE Transactions on Neural Networks},
+	title={Learning to trade via direct reinforcement},
+	year={2001},
+	volume={12},
+	number={4},
+	pages={875-889},
 }
 
 @inproceedings{Tamar2012,
-	abstract = {Managing risk in dynamic decision problems is of cardinal importance in many fields such as finance and process control. The most common approach to defining risk is through various variance related criteria such as the Sharpe Ratio or the standard deviation adjusted reward. It is known that optimizing many of the variance related risk criteria is NP-hard. In this paper we devise a framework for local policy gradient style algorithms for reinforcement learning for variance related criteria. Our starting point is a new formula for the variance of the cost-to-go in episodic tasks. Using this formula we develop policy gradient algorithms for criteria that involve both the expected cost and the variance of the cost. We prove the convergence of these algorithms to local minima and demonstrate their applicability in a portfolio planning problem. Copyright 2012 by the author(s)/owner(s).},
-	author = {Tamar, Aviv and {Di Castro}, Dotan and Mannor, Shie},
-	booktitle = {Proceedings of the 29th International Conference on Machine Learning, ICML 2012},
+	author = {Tamar, Aviv and Di Castro, Dotan and Mannor, Shie},
+	title = {Policy Gradients with Variance Related Risk Criteria},
+	year = {2012},
 	isbn = {9781450312851},
-	title = {{Policy gradients with variance related risk criteria}},
-	year = {2012}
+	publisher = {Omnipress},
+	booktitle = {Proceedings of the 29th International Coference on International Conference on Machine Learning (ICML 2012)},
+	pages = {1651–1658},
+	numpages = {8},
+	address = {Edinburgh, Scotland},
+	month = jun,
+	series = {ICML’12}
 }
 
-@inproceedings{Prashanth2013,
-	abstract = {In many sequential decision-making problems we may want to manage risk by minimizing some measure of variability in rewards in addition to maximizing a standard criterion. Variance-related risk measures are among the most common risk-sensitive criteria in finance and operations research. However, optimizing many such criteria is known to be a hard problem. In this paper, we consider both discounted and average reward Markov decision processes. For each formulation, we first define a measure of variability for a policy, which in turn gives us a set of risk-sensitive criteria to optimize. For each of these criteria, we derive a formula for computing its gradient. We then devise actor-critic algorithms for estimating the gradient and updating the policy parameters in the ascent direction. We establish the convergence of our algorithms to locally risk-sensitive optimal policies. Finally, we demonstrate the usefulness of our algorithms in a traffic signal control application.},
-	author = {Prashanth, L. A. and Ghavamzadeh, Mohammad},
-	booktitle = {Advances in Neural Information Processing Systems},
-	issn = {10495258},
-	title = {{Actor-critic algorithms for risk-sensitive MDPs}},
-	year = {2013}
+@incollection{Prashanth2013,
+	title = {Actor-Critic Algorithms for Risk-Sensitive MDPs},
+	author = {L.A., Prashanth and Ghavamzadeh, Mohammad},
+	booktitle = {Advances in Neural Information Processing Systems 26},
+	editor = {C. J. C. Burges and L. Bottou and M. Welling and Z. Ghahramani and K. Q. Weinberger},
+	pages = {252--260},
+	year = {2013},
+	publisher = {Curran Associates, Inc.},
+	address = {Lake Tahoe, NV/CA, USA},
+	url = {http://papers.nips.cc/paper/4917-actor-critic-algorithms-for-risk-sensitive-mdps.pdf}
 }
 
 @article{Chow2018,
@@ -1566,16 +1717,17 @@ year = {2017}
 	pages={491-496},
 }
 
-@inproceedings{Turchetta2016,
-	abstract = {In classical reinforcement learning agents accept arbitrary short term loss for long term gain when exploring their environment. This is infeasible for safety critical applications such as robotics, where even a single unsafe action may cause system failure or harm the environment. In this paper, we address the problem of safely exploring finite Markov decision processes (MDP). We define safety in terms of an a priori unknown safety constraint that depends on states and actions and satisfies certain regularity conditions expressed via a Gaussian process prior. We develop a novel algorithm, SAFEMDP, for this task and prove that it completely explores the safely reachable part of the MDP without violating the safety constraint. To achieve this, it cautiously explores safe states and actions in order to gain statistical confidence about the safety of unvisited state-action pairs from noisy observations collected while navigating the environment. Moreover, the algorithm explicitly considers reachability when exploring the MDP, ensuring that it does not get stuck in any state with no safe way out. We demonstrate our method on digital terrain models for the task of exploring an unknown map with a rover.},
-	archivePrefix = {arXiv},
-	arxivId = {1606.04753},
+@incollection{Turchetta2016,
+	title = {Safe Exploration in Finite Markov Decision Processes with Gaussian Processes},
 	author = {Turchetta, Matteo and Berkenkamp, Felix and Krause, Andreas},
-	booktitle = {Advances in Neural Information Processing Systems},
-	eprint = {1606.04753},
-	issn = {10495258},
-	title = {{Safe exploration in finite Markov decision processes with Gaussian processes}},
-	year = {2016}
+	booktitle = {Advances in Neural Information Processing Systems 29},
+	editor = {D. D. Lee and M. Sugiyama and U. V. Luxburg and I. Guyon and R. Garnett},
+	pages = {4312--4320},
+	year = {2016},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/6358-safe-exploration-in-finite-markov-decision-processes-with-gaussian-processes.pdf},
+	month=dec,
+	address={Barcelona, Spain}
 }
 
 @book{Altman1999,
@@ -1602,7 +1754,6 @@ year = {2017}
   abstract = 	 {For many applications of reinforcement learning it can be more convenient to specify both a reward function and constraints, rather than trying to design behavior through the reward function. For example, systems that physically interact with or around humans should satisfy safety constraints. Recent advances in policy search algorithms (Mnih et al., 2016, Schulman et al., 2015, Lillicrap et al., 2016, Levine et al., 2016) have enabled new capabilities in high-dimensional control, but do not consider the constrained setting. We propose Constrained Policy Optimization (CPO), the first general-purpose policy search algorithm for constrained reinforcement learning with guarantees for near-constraint satisfaction at each iteration. Our method allows us to train neural network policies for high-dimensional control while making guarantees about policy behavior all throughout training. Our guarantees are based on a new theoretical result, which is of independent interest: we prove a bound relating the expected returns of two policies to an average divergence between them. We demonstrate the effectiveness of our approach on simulated robot locomotion tasks where the agent must satisfy constraints motivated by safety.}
 }
 
-
 @inproceedings{Tessler2019,
 	abstract = {Solving tasks in Reinforcement Learning is no easy feat. As the goal of the agent is to maximize the accumulated reward, it often learns to exploit loopholes and misspecifications in the reward signal resulting in unwanted behavior. While constraints may solve this issue, there is no closed form solution for general constraints. In this work, we present a novel multi-timescale approach for constrained policy optimization, called 'Reward Constrained Policy Optimization' (RCPO), which uses an alternative penalty signal to guide the policy towards a constraint satisfying one. We prove the convergence of our approach and provide empirical evidence of its ability to train constraint satisfying policies.},
 	archivePrefix = {arXiv},
@@ -1611,14 +1762,30 @@ year = {2017}
 	booktitle = {7th International Conference on Learning Representations, ICLR 2019},
 	eprint = {1805.11074},
 	title = {{Reward constrained policy optimization}},
+	address={New Orleans, LA, USA},
+	month=may,
 	year = {2019}
 }
 
-@article{leung2018infusing,
-	title={On infusing reachability-based safety assurance within probabilistic planning frameworks for human-robot vehicle interactions},
-	author={Leung, Karen and Schmerling, Edward and Chen, Mo and Talbot, John and Gerdes, J Christian and Pavone, Marco},
-	journal={arXiv preprint arXiv:1812.11315},
-	year={2018}
+@InProceedings{leung2018infusing,
+	author="Leung, Karen
+	and Schmerling, Edward
+	and Chen, Mo
+	and Talbot, John
+	and Gerdes, J. Christian
+	and Pavone, Marco",
+	editor="Xiao, Jing
+	and Kr{\"o}ger, Torsten
+	and Khatib, Oussama",
+	title="On Infusing Reachability-Based Safety Assurance Within Probabilistic Planning Frameworks for Human-Robot Vehicle Interactions",
+	booktitle="Proceedings of the 2018 International Symposium on Experimental Robotics (ISER 2018)",
+	year="2020",
+	publisher="Springer International Publishing",
+	address="Buenos Aires, Argentina",
+	month=nov,
+	pages="561--574",
+	abstract="Action anticipation, intent prediction, and proactive behavior are all desirable characteristics for autonomous driving policies in interactive scenarios. Paramount, however, is ensuring safety on the road---a key challenge in doing so is accounting for uncertainty in human driver actions without unduly impacting planner performance. This paper introduces a minimally-interventional safety controller operating within an autonomous vehicle control stack with the role of ensuring collision-free interaction with an externally controlled (e.g., human-driven) counterpart. We leverage reachability analysis to construct a real-time (100 Hz) controller that serves the dual role of (1) tracking an input trajectory from a higher-level planning algorithm using model predictive control, and (2) assuring safety through maintaining the availability of a collision-free escape maneuver as a persistent constraint regardless of whatever future actions the other car takes. A full-scale steer-by-wire platform is used to conduct traffic weaving experiments wherein the two cars, initially side-by-side, must swap lanes in a limited amount of time and distance, emulating cars merging onto/off of a highway. We demonstrate that, with our control stack, the autonomous vehicle is able to avoid collision even when the other car defies the planner's expectations and takes dangerous actions, either carelessly or with the intent to collide, and otherwise deviates minimally from the planned trajectory to the extent required to maintain safety.",
+	isbn="978-3-030-33950-0"
 }
 
 @article{Fisac2019,
@@ -1638,16 +1805,21 @@ year = {2017}
     pages={2737-2752},
 }
 
-@inproceedings{Le2019,
-	abstract = {When learning policies for real-world domains, two important questions arise: (i) how to efficiently use pre-collected off-policy, non-optimal behavior data; and (ii) how to mediate among different competing objectives and constraints. We thus study the problem of batch policy learning under multiple constraints, and offer a systematic solution. We first propose a flexible meta-algorithm that admits any batch reinforcement learning and online learning procedure as subroutines. We then present a specific algorithmic instantiation and provide performance guarantees for the main objective and all constraints. As part of off-policy learning, we propose a simple method for off-policy policy evaluation (OPR) and derive PAC-style bounds. Our algorithm achieves strong empirical results in different domains, including in a challenging problem of simulated car driving subject to multiple constraints such as lane keeping and smooth driving. We also show experimentally that our OPR method outperforms other popular OPR techniques on a standalone basis, especially in a high-dimensional setting.},
-	archivePrefix = {arXiv},
-	arxivId = {1903.08738},
-	author = {Le, Hoang M. and Voloshin, Cameron and Yue, Yisong},
-	booktitle = {36th International Conference on Machine Learning, ICML 2019},
-	eprint = {1903.08738},
-	isbn = {9781510886988},
-	title = {{Batch policy learning under constraints}},
-	year = {2019}
+@InProceedings{Le2019,
+  title = 	 {Batch Policy Learning under Constraints},
+  author = 	 {Le, Hoang and Voloshin, Cameron and Yue, Yisong},
+  booktitle = 	 {Proceedings of the 36th International Conference on Machine Learning},
+  pages = 	 {3703--3712},
+  year = 	 {2019},
+  editor = 	 {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+  volume = 	 {97},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Long Beach, California, USA},
+  month = 	 {09--15 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v97/le19a/le19a.pdf},
+  url = 	 {http://proceedings.mlr.press/v97/le19a.html},
+  abstract = 	 {When learning policies for real-world domains, two important questions arise: (i) how to efficiently use pre-collected off-policy, non-optimal behavior data; and (ii) how to mediate among different competing objectives and constraints. We thus study the problem of batch policy learning under multiple constraints, and offer a systematic solution. We first propose a flexible meta-algorithm that admits any batch reinforcement learning and online learning procedure as subroutines. We then present a specific algorithmic instantiation and provide performance guarantees for the main objective and all constraints. As part of off-policy learning, we propose a simple method for off-policy policy evaluation (OPE) and derive PAC-style bounds. Our algorithm achieves strong empirical results in different domains, including in a challenging problem of simulated car driving subject to multiple constraints such as lane keeping and smooth driving. We also show experimentally that our OPE method outperforms other popular OPE techniques on a standalone basis, especially in a high-dimensional setting.}
 }
 
 @inproceedings{Torossian19a,
@@ -1746,31 +1918,34 @@ year = {2017}
 @inproceedings{Lu2019,
 	abstract = {An adaptive Model Predictive Control (adaptive MPC) strategy is proposed for linear systems with constant unknown model parameters, bounded additive disturbances and state and control constraints. By combining online set-based identification and robust tube MPC, the proposed controller reduces the conservativeness of constraint handling, guarantees recursive feasibility and provides asymptotic bounds on the closed loop system state that depend explicitly on the the identified parameter set. Computational tractability is ensured by using fixed complexity polytopic sets to bound the model parameters and predicted states. Convex conditions for persistence of excitation are considered. The results are illustrated by a numerical example.},
 	author = {Lu, Xiaonan and Cannon, Mark},
-	booktitle = {Proceedings of the American Control Conference},
+	booktitle = {2019 American Control Conference (ACC)},
+	month={10-12 July},
+	address={ Philadelphia, PA, USA},
 	isbn = {9781538679265},
 	issn = {07431619},
 	title = {{Robust adaptive tube model predictive control}},
-	year = {2019}
+	year = {2019},
+	pages={3695-3701},
 }
 
 @INPROCEEDINGS{Kohler2019,
 	author={J. {Köhler} and E. {Andina} and R. {Soloperto} and M. A. {Müller} and F. {Allgöwer}},
-	booktitle={2019 IEEE 58th Conference on Decision and Control (CDC)}, 
-	title={Linear robust adaptive model predictive control: Computational complexity and conservatism}, 
+	booktitle={2019 IEEE 58th Conference on Decision and Control (CDC)},
+	title={Linear robust adaptive model predictive control: Computational complexity and conservatism},
 	year={2019},
-	volume={},
-	number={},
+	month=dec,
+	address={Nice, France},
 	pages={1383-1388},
 }
 
-@article{Macek2009,
-	abstract = {This paper describes the deliberative part of a navigation architecture designed for safe vehicle navigation in dynamic urban environments. It comprises two key modules working together in a hierarchical fashion: (a) the Route Planner whose purpose is to compute a valid itinerary towards the a given goal. An itinerary comprises a geometric path augmented with additional information based on the structure of the environment considered and traffic regulations, and (b) the Partial Motion Planner whose purpose is to ensure the proper following of the itinerary while dealing with the moving objects present in the environment (eg other vehicles, pedestrians). In the architecture proposed, a special attention is paid to the motion safety issue, ie the ability to avoid collisions. Different safety levels are explored and their operational conditions are explicitly spelled out (something which is usually not done).},
-	author = {Ma{\^{c}}ek, Kristijan and Vasquez, Dizan and Fraichard, Thierry and Siegwart, Roland},
-	issn = {00051144},
-	journal = {Automatika},
-	keywords = {Dynamic environment,Motion planning,Motion safety,Urban navigation},
-	title = {{Towards safe vehicle navigation in dynamic urban scenarios}},
-	year = {2009}
+@INPROCEEDINGS{Macek2009,
+  author = {Ma{\^{c}}ek, Kristijan and Vasquez, Dizan and Fraichard, Thierry and Siegwart, Roland},
+  booktitle={2008 11th International IEEE Conference on Intelligent Transportation Systems (ITSC)},
+  title={Safe Vehicle Navigation in Dynamic Urban Scenarios},
+  month={12-15 Oct},
+  address={Beijing, China},
+  year={2008},
+  pages={482-489},
 }
 
 ﻿@article{Bouraine2012,
@@ -1804,32 +1979,29 @@ year = {2017}
 }
 
 @article{Mitsch2017,
-	abstract = {This article answers fundamental safety questions for ground robot navigation: under which circumstances does which control decision make a ground robot safely avoid obstacles? Unsurprisingly, the answer depends on the exact formulation of the safety objective, as well as the physical capabilities and limitations of the robot and the obstacles. Because uncertainties about the exact future behavior of a robot's environment make this a challenging problem, we formally verify corresponding controllers and provide rigorous safety proofs justifying why the robots can never collide with the obstacle in the respective physical model. To account for ground robots in which different physical phenomena are important, we analyze a series of increasingly strong properties of controllers for increasingly rich dynamics and identify the impact that the additional model parameters have on the required safety margins. We analyze and formally verify: (i) static safety, which ensures that no collisions can happen with stationary obstacles; (ii) passive safety, which ensures that no collisions can happen with stationary or moving obstacles while the robot moves; (iii) the stronger passive-friendly safety, in which the robot further maintains sufficient maneuvering distance for obstacles to avoid collision as well; and (iv) passive orientation safety, which allows for imperfect sensor coverage of the robot, i.e., the robot is aware that not everything in its environment will be visible. We formally prove that safety can be guaranteed despite sensor uncertainty and actuator perturbation. We complement these provably correct safety properties with liveness properties: we prove that provably safe motion is flexible enough to let the robot navigate waypoints and pass intersections. To account for the mixed influence of discrete control decisions and the continuous physical motion of the ground robot, we develop corresponding hybrid system models and use differential dynamic logic theorem-proving techniques to formally verify their correctness. Since these models identify a broad range of conditions under which control decisions are provably safe, our results apply to any control algorithm for ground robots with the same dynamics. As a demonstration, we also synthesize provably correct runtime monitor conditions that check the compliance of any control algorithm with the verified control decisions.},
-	archivePrefix = {arXiv},
-	arxivId = {1605.00604},
-	author = {Mitsch, Stefan and Ghorbal, Khalil and Vogelbacher, David and Platzer, Andr{\'{e}}},
+	author = {Stefan Mitsch and Khalil Ghorbal and David Vogelbacher and André Platzer},
+	title ={Formal verification of obstacle avoidance and navigation of ground robots},
+	journal = {The International Journal of Robotics Research},
+	volume = {36},
+	number = {12},
+	pages = {1312-1340},
+	year = {2017},
 	doi = {10.1177/0278364917733549},
-	eprint = {1605.00604},
-	issn = {17413176},
-	journal = {International Journal of Robotics Research},
-	keywords = {Provable correctness,ground robot,hybrid systems,navigation,obstacle avoidance,theorem proving},
-	title = {{Formal verification of obstacle avoidance and navigation of ground robots}},
-	year = {2017}
 }
-
 
 @Comment{Chap3,
 	title = {Problem Statement},
 }
 
-
 @article{Kesting2007,
-	abstract = {A general model (minimizing overall braking induced by lane change, MOBIL) is proposed to derive lane-changing rules for discretionary and mandatory lane changes for a wide class of car-following models. Both the utility of a given lane and the risk associated with lane changes are determined In terms of longitudinal accelerations calculated with micro-scopic traffic models. This determination allows for the formulation of compact and general safety and incentive criteria for both symmetric and asymmetric passing rules. Moreover, anticipative elements and the crucial influence of velocity differences of these car-following models are automatically transferred to the lane-changing rules. Although the safety criterion prevents critical lane changes and collisions, the incentive criterion takes into account the advantages and disadvantages of other drivers associated with a lane change via the "politeness factor." The parameter allows one to vary the motivation for lane changing from purely egoistic to more cooperative driving behavior. This novel feature allows one first to prevent lane changes for a marginal advantage if they obstruct other drivers and second to let an aggressive driver induce the lane change of a slower driver ahead in order to no longer be obstructed. This phenomenon is common for asymmetric passing rules with a dedicated lane for passing. The model is applied to traffic simulations of cars and trucks with the Intelligent driver model as the underlying car-following model. An open system with an on-ramp is studied, and the resulting lanechanging rate is investigated as a function of the spatial coordinate as well as a function of traffic density.},
-	author = {Kesting, Arne and Treiber, Martin and Helbing, Dirk},
-	doi = {10.3141/1999-10},
-	isbn = {9780309104258},
-	issn = {03611981},
+	author = {Arne Kesting and Martin Treiber and Dirk Helbing},
+	title ={General Lane-Changing Model MOBIL for Car-Following Models},
 	journal = {Transportation Research Record},
-	title = {{General lane-changing model MOBIL for car-following models}},
-	year = {2007}
+	volume = {1999},
+	number = {1},
+	pages = {86-94},
+	year = {2007},
+	doi = {10.3141/1999-10},
 }
+
+
