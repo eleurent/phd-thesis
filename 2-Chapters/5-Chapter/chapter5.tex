@@ -1016,3 +1016,23 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
 
 
 \end{subappendices}
+
+
+\chapter*{Part Conclusion:\\ {\Large Review of our Requirements}}
+
+\markboth{Part Conclusion}{Part Conclusion}
+
+% Are they met?
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{lcX}
+		\toprule
+		Criterion & Met & Description \\
+		\midrule
+		\textbf{Social Awareness} & $\hlr{\checkmark}$ & using the ego-attention architecture to actively attend to other vehicles \\
+		\textbf{Sample Efficiency} & $\hlr{\checkmark}$ & social-awareness is an inductive bias wich fastens training \\
+		\textbf{Safety} & $\hlr{\checkmark}$ & a cost signal is constrained to remain below a threshold budget \\
+		\textbf{Balance between safety and efficiency} & $\hlr{\checkmark}$ & the budget beta can be adjusted in real time as an input to the budgeted policy to tradeoff safety with/ efficiency
+		\bottomrule
+	\end{tabularx}
+\end{table}
