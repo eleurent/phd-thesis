@@ -80,19 +80,19 @@ Thus, since $Q^{\star}$ is a fixed-point of a contracting operator, it can be co
 In order to apply a reinforcement learning algorithm such as \gls{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. The state should at least contain a description of every nearby vehicle, when social interactions are relevant to the decision. We recall our definition \eqref{eq:state-space} of $\cS$ from \Cref{chapter:3}, in which a vehicle driving on a road is described by it's continuous position, heading and velocity, and the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N_v$ other vehicles can be described by a list of individual vehicle states:
 \begin{equation*}
 s = \begin{bmatrix}
-x_0 & y_0 & v_0 & \psi_0\\
+p^x_0 & p^y_0 & v_0 & \psi_0\\
 \vdots & \vdots & \vdots & \vdots\\
-x_{N_v} & y_{N_v} & v_{N_v} & \psi_{N_v}\\
+p^x_{N_v} & p^y_{N_v} & v_{N_v} & \psi_{N_v}\\
 \end{bmatrix}
 \in\gls+{cS} \eqdef\Real^{(N_v+1) \times 4}.
 \end{equation*}
 
-This description was appropriate to simply describe the system dynamics. However, it has several drawbacks when used for function approximation: because of its $2\pi$-periodicity, the heading $\psi_i$ is either clipped to $(-\pi, \pi]$ which causes a discontinuity at $\pm\pi$, or unclipped which causes several inputs to correspond to the same state. Likewise, the forward velocity $v_i$ needs to be combined with the heading $\psi_i$ and projected to inform the future positions $x_i,\,y_i$ of the vehicle $i$. Consequently, we slightly modify the features describing the vehicle states as
+This description was appropriate to simply describe the system dynamics. However, it has several drawbacks when used for function approximation: because of its $2\pi$-periodicity, the heading $\psi_i$ is either clipped to $(-\pi, \pi]$ which causes a discontinuity at $\pm\pi$, or unclipped which causes several inputs to correspond to the same state. Likewise, the forward velocity $v_i$ needs to be combined with the heading $\psi_i$ and projected to inform the future positions $p^x_i,\,p^y_i$ of the vehicle $i$. Consequently, we slightly modify the features describing the vehicle states as
 \begin{equation}
 s = \left(s_i \right)_{i \in [0, N_v]}\qquad
 \text{where}\qquad
 s_i = \begin{bmatrix}
-x_i & y_i & \dot{x}_i & \dot{y}_i & \cos\psi_i & \sin \psi_i
+p^x_i & p^y_i & \dot{p}^x_i & \dot{p}^y_i & \cos\psi_i & \sin \psi_i
 \end{bmatrix}
 \label{eq:coordinates}
 \end{equation}
@@ -115,7 +115,7 @@ This encoding is efficient in the sense that it uses the smallest quantity of in
 \policy(\cdot|(s_0, s_1,\dotsc,s_{N_v})) = \policy(\cdot|(s_0, s_{\tau(1)},\dotsc,s_{\tau(N_v)})), \quad\quad\quad \forall\tau \in \mathfrak{S}_{N_v},
 \end{equation}
 where $\mathfrak{S}_{N_v}$ is the \emph{symmetric} group of permutations of the integer range $[1,N_v]$.
-A popular way to address this limitations is to use a \emph{spatial grid} representation. Instead of explicitly representing spatial information as variables $x, y$ along with other features $f$ directly inside a state $\{s_i=(x_i,y_i,f_i)\}_{i\in[0,N]}$ indexed on the vehicles, they are instead represented implicitly through the layout of several feature variables $f_{ij}$ organised in a tensor structure, where the $(i,j)$ indexes refer to a quantisation of the 2D-space. This representation is illustrated in \Cref{fig:representation} (right). Note that the size of this tensor is related to the area covered divided by the quantisation step, which reflects a trade-off between accuracy and dimensionality.
+A popular way to address this limitations is to use a \emph{spatial grid} representation. Instead of explicitly representing spatial information as variables $x, y$ along with other features $f$ directly inside a state $\{s_i=(p^x_i,p^y_i,f_i)\}_{i\in[0,N]}$ indexed on the vehicles, they are instead represented implicitly through the layout of several feature variables $f_{ij}$ organised in a tensor structure, where the $(i,j)$ indexes refer to a quantisation of the 2D-space. This representation is illustrated in \Cref{fig:representation} (right). Note that the size of this tensor is related to the area covered divided by the quantisation step, which reflects a trade-off between accuracy and dimensionality.
 In an occupancy grid, the $f$ features contains presence information (0-1) and additional channels such as velocity and heading, as in \citep[e.g.][]{Isele2018, Fridman2018, Bansal2018, Rehder2017c}. Another example is the use of top-view RGB images \citep[e.g.][]{Bagnell2010, Rehder2017, Rehder2017c, Liu2018}.
 
 

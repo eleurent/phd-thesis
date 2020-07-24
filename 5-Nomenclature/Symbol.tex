@@ -39,8 +39,8 @@
 
 % --- Probabilities
 
-\newglossaryentry{expectedvalue}{name={\mathbb{E}},description={expectation under a probabilistic model},type=symbols, category=symbol, sort={ap}}
-\newglossaryentry{variance}{name={\mathbb{V}},description={variance under a probabilistic model},type=symbols, category=symbol, sort={ap}}
+\newglossaryentry{expectedvalue}{name={$\mathbb{E}$},description={expectation under a probabilistic model},type=symbols, category=symbol, sort={ap}}
+\newglossaryentry{variance}{name={$\mathbb{V}$},description={variance under a probabilistic model},type=symbols, category=symbol, sort={ap}}
 
 \newglossaryentry{cM}{name={$\mathcal{M}(\cX)$}, text={\var{\mathcal{M}}},description={set of probability measures on a measurable space $\cX$},type=symbols, category=symbol, sort={ap}}
 \newcommand{\cM}{\gls{cM}}
@@ -185,3 +185,13 @@
 
 
 % --- Chapter 7
+
+\newglossaryentry{timestep}{name={\var{\mathrm{d} t}},description={time step at which \gls{MPC} controls are applied},type=symbols, category=symbol}
+\newcommand{\timestep}{\gls{timestep}}
+
+\newglossaryentry{confidence}{name={\var{\delta}},description={confidence level for statistical estimates, in $(0, 1]$] },type=symbols, category=symbol}
+\newcommand{\confidence}{{\gls{confidence}}}
+
+
+\newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\params$, such that $\mathbb{P}(\params\in\confidenceset) \geq 1-\confidence$.},type=symbols, category=symbol}
+\newcommand{\confidenceset}{\gls{confidenceset}}

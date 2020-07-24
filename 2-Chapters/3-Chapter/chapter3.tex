@@ -51,7 +51,7 @@ Namely, we take the liberty of assuming to a noise-free access to every feature 
 As mentioned in \Cref{chapter:1}, the main challenge of Behavioural Planning is to interact with other vehicles. Therefore, the state should include a description of every vehicle nearby. In addition to the ego-vehicle, indexed by 0, the scene contains a number $N_v$ of other vehicles indexed by the range $[1, N_v]$.
 Any vehicle of index $i\in[0,N_v]$ is represented by 
 \begin{enumerate}[label=(\roman*)]
-	\item its position $(x_i, y_i)\in\Real^2$,
+	\item its position $(p^x_{i}, p^y_{i})\in\Real^2$,
 	\item its forward speed $v_i\in\Real$, 
 	\item its heading $\psi_i\in\Real$.
 \end{enumerate}
@@ -60,9 +60,9 @@ The resulting joint state is the traffic description:
 \begin{equation}
 \label{eq:state-space}
 s = \begin{bmatrix}
-x_0 & y_0 & v_0 & \psi_0\\
+p^x_{0} & p^y_{0} & v_0 & \psi_0\\
 \vdots & \vdots & \vdots & \vdots\\
-x_{N_v} & y_{N_v} & v_{N_v} & \psi_{N_v}\\
+p^x_{{N_v}} & p^y_{{N_v}} & v_{N_v} & \psi_{N_v}\\
 \end{bmatrix}
 \in\gls+{cS} \eqdef\Real^{(N_v+1) \times 4}.
 \end{equation}
@@ -75,9 +75,9 @@ We also assume knowledge of the road network, comprising:
 	\item a graph description of the network topology, where the nodes represent intersections and the edges represent road segments;
 	\item the geometry of every lane $L$ in the network (every edge), described by its centre-line parametric curve
 	$
-	s \rightarrow (x_{L}(s), y_{L}(s))\in \Real^2,
+	s \rightarrow (p^x_{L}(s), p^y_{L}(s))\in \Real^2,
 	$
-	\noindent and heading $\psi_L:s \rightarrow \tan^{-1}\left({\odv{y_L}{s}(s)}/{\odv{x_L}{s}(s)}\right) \in \Real$
+	\noindent and heading $\psi_L:s \rightarrow \tan^{-1}\left({\odv{p^y_{L}}{s}(s)}/{\odv{p^x_{L}}{s}(s)}\right) \in \Real$
 	(tangent to the curve) where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
 \end{enumerate}
 
@@ -112,8 +112,8 @@ This section describes how the behavioural decisions influence the evolution of 
 We represent the non-holonomic motion capabilities of every vehicle $i\in[0, N_v]$ in the scene by the Kinematic Bicycle Model \citep[see \eg][]{Polack2017}:
 \begin{align}
 \begin{split}
-\dot{x}_i &= v_i\cos(\psi_i + \beta_i), \\
-\dot{y}_i &= v_i\sin(\psi_i + \beta_i),\\
+\dot{p}^x_i &= v_i\cos(\psi_i + \beta_i), \\
+\dot{p}^y_i &= v_i\sin(\psi_i + \beta_i),\\
 \dot{v}_i &= a_i,\\
 \dot{\psi}_i &= \frac{v_i}{l}\sin(\beta_i),
 \end{split}
@@ -122,12 +122,12 @@ where $l$ is the vehicle half-length, $a_i$ is the throttle command and $\beta_i
 
 \subsection{Motion planning and control}
 
-We equip the ego-vehicle --and also other vehicles $i\in[0, N_v]$ in the scene-- with a capability to execute the meta actions $\cA$. This requires the ability to follow a lane $L_i$, described by the road information mentioned above through its lateral position $y_{L_i}$ and heading $\psi_{L_i}$ . To that end, vehicles follow a cascade controller of lateral position and heading in the form
+We equip the ego-vehicle --and also other vehicles $i\in[0, N_v]$ in the scene-- with a capability to execute the meta actions $\cA$. This requires the ability to follow a lane $L_i$, described by the road information mentioned above through its lateral position $p^y_{L_i}$ and heading $\psi_{L_i}$ . To that end, vehicles follow a cascade controller of lateral position and heading in the form
 \begin{align}
 \label{eq:heading-command}
 \begin{split}
 \dot{\psi}_i &= K_i^\psi\left(\psi_{L_i}+\sin^{-1}\left(\frac{\tilde{v}_{i,y}}{v_i}\right)-\psi_i\right),\\
-\tilde{v}_{i,y} &= K_i^y (y_{L_i}-y_i),
+\tilde{v}_{i,y} &= K_i^y (p^y_{L_i}-p^y_i),
 \end{split}
 \end{align}
 where $K_i^y\in\Real$ and $K_i^\psi\in\Real$ are control gains.
