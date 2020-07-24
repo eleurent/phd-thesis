@@ -21,8 +21,6 @@ This third part studies model-based \gls{RL} algorithms, that estimate the \gls{
 In this chapter, we focus on this planning step under real-time requirements, which calls for provably and empirically sample-efficient algorithms. Since our continuous state space $\cS$ precludes the use of Dynamic Programming, we consider tree-based planning algorithms. First, to handle uncertain human behaviours modelled as \emph{stochastic} dynamics, we consider the \OLOP algorithm, highlight its faulty behaviour and propose a modified version that alleviates this issue. Second, we tackle a paradox: despite the \gls{MDP} transitions having a graph structure, \gls{MCTS} algorithms use a tree structure that prevents them from merging similar states. We show that doing so with a graph-based planner better exploits the structure of motion planning problems where trajectories tend to overlap.\footnote{This chapter is based on two articles, published and submitted to the \emph{2019 European} and \emph{2020 Asian Conferences on Machine Learning}, respectively \citep{Leurent2020practical,Leurent2020monte}.}
 \minitocStartChapter{}
 
-% TODO: revoir la biblio de ce chapitre, limiter les abbreviations
-
 \section{Motivation}
 
 In this chapter, we assume that an \emph{estimation oracle} provides us with a good estimate of the \gls{MDP} $(\cS, \cA, \Ps, \reward, \discount)$, and we ponder over the \emph{planning} problem: how to compute the corresponding optimal policy $\policy^\star$?
@@ -850,7 +848,7 @@ This enables to define a measure of the difficulty of a planning problem.
 This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the subtree $T^\infty=\bigcup_h T_h^\infty$ of near-optimal nodes that can be sampled by \OPD, and acts as an effective branching factor as opposed to the true branching factor $K$. When $\hlrb{\kappa}$ is small, fewer nodes must be explored at a given depth allowing the algorithm to plan deeper for a given budget $n$. Thus, it directly impacts the simple regret that can be achieved by \OPD when run on a given MDP.
 
 
-\begin{theorem}[Regret bound of \citealt{Hren2008}]
+\begin{theorem}[Regret bound of \citealp{Hren2008}]
 	\begin{leftbar}[theorembar]
 	\label{thm:regret-opd}
 	The \Cref{alg:opd} enjoys the following regret bound:

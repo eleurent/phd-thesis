@@ -251,7 +251,7 @@ For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with co
 
 Under this assumption, we can derive a confidence ellipsoid for $\params$.
 
-\begin{theorem}[Confidence ellipsoid, a matricial version of \citealt{Abbasi2011}]
+\begin{theorem}[Confidence ellipsoid, a matricial version of \citealp{Abbasi2011}]
 	\label{thm:confidence_ellipsoid}
 	\begin{leftbar}[theorembar]
 	Under \Cref{assumpt:gaussian-noise}, it holds with probability at least $1-\confidence$ that
@@ -316,7 +316,7 @@ We first give some background on interval arithmetic and nonnegative systems, be
 
 \subsubsection{Interval arithmetic}
 
-\begin{lemma}[\citealt{Efimov2012}]
+\begin{lemma}[\citealp{Efimov2012}]
 	\label{lem:interval}
 	Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 	
@@ -353,14 +353,14 @@ y(t)=Cx(t)+E\omega(t),\nonumber
 \end{gather}
 with $x(t)\in\Real^{n}$, $y(t)\in\Real^{p}$ and a Metzler matrix $A\in\Real^{p\times p}$, is elementwise nonnegative for all $t\ge0$ provided that $x(0)\ge0$, $u:\Real_{+}\to\Real_{+}^{q}$, $\omega:\Real_{+}\to\Real_{+}^{r}$ and $B\in\Real_{+}^{p\times q}$, $D\in\Real_{+}^{p\times r}$ \citep{FarinaRinaldi2000,Smith95}. The output solution $y(t)$ is nonnegative if $C\in\Real_{+}^{s\times p}$ and $E\in\Real_{+}^{s\times r}$. Such dynamical systems are called cooperative (monotone) or nonnegative if only initial conditions in $\Real_{+}^{n}$ are considered \citep{FarinaRinaldi2000,Smith95}.
 
-\begin{lemma}[\citealt{REZ11}]
+\begin{lemma}[\citealp{REZ11}]
 	\label{lem:l2}
 	\begin{leftbar}[lemmabar]
 		Given the matrices $A\in\Real^{p\times p}$, $Y\in\Real^{p\times p}$ and \textup{$C\in\Real^{s\times p}$. }If there is a matrix \textup{$L\in\Real^{p\times s}$} such that the matrices $A-LC$ and $Y$ have the same eigenvalues, then there is a matrix $S\in\Real^{p\times p}$ such that $Y=S(A-LC)S^{-1}$ provided that the pairs $(A-LC,\chi_{1})$ and $(Y,\chi_{2})$ are observable for some $\chi_{1}\in\Real^{1\times p}$, $\chi_{2}\in\Real^{1\times p}$.
 	\end{leftbar}
 \end{lemma}
 This result allows to represent the system \eqref{eq:LTI_syst} in its nonnegative form via a similarity transformation of coordinates.
-\begin{lemma}[\citealt{Efimov_a2013}]
+\begin{lemma}[\citealp{Efimov_a2013}]
 	\label{lem:l3}
 	\begin{leftbar}[lemmabar]
 		Let $D\in\Xi\subset\Real^{p\times p}$ be a matrix variable satisfying the interval constraints $\Xi=\{D\in\Real^{p\times p}:\,D_{a}-\Delta\le D\le D_{a}+\Delta\}$ for some $D_{a}^{\text{T}}=D_{a}\in\Real^{p\times p}$ and $\Delta\in\Real_{+}^{p\times p}$. If for some constant $\mu\in\Real_{+}$ and a diagonal matrix $\Upsilon\in\Real^{p\times p}$ the Metzler matrix $Y=\mu E_{p\times p}-\Upsilon$ has the same eigenvalues as the matrix $D_{a}$, then there is an orthogonal matrix $S\in\Real^{p\times p}$ such that the matrices $S^{\text{T}}DS$ are Metzler for all $D\in\Xi$ provided that $\mu>p||\Delta||_{max}$.\textup{ }
@@ -1316,6 +1316,24 @@ This amounts to changing the reward function, except that the worst case is asse
 A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \textit{``bad event''} (e.g. a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system. 
 
 \paragraph{Planning}
+
+\begin{algorithm}[t]
+	\DontPrintSemicolon
+	\caption{Integrated framework for confident estimation, interval prediction and minimax control}
+	\label{alg:full}
+	
+	\KwData{confidence level $\confidence$, structure $(A,\phi)$, reward $R$, $\cD_{[0]}\gets\emptyset,\, \ba_1\gets\emptyset$}
+	\For{$N = 0,1,2,\dots$}{
+		$\confidenceset \gets$\textsc{Model Estimation}$(\cD_{[N]})$. \eqref{eq:confidence-ellipsoid}\;
+		\For{each planning step $k\in\{N,\dots,N+K\}=N+[K]$}{
+			$[\underline{x}_{k+1}, \overline{x}_{k+1}]\gets$ \textsc{Interval Prediction}($\confidenceset, \ba_kb$) for each action $b\in \cA$. \eqref{eq:interval-predictor}\;
+			$\ba_{k+1}$ $\gets$\textsc{Pessimistic Planning}$(\underline{R_{k+1}}([\underline{x}_{k+1}, \overline{x}_{k+1}]))$.  \eqref{eq:opd}\;
+		}
+		Execute the recommended control $u_{N+1}$, and add the transition $(x_{N+1}, y_{N+1}, u_{N+1})$ to $\cD_{[N+1]}$.\;
+	}
+	
+\end{algorithm}
+
 To optimise $\hat{V}^r$ \eqref{eq:surrogate_objective}, we cannot use Dynamic Programming algorithms since the state space is continuous and the pessimistic rewards are non-Markovian. Instead, as we did in \Cref{chapter:6}, we turn to tree-based planning algorithms, which optimise a sequence of actions based on the corresponding sequence of rewards, without requiring Markovity nor state enumeration.
 
 Though there exist works addressing continuous action spaces \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision space $\Real^q$ by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
@@ -1325,32 +1343,16 @@ where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)
 
 This enables us to consider the \OPD algorithm \citep{Hren2008} tailored for the case when the relationship between actions and rewards is deterministic. Indeed, the stochasticity of the perturbations and measurements is encased in $\hat{V}^r$: given the observations up to time $N$ both the predictor dynamics \eqref{eq:interval-predictor} and the pessimistic rewards \eqref{eq:pessimistic-rewards} are deterministic.
 
-At each planning iteration $k\in[K]$, \OPD progressively builds a tree $\cT_{k+1}$ by forming upper-bounds $B_a(k)$ over the value of sequences of actions $a$, and expanding\footnote{The expansion of a leaf node $a$ refers to the simulation of its children transitions $aA = \{ab, b\in A\}$} the leaf $a_k$ with highest upper-bound:
+At each planning iteration $k\in[K]$, \OPD progressively builds a tree $\cT_{k+1}$ by forming upper-bounds $U_a(k)$ over the value of sequences of actions $a$, and expanding\footnote{The expansion of a leaf node $a$ refers to the simulation of its children transitions $a\cA = \{ab, b\in \cA\}$} the leaf $a_k$ with highest upper-bound:
 \begin{equation}
 \label{eq:opd}
-a_k = \argmax_{a\in\cL_k} B_a(k), \quad B_a(k) = \sum_{n=0}^{h(a)-1} \pessimisticreward_n(a) + \frac{\discount^{h(a)}}{1-\discount}
+a_k = \argmax_{a\in\cL_k} U_a(k), \quad U_a(k) = \sum_{n=0}^{h(a)-1} \pessimisticreward_n(a) + \frac{\discount^{h(a)}}{1-\discount}
 \end{equation}
 where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the sequence $a$, and $\pessimisticreward_n(a)$ the pessimistic reward \eqref{eq:pessimistic-rewards} obtained at time $n$ by following the controls $u_n = \pi_{a_n}(x_n)$.
 
 \Cref{alg:full} shows the full integration of the three procedures of estimation, prediction and control. 
-\begin{algorithm}[th]
-	\caption{Robust Estimation, Prediction and Control}
-	\label{alg:full}
-	%	\begin{algorithmic}
-	%		\STATE {\bfseries Input:} confidence level $\confidence$, structure $(A,\phi)$, reward $R$, $\cD_{[0]}\gets\emptyset,\, \ba_1\gets\emptyset$
-	%		\FOR{$N = 0,1,2,\dots$} 
-	%		\STATE $\confidenceset \gets$\textsc{Model Estimation}$(\cD_{[N]})$. \eqref{eq:polytope}
-	%		\FOR{each planning step $k\in\{N,\dots,N+K\}=N+[K]$}
-	%		\STATE $[\underline{x}_{k+1}, \overline{x}_{k+1}]\gets$ \textsc{Interval Prediction}($\confidenceset, \ba_kb$) for each action $b\in \cA$. \eqref{eq:interval-predictor}
-	%		
-	%		\STATE $\ba_{k+1}$ $\gets$\textsc{Pessimistic Planning}$(\underline{R_{k+1}}([\underline{x}_{k+1}, \overline{x}_{k+1}]))$.  \eqref{eq:opd}
-	%		\ENDFOR
-	%		\STATE Execute the recommended control $u_{N+1}$, and add the transition $(x_{N+1}, y_{N+1}, u_{N+1})$ to $\cD_{[N+1]}$.
-	%		\ENDFOR
-	%	\end{algorithmic}
-\end{algorithm}
 
-\begin{theorem}[Planning performance of \citealt{Hren2008}]
+\begin{theorem}[Planning performance of \citealp{Hren2008}]
 	\label{theorem:opd-regret}
 	\begin{leftbar}[theorembar]
 	The simple regret of the \OPD algorithm \eqref{eq:opd} applied to the surrogate objective \eqref{eq:surrogate_objective} after $K$ planning iterations is
@@ -1380,10 +1382,10 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 		\exists \underline{\phi},\overline{\phi}>0: \forall n\geq n_0,\quad \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2;
 		\end{align*}
 		\item a stability condition: there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
-		$\begin{bmatrix}
+		$$\begin{bmatrix}
 		A_0^\transp P + P A_0^\transp + Q_0 & P|D|  \\
 		|D|^\transp P & -\rho I_r \\
-		\end{bmatrix}< 0;$
+		\end{bmatrix}< 0;$$
 	\end{enumerate}
 	we can bound the approximation error of \Cref{alg:full}:
 	\begin{equation*}
@@ -1396,7 +1398,7 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 \section{Multi-model selection}
 \label{sec:multi-model}
 
-The procedure we developed in sections \Cref{sec:estimation,sec:prediction,sec:control} relies on strong modelling assumptions, such as the linear dynamics \eqref{eq:dynamics} and \Cref{assumpt:structure}. But what if they are wrong?
+The procedure we developed in \Cref{sec:estimation,sec:prediction,sec:control} relies on strong modelling assumptions, such as the dynamics structure in \Cref{assumpt:structure}. But what if they are wrong?
 
 \paragraph{Model adequacy}
 
@@ -1420,7 +1422,7 @@ We temporarily ignore the parametric uncertainty on $\theta$ to simply consider 
 We want to adapt our planning algorithm in order to balance these concurrent hypotheses in a robust fashion, i.e. maximise a robust objective with discrete ambiguity
 \begin{equation}
 \label{eq:robust-objective-discrete}
-V^r = \sup_{a\in\cA^\Natural}\min_{m\in[M]} \sum_{n=N+1}^\infty \discount^n R_n^m
+\hlg{\sup_{a\in\cA^\Natural}}\underbrace{\hlr{\min_{m\in[M]}} \sum_{n=N+1}^\infty \discount^n R_n^m}_{V^r(a)}
 \end{equation}
 where $R_n^m$ is the reward obtain by following the action sequence $a$ up to step $n$ under the dynamics $f^m$.
 This objective could be optimised in the same way as in \Cref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \Cref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \texttt{OPD} algorithm in the following way:
@@ -1430,7 +1432,7 @@ This objective could be optimised in the same way as in \Cref{sec:control}, but 
 	We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by
 	\begin{equation}
 	\label{eq:robust-b-values}
-	B_a^r(k)  \eqdef \min_{m\in[M]} \sum_{n=0}^{h-1} \discount^n R_n^m  + \frac{\discount^h}{1-\discount}
+	U_a^r(k)  \eqdef \min_{m\in[M]} \sum_{n=0}^{h-1} \discount^n R_n^m  + \frac{\discount^h}{1-\discount}
 	\end{equation}
 	\end{leftbar}
 \end{definition}
@@ -1439,9 +1441,9 @@ Note that it is not equivalent to solving each control problem independently and
 \begin{remark}
 	\label{sec:min-max-order}
 	\begin{leftbar}[remarkbar]
-	In the definition of $B_{a}^{r}(k)$ \eqref{eq:br} and $U_{a}^{r}(k)$ \eqref{eq:ur} it is essential that the minimum over the models is only taken at the end of trajectories, in the same way as for the robust objective \eqref{eq:robust-objective-discrete} in which the worst-case dynamics is only determined after the action sequence has been fully specified. Assume that $U_{a}^{r}(k)$ is instead naively defined as
+	In the definition of $U_{a}^{r}(k)$ \eqref{eq:br} and $L_{a}^{r}(k)$ \eqref{eq:ur} it is essential that the minimum over the models is only taken at the end of trajectories, in the same way as for the robust objective \eqref{eq:robust-objective-discrete} in which the worst-case dynamics is only determined after the action sequence has been fully specified. Assume that $L_{a}^{r}(k)$ is instead naively defined as
 	\[
-	U_{a}^{r}(k)=\min_{m\in[1,M]}U_{a}^{m}(k),
+	L_{a}^{r}(k)=\min_{m\in[1,M]}L_{a}^{m}(k),
 	\]
 	
 	This would not recover the robust policy, as we show in \Cref{fig:min-max-order} with a simple counter-example.
@@ -1459,7 +1461,7 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.45\linewidth]{img/robust-control-tree}
-	\caption{The computation of robust B-values in \eqref{eq:robust-b-values}. The simulation of trajectories for every dynamics model $f^m$ is represented as stacked versions of the expanded tree $\mathcal{T}_k$.}
+	\caption{The computation of robust U-values in \eqref{eq:robust-b-values}. The simulation of trajectories for every dynamics model $f^m$ is represented as stacked versions of the expanded tree $\mathcal{T}_k$.}
 	\label{fig:drop}
 \end{figure}
 
@@ -1546,7 +1548,7 @@ We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} i
 \end{table}
 
 \paragraph{Behavioural planning for an autonomous vehicle}
-We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $\chi_0\in\Real^4$ is approaching an intersection among $V$ other vehicles with states $\chi_i\in\Real^4$, resulting in a joint traffic state $x = [\chi_0, \dots,\chi_V]^\top\in\Real^{4V+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5V}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16V^2}$.
+We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $x_0\in\Real^4$ is approaching an intersection among ${N_v}$ other vehicles with states $x_i\in\Real^4$, resulting in a joint traffic state $x = [x_0, \dots,x_{N_v}]^\top\in\Real^{4{N_v}+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5{N_v}}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16{N_v}^2}$.
 %This allows to scale to larger systems: in our experiments, we used a state space of dimension $44$ ($V=10$) where e.g. \citep{Dean2018,abeille18a} reported numerical experiments with states of dimensions 3 and 4, respectively.
 The system dynamics $f$, which describes the couplings and interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. We compare \Cref{alg:full} to a nominal agent planning with the estimated parameter $\theta_{[N],\lambda}$, with two different modelling assumptions: we assume that Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks a model with minimal prediction error. Their performances are compared in \Cref{tab:driving}. Again, the robust approach is less efficient on average than planning with a nominal model, but it does better in terms of worst-case performance and manages to avoid collisions, contrary to the nominal baselines that suffer from model bias. We provide more details about the system and videos of the experiments in the Supplementary Material.
 
@@ -1607,7 +1609,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	We start by showing a preliminary proposition:
 	
-	\begin{proposition}[Matrix version of Theorem 1 of \citealt{Abbasi2011}]
+	\begin{proposition}[Matrix version of Theorem 1 of \citealp{Abbasi2011}]
 		\label{prop:concentration}
 		\begin{leftbar}[propositionbar]
 		Let $\{F_n\}_{n=0}$ be a filtration.
@@ -1895,13 +1897,13 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\begin{lemma}[Robust values ordering]
 		\label{lemma:uvb}
 		\begin{leftbar}[lemmabar]
-		In addition to the robust B-value defined in \eqref{eq:robust-b-values}, that we extend to inner nodes	
+		In addition to the robust U-value defined in \eqref{eq:robust-b-values}, that we extend to inner nodes	
 		\begin{equation}
 		\label{eq:br}
-		B_a^r(k)  \eqdef
+		U_a^r(k)  \eqdef
 		\begin{cases}
 		\min_{m\in[M]} \sum_{n=0}^{h-1} \discount^n R_n^m  + \frac{\discount^h}{1-\discount}&\text{if } a \text{ is a leaf;}\\
-		\max_{b\in\mathcal{A}} B_{ab}^r(k) & \text{else.}
+		\max_{b\in\mathcal{A}} U_{ab}^r(k) & \text{else.}
 		\end{cases},
 		\end{equation}
 		
@@ -1913,21 +1915,21 @@ We present a framework for the robust estimation, prediction and control of a pa
 		and the robust U-values of a sequence of action $a$
 		\begin{equation}
 		\label{eq:ur}
-		U_a^r(K)  \eqdef
+		L_a^r(K)  \eqdef
 		\begin{cases}
 		\min_{m\in[M]} \sum_{n=0}^{h-1} \discount^n R_n^m &\text{if } a \text{ is a leaf;}\\
-		\max_{b\in\mathcal{A}} U_{ab}^r(n) & \text{else.}
+		\max_{b\in\mathcal{A}} L_{ab}^r(n) & \text{else.}
 		\end{cases}
 		\end{equation}
 		
-		Then, the robust values, U-values and B-values exhibit similar properties as the optimal values, U-values and B-values, that is: for all $0 < k < K$ and $a\in\mathcal{T}_T$,
+		Then, the robust values, L-values and U-values exhibit similar properties as the optimal values, L-values and U-values, that is: for all $0 < k < K$ and $a\in\Tau$,
 		\begin{equation}
-		U^r_a(k) \leq U^r_a(K) \leq V^r_a \leq B^r_a(K) \leq B^r_a(k)
+		L^r_a(k) \leq L^r_a(K) \leq V^r_a \leq U^r_a(K) \leq U^r_a(k)
 		\end{equation}
 		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
-		By definition, when starting with sequence $a$, the value $U_a^m(k)$ represents the minimum admissible reward, while $B_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^{\star}$, $U_a^m(k)$ and $U_a^r(k)$ are non-decreasing functions of $k$ and $B_a^m(k)$ and $B_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
+		By definition, when starting with sequence $a$, the value $L_a^m(k)$ represents the minimum admissible reward, while $U_a^m(k)$ corresponds to the best admissible reward achievable with respect to the the possible continuations of $a$. Thus, for all $a\in\mathcal{A}^{\star}$, $L_a^m(k)$ and $L_a^r(k)$ are non-decreasing functions of $k$ and $U_a^m(k)$ and $U_a^r(k)$ are a non-increasing functions of $k$, while $V_a^m$ and $V_a^r$ do not depend on $k$.
 		
 		Moreover, since the reward function $R$ is assumed be bounded in $[0, 1]$, the sum of discounted rewards from a node of depth $d$ is at most $\discount^d + \discount^{d+1}+\dots = \frac{\discount^d}{1-\discount}$. As a consequence, for all $k \geq 0$ , $a\in\mathcal{L}_k$ of depth $d$, and any sequence of rewards $(R_n)_{n\in\mathbb{N}}$ obtained from following a path in $a\mathcal{A}^\infty$ with any dynamics $m \in [M]$:
 		\begin{equation*}
@@ -1945,7 +1947,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		that is,
 		\begin{equation}
 		\label{eq:urvrbr}
-		U^r_a(k) \leq V^r_a  \leq B^r_a(k)
+		L^r_a(k) \leq V^r_a  \leq U^r_a(k)
 		\end{equation}
 		
 		Finally, \eqref{eq:urvrbr} is extended to the rest of $\mathcal{T}_k$ by recursive application of \eqref{eq:max_vr}, \eqref{eq:ur} and \eqref{eq:br}.
@@ -1954,15 +1956,17 @@ We present a framework for the robust estimation, prediction and control of a pa
 	We now turn to the proof of the theorem.
 	
 	\begin{proof}
-		\citet{Hren2008} first show in Theorem 2 that the simple regret $r_K$ of their optimistic planner is bounded by $\frac{\discount^{d_K}}{1 - \discount}$ where $d_K$ is the depth of $\mathcal{T}_K$. This properties relies on the fact that the returned action belongs to the deepest explored branch, which we can show likewise by contradiction using \Cref{lemma:uvb}. This yields directly that the returned action $a = i_0$ where $i$ is some node of maximal depth $d_K$ expanded at round $k\leq K$, which by selection rule verifies $B_a^r(k) = B_i^r(k) = \max_{x\in\mathcal{A}} B_x^r(k)$ and
+		\citet{Hren2008} first show in Theorem 2 that the simple regret $r_K$ of their optimistic planner is bounded by $\frac{\discount^{d_K}}{1 - \discount}$ where $d_K$ is the depth of $\mathcal{T}_K$. This properties relies on the fact that the returned action belongs to the deepest explored branch, which we can show likewise by contradiction using \Cref{lemma:uvb}. This yields directly that the returned action $a = i_0$ where $i$ is some node of maximal depth $d_K$ expanded at round $k\leq K$, which by selection rule verifies $U_a^r(k) = U_i^r(k) = \max_{x\in\mathcal{A}} U_x^r(k)$ and
 		\begin{align*}
 		\label{eq:Rndn}
-		V^r - V_a^r = V_{a^{\star}}^r - V_a^r  \leq B_{a^{\star}}^r(k) - V_a^r &\leq B_{a}^r(k) - U_a^r(k) \\
-		&= B_{i}^r(k) - U_i^r(k) \\
+		V^r - V_a^r &= V_{a^{\star}}^r - V_a^r  \\
+		&\leq U_{a^{\star}}^r(k) - V_a^r \\
+		&\leq U_{a}^r(k) - L_a^r(k) \\
+		&= U_{i}^r(k) - L_i^r(k) \\
 		&= \frac{\discount^{d_K}}{1-\discount}.
 		\end{align*}
 		
-		Secondly, they bound the depth $d_K$ of $\mathcal{T}_K$ with respect to $K$. To that end, they show that the expanded nodes always belong to the sub-tree $\mathcal{T}_\infty$ of all the nodes of depth $d$ that are $\frac{\discount^d}{1-\discount}$-optimal. Indeed, if a node $i$ of depth $d$ is expanded at round $k$, then $B_i^r(k) \geq B_j^r(k)$ for all $j\in \mathcal{L}_k$ by selection rule, thus the max-backups of \eqref{eq:robust-b-values} up to the root yield $B^r_i(k) = B_\emptyset^r(k)$. Moreover, by \Cref{lemma:uvb} we have that $B_\emptyset^r(k) \geq V_\emptyset^r = V^r$ and so $V_i^r \geq U_i^r(k) = B_i^r(k) - \frac{\discount^d}{1-\discount} \geq V^r - \frac{\discount^d}{1-\discount}$, thus $i \in \mathcal{T}_\infty$.
+		Secondly, they bound the depth $d_K$ of $\mathcal{T}_K$ with respect to $K$. To that end, they show that the expanded nodes always belong to the sub-tree $\mathcal{T}_\infty$ of all the nodes of depth $d$ that are $\frac{\discount^d}{1-\discount}$-optimal. Indeed, if a node $i$ of depth $d$ is expanded at round $k$, then $U_i^r(k) \geq U_j^r(k)$ for all $j\in \mathcal{L}_k$ by selection rule, thus the max-backups of \eqref{eq:robust-b-values} up to the root yield $U^r_i(k) = U_\emptyset^r(k)$. Moreover, by \Cref{lemma:uvb} we have that $U_\emptyset^r(k) \geq V_\emptyset^r = V^r$ and so $V_i^r \geq L_i^r(k) = U_i^r(k) - \frac{\discount^d}{1-\discount} \geq V^r - \frac{\discount^d}{1-\discount}$, thus $i \in \mathcal{T}_\infty$.
 		
 		Then from the definition of $\kappa$ applied to nodes in $\mathcal{T}_\infty$, there exists $d_0$ and $c$ such that the number $n_d$ of nodes of depth $d \geq d_0$ in $\mathcal{T}_\infty$ is bounded by $c\kappa^d$. As a consequence, 
 		\begin{eqnarray*}
@@ -2165,7 +2169,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	\paragraph{Change of coordinates}
 %	In both cases, the obtained polytope centre $A_0$ is non-Metzler.
 %	We use the similarity transformation of coordinates of \citet{Efimov2013}. Precisely, we choose $\Theta$ such that for any $\theta\in\Theta$, $\structureddynamics$ is always diagonalisable with real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $Z$. The transformed system $X'=Z^{-1}(X-X_c)$ verifies \eqref{eq:confidence} with $A_0$ Metlzer as required to apply the interval predictor of \Cref{prop:predictor}. Finally, the obtained predictor is transformed back to the original coordinates $Z$ by using the following lemma:
-%	\begin{lemma}[Interval arithmetic of \citealt{Efimov2012}]
+%	\begin{lemma}[Interval arithmetic of \citealp{Efimov2012}]
 %		\label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 %		
 %		\begin{enumerate}

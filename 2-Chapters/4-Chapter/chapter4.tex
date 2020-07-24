@@ -48,7 +48,7 @@ We start by giving some background on standard model-free learning algorithms --
 \subsection{Value-based deep \glsxtrlong{RL}}
 
 Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\optimalpolicy$ since $\Q^\star = \Q^{\optimalpolicy}$. However, the converse that $\optimalpolicy$ can be obtained from knowing $\Q^\star$ is also true since
-\begin{proposition}[Optimality of the greedy policy, \citealt{Bellman1957}]
+\begin{proposition}[Optimality of the greedy policy, \citealp{Bellman1957}]
 	\begin{leftbar}[propositionbar]
 	A greedy policy defined as
 	\begin{equation*}
@@ -59,7 +59,7 @@ Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal
 \end{proposition}
 
 Finding an optimal policy thus reduces to computing the optimal value function $Q^\star$. Fortunately,
-\begin{theorem}[Bellman Optimality Equation, \citealt{Bellman1957}]
+\begin{theorem}[Bellman Optimality Equation, \citealp{Bellman1957}]
 \label{thm:bellman-optimality-mdp}
 \begin{leftbar}[theorembar]
 The optimal action-value function $Q^\star$ satisfies the Bellman Optimality Equation:
