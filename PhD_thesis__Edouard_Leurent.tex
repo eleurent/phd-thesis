@@ -62,13 +62,13 @@
 	% *************************** Nomenclature ****************************
 %	\begin{spacing}{0.93}
 		\glsaddallunused
-		\printglossary[type=main]
+		\printglossary[type=main, title={List of Acronyms}]
+		\label{chapter:nomenclature}
 		\newcommand*{\Agroupname}{Mathematical notations}
 		\newcommand*{\Bgroupname}{Markov Decision Processes}
 		\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
-		\printglossary[type=symbols]
-		%\printunsrtglossaries 
-		\label{chapter:nomenclature}
+		\newcommand*{\Zgroupname}{Linear Systems}
+		\printglossary[type=symbols, title={List of Symbols}]
 %	\end{spacing}
 
 	% \input{4-Listofpublications/Listofpublications}
@@ -98,7 +98,7 @@
 		% \nocite{*}
 %		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2,contributions}
 
-		\printbibliography
+		\printbibliography[heading=bibintoc]
 
 %		\vfill{}
 %		\hr{}		
@@ -113,13 +113,7 @@
 
 %	\end{small}
 
-	% \printthesisindex
-
 	\backmatter
-	% \cleardoublepage
 	\cleartoleftpage
-	% \clearpage
-
-	% \newpage
 	\include{6-Back/back-page}
 \end{document}

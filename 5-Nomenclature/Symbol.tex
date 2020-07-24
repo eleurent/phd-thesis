@@ -12,7 +12,7 @@
 \newcommand{\transition}{\Ps}
 
 
-% --- Mathematical notations
+% --- Mathematical notations: key A
 
 \newglossaryentry{real}{name={$\mathbb{R}$},description={set of real numbers}, type=symbols, category=symbol, sort={a}}
 \newglossaryentry{natural}{name={$\mathbb{N}$},description={set of integers}, type=symbols, category=symbol, sort={a}}
@@ -37,7 +37,7 @@
 \newglossaryentry{bigo}{name={$o(\cdot), \mathcal{O}(\cdot), \Omega(\cdot)$}, description={Landau notations for positive functions: $f(x)=o(g(x)$ means that $g(x)\neq0$ and $f(x)/g(x)\to 0$ for $x\to\infty$, $f(x)=\mathcal{O}(g(x))$ means that there exists $x_0,K>0$ such that $f(x)\leq K g(x)$ from $x\geq x_0$, and $f(x)=\Omega(g(x))$ means $g(x)=\mathcal{O}(f(x))$}, type=symbols, category=symbol, sort={a}}
 
 
-% --- Probabilities
+% --- Probabilities: key AP
 
 \newglossaryentry{expectedvalue}{name={$\mathbb{E}$},description={expectation under a probabilistic model},type=symbols, category=symbol, sort={ap}}
 \newglossaryentry{variance}{name={$\mathbb{V}$},description={variance under a probabilistic model},type=symbols, category=symbol, sort={ap}}
@@ -56,19 +56,10 @@
 \newglossaryentry{binomiald}{name={\var{\mathcal{B}}},description={Binomial distribution},type=symbols, category=symbol, sort={ap}}
 \newcommand{\binomial}{\gls{binomiald}}
 
-\newglossaryentry{features}{name={\var{\phi}},description={features},type=symbols, category=symbol}
-\newcommand{\features}{\gls{features}}
-
-\newglossaryentry{maxit}{name={\var{K}},description={number of iterations},type=symbols, category=symbol}
-\newcommand{\maxiteration}{\gls{maxit}}
-
-\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol}
-\newcommand{\T}{\gls{Tt}}
-
 \newglossaryentry{transpose}{name={$M^\top$}, text={\var{\top}},description={transpose of a matrix $M$},type=symbols, category=symbol, sort={ap}}
 \newcommand{\transpose}{\gls{transpose}}
 
-% --- MDP
+% --- MDP: key B MDP
 
 \newglossaryentry{cS}{name={\var{\mathcal{S}}},description={set of states $s\in\mathcal{S}$},type=symbols, category=symbol, sort={bmdpa}}
 \newcommand{\cS}{\gls{cS}}
@@ -85,8 +76,6 @@
 \newglossaryentry{discountfactor}{name={\var{\gamma}},description={discount factor in $[0, 1)$},type=symbols, category=symbol, sort={bmdpe}}
 \newcommand{\discount}{{\gls{discountfactor}}}
 
-% --- RL
-
 \newglossaryentry{policy}{name={\var{\pi}},description={policy},type=symbols, category=symbol, sort={bmdpf}}
 \newcommand{\policy}{{\gls{policy}}}
 
@@ -96,25 +85,19 @@
 \newglossaryentry{return}{name={\var{G}},description={discounted return for the reward signal},type=symbols, category=symbol, sort={bmdph}}
 \newcommand{\return}{\gls{return}}
 
-\newglossaryentry{V}{name={\var{V}},description={state value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpi}}
+\newglossaryentry{V}{name={\var{V}},description={state value function (${}^\star$ for optimal value, ${}^\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpi}}
 \newcommand{\V}{\gls{V}}
 
-\newglossaryentry{Q}{name={\var{Q}},description={state-action value function ($\star$ for optimal value, $\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpj}}
+\newglossaryentry{Q}{name={\var{Q}},description={state-action value function (${}^\star$ for optimal value, ${}^\pi$ for policy value)},type=symbols, category=symbol, sort={bmdpj}}
 \newcommand{\Q}{\gls{Q}}
 
-\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort={bmdpk}}
+\newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator (${}^\star$ for optimality, ${}^\pi$ for evaluation)},type=symbols, category=symbol, sort={bmdpk}}
 \newcommand{\bo}{\gls{bo}}
-
-\newglossaryentry{params}{name={\var{\theta}},description={parameters for a model},type=symbols, category=symbol}
-\newcommand{\params}{{\gls{params}}}
 
 \newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm},type=symbols, category=symbol, sort={bmdpl}}
 \newcommand{\regret}{\gls{regret}}
 
-\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
-\newcommand{\cD}{\gls{cD}}
-
-% --- Chapter 5
+% --- Budgeted RL: key E BRL
 
 \newglossaryentry{ocS}{name={\var{\overline{\mathcal{S}}}},description={set of augmented states},type=symbols, category=symbol, sort={ebrla}}
 \newcommand{\ocS}{\gls{ocS}}
@@ -173,25 +156,47 @@
 \newglossaryentry{Qc}{name={\var{Q_c}},description={Cost Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\Qc}{\gls{Qc}}
 
-\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={augmented Bellman operator ($\star$ for optimality, $\pi$ for evaluation)},type=symbols, category=symbol, sort={ebrlp}}
+\newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={augmented Bellman operator (${}^\star$ for optimality, ${}^\pi$ for evaluation)},type=symbols, category=symbol, sort={ebrlp}}
 \newcommand{\abo}{{\gls{abo}}}
 
-%\newglossaryentry{projection}{name={\var{{\Xi}}},description={Projection operator}, type=symbols, category=symbol}
-%\newcommand{\projection}{\gls{projection}}
-%
-%\newglossaryentry{augmentedprojection}{name={\var{\overline{{\Xi}}}},description={Augmented projection operator},type=symbols, category=symbol}
-%\newcommand{\augmentedprojection}{\gls{augmentedprojection}}
 
 
+% --- Linear Systems: Key = Z CTRL
 
-% --- Chapter 7
+\newglossaryentry{safestates}{name={\var{\mathbb{X}}},description={constraint set for safe states $x(t)\in\mathbb{X}\subset\mathbb{R}^p$},type=symbols, category=symbol, sort={zctrla}}
+\newcommand{\safestates}{{\gls{safestates}}}
 
-\newglossaryentry{timestep}{name={\var{\mathrm{d} t}},description={time step at which \gls{MPC} controls are applied},type=symbols, category=symbol}
+\newglossaryentry{safecontrols}{name={\var{\mathbb{U}}},description={constraint set for safe controls $u(t)\in\gls{safecontrols}\subset\mathbb{R}^q$},type=symbols, category=symbol, sort={zctrlb}}
+\newcommand{\safecontrols}{{\gls{safecontrols}}}
+
+\newglossaryentry{timestep}{name={\var{\mathrm{d} t}},description={time step at which \gls{MPC} controls are applied},type=symbols, category=symbol, sort={zctrlc}}
 \newcommand{\timestep}{\gls{timestep}}
 
-\newglossaryentry{confidence}{name={\var{\delta}},description={confidence level for statistical estimates, in $(0, 1]$] },type=symbols, category=symbol}
+\newglossaryentry{features}{name={\var{\phi}},description={features for a parametrized},type=symbols, category=symbol, sort={zctrld}}
+\newcommand{\features}{\gls{features}}
+
+\newglossaryentry{params}{name={\var{\theta}},description={parameters $\params\in\mathbb{R}^d$ for a model},type=symbols, category=symbol, sort={zctrle}}
+\newcommand{\params}{{\gls{params}}}
+
+\newglossaryentry{structureddynamics}{name={\var{A(\params)}},description={structured state matrix $A(\params)\in\mathbb{R}^{p\times p}$, depending on unknown parameters $\params$},type=symbols, category=symbol, sort={zctrlf}}
+\newcommand{\structureddynamics}{{\gls{structureddynamics}}}
+
+\newglossaryentry{confidence}{name={\var{\delta}},description={confidence level for statistical estimates, in $(0, 1]$},type=symbols, category=symbol, sort={zctrlg}}
 \newcommand{\confidence}{{\gls{confidence}}}
 
-
-\newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\params$, such that $\mathbb{P}(\params\in\confidenceset) \geq 1-\confidence$.},type=symbols, category=symbol}
+\newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\params$, such that $\mathbb{P}(\params\in\confidenceset) \geq 1-\confidence$.},type=symbols, category=symbol, sort={zctrlh}}
 \newcommand{\confidenceset}{\gls{confidenceset}}
+
+\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol, sort={zctrli}}
+\newcommand{\T}{\gls{Tt}}
+
+\newglossaryentry{maxit}{name={\var{K}},description={number of planning iterations},type=symbols, category=symbol, sort={zctrlj}}
+\newcommand{\maxiteration}{\gls{maxit}}
+
+
+
+% --- Others, unsorted
+
+\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
+\newcommand{\cD}{\gls{cD}}
+

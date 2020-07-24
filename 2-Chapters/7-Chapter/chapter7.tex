@@ -16,7 +16,7 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-Model-based algorithms often assume\emph{certainty equivalence} to decouple estimation and control: they use a point estimate $\hat{\Ps}$ of the dynamics to plan as if it was the true value. Unfortunately, this \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build a \emph{confidence region} that contains the true dynamics with high probability, and maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.\footnote{This chapter is based on two articles published in the \emph{2019 and 2020 Conferences on Decision and Control} \citep{Leurent2019interval,Leurent2020robust} and one submitted to the \emph{2020 Conference on Neural Information Processing Systems} \citep{Leurent2020beyond}.}
+Model-based algorithms often assume \emph{certainty equivalence} to decouple estimation and control: they use a point estimate $\hat{\Ps}$ of the dynamics to plan as if it was the true value. Unfortunately, this \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build a \emph{confidence region} that contains the true dynamics with high probability, and maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.\footnote{This chapter is based on two articles published in the \emph{2019 and 2020 Conferences on Decision and Control} \citep{Leurent2019interval,Leurent2020robust} and one submitted to the \emph{2020 Conference on Neural Information Processing Systems} \citep{Leurent2020beyond}.}
 \minitocStartChapter{}
 
 \section{Motivation}
@@ -41,7 +41,7 @@ We consider a dynamical system with state $x\in\Real^p$, acted on by controls $u
 \begin{equation*}
 \dot{x}(t) = f_\theta\left(x(t),u(t),\omega(t)\right),
 \end{equation*}
-where the dynamics structure $\theta\rightarrow f_\theta$ is \emph{known}, and the parameter vector $\theta$ belongs to a known compact set $\Theta \subset \Real^d$.
+where the dynamics structure $\theta\rightarrow f_\theta$ is \emph{known}, and the parameter vector $\gls+{params}$ belongs to a known compact set $\Theta \subset \Real^d$.
 \end{leftbar}
 \end{assumption}
 \noindent We argue that this structure assumption is realistic given that most industrial applications to date have been relying on physical models to describe their processes and well-engineered controllers to operate them, rather than machine learning. Our framework relaxes this modelling effort by allowing some \emph{structured uncertainty} around the nominal model.
@@ -59,9 +59,9 @@ We adopt a data-driven scheme to estimate the parameters $\theta$ more accuratel
 	\caption{The model estimation procedure. The confidence region $\confidenceset$ shrinks with the number of samples $N$.}
 	\label{fig:estimation}
 \end{figure}
-To address this issue, we turn to the framework of \emph{robust} decision-making: instead of merely considering a point estimate of the dynamics, the control scheme needs to rely on an entire \emph{confidence region} $\confidenceset$, illustrated in \Cref{fig:estimation}, that contains the true dynamics parameters with high probability:
+To address this issue, we turn to the framework of \emph{robust} decision-making: instead of merely considering a point estimate of the dynamics, the control scheme needs to rely on an entire \emph{confidence region} $\gls+{confidenceset}$, illustrated in \Cref{fig:estimation}, that contains the true dynamics parameters with high probability:
 \begin{align}
-\probability{\theta\in \confidenceset} \geq 1-\confidence,
+\probability{\theta\in \gls+{confidenceset}} \geq 1-\gls+{confidence},
 \label{eq:confidence}
 \end{align}
 where $\confidence\in(0,1]$ is the confidence level. 
@@ -99,18 +99,17 @@ Yet, in order to obtain an closed-form for $X(t)$, we need to know how the uncer
 \begin{assumption}[Structure \textsc{iii}]
 	\label{assumpt:structure}
 	\begin{leftbar}[assumptionbar]
-		There exists a known feature tensor $\phi\in \Real^{d \times p \times p}$ such that for all $\theta\in\Theta$,
+		There exists a known feature tensor $\features\in \Real^{d \times p \times p}$ such that for all $\theta\in\Theta$,
 		
 		\begin{equation}
 		\label{eq:dynamics}
-		\dot{x}(t)=A(\theta)x(t) + B u(t) + D \omega(t),\;t\geq0,
+		\dot{x}(t)=\gls+{structureddynamics} x(t) + B u(t) + D \omega(t),\;t\geq0,
 		\end{equation}
 		with
 		\begin{equation}
-		A(\theta) = A + %\theta^\transp \phi \eqdef A + 
-		\sum_{i=1}^d \theta_i\phi_i,
+		\gls+{structureddynamics} = A + \sum_{i=1}^d \gls+{params}_i\gls+{features}_i,
 		\end{equation}
-		where $A,\phi_1,\dots,\phi_d\in\Real^{p\times p}$ are known. 
+		where $A,\features_1,\dots,\features_d\in\Real^{p\times p}$ are known. 
 	\end{leftbar}
 \end{assumption}
 For all $n$, we denote $\Phi_n = [\phi_1 x_n \dots \phi_d x_n]\in\Real^{p\times d}$.
@@ -129,9 +128,9 @@ In \textbf{\Cref{sec:prediction}}, as a second contribution, we derive an \emph{
 
 As a first application and third contribution, we consider the problem of robustly stabilising the system \eqref{eq:dynamics} at a vicinity of the origin, while ensuring that
 \begin{equation*}
-x(t)\in\X,\;u(t)\in\U\quad\forall t\geq0,
+x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0,
 \end{equation*}
-where $[\underline{x}_{0},\overline{x}_{0}]\subset\X\subset\Real^{p}$ and $\U\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
+where $[\underline{x}_{0},\overline{x}_{0}]\subset\safestates\subset\Real^{p}$ and $\safecontrols\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
 In \textbf{\Cref{sec:robust-stabilisation}}, we introduce a Dual-\gls{MPC} scheme that achieves this result by relying on a stabilising control for the predicted intervals.
 
 % --- 5. Second application: minimax control of generic costs
@@ -159,7 +158,7 @@ Finally, in \textbf{\Cref{sec:interval-experiments}} we demonstrate the applicab
 
 \subsection{Related Work}
 
-The control of uncertain systems is a long-standing problem, to which a vast body of literature is dedicated. Existing work is mostly concerned with the problem of \emph{stabilisation} around a fixed reference state or trajectory, including approaches such as $\cH_\infty$ control \citep[][]{Basar1996}, sliding-mode control \citep{Lu1997} or system-level synthesis \citep{Dean2019,Dean2018}. This chapter fits in the popular \gls{MPC} framework, for which adaptive data-driven schemes have been developed to deal with model uncertainty \citep{Sastry1990,Tanaskovic2014,Amos2018}, but lack guarantees. The family of tube-MPC algorithms seeks to derive theoretical guarantees of \emph{robust constraint satisfaction}: as in \Cref{sec:robust-stabilisation}, the state $x$ and control $u$ are constrained in a safe region $\X,\,\U$ around the origin, often chosen convex \citep{Fukushima2007,Adetola2009,Aswani2013,Turchetta2016,Lorenzen2017,Kohler2019,Lu2019}. Our work mainly differs in that it relies on intervals rather than zonotopes, for simplicity of implementation and computational efficiency.
+The control of uncertain systems is a long-standing problem, to which a vast body of literature is dedicated. Existing work is mostly concerned with the problem of \emph{stabilisation} around a fixed reference state or trajectory, including approaches such as $\cH_\infty$ control \citep[][]{Basar1996}, sliding-mode control \citep{Lu1997} or system-level synthesis \citep{Dean2019,Dean2018}. This chapter fits in the popular \gls{MPC} framework, for which adaptive data-driven schemes have been developed to deal with model uncertainty \citep{Sastry1990,Tanaskovic2014,Amos2018}, but lack guarantees. The family of tube-MPC algorithms seeks to derive theoretical guarantees of \emph{robust constraint satisfaction}: as in \Cref{sec:robust-stabilisation}, the state $x$ and control $u$ are constrained in a safe region $\safestates,\,\safecontrols$ around the origin, often chosen convex \citep{Fukushima2007,Adetola2009,Aswani2013,Turchetta2016,Lorenzen2017,Kohler2019,Lu2019}. Our work mainly differs in that it relies on intervals rather than zonotopes, for simplicity of implementation and computational efficiency.
 
 Yet, as we argue, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance) and are better addressed with the minimax control objective, which can allow more flexible goal formulations. Minimax control has mostly been studied in two particular instances.
 
@@ -298,7 +297,7 @@ Moreover, we assume that \Cref{assumpt:bounded-noise} is verified, such that the
 
 Note that since the function $A$ and the set $\Theta$ are known, and $\theta\in\Theta$, then there exist matrices $\underline{A},\overline{A}\in\Real^{p\times p}$, which can be easily computed, such that 
 \[
-\underline{A}\leq A(\theta)\leq\overline{A},\quad\forall\theta\in\Theta.
+\underline{A}\leq \structureddynamics\leq\overline{A},\quad\forall\theta\in\Theta.
 \]
 
 The objective of this section is to design an \emph{interval predictor} for the system \eqref{eq:LPV_syst}, which takes the information on the initial conditions $[\underline{x}_{0},\overline{x}_{0}]$, the admissible bounds on the values of the exogenous input $[\underline{\omega}(t),\overline{\omega}(t)]$, the information about $A(\cdot)$ and $\Theta$ (\eg the matrices $\underline{A},\overline{A}$, but not the instant value of $\theta(t)$) and generates bounded interval estimates $\underline{x}(t),\overline{x}(t)\in\Real^{p}$ such that
@@ -416,15 +415,15 @@ We will additionally assume the following:
 	\begin{leftbar}[assumptionbar]
 	There exist a matrix $A_{0}\in\Real^{p\times p}$ and matrices $\Delta A_{i}\in\Real^{p\times p}$, $i\in[M]$ for some $M\in\Natural_{+}$ such that the following relations are satisfied for all $\theta\in\Theta$:
 	\begin{gather*}
-	A(\theta)=A_{0}+\sum_{i=1}^{M}\lambda_{i}(\theta)\Delta A_{i},\\
+	\structureddynamics=A_{0}+\sum_{i=1}^{M}\lambda_{i}(\theta)\Delta A_{i},\\
 	\sum_{i=1}^{M}\lambda_{i}(\theta)=1;\;\lambda_{i}(\theta)\in[0,1],\;i\in[M].
 	\end{gather*}
 	\end{leftbar}
 \end{assumption}
-Therefore, it is assumed that the matrix $A(\theta)$ for any $\theta\in\Theta$ can be embedded in a polytope defined by $M$ known vertices $\Delta A_{i}$ with the given centre $A_{0}$. 
+Therefore, it is assumed that the matrix $\structureddynamics$ for any $\theta\in\Theta$ can be embedded in a polytope defined by $M$ known vertices $\Delta A_{i}$ with the given centre $A_{0}$. 
 
 % TODO: choix des noms pour regions de confiance. C_n,delta pour le polytope ?
-To connect this assumption to the results obtained from model estimation in previous section, we can enclose the confidence ellipsoid $\confidenceset$ on $\theta$ obtained from $\eqref{eq:confidence-ellipsoid}$ at time $t=t_N$ into a polytope $\cP$ on $A(\theta)$. For simplicity, we present here a simple but coarse strategy: bound the ellipsoid by its enclosing sphere, and then the sphere by its enclosing hypercube. We obtain
+To connect this assumption to the results obtained from model estimation in previous section, we can enclose the confidence ellipsoid $\confidenceset$ on $\theta$ obtained from $\eqref{eq:confidence-ellipsoid}$ at time $t=t_N$ into a polytope $\cP$ on $\structureddynamics$. For simplicity, we present here a simple but coarse strategy: bound the ellipsoid by its enclosing sphere, and then the sphere by its enclosing hypercube. We obtain
 \begin{align}
 \label{eq:polytope}
 &\cP = \left\{ A_{0}+\sum_{i=1}^{M}\lambda_{i}\Delta A_{i}: \lambda\geq 0,  \sum_{i=1}^{M}\lambda_{i}=1\right\},
@@ -732,7 +731,7 @@ This yields the following longitudinal dynamics:
 \end{align*}
 where $\theta_{i,2}$ and $\theta_{i,3}$ are set to $0$ whenever the corresponding features are not active.
 
-It can be rewritten in the form $$\dot{x} = A(\theta)(x-x_c) + d.$$ For example, in the case of two vehicles only,
+It can be rewritten in the form $$\dot{x} = \structureddynamics(x-x_c) + d.$$ For example, in the case of two vehicles only,
 \begin{equation*}
 x = \begin{bmatrix}
 p^x_i \\
@@ -757,7 +756,7 @@ v_0 \\
 \end{equation*}
 
 \begin{equation*}
-A(\theta)
+\structureddynamics
 =
 \begin{blockarray}{ccccc}
 & i & f_i & i & f_i \\
@@ -846,9 +845,9 @@ In this section, as a first application of the estimation and prediction tools i
 such that
 \begin{equation}
 \label{eq:constraints}
-x(t)\in\X,\;u(t)\in\U\quad\forall t\geq0,
+x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0,
 \end{equation}
-where $[\underline{x}_{0},\overline{x}_{0}]\subset\X\subset\Real^{p}$ and $\U\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
+where $[\underline{x}_{0},\overline{x}_{0}]\subset\safestates\subset\Real^{p}$ and $\safecontrols\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
 
 \subsection{Stabilising control for \eqref{eq:predictor-naive} and \eqref{eq:interval-predictor}}
 
@@ -1017,7 +1016,7 @@ for all $\xi,\tilde{\confidence}\in\Real^{2p}$, where
 and we can define the set (recall that the signal $\tilde{\confidence}(t)$
 is known for all $t\geq0$)
 \begin{equation}
-\X_{f}=\{\xi\in\Real^{2p}:V(\xi)\leq\alpha^{-1}\sup_{t\geq0}|\tilde{\confidence}^{\top}(t)\Gamma\tilde{\confidence}(t)|\},\label{eq:X_f}
+\safestates_{f}=\{\xi\in\Real^{2p}:V(\xi)\leq\alpha^{-1}\sup_{t\geq0}|\tilde{\confidence}^{\top}(t)\Gamma\tilde{\confidence}(t)|\},\label{eq:X_f}
 \end{equation}
 as the set that asymptotically attracts all trajectories in \eqref{eq:closed-loop_pr}.
 
@@ -1085,7 +1084,7 @@ The requirements imposed on $P,Z_{+},Z_{-}$ in this corollary are
 more restrictive than the conditions of Theorem \ref{thm:ISS_pr},
 but it allows the gains $K_{0},K_{1},K_{2}$ to be efficiently calculated.
 
-Under conditions of Theorem \ref{thm:ISS_pr}, the control \eqref{eq:control_pr} ensures stabilisation of the predictor \eqref{eq:predictor} (\ie \eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in a vicinity $\X_{f}$ of the origin. The size of the vicinity is proportional to the system \eqref{eq:dynamics} uncertainty (it can be optimized by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-property}, it implies that the system \eqref{eq:dynamics} also will reach a neighborhood of the origin under the control \eqref{eq:control_pr}. Hence, the posed control problem would be solved provided that \eqref{eq:constraints} holds. In order to ensure the robust constraint satisfaction we consider an \gls{MPC} design in the next section.
+Under conditions of Theorem \ref{thm:ISS_pr}, the control \eqref{eq:control_pr} ensures stabilisation of the predictor \eqref{eq:predictor} (\ie \eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in a vicinity $\safestates_{f}$ of the origin. The size of the vicinity is proportional to the system \eqref{eq:dynamics} uncertainty (it can be optimized by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-property}, it implies that the system \eqref{eq:dynamics} also will reach a neighborhood of the origin under the control \eqref{eq:control_pr}. Hence, the posed control problem would be solved provided that \eqref{eq:constraints} holds. In order to ensure the robust constraint satisfaction we consider an \gls{MPC} design in the next section.
 
 \subsection{Robust constraint satisfaction}
 \label{sec:stab-robust-control}
@@ -1098,19 +1097,19 @@ formulation). We need the following hypothesis in this section:
 	\begin{leftbar}[assumptionbar]
 	\label{assumpt:feasible-constr} There exist $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$	satisfying the conditions of \Cref{thm:ISS_pr} for the matrices	$A_{0}$ and $\Delta A_{i}$ with $i\in[M]$ calculated in \eqref{eq:polytope}	for $\hat{\Theta}(t)=\Theta$, and
 	\[
-	\X_{f}\subset\X^{2},
+	\safestates_{f}\subset\safestates^{2},
 	\]
-	where the corresponding set $\X_{f}$ is given in \eqref{eq:X_f}, and
+	where the corresponding set $\safestates_{f}$ is given in \eqref{eq:X_f}, and
 	\[
-	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\U
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\safecontrols
 	\]
-	for any $\xi\in\X_{f}$ and $t\geq0$.
+	for any $\xi\in\safestates_{f}$ and $t\geq0$.
 	\end{leftbar}
 \end{assumption}
 These properties guarantee that there exists a control \eqref{eq:control_pr}
 that can be always applied to stabilise the predictor \eqref{eq:interval-predictor}
 (the worst-case estimate set $\Theta$ is used to calculate the system
-matrices) and into the set $\X_{f}$ the restrictions \eqref{eq:constraints}
+matrices) and into the set $\safestates_{f}$ the restrictions \eqref{eq:constraints}
 also hold for such a control. Recall that we denote $\timestep>0$ the time step and $t_{n}=n\timestep$ for $n\in\Natural_{+}$, and define $T>\timestep $ as the \gls{MPC} prediction horizon, \ie at each $t_n\geq0$, to design
 the input $u(t)$, an optimal control problem is solved on the interval $[t_n,t_n+T]$, and this optimal control problem is resolved again after $\timestep$ units of time (on the interval $[t_n,t_{n+1} = t_n+\timestep)$ the obtained
 optimal control is applied). Then the developed \gls{MPC} algorithm can be formalized as follows for
@@ -1139,19 +1138,19 @@ any $t_{n}\geq0$:
 		\end{align}
 		where $(\underline{x}(t_{n-1}+\timestep)^{\top},\overline{x}(t_{n-1}+\timestep)^{\top})^{\top}=\xi(t_{n-1}+\timestep)$
 		is obtained during the prediction on the previous iteration.
-		\item $\xi(s)\in\X^{2}$ and $u(s)\in\U$ for $s\in[t_{n},t_{n}+T]$; 
-		\item $\xi(t_{n}+T)\in\X_{f}$.
+		\item $\xi(s)\in\safestates^{2}$ and $u(s)\in\safecontrols$ for $s\in[t_{n},t_{n}+T]$; 
+		\item $\xi(t_{n}+T)\in\safestates_{f}$.
 	\end{enumerate}
 	\item For $t\in[t_{n},t_{n+1})$ select
 	\begin{equation}
 	u(t)=\begin{cases}
-	\cU(t) & \xi(t_{n})\notin\X_{f}\\
-	\eqref{eq:control_pr} & \xi(t_{n})\in\X_{f}
+	\cU(t) & \xi(t_{n})\notin\safestates_{f}\\
+	\eqref{eq:control_pr} & \xi(t_{n})\in\safestates_{f}
 	\end{cases},\label{eq:control}
 	\end{equation}
 	where $K_{0},K_{1},K_{2}$ are taken from \Cref{assumpt:feasible-constr}.
 \end{enumerate}
-As we can conclude, the idea of the proposed dual \gls{MPC} scheme \citep[see also][]{Michalska1993,Mayne2000,Mayne2009} is to use an open-loop optimal control to reach a neighbourhood of the origin $\X_{f}$ ensuring a robust constraint satisfaction \eqref{eq:constraints}, where a closed-loop control \eqref{eq:control_pr} can be applied, which provides asymptotic performances (stability and robustness, also with constraint satisfaction due to \Cref{assumpt:feasible-constr} and the definition of the terminal set \eqref{eq:X_f}). 
+As we can conclude, the idea of the proposed dual \gls{MPC} scheme \citep[see also][]{Michalska1993,Mayne2000,Mayne2009} is to use an open-loop optimal control to reach a neighbourhood of the origin $\safestates_{f}$ ensuring a robust constraint satisfaction \eqref{eq:constraints}, where a closed-loop control \eqref{eq:control_pr} can be applied, which provides asymptotic performances (stability and robustness, also with constraint satisfaction due to \Cref{assumpt:feasible-constr} and the definition of the terminal set \eqref{eq:X_f}). 
 
 The proposed rule of the initial condition setup for prediction \eqref{eq:update} is chosen in a way to use all available information about the state: at $t_{0}=0$ it is intersection of the measured interval $[y_{1}(t_{n})-\underline{\nu}_{1}(t_{n}),y_{1}(t_{n})+\overline{\nu}_{1}(t_{n})]$ and the set $[\underline{x}_{0},\overline{x}_{0}]$ (since we assume that initially the state is in this set by  \Cref{assumpt:bounded-state}), and at $t_{n}$ with $n\geq1$, we again take the measured information and project it into the interval $[\underline{x}(t_{n-1}+\timestep),\overline{x}(t_{n-1}+\timestep)]$, which is the predicted set of admissible values of $x(t_{i})$ at $t_{i-1}$ with the selected optimal control \eqref{eq:control}. Due to the inclusion property \eqref{eq:inclusion-property}, which is always satisfied for the predictor \eqref{eq:interval-predictor} (or \eqref{eq:predictor-naive}) by construction, the intersection of $[y_{1}(t_{n})-\underline{\nu}_{1}(t_{n}),y_{1}(t_{n})+\overline{\nu}_{1}(t_{n})]$ (measured currently) with $[\underline{x}(t_{n-1}+\timestep),\overline{x}(t_{n-1}+\timestep)]$ (predicted $\timestep$ units of time ago) may help in reducing the influence of the measurement noise $\nu_{1}(t)$.
 
@@ -1159,10 +1158,10 @@ The main result of the section is as follows:
 \begin{theorem}
 	\begin{leftbar}[theorembar]
 	\label{thm:robust-constraint-sat}
-	Let $\underline{x}_{0},\overline{x}_{0}\in\X$, and \Cref{assumpt:structure,assumpt:bounded-noise,assumpt:bounded-state,assumpt:metzler,assumpt:feasible-constr} hold with $\overline{\omega},\overline{\omega}-\underline{\omega}$ being non-increasing functions of $t\geq0$. Then the closed-loop system given by \eqref{eq:dynamics}, \eqref{eq:outputs}, \eqref{eq:interval-predictor} and \eqref{eq:control} has the following properties:
+	Let $\underline{x}_{0},\overline{x}_{0}\in\safestates$, and \Cref{assumpt:structure,assumpt:bounded-noise,assumpt:bounded-state,assumpt:metzler,assumpt:feasible-constr} hold with $\overline{\omega},\overline{\omega}-\underline{\omega}$ being non-increasing functions of $t\geq0$. Then the closed-loop system given by \eqref{eq:dynamics}, \eqref{eq:outputs}, \eqref{eq:interval-predictor} and \eqref{eq:control} has the following properties:
 	\begin{enumerate}
-		\item Input-to-state stability for $\underline{x},\;\overline{x}$ and practical input-to-state stability for $x$ with respect to $\underline{\omega},\overline{\omega}$ in the terminal set $\X_{f}$; 
-		\item Recursive feasibility with reaching $\X_{f}$ in a finite time; 
+		\item Input-to-state stability for $\underline{x},\;\overline{x}$ and practical input-to-state stability for $x$ with respect to $\underline{\omega},\overline{\omega}$ in the terminal set $\safestates_{f}$; 
+		\item Recursive feasibility with reaching $\safestates_{f}$ in a finite time; 
 		\item Constraint satisfaction.
 	\end{enumerate}
 \end{leftbar}
@@ -1172,21 +1171,21 @@ The main result of the section is as follows:
 	result of \Cref{thm:confidence_ellipsoid}, and we can enforce that the size of the set $\confidenceset$
 	does not grow with time by iteratively taking the intersection: $\confidenceset \eqdef ``\confidenceset\text{ from \eqref{eq:confidence-ellipsoid}}" \cap \cC_{[N-1],\confidence}$.
 	
-	Note that if for some $t_{n}\geq0$ the initial conditions $(\underline{x}^{\top}(t_{n}),\overline{x}^{\top}(t_{n}))^{\top}\in\X_{f}\subset\X^{2}$,
+	Note that if for some $t_{n}\geq0$ the initial conditions $(\underline{x}^{\top}(t_{n}),\overline{x}^{\top}(t_{n}))^{\top}\in\safestates_{f}\subset\safestates^{2}$,
 	then the control \eqref{eq:control} equals to \eqref{eq:control_pr}.
-	According to the definition \eqref{eq:X_f} of $\X_{f}$ and \Cref{assumpt:feasible-constr}, $\xi(t)\in\X_{f}$ and $u(t)\in\U$ for all $t\geq t_{n}$,
+	According to the definition \eqref{eq:X_f} of $\safestates_{f}$ and \Cref{assumpt:feasible-constr}, $\xi(t)\in\safestates_{f}$ and $u(t)\in\safecontrols$ for all $t\geq t_{n}$,
 	and the system is input-to-state stable with respect to $\xi(t)=[\underline{x}^{\top}(t)\;\overline{x}^{\top}(t)]^{\top}$
 	due to the result of \Cref{thm:ISS_pr}. Since $|x(t)|\leq|\xi(t)|$
 	under \eqref{eq:inclusion-property} for $t\geq t_{n}$ and $|\xi(t_{n})|\leq|x(t_{n})|+\zeta$
 	with $\zeta>0$ (that is well defined for all initial conditions in
-	$\X_{f}$), the practical input-to-state stability for the variable
+	$\safestates_{f}$), the practical input-to-state stability for the variable
 	$x(t)$ follows. The point \emph{1.} is proven.
 	
-	Now, let $(\underline{x}^{\top}(0),\overline{x}^{\top}(0))^{\top}\in\X^{2}\setminus\X_{f}$
+	Now, let $(\underline{x}^{\top}(0),\overline{x}^{\top}(0))^{\top}\in\safestates^{2}\setminus\safestates_{f}$
 	and assume that there is a solution of the optimal control problem
 	\eqref{eq:OCP}. Applying such a control through \eqref{eq:control}
-	for $t\in[0,\timestep)$, we have that $\xi(t)\in\X$ and $u(t)\in\U$
-	on this time interval. At $t=t_{1}=\timestep$, if again $(\underline{x}^{\top}(t_{1}),\overline{x}^{\top}(t_{1}))^{\top}\in\X^{2}\setminus\X_{f}$
+	for $t\in[0,\timestep)$, we have that $\xi(t)\in\safestates$ and $u(t)\in\safecontrols$
+	on this time interval. At $t=t_{1}=\timestep$, if again $(\underline{x}^{\top}(t_{1}),\overline{x}^{\top}(t_{1}))^{\top}\in\safestates^{2}\setminus\safestates_{f}$
 	(where $\underline{x}(t_{1}),\overline{x}(t_{1})$ are calculated
 	as in \eqref{eq:update}), then it recursively exists a solution to
 	\eqref{eq:OCP} since the set $\confidenceset$ is shrinking by its
@@ -1194,14 +1193,14 @@ The main result of the section is as follows:
 	are non-increasing by hypotheses of the theorem (\emph{i.e}., the
 	solution obtained at $t_{n}$ is a sub-optimal branch of the solution
 	calculated at $t_{n-1}$ for all $n\geq1$). Thus, recursive feasibility
-	follows. Note that $\X_{f}$ is a neighbourhood of the origin, and
+	follows. Note that $\safestates_{f}$ is a neighbourhood of the origin, and
 	the given in \eqref{eq:OCP} cost with positive definite matrices
-	$W_{1}$, $W_{2}$ and $W_{3}$ is minimized inside $\X_{f}$. Using
-	this and sub-optimality arguments, since $\xi(t_{n}+T)\in\X_{f}$
+	$W_{1}$, $W_{2}$ and $W_{3}$ is minimized inside $\safestates_{f}$. Using
+	this and sub-optimality arguments, since $\xi(t_{n}+T)\in\safestates_{f}$
 	in \eqref{eq:OCP} (provided that the optimal control $\cU$ is applied)
 	and $[\underline{x}(t_{n}),\overline{x}(t_{n})]\subset[\underline{x}(t_{n-1}+\timestep),\overline{x}(t_{n-1}+\timestep)]$
 	for all $n\geq1$, there is a finite time instant $t_{k}\geq T$ such
-	that $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}$,
+	that $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\safestates_{f}$,
 	and the system further stays there. The point \emph{2.} is substantiated.
 	
 	The point \emph{3.} is a consequence of the previous analysis: under
@@ -1212,16 +1211,16 @@ The main result of the section is as follows:
 	\begin{leftbar}[remarkbar]
 	At each $t_{N}$, $N\in\Natural_{+}$, the gains $K_{0},K_{1},K_{2}$
 	can be recalculated for the currently estimated set $\confidenceset$.
-	If next, the obtained in \eqref{eq:X_f} set $\X_{f}$ satisfies 
+	If next, the obtained in \eqref{eq:X_f} set $\safestates_{f}$ satisfies 
 	$
-	\X_{f}\subset\X^{2},
+	\safestates_{f}\subset\safestates^{2},
 	$
 	and
 	$
-	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\U
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\safecontrols
 	$
-	for any $\xi\in\X_{f}$ and $t\geq0$, as in \Cref{assumpt:feasible-constr},
-	then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
+	for any $\xi\in\safestates_{f}$ and $t\geq0$, as in \Cref{assumpt:feasible-constr},
+	then the new set $\safestates_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
 	can be used in \eqref{eq:control}.
 	\end{leftbar}
 \end{remark}
@@ -1273,7 +1272,7 @@ B =
 \end{bmatrix}.
 \]
 
-\noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
+\noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\safestates = \pm[3, 2, 6, 6]^\transp$ and $\safecontrols=\pm[10]$.
 
 \begin{figure}[th]
 	\centering
@@ -1369,7 +1368,7 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 	\end{leftbar}
 \end{theorem}
 
-Hence, by using enough computational budget $K$ for planning we can get as close as we want to the optimal surrogate value $\hat{V}^r(a^{\star})$, at a polynomial rate. Unfortunately, there exists a gap between $\hat{V}^r$ and the true robust objective $V^r$, which stems from three approximations: (i) the true reachable set was approximated by an enclosing interval in \eqref{eq:inclusion-property}; (ii) the time-invariance of the dynamics uncertainty $A(\theta)\in\confidenceset$ was handled by the interval predictor \eqref{eq:interval-predictor} as if it were a time-varying uncertainty $A(\theta(t))\in\confidenceset,\forall t$ ; and (iii) the lower-bound $\sum\min\leq \min\sum$ used to define the surrogate objective \eqref{eq:surrogate_objective} is not tight. However, this gap can be bounded with additional assumptions.
+Hence, by using enough computational budget $K$ for planning we can get as close as we want to the optimal surrogate value $\hat{V}^r(a^{\star})$, at a polynomial rate. Unfortunately, there exists a gap between $\hat{V}^r$ and the true robust objective $V^r$, which stems from three approximations: (i) the true reachable set was approximated by an enclosing interval in \eqref{eq:inclusion-property}; (ii) the time-invariance of the dynamics uncertainty $\structureddynamics\in\confidenceset$ was handled by the interval predictor \eqref{eq:interval-predictor} as if it were a time-varying uncertainty $A(\theta(t))\in\confidenceset,\forall t$ ; and (iii) the lower-bound $\sum\min\leq \min\sum$ used to define the surrogate objective \eqref{eq:surrogate_objective} is not tight. However, this gap can be bounded with additional assumptions.
 
 \begin{theorem}[Regret bound]
 	\label{thm:control-error}
@@ -1404,7 +1403,7 @@ The procedure we developed in sections \Cref{sec:estimation,sec:prediction,sec:c
 
 One of the major benefits of using the family of linear models, compared to richer model classes, is that they provide strict conditions allowing to quantify the adequacy of the modelling assumptions to the observations.
 
-Given $N-1$ observations, \Cref{sec:estimation} provides a polytopic confidence region \eqref{eq:polytope} that contains $A(\theta)$ with probability at least $1-\confidence$. Since the dynamics are linear, we can propagate this confidence region to the next observation: $y_{N}$ must belong to the Minkowski sum of a polytope representing model uncertainty $\cP(A_{0} x_N + Bu_N, \Delta A_{1}x_N,\dots, \Delta A_{2^d}x_N)$ and a polytope $\cP(0_p, \underline{\eta}, \overline{\eta})$ bounding the perturbation and measurement noises. \citet{delos2015} provide a way to test this membership in polynomial time using linear programming. Whenever it is not verified, we can confidently reject the $(A,\phi)$-modelling \Cref{assumpt:structure}. This enables us to consider a rich set of potential features $\left((A^1, \phi^1), \dots, (A^M, \phi^M)\right)$ rather than relying on a single assumption, and only retain those that are consistent with the observations so far. Then, every remaining hypothesis must be considered during planning.
+Given $N-1$ observations, \Cref{sec:estimation} provides a polytopic confidence region \eqref{eq:polytope} that contains $\structureddynamics$ with probability at least $1-\confidence$. Since the dynamics are linear, we can propagate this confidence region to the next observation: $y_{N}$ must belong to the Minkowski sum of a polytope representing model uncertainty $\cP(A_{0} x_N + Bu_N, \Delta A_{1}x_N,\dots, \Delta A_{2^d}x_N)$ and a polytope $\cP(0_p, \underline{\eta}, \overline{\eta})$ bounding the perturbation and measurement noises. \citet{delos2015} provide a way to test this membership in polynomial time using linear programming. Whenever it is not verified, we can confidently reject the $(A,\phi)$-modelling \Cref{assumpt:structure}. This enables us to consider a rich set of potential features $\left((A^1, \phi^1), \dots, (A^M, \phi^M)\right)$ rather than relying on a single assumption, and only retain those that are consistent with the observations so far. Then, every remaining hypothesis must be considered during planning.
 
 \paragraph{Robust selection}
 
@@ -1473,7 +1472,7 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 	\end{leftbar}
 \end{theorem}
 
-The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $A(\theta)\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
+The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
 \label{sec:interval-experiments}
@@ -1723,11 +1722,11 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\subsection{Proof of \Cref{prop:lower-bound}}
 	
 	\begin{proof}
-		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $A(\theta)\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
+		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
 		
 		Thus, by taking the min over $C_{[N],\confidence}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$,
 		\begin{align*}
-		V^r(\bu) &= \min_{\substack{A(\theta)\in C_{[N],\confidence}\\ \underline{\bom} \leq \bom \leq \overline{\bom}}} \sum_{n=N+1}^\infty \discount^n R(x_n)\\
+		V^r(\bu) &= \min_{\substack{\structureddynamics\in C_{[N],\confidence}\\ \underline{\bom} \leq \bom \leq \overline{\bom}}} \sum_{n=N+1}^\infty \discount^n R(x_n)\\
 		&\geq \sum_{n=N+1}^\infty \discount^n \underline{R}_n(\bu)\\
 		&= \hat{V}^r(\bu)
 		\end{align*}
@@ -1744,7 +1743,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\exists \underline{\phi},\overline{\phi}>0, n_0: \forall n\geq n_0,\nonumber\\ \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
 		\end{align}
 		then,
-		\[\|A(\theta) - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
+		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
 	\end{leftbar}
 	\end{lemma}
 	\begin{proof}
@@ -1764,9 +1763,9 @@ We present a framework for the robust estimation, prediction and control of a pa
 		Thus,
 		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
 		
-		And $A(\theta)$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
+		And $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
 		\begin{align*}
-		((A(\theta)&-A(\theta_{[N],\lambda}))^\transp (A(\theta) - A(\theta_{[N],\lambda})))_{i,j}\\
+		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
 		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
 		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
 		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{\log N}{N}} \right) 
@@ -1842,7 +1841,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 		\end{equation}
 		
 		We now examine the condition $\Upsilon \leq 0$.
-		We resort to its Schur complement: given $\alpha > 0$ , $\Upsilon \leq 0$ if and only if $R \geq S$, where $S= \alpha^{-1}\begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}^\transp \begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}$ and $R$ is the top-left block of $-\Upsilon$:
+		We resort to its Schur complement: given $\alpha > 0$, $\Upsilon \leq 0$ if and only if $R \geq S$, where $S= \alpha^{-1}\begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}^\transp \begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}$ and $R$ is the top-left block of $-\Upsilon$:
 		\[R = \begin{bmatrix}
 		-A_0^\transp P - P A_0^\transp - Q - 4\alpha I_p & -P|D|\\
 		-|D|^\transp P & \rho I_r\\
@@ -1874,9 +1873,8 @@ We present a framework for the robust estimation, prediction and control of a pa
 	
 	Finally, we propagate the state prediction error bound to the pessimistic rewards and surrogate objective to get our final result.
 	\begin{proof}
-		
-		For any sequence of controls $\bu$, dynamics $A(\theta)\in C_{[N],\confidence}$ and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, we clearly have 
-		\[V(\bu)^r \leq V(\bu) = \expectedvalue_{\bom}\sum_n \discount^n R(x_n)\]
+		For any sequence of controls $\bu$, dynamical parameters $\theta\in \confidenceset$ and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, we clearly have 
+		\[V(\bu)^r \leq V(\bu) = \expectedvalue_{\bom}\sum_n \discount^n \R(x_n)\]
 		
 		Moreover, by the inclusion property \eqref{eq:inclusion-property}, we have that $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \leq \max_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x)$. Assuming $R$ is $L$-lipschitz,
 		\begin{align*}
@@ -2104,7 +2102,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	\end{align*}
 %	where $\theta_{i,2}$ and $\theta_{i,3}$ are set to $0$ whenever the corresponding features are not active.
 %	
-%	It can be rewritten in the form $$\dot{X} = A(\theta)(X-X_c) + \omega.$$ For example, in the case of two vehicles only:
+%	It can be rewritten in the form $$\dot{X} = \structureddynamics(X-X_c) + \omega.$$ For example, in the case of two vehicles only:
 %	\begin{equation*}
 %	X = \begin{bmatrix}
 %	x_i \\
@@ -2129,7 +2127,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	\end{equation*}
 %	
 %	\begin{equation*}
-%	A(\theta)
+%	\structureddynamics
 %	=
 %	\begin{blockarray}{ccccc}
 %	& i & f_i & i & f_i \\
@@ -2168,7 +2166,7 @@ We present a framework for the robust estimation, prediction and control of a pa
 %	
 %	\paragraph{Change of coordinates}
 %	In both cases, the obtained polytope centre $A_0$ is non-Metzler.
-%	We use the similarity transformation of coordinates of \citet{Efimov2013}. Precisely, we choose $\Theta$ such that for any $\theta\in\Theta$, $A(\theta)$ is always diagonalisable with real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $Z$. The transformed system $X'=Z^{-1}(X-X_c)$ verifies \eqref{eq:confidence} with $A_0$ Metlzer as required to apply the interval predictor of \Cref{prop:predictor}. Finally, the obtained predictor is transformed back to the original coordinates $Z$ by using the following lemma:
+%	We use the similarity transformation of coordinates of \citet{Efimov2013}. Precisely, we choose $\Theta$ such that for any $\theta\in\Theta$, $\structureddynamics$ is always diagonalisable with real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $Z$. The transformed system $X'=Z^{-1}(X-X_c)$ verifies \eqref{eq:confidence} with $A_0$ Metlzer as required to apply the interval predictor of \Cref{prop:predictor}. Finally, the obtained predictor is transformed back to the original coordinates $Z$ by using the following lemma:
 %	\begin{lemma}[Interval arithmetic of \citealt{Efimov2012}]
 %		\label{lem:interval} Let $x\in\mathbb{R}^{n}$ be a vector variable, $\underline{x}\le x\le\overline{x}$ for some $\underline{x},\overline{x}\in\mathbb{R}^{n}$. 
 %		
