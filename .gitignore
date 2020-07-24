@@ -34,6 +34,8 @@
 *.slg
 *.slo
 *.sls
+*.bcf
+*.run.xml
 
 PhD_thesis__Edouard_Leurent.pdf
 
