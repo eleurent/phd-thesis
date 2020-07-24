@@ -16,7 +16,7 @@
 \end{flushright}
 
 \abstractStartChapter{}%
-Model-based algorithms often assume \emph{certainty equivalence} to decouple estimation and control: they use a point estimate $\hat{\Ps}$ of the dynamics to plan as if it was the true value. Unfortunately, this \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build a \emph{confidence region} that contains the true dynamics with high probability, and maximise the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs, all within an end-to-end analysis.\footnote{This chapter is based on two articles published in the \emph{2019 and 2020 Conferences on Decision and Control} \citep{Leurent2019interval,Leurent2020robust} and one submitted to the \emph{2020 Conference on Neural Information Processing Systems} \citep{Leurent2020beyond}.}
+Model-based algorithms often assume \emph{certainty equivalence} to decouple estimation and control: they use a point estimate $\hat{\Ps}$ of the dynamics as if it was the true value. Unfortunately, this \textit{model bias} can significantly degrade the performances. In this chapter, we address this issue by resorting to \emph{robust} decision-making: instead a mere point estimate, we build a \emph{confidence region} that contains the true dynamics with high probability, and consider the worst-case outcome with respect to this uncertainty. We propose an integrated framework leveraging non-asymptotic linear regression, interval prediction and tree-based planning to achieve robust stabilisation and minimax control with generic costs; along with an end-to-end analysis.\footnote{This chapter is based on two articles published in the \emph{2019 and 2020 Conferences on Decision and Control} \citep{Leurent2019interval,Leurent2020robust} and one submitted to the \emph{2020 Conference on Neural Information Processing Systems} \citep{Leurent2020beyond}.}
 \minitocStartChapter{}
 
 \section{Motivation}
@@ -85,16 +85,16 @@ In \textbf{\Cref{sec:estimation}}, having observed a history $\cD_{[N]} = \{(x_n
 \begin{figure}[ht]
 	\centering
 	\includegraphics[trim={0 0 0 0}, clip, width=0.5\linewidth]{img/interval-hull}
-	\caption{The state prediction procedure. At each time step, we bound \hlr{(in red)} the set of reachable states \hlg{(in green)} under model uncertainty \eqref{eq:confidence}}
+	\caption{The state prediction procedure. At each time step, we bound the set of reachable states \hlg{$x(t)$ (in green)} under model uncertainty \eqref{eq:confidence} in the interval \hlr{$[\ux(t), \ox(t)]$ (in red)}.}
 	\label{fig:prediction}
 \end{figure}
 
-In order to inform the controls, uncertainty about the dynamics $C_{[N],\confidence}$ needs to be propagated to the induced trajectories. To that end, we wish to derive a predictor $X(t)$ which takes the information on the current state ${x}_N$, the confidence region $\confidenceset$, a planned control sequence $\bu$ and admissible perturbation bounds $[\underline{\omega}(t),\overline{\omega}(t)]$; and verifies the \emph{inclusion property} illustrated in \Cref{fig:prediction}:
-\begin{equation*}
-%\label{eq:inclusion-property}
-x(t)\in X(t), \forall t\geq t_N.
-\end{equation*}
-Yet, in order to obtain an closed-form for $X(t)$, we need to know how the uncertainty over $x(t)$ can affect that of the next state $x(t+dt)$, which requires further specifying the shape of the features $\phi$ and $\psi$. Again, we make an assumption that $\phi$ and $\psi$ are linearly dependent on the states $x(t)$, controls $u(t)$ and perturbations $\omega(t)$, so as to draw on the theory of interval observers for linear systems. Thus, in this chapter we will consider a dynamical system in the following form.
+In order to inform the controls, uncertainty about the dynamics $C_{[N],\confidence}$ needs to be propagated to the induced trajectories. To that end, we wish to derive an interval predictor $[\ux(t),\ox(t)]$ which takes the information on the current state ${x}_N$, the confidence region $\confidenceset$, a planned control sequence $\bu$ and admissible perturbation bounds $[\underline{\omega}(t),\overline{\omega}(t)]$; and verifies the \emph{inclusion property} illustrated in \Cref{fig:prediction}:
+\begin{equation}
+\label{eq:inclusion-property}
+\ux(t)\leq x(t)\leq \ox(t),\; \forall t\geq t_N.
+\end{equation}
+Yet, in order to obtain an closed-form for $[\ux(t),\ox(t)]$, we need to know how the uncertainty over $x(t)$ can affect that of the next state $x(t+dt)$, which requires further specifying the shape of the features $\phi$ and $\psi$. Again, we make an assumption that $\phi$ and $\psi$ are linearly dependent on the states $x(t)$, controls $u(t)$ and perturbations $\omega(t)$, so as to draw on the theory of interval observers for linear systems. Thus, in this chapter we will consider a dynamical system in the following form.
 
 \begin{assumption}[Structure \textsc{iii}]
 	\label{assumpt:structure}
@@ -127,28 +127,23 @@ In \textbf{\Cref{sec:prediction}}, as a second contribution, we derive an \emph{
 \paragraph{Robust stabilisation and constraint satisfaction}
 
 As a first application and third contribution, we consider the problem of robustly stabilising the system \eqref{eq:dynamics} at a vicinity of the origin, while ensuring that
-\begin{equation*}
-x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0,
-\end{equation*}
+\begin{equation}
+x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0, \label{eq:constraints}
+\end{equation}
 where $[\underline{x}_{0},\overline{x}_{0}]\subset\safestates\subset\Real^{p}$ and $\safecontrols\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
 In \textbf{\Cref{sec:robust-stabilisation}}, we introduce a Dual-\gls{MPC} scheme that achieves this result by relying on a stabilising control for the predicted intervals.
 
 % --- 5. Second application: minimax control of generic costs
 \paragraph{Minimax control beyond quadratic costs}
-Yet, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance). To allow for more flexible goal formulations, these tasks can be better formulated with the \emph{minimax control objective} \citep{Bental2009,Bertsimas2011,Gorissen2015}, that we consider as a second application. This objective aims to maximise the worst-case return $V^r$
+Yet, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoidance). To allow for more flexible goal formulations, these tasks can be better formulated with the \emph{minimax control objective} \citep{Bental2009,Bertsimas2011,Gorissen2015}, that we consider as a second application. This objective aims to maximise the worst-case return $V^r$ with respect to the confidence region $\confidenceset$ and admissible perturbations
 \begin{equation}
-\label{eq:robust-control}
-\sup_{\bu\in{(\Real^q)}^\Natural} {V^r(\bu)}
-\end{equation}
-with respect to the confidence region $\confidenceset$
-\begin{equation}
-\label{eq:robust-control-obj}
-{V^r(\bu)} \eqdef \inf_{\substack{\theta \in \confidenceset \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right],
+\label{eq:minimax-obj}
+\hlg{\sup_{\bu\in{(\Real^q)}^\Natural}} \underbrace{\hlr{\inf_{\substack{\theta \in \confidenceset \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right]}_{{V^r(\bu)}},
 \end{equation}
 where $x_n(\bu,\bom)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\bom$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$, and $\R$ is an \emph{arbitrary} bounded reward function. This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[e.g.][]{Kumar2013}.
 
-Unfortunately, minimax problems such as $\eqref{eq:robust-control}$ are already notoriously hard when the reward $\R$ has a simple form. Without a restriction on the shape of functions $\R$, solving the optimal -- not to mention the robust -- control objective is intractable and we cannot hope to derive an explicit solution. Thus, in \textbf{\Cref{sec:control}} we propose a robust \gls{MPC} algorithm for solving \eqref{eq:robust-control} numerically. Facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms studied in \Cref{chapter:6}.
-However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:robust-control-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:control-error}. This is our forth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
+Unfortunately, minimax problems such as $\eqref{eq:minimax-obj}$ are already notoriously hard when the reward $\R$ has a simple form. Without a restriction on the shape of functions $\R$, solving the optimal -- not to mention the robust -- control objective is intractable and we cannot hope to derive an explicit solution. Thus, in \textbf{\Cref{sec:control}} we propose a robust \gls{MPC} algorithm for solving \eqref{eq:minimax-obj} numerically. Facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms studied in \Cref{chapter:6}.
+However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:minimax-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:control-error}. This is our forth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
 
 \paragraph{Multi-model extension}
 In \textbf{\Cref{sec:multi-model}}, our fifth contribution extends the proposed framework to consider multiple modelling assumptions, while narrowing uncertainty through data-driven model rejection, and still ensuring safety via robust model-selection during planning.
@@ -250,7 +245,7 @@ For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with co
 
 \begin{remark}
 	\begin{leftbar}[remarkbar]
-		The robust objective \eqref{eq:robust-control} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\confidence_n$. By choosing $\confidence_n = \frac{\confidence}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\confidence$.
+		The robust objective \eqref{eq:minimax-obj} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\confidence_n$. By choosing $\confidence_n = \frac{\confidence}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\confidence$.
 	\end{leftbar}
 \end{remark}
 
@@ -302,7 +297,7 @@ Note that since the function $A$ and the set $\Theta$ are known, and $\theta\in\
 
 The objective of this section is to design an \emph{interval predictor} for the system \eqref{eq:LPV_syst}, which takes the information on the initial conditions $[\underline{x}_{0},\overline{x}_{0}]$, the admissible bounds on the values of the exogenous input $[\underline{\omega}(t),\overline{\omega}(t)]$, the information about $A(\cdot)$ and $\Theta$ (\eg the matrices $\underline{A},\overline{A}$, but not the instant value of $\theta(t)$) and generates bounded interval estimates $\underline{x}(t),\overline{x}(t)\in\Real^{p}$ such that
 \begin{equation}
-\underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.\label{eq:inclusion-property}
+\underline{x}(t)\leq x(t)\leq\overline{x}(t),\quad\forall t\geq0.\tag{\ref{eq:inclusion-property}}
 \end{equation}
 
 In the presence of uncertainty (unknown parameters $\params$ or/and external disturbances $\omega(t)$) the design of a conventional estimator or predictor, approaching the ideal value of the state, can be realized under restrictive assumptions only. However, an interval estimation/prediction remains frequently feasible: using input-output information an algorithm evaluates the set of admissible values (interval) for the state at each instant of time \citep{Efimov2016,Raiessi2018}. The interval length must be minimized via a parametric tuning of the system, and it is typically proportional to the size of the model uncertainty \citep{Chebotarev2015}. It is worth stressing that the interval estimation or prediction is not a relaxation of the original problem, in fact it is an improvement since the interval mean value can be used as the state pointwise estimate, while the interval bounds provide a simultaneous accuracy evaluation for given uncertainty.
@@ -844,8 +839,7 @@ The prediction problem for uncertain \gls{LPV} systems is solved by designing an
 In this section, as a first application of the estimation and prediction tools introduced above, we set out to design a robust control $u(t)$ that stabilises \eqref{eq:dynamics}, \eqref{eq:outputs} at a vicinity of the origin under \Cref{assumpt:structure,assumpt:bounded-state,assumpt:bounded-noise}
 such that
 \begin{equation}
-\label{eq:constraints}
-x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0,
+x(t)\in\safestates,\;u(t)\in\safecontrols\quad\forall t\geq0,\tag{\ref{eq:constraints}}
 \end{equation}
 where $[\underline{x}_{0},\overline{x}_{0}]\subset\safestates\subset\Real^{p}$ and $\safecontrols\subset\Real^{q}$ are given bounded constraint sets for the state and the control, respectively.
 
@@ -1162,7 +1156,7 @@ The main result of the section is as follows:
 	\begin{enumerate}
 		\item Input-to-state stability for $\underline{x},\;\overline{x}$ and practical input-to-state stability for $x$ with respect to $\underline{\omega},\overline{\omega}$ in the terminal set $\safestates_{f}$; 
 		\item Recursive feasibility with reaching $\safestates_{f}$ in a finite time; 
-		\item Constraint satisfaction.
+		\item Constraint satisfaction \eqref{eq:constraints}.
 	\end{enumerate}
 \end{leftbar}
 \end{theorem}
@@ -1289,28 +1283,31 @@ The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\confid
 
 As we discussed in \Cref{sec:robust-motivation}, the ability to stabilise a system in the neighbourhood of the origin is not sufficient to tackle many tasks for which there exist no clear notion of equilibrium, and where the system must continually and dynamically adapt to its surroundings. This especially includes tasks akin to obstacle avoidance, which constitutes a substantial part of motion planning.
 
-Therefore, in this section, we tackle the arguably more expressive objective of minimax control \eqref{eq:robust-control-obj} of an arbitrary bounded reward function $\reward:\Real^p\to[0, 1]$.
+Therefore, in this section and as a second application of the tools introduced in \Cref{sec:estimation,sec:prediction}, we tackle the arguably more expressive objective of minimax control \eqref{eq:minimax-obj} of an arbitrary bounded reward function $\reward:\Real^p\to[0, 1]$, recalled here:
+\begin{equation}
+\hlg{\sup_{bu\in{(\Real^q)}^\Natural}} \hlr{\inf_{\substack{\theta \in \confidenceset \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right]. \tag{\ref{eq:minimax-obj}}
+\end{equation}
 
-In order to evaluate the robust objective $V^r$ \eqref{eq:robust-control}, we approximate it thanks to the interval prediction $[\underline{x}(t), \overline{x}(t)]$ of \Cref{sec:prediction}.
+\paragraph{Evaluation} In order to evaluate this robust objective $V^r$, we approximate it thanks to the interval prediction $[\underline{x}(t), \overline{x}(t)]$ of \Cref{sec:prediction}.
 
 \begin{definition}[Surrogate objective]
 	\begin{leftbar}[defnbar]
 	Let
 	\begin{align}
 	\label{eq:surrogate_objective} 
-	\hat{V}^r(\bu) &\eqdef \sum_{n=N+1}^\infty \discount^n \underline{R}_n(\bu)\\ 
-	\text{where}\quad\underline{R}_n(\bu) &\eqdef \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) \label{eq:pessimistic-rewards}
+	\hat{V}^r(\bu) &\eqdef \sum_{n=N+1}^\infty \discount^n \pessimisticreward_n(\bu),\\ 
+	\text{where}\quad\pessimisticreward_n(\bu) &\eqdef \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  \R(x), \label{eq:pessimistic-rewards}
 	\end{align}
 	and $\underline{x}_n(\bu), \overline{x}_n(\bu)$ follow the dynamics defined in \eqref{eq:interval-predictor}.
 	\end{leftbar}
 \end{definition}
 
-This amounts to changing the reward function, except that the worst case is assessed over the whole past trajectory, which makes this pessimistic reward $\underline{R_n}$ \emph{not Markovian}.
+This amounts to changing the reward function, except that the worst case is assessed over the whole past trajectory, which makes this pessimistic reward $\pessimisticreward_n$ \emph{not Markovian}.
 
 \begin{proposition}[Lower bound]
 	\label{prop:lower-bound}
 	\begin{leftbar}[propositionbar]
-	The surrogate objective  \eqref{eq:surrogate_objective} is a lower bound of the true objective  \eqref{eq:robust-control-obj}: 
+	The surrogate objective  \eqref{eq:surrogate_objective} is a lower bound of the true objective  \eqref{eq:minimax-obj}: 
 	\begin{equation*}
 	\hat{V}^r(\bu) \leq V^r(\bu)
 	\end{equation*}
@@ -1319,19 +1316,21 @@ This amounts to changing the reward function, except that the worst case is asse
 A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \textit{``bad event''} (e.g. a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system. 
 
 \paragraph{Planning}
-To optimise $\hat{V}^r$ \eqref{eq:surrogate_objective}, we cannot use Dynamic Programming algorithms since the state space is continuous and the pessimistic rewards are non-Markovian. Instead, we turn to tree-based planning algorithms, which optimise a sequence of actions based on the corresponding sequence of rewards, without requiring Markovity nor state enumeration.
+To optimise $\hat{V}^r$ \eqref{eq:surrogate_objective}, we cannot use Dynamic Programming algorithms since the state space is continuous and the pessimistic rewards are non-Markovian. Instead, as we did in \Cref{chapter:6}, we turn to tree-based planning algorithms, which optimise a sequence of actions based on the corresponding sequence of rewards, without requiring Markovity nor state enumeration.
 
-Though there exist works addressing continuous actions \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision space $(\Real^q)^\Natural$ by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
-The robust objective \eqref{eq:robust-control} becomes $\sup_{\ba\in{\cA}^\Natural} V^r(\ba)$, where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
+Though there exist works addressing continuous action spaces \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision space $\Real^q$ by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
+The robust objective \eqref{eq:minimax-obj} becomes
+\[\sup_{\ba\in{\cA}^\Natural} V^r(\ba),\]
+where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
 
 This enables us to consider the \OPD algorithm \citep{Hren2008} tailored for the case when the relationship between actions and rewards is deterministic. Indeed, the stochasticity of the perturbations and measurements is encased in $\hat{V}^r$: given the observations up to time $N$ both the predictor dynamics \eqref{eq:interval-predictor} and the pessimistic rewards \eqref{eq:pessimistic-rewards} are deterministic.
 
 At each planning iteration $k\in[K]$, \OPD progressively builds a tree $\cT_{k+1}$ by forming upper-bounds $B_a(k)$ over the value of sequences of actions $a$, and expanding\footnote{The expansion of a leaf node $a$ refers to the simulation of its children transitions $aA = \{ab, b\in A\}$} the leaf $a_k$ with highest upper-bound:
 \begin{equation}
 \label{eq:opd}
-a_k = \argmax_{a\in\cL_k} B_a(k), \quad B_a(k) = \sum_{n=0}^{h(a)-1} \underline{R}_n(a) + \frac{\discount^{h(a)}}{1-\discount}
+a_k = \argmax_{a\in\cL_k} B_a(k), \quad B_a(k) = \sum_{n=0}^{h(a)-1} \pessimisticreward_n(a) + \frac{\discount^{h(a)}}{1-\discount}
 \end{equation}
-where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the sequence $a$, and $\underline{R}_n(a)$ the pessimistic reward \eqref{eq:pessimistic-rewards} obtained at time $n$ by following the controls $u_n = \pi_{a_n}(x_n)$.
+where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the sequence $a$, and $\pessimisticreward_n(a)$ the pessimistic reward \eqref{eq:pessimistic-rewards} obtained at time $n$ by following the controls $u_n = \pi_{a_n}(x_n)$.
 
 \Cref{alg:full} shows the full integration of the three procedures of estimation, prediction and control. 
 \begin{algorithm}[th]
@@ -1441,7 +1440,6 @@ Note that it is not equivalent to solving each control problem independently and
 	\label{sec:min-max-order}
 	\begin{leftbar}[remarkbar]
 	In the definition of $B_{a}^{r}(k)$ \eqref{eq:br} and $U_{a}^{r}(k)$ \eqref{eq:ur} it is essential that the minimum over the models is only taken at the end of trajectories, in the same way as for the robust objective \eqref{eq:robust-objective-discrete} in which the worst-case dynamics is only determined after the action sequence has been fully specified. Assume that $U_{a}^{r}(k)$ is instead naively defined as
-	
 	\[
 	U_{a}^{r}(k)=\min_{m\in[1,M]}U_{a}^{m}(k),
 	\]
@@ -1472,7 +1470,7 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 	\end{leftbar}
 \end{theorem}
 
-The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:robust-control} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
+The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:minimax-obj} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
 \label{sec:interval-experiments}
@@ -1722,12 +1720,12 @@ We present a framework for the robust estimation, prediction and control of a pa
 	\subsection{Proof of \Cref{prop:lower-bound}}
 	
 	\begin{proof}
-		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \underline{R}_n(\bu)$.
+		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \pessimisticreward_n(\bu)$.
 		
 		Thus, by taking the min over $C_{[N],\confidence}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$,
 		\begin{align*}
 		V^r(\bu) &= \min_{\substack{\structureddynamics\in C_{[N],\confidence}\\ \underline{\bom} \leq \bom \leq \overline{\bom}}} \sum_{n=N+1}^\infty \discount^n R(x_n)\\
-		&\geq \sum_{n=N+1}^\infty \discount^n \underline{R}_n(\bu)\\
+		&\geq \sum_{n=N+1}^\infty \discount^n \pessimisticreward_n(\bu)\\
 		&= \hat{V}^r(\bu)
 		\end{align*}
 	\end{proof}
