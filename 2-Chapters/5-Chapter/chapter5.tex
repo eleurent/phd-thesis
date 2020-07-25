@@ -154,7 +154,7 @@ We restrict $\ocS$ to feasible budgets only: $\ocS_f \eqdef \{(s,\budget)\in\ocS
 	\end{leftbar}
 \end{proposition}
 \begin{proof}
-	We provide the proof in \Cref{sec:proof-bell-eval}.
+	We provide the proof in \Cref{sec:proof-bell-expect}.
 \end{proof}
 
 We now come to the definition of budgeted optimality. We want an optimal budgeted policy to: 
@@ -376,7 +376,7 @@ However, it can be solved efficiently by exploiting the \emph{structure} of the 
     $p \leftarrow (\budget - q_c^1) / (q_c^2 - q_c^1)$\;
     \Return the mixture $(1-p)\dirac(\oa-\oa^1) + p\dirac(\oa-\oa^2)$\;
     }}
-    \lElse{\Return $\dirac(\oa - \argmax_{\oa} \Qr(\os,\oa))$\tcp*[f]{Budget $\budget$ always respected}}
+    \lElse{\Return $\dirac(\oa - \argmax_{\oa} \Qr(\os,\oa))$\tcp*[f]{budget $\budget$ always respected}}
     \caption{Convex hull policy $\budgetedpolicy_\text{hull}(\oa|\os; \oQ)$}
     \label{alg:pi_hull}
 \end{algorithm}
@@ -1025,12 +1025,12 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
 % Are they met?
 
 \begin{table}[H]
-	\begin{tabularx}{\linewidth}{lcX}
+	\begin{tabularx}{\linewidth}{p{4cm}cX}
 		\toprule
-		Criterion & Meet & Description \\
+		Criterion & is met & Description \\
 		\midrule
 		\textbf{Social Awareness} & {\Large $\hlgb{\checkmark}$} & using the ego-attention architecture to actively attend to other vehicles \\
-		\textbf{Sample Efficiency} & {\Large $\hlgb{\checkmark}$} & social-awareness is an inductive bias wich fastens training \\
+		\textbf{Sample Efficiency} & {\Large $\hlgb{\checkmark}$} & social-awareness is an inductive bias which fastens training \\
 		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & a cost signal is constrained to remain below a threshold budget \\
 		\textbf{Balance between safety and efficiency} & {\Large $\hlgb{\checkmark}$} & the budget beta can be adjusted in real time as an input to the budgeted policy to trade-off safety with/ efficiency \\
 		\bottomrule
