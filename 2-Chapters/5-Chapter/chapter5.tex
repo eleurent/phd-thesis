@@ -1019,21 +1019,24 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
 \end{subappendices}
 
 
-\chapter*{Part Conclusion:\\ {\Large Review of our Requirements}}
+\chapter*{Part Conclusion\\ {\LARGE Review of our Requirements}}
 
 \markboth{Part Conclusion}{Part Conclusion}
+\addcontentsline{toc}{chapter}{Part Conclusion}
 
-% Are they met?
+Let us come back to the specifications of desirable properties for a behavioural planning algorithm, that we advocated in \Cref{chapter:1}. In \Cref{tab:part-2-conclusion}, we examine which of these criteria are met or not by the methods developed in \Cref{part:2}.
 
 \begin{table}[H]
-	\begin{tabularx}{\linewidth}{p{4cm}cX}
+	\begin{tabularx}{\linewidth}{p{4.3cm}cX}
 		\toprule
-		Criterion & is met & Description \\
+		Criterion & & Description \\
 		\midrule
-		\textbf{Social Awareness} & {\Large $\hlgb{\checkmark}$} & using the ego-attention architecture to actively attend to other vehicles \\
-		\textbf{Sample Efficiency} & {\Large $\hlgb{\checkmark}$} & social-awareness is an inductive bias which fastens training \\
-		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & a cost signal is constrained to remain below a threshold budget \\
+		\textbf{Social Awareness} & {\Large $\hlgb{\checkmark}$} & In \Cref{chapter:4}, we introduced an attention-based \glsxtrlong{NN} architecture that explicitly attends to other drivers in the scene, sorting out irrelevant vehicles from those that represent a source of danger. \\
+		\textbf{Sample Efficiency} & {\Large $\hlgb{\checkmark}$} & We showed in \Cref{fig:attention-reward} that this architecture also comes with an inductive bias -- permutation invariance -- that allows to fasten the training process. \\
+		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & A first notion of risk was introduced in \Cref{chapter:5}, in the shape of a cost signal $\constraint(s,a)$ constrained to remain below a threshold $\beta$, in expectation. This formulation makes it possible to state safety specifications orthogonal to the traditional reward maximisation objective.\\
 		\textbf{Balance between safety and efficiency} & {\Large $\hlgb{\checkmark}$} & the budget beta can be adjusted in real time as an input to the budgeted policy to trade-off safety with/ efficiency \\
 		\bottomrule
 	\end{tabularx}
+	\caption{}
+	\label{tab:part-2-conclusion}
 \end{table}
