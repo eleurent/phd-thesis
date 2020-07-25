@@ -12,6 +12,14 @@
 \usepackage[inline]{enumitem}
 \setlist[enumerate,itemize,description]{topsep=0em}
 
+% --- Epigraphs in parts
+% https://tex.stackexchange.com/a/202324
+\usepackage{xpatch}
+\makeatletter
+\xpatchcmd{\@endpart}{\vfil\newpage}{}{}{}
+\xpatchcmd{\@endpart}{\newpage}{}{}{}
+\makeatother
+
 % --- Algorithms packages
 \usepackage[algochapter,linesnumbered,commentsnumbered,inoutnumbered,ruled,vlined]{algorithm2e}
 \SetKwComment{Comment}{$\triangleright$\ }{}
