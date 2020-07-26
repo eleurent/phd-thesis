@@ -130,20 +130,17 @@
 
 % --- Bibliography
 % Add `custombib' in the document class option to use this section
-
-	
 \ifuseCustomBib
-
-	\usepackage[backend=biber, style=apa,
+	\usepackage[backend=biber, style=authoryear,
 		sorting=nyt, natbib=true,doi=false,isbn=false,url=false,eprint=false]{biblatex}
 	\setlength\bibitemsep{0.5\baselineskip}
 
-%	\DeclareFieldFormat[article, inbook]{title}{#1} 
-%  \renewcommand*{\intitlepunct}{\addspace\nopunct}
-%	\renewbibmacro{in:}{%
-%		\ifentrytype{article}
-%		{}
-%		{\printtext{\bibstring{in}\intitlepunct}}}
+  \DeclareFieldFormat[article, inbook]{title}{#1} 
+  \renewcommand*{\intitlepunct}{\addspace\nopunct}
+	\renewbibmacro{in:}{%
+		\ifentrytype{article}
+		{}
+		{\printtext{\bibstring{in}\intitlepunct}}}
 
 \fi
 % changes the default name `Bibliography` -> `References'
