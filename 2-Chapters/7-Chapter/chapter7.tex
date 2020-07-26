@@ -1584,12 +1584,6 @@ The system dynamics $f$, which describes the couplings and interactions between 
 
 We propose a framework for the robust estimation, prediction and control of a partially known linear system. After deriving a confidence region for the state matrix through non-asymptotic linear regression, we design an interval predictor guaranteed to contain the induced trajectory, and whose stability is guaranteed upon satisfaction of an \gls{LMI}. We leverage these tools in two applications. First, the robust stabilisation of the system at the origin under state and control constraints, that we achieve with a dual \gls{MPC} and feedback that both exploit the predicted intervals. Second, the minimax control of a generic (non-quadratic) cost function, for which we provide an tree-based planning algorithm whose predicted performance is guaranteed and whose regret is bounded. The applicability of the method is further improved by a multi-model extension and demonstrated on several simulated driving applications, namely: socially-aware trajectory prediction for an observed vehicle, steering control under unknown tire friction, and safe intersection crossing among drivers with uncertain destination and driving styles.
 
-%TODO: review of our requirements
-% Socially aware: check (coupled dynamics)
-% Safety: check (worst-case)
-% Balanced with efficiency: conservativeness can be tuned with confidence level $\delta$, or adding additional modelling assumptions which increases robustness at the price of efficiency.
-% Sample efficient: based on optimistic planner, which can benefit from contributions of Chapter 6, value of merging the states
-
 \begin{subappendices}
 	
 	\section{Technical details}
@@ -1674,7 +1668,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		$$\expectedvalue[M_\tau^z] = \expectedvalue[\liminf_{t\to\infty} M_{\min(\tau,t)}^z] \leq \liminf_{t\to\infty} \expectedvalue[M_{\min(\tau,t)}^z] \leq 1.$$
 		
 		This results allows to apply a result from \citep{pena2008self}.
-		\begin{lemma}[Theorem 14.7 of \citep{pena2008self}]
+		\begin{lemma}[Theorem 14.7 of \citealp{pena2008self}]
 			\begin{leftbar}[lemmabar]
 			If $Z$ is a random vector and $B$ is a symmetric positive definite matrix such that
 			\[\forall \discount\in\Real^d, \ln \expectedvalue \exp \left(\discount^\transp Z -\frac{1}{2} \discount^\transp B \discount \right)\leq 0,\]
@@ -1705,8 +1699,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		
 		Using the Cauchy-Schwartz inequality, we get
 		\begin{align*}
-		|x^\transp\theta_{N,\lambda}  -x^\transp\theta| \leq {} & \|x\|_{G_{N, \lambda}^{-1}}\left(\left\|\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n\right\|_{G_{N, \lambda}^{-1}}\right.\\ 
-		&+ \left.\lambda\|\theta\|_{G_{N, \lambda}^{-1}}\right)
+		|x^\transp\theta_{N,\lambda}  -x^\transp\theta| \leq \|x\|_{G_{N, \lambda}^{-1}}\left(\left\|\sum_{n=1}^N \Phi_n^\transp \Sigma_p^{-1}\eta_n\right\|_{G_{N, \lambda}^{-1}} + \lambda\|\theta\|_{G_{N, \lambda}^{-1}}\right)
 		\end{align*}
 		
 		In particular, for $x = G_{N,\lambda}(\theta_{N,\lambda} - \theta)$, we get after simplifying with $\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}}$,
@@ -2046,7 +2039,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		This describes a $\Real^d$ box containing $\theta' = P\theta$, whose $k^\text{th}$ vertex is represented by $$\theta_{N,\lambda}' + \beta_{N}(\confidence)^{1/2}D^{-1/2} h_k.$$ We obtain the corresponding box on $\theta$ by transforming each vertex of the box with $P^{-1}$.
 	\end{proof}
 	
-	\begin{figure}
+	\begin{figure}[ht]
 		\centering
 		\includegraphics[trim={3.8cm, 2cm, 5cm, 3.8cm}, clip, width=0.7\linewidth]{img/ellipsoid_to_polytope}
 		\caption{From the confidence ellipsoid $\cC_\confidence$ to its enclosing polytope $\cP_\confidence$}
@@ -2209,3 +2202,26 @@ We propose a framework for the robust estimation, prediction and control of a pa
 %	\end{cases}\]
 	
 \end{subappendices}
+
+
+\chapter*{Part Conclusion\\ {\LARGE Review of our Requirements}}
+
+\markboth{Part Conclusion}{Part Conclusion}
+\addcontentsline{toc}{chapter}{Part Conclusion}
+
+Again, in \Cref{tab:part-3-conclusion} we discuss whether the methods developed in \Cref{part:3} address the challenges identified in \Cref{chapter:1}.
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{p{2.2cm}cX}
+		\toprule
+		Criterion & & Description \\
+		\midrule
+		\textbf{\makecell[l]{Social \\Awareness}} & {\Large $\hlgb{\checkmark}$} & In \Cref{chapter:6,chapter:7}, the planning algorithm relies on a predictive model $\dot{x_i} = f_i(x, u)$ in which the motion of a vehicle $i\in[N_v]$ is coupled to that of other vehicles $x = [x_0, x_1, \dots x_{N_v}]$ in the scene, to account for driving interactions. \\
+		\textbf{\makecell[l]{Sample \\ Efficiency}} & {\Large $\hlgb{\checkmark}$} & For \emph{model estimation}, we rely in \Cref{chapter:7} on a structured parametrised model $\dot x = A(\theta)x + Bu$ which incorporates priors over car-like kinematics (non-holonomic) and human driving behaviours (lane following, cruise control). The \emph{planning} step can benefit from the contributions of \Cref{chapter:6} on optimistic tree-based planning, such as merging the states of overlapping sampled trajectories. \\
+		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & Two other notions of risk were introduced in \Cref{chapter:7}: first as a hard constraint $x\in\safestates,\,u\in\safecontrols$ under bounded disturbances and parametric model uncertainty; and second, as a minimax objective that produces risk-averse behaviours by evaluating the worst possible outcome under said disturbances and model uncertainty. \\
+		\textbf{Balance between safety and efficiency} & {\Large $\hlgb{\checkmark}$} & The conservativeness of the robust \gls{MPC} algorithms of \Cref{chapter:7} can be tuned by adjusting the confidence level $\confidence$ to trade-off the error probability with the size of the confidence region $\cC_{[N],\delta}$; or by considering additional modelling assumptions $(A, \phi)$ in the multi-model perspective, which will increase robustness at the expense of efficiency.\\
+		\bottomrule
+	\end{tabularx}
+	\caption{Do the methods of \Cref{part:3} comply with the specifications of \Cref{chapter:1}?}
+	\label{tab:part-3-conclusion}
+\end{table}

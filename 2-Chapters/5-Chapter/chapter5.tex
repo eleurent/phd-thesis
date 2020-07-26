@@ -1033,10 +1033,10 @@ Let us come back to the specifications of desirable properties for a behavioural
 		\midrule
 		\textbf{Social Awareness} & {\Large $\hlgb{\checkmark}$} & In \Cref{chapter:4}, we introduced an attention-based \glsxtrlong{NN} architecture that explicitly attends to other drivers in the scene, sorting out irrelevant vehicles from those that represent a source of danger. \\
 		\textbf{Sample Efficiency} & {\Large $\hlgb{\checkmark}$} & We showed in \Cref{fig:attention-reward} that this architecture also comes with an inductive bias -- permutation invariance -- that allows to fasten the training process. \\
-		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & A first notion of risk was introduced in \Cref{chapter:5}, in the shape of a cost signal $\constraint(s,a)$ constrained to remain below a threshold $\beta$, in expectation. This formulation makes it possible to state safety specifications orthogonal to the traditional reward maximisation objective.\\
-		\textbf{Balance between safety and efficiency} & {\Large $\hlgb{\checkmark}$} & the budget beta can be adjusted in real time as an input to the budgeted policy to trade-off safety with/ efficiency \\
+		\textbf{Safety} & {\Large $\hlgb{\checkmark}$} & A first notion of risk was introduced in \Cref{chapter:5}, in the shape of a cost signal $\constraint(s,a)$ constrained to remain below a threshold $\budget$, in expectation. This formulation makes it possible to state safety specifications orthogonal to the traditional reward maximisation objective.\\
+		\textbf{Balance between safety and efficiency} & {\Large $\hlgb{\checkmark}$} & The cost budget $\budget$ can be adjusted in real time as an input of the budgeted policy $\budgetedpolicy$ to trade-off safety with  efficiency \\
 		\bottomrule
 	\end{tabularx}
-	\caption{}
+	\caption{Do the methods of \Cref{part:2} comply with the specifications of \Cref{chapter:1}?}
 	\label{tab:part-2-conclusion}
 \end{table}
