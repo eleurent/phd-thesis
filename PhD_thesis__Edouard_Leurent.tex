@@ -41,11 +41,23 @@
 	\frontmatter
 	\input{1-Preamble/preambles}
 
-	% *************************** TOC & Nomenclature ****************************
+	% *************************** TOC ****************************
 	\begin{spacing}{1}
 		\dominitoc
 		\tableofcontents
 	\end{spacing}
+
+	% *************************** Nomenclature ****************************
+	%	\begin{spacing}{0.93}
+	\glsaddallunused
+	\printglossary[type=main, title={List of Acronyms}]
+	\label{chapter:nomenclature}
+	\newcommand*{\Agroupname}{Mathematical notations}
+	\newcommand*{\Bgroupname}{Markov Decision Processes}
+	\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
+	\newcommand*{\Zgroupname}{Linear Systems}
+	\printglossary[type=symbols, title={List of Symbols}]
+	%	\end{spacing}
 
 	% *************** Chapters ****************
 	\mainmatter
@@ -58,18 +70,6 @@
 	\newpage
 
 %	\begin{small}   % XXX
-
-	% *************************** Nomenclature ****************************
-%	\begin{spacing}{0.93}
-		\glsaddallunused
-		\printglossary[type=main, title={List of Acronyms}]
-		\label{chapter:nomenclature}
-		\newcommand*{\Agroupname}{Mathematical notations}
-		\newcommand*{\Bgroupname}{Markov Decision Processes}
-		\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
-		\newcommand*{\Zgroupname}{Linear Systems}
-		\printglossary[type=symbols, title={List of Symbols}]
-%	\end{spacing}
 
 	% \input{4-Listofpublications/Listofpublications}
 	% **************** Listes *****************
