@@ -26,7 +26,7 @@
 % \usepackage[a-1b]{pdfx}  % https://www.ctan.org/pkg/pdfx, PDF/A1-b for archiving
 
 % --- Draft Mode
-\SetDraftVersion{v4: Chap 1--7}
+\SetDraftVersion{master}
 
 % Packages (add your own packages here)
 \input{0-Misc/packages}
@@ -42,21 +42,21 @@
 	\input{1-Preamble/preambles}
 
 	% *************************** TOC ****************************
-	\begin{spacing}{1}
-		\dominitoc
-		\tableofcontents
-	\end{spacing}
+	\dominitoc
+	\tableofcontents
 
-	% *************************** Nomenclature ****************************
+	% *************************** Nomenclature ***************************
 	%	\begin{spacing}{0.93}
 	\glsaddallunused
 	\printglossary[type=main, title={List of Acronyms}]
-	\label{chapter:nomenclature}
+	\mtcfixglossary[chapter]
+	
 	\newcommand*{\Agroupname}{Mathematical notations}
 	\newcommand*{\Bgroupname}{Markov Decision Processes}
 	\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
 	\newcommand*{\Zgroupname}{Linear Systems}
 	\printglossary[type=symbols, title={List of Symbols}]
+	\mtcfixglossary[chapter]
 	%	\end{spacing}
 
 	% *************** Chapters ****************
@@ -79,11 +79,13 @@
 		% https://tex.stackexchange.com/questions/69184/remove-blank-page-between-list-of-figures-and-list-of-tables#69218
 		\let\cleardoublepage\clearpage%
 		\listoffigures
+		\mtcaddchapter
 		\let\cleardoublepage\clearpage%
 		\listofalgorithms
-		\addcontentsline{toc}{chapter}{List of Algorithms}
+		\mtcaddchapter[List of Algorithms]
 		\let\cleardoublepage\clearpage%
 		\listoftables
+		\mtcaddchapter
 	}
 %	\end{spacing}
 
@@ -99,6 +101,7 @@
 %		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2,contributions}
 
 		\printbibliography[heading=bibintoc]
+		\adjustmtc
 
 %		\vfill{}
 %		\hr{}		
