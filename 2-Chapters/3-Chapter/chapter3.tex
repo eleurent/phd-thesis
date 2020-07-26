@@ -100,11 +100,10 @@ We represent the non-holonomic motion capabilities of every vehicle $i\in[0, N_v
 \begin{split}
 \dot{p}^x_i &= v_i\cos(\psi_i + \beta_i), \\
 \dot{p}^y_i &= v_i\sin(\psi_i + \beta_i),\\
-\dot{v}_i &= a_i,\\
 \dot{\psi}_i &= \frac{v_i}{l}\sin(\beta_i),
 \end{split}
 \end{align}
-where $l$ is the vehicle half-length, $a_i$ is the throttle command and $\beta_i$ is the slip angle at the centre of gravity, used as a steering command.
+where $l$ is the vehicle half-length, $\dot{v}_i$ is the throttle command and $\beta_i$ is the slip angle at the centre of gravity, used as a steering command.
 
 \subsection{Motion planning and control}
 
@@ -121,7 +120,7 @@ Note that the corresponding steering command $\beta_i$ can be obtained from \eqr
 
 Furthermore, the ego-vehicle needs to be able to control its speed as per the meta actions $\cA$. To that end, we use a linear longitudinal controller
 \begin{equation*}
-a_0 = K_0^v(v_r - v_0),
+\dot{v}_0 = K_0^v(v_r - v_0),
 \end{equation*}
 where $v_r\in\Real$ is the reference speed, incremented by $\pm \SI[per-mode=symbol]{5}{\meter\per\second}$ by the \emph{drive faster} and \emph{drive slower} meta-actions, and $K_0^v\in\Real$ is a control gain.
 
@@ -134,12 +133,12 @@ Other simulated vehicles follow simple and behavioural models from the traffic s
 The acceleration command $a_i$ of a vehicle $i\in[1, N_v]$ is controlled directly by the \gls{IDM} from \citep{Treiber2000}:
 \begin{align}
 \begin{split}
-a_i &= a_i^+\left[1-\left(\frac{v}{v_i^0}\right)^\delta - \left(\frac{d^{\star}_i}{d_i}\right)^2\right], \\
+\dot{v}_i &= a_i\left[1-\left(\frac{v}{v_i^0}\right)^\delta - \left(\frac{d^{\star}_i}{d_i}\right)^2\right], \\
 \text{where }\quad d^{\star}_i &= d_i^0 + T_i v_i + \frac{v_i\Delta v_i}{2\sqrt{a_i^+ b_i}},
 \end{split}
 \end{align}
 $v_i$ is the vehicle velocity, $d_i$ is the distance to its front vehicle.
-The dynamics of vehicle $i\in[1, N_v]$ are thus parametrised by the desired velocity $v_i^0$ , the time gap $T_i$, the jam distance $d_i^0$, the maximum acceleration $a_i^+$ and deceleration $b_i$, and the velocity exponent $\delta$.
+The dynamics of vehicle $i\in[1, N_v]$ are thus parametrised by the desired velocity $v_i^0$ , the time gap $T_i$, the jam distance $d_i^0$, the maximum acceleration $a_i$ and deceleration $b_i$, and the velocity exponent $\delta$.
 
 \paragraph{Lateral behaviour}
 
@@ -192,7 +191,7 @@ Thus, unless otherwise stated, the reward function $\R$ is chosen as follows:
 
 A more realistic reward function may include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
 
-This reward function is \emph{dense}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it its discontinuous at collision states.
+This reward function is \emph{dense}\footnote{Rewards are said to be \emph{dense} when they are a rich signal obtained at (nearly) every step of decisions, which helps quickly shaping the behaviour and guiding exploration. In contrast, \emph{sparse} rewards are obtained for only a few goal states which are seldom reached (\eg only at the exit of a maze, or the end of a board game), which makes exploration much harder and requires assigning \emph{credit} to the action(s) responsible for a win/loss}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it its discontinuous at collision states.
 
 \section{Implementation}
 

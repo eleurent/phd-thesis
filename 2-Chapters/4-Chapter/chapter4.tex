@@ -30,7 +30,7 @@
 
 \abstractStartChapter{}%
 Having detailed the \gls{MDP} model in \Cref{part:1}, we now study in \Cref{part:2} how model-free \glsxtrlong{RL} algorithms can learn an optimal behavioural planning policy. In this chapter, we focus on the design of \emph{sample-efficient} learning architectures, tailored for dense traffic situations. Such architectures should deal with a varying number of nearby vehicles, be invariant to the ordering chosen to describe them, while staying accurate and compact. We observe that the two most popular representations in the literature do not fit these criteria, and perform badly on an complex negotiation task. We propose an attention-based architecture that satisfies all these properties and explicitly accounts for interactions between the traffic participants. We empirically show that this architecture enjoys significant performance gains, and is able to capture interactions patterns that can be visualised and qualitatively interpreted.\footnote{This chapter is based on a preprint \citep{Leurent2019social} presented at the \emph{Machine Learning for Autonomous Driving workshop} at the NeurIPS 2019 conference. It is a collaboration with my friend and colleague Jean Mercat, who pursued this idea in further work on trajectory forecasting, which was published at the \emph{2020 International Conference on Robotics and Automation} \citep{Mercat2020} and won two international competitions.}
-\minitocStartChapter{}
+\minitocStartChapterNoNewPage{}
 
 \section{Motivation}
 
