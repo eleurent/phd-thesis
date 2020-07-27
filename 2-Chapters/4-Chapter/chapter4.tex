@@ -181,89 +181,90 @@ The outputs from all heads are finally combined with a linear layer, and the res
 
 \begin{figure}[tp]
 	\centering
-	\begin{tikzpicture}[scale=1, every node/.style={scale=1}]
-	\node(X1){ego encoding};
-	\node[below of=X1, node distance=2cm](X2){$\vdots$};
-	\node[below of=X2, node distance=2cm](X3){vehicle$_{N_v}$ encoding};
-	
-	\coordinate[right of= X1, node distance=2cm](X1b){};
-	
-	\draw (X1) -- (X1b);
-	
-	\node[draw, right of=X1b, node distance=1cm](LK1){$L_{k}$};
-	\node[draw, below of=LK1, node distance=1cm](LV1){$L_{v}$};
-	\node[draw, above of=LK1, node distance=1cm](LQ1){$L_{q}$};
-	
-	\draw (X1b) -- (LQ1);
-	\draw (X1b) -- (LK1);
-	\draw (X1b) -- (LV1);
-	
-	
-	\node[right of=LQ1, node distance=1cm](Q1){$\mathbf{q}_0$};
-	\node[right of=LK1, node distance=1cm](K1){$\mathbf{k}_0$};
-	\node[right of=LV1, node distance=1cm](V1){$\mathbf{v}_0$};
-	
-	\draw (LQ1) -- (Q1);
-	\draw (LK1) -- (K1);
-	\draw (LV1) -- (V1);
-	
-	\coordinate[right of= X3, node distance=2cm](X3b){};
-	
-	\draw (X3) -- (X3b);
-	
-	\node[draw, right of=X3b, node distance=1cm](LK3){$L_{k}$};
-	\node[draw, below of=LK3, node distance=1cm](LV3){$L_{v}$};
-	
-	\draw (X3b) -- (LK3);	
-	\draw (X3b) -- (LV3);
-	
-	\node[right of=LK3, node distance=1cm](K3){$\mathbf{k}_{n}$};
-	\node[right of=LV3, node distance=1cm](V3){$\mathbf{v}_{n}$};
-	
-	\draw (LK3) -- (K3);
-	\draw (LV3) -- (V3);
-	
-	\coordinate[right of=Q1, node distance=0.3cm](TOP){};
-	\coordinate[right of=V3, node distance=0.3cm](BOT){};
-	\draw[decorate,decoration={brace}] (TOP) -- node[left=5pt]{} (BOT);
-	
-	\node[right of=X2, text width=3cm, node distance=5.5cm](EQ){
-		\footnotesize \[Q = \left( \begin{matrix}
-		\mathbf{q}_0
-		\end{matrix} \right)\]
-		\\
-		\footnotesize \[K = \left( \begin{matrix}
-		\mathbf{k}_0 \\
-		\vdots \\
-		\mathbf{k}_{n}
-		\end{matrix} \right)\]
-		\\
-		\footnotesize \[ V = \left( \begin{matrix}
-		\mathbf{v}_0 \\
-		\vdots \\
-		\mathbf{v}_{n}
-		\end{matrix}\right) \]
-	};
-	
-	\node[draw, right of=X2, node distance=8.3cm](EQ2){
-		\footnotesize $\sigma\left(\frac{QK^T}{\sqrt{d_k}}\right)V$};
-	
-	\coordinate[left of=EQ2, node distance=1.6cm, above=2.2cm](TOP2){};
-	\coordinate[left of=EQ2, node distance=1.5cm, below=0.0cm](MID2){};
-	\coordinate[left of=EQ2, node distance=1.6cm, below=2.2cm](BOT2){};
-	\draw[decorate,decoration={brace}] (TOP2) -- node[left=5pt]{} (BOT2);
-	\draw (MID2) -- (EQ2);
-	
-	\node[right of=EQ2, node distance=2cm](OUT){output};
-	\draw (EQ2) -- (OUT);
-	
-	\draw[draw=black, dashed] (1.75cm, -5.5cm) rectangle (9.5cm,1.5cm);
-	\end{tikzpicture}
+%	\begin{tikzpicture}[scale=1, every node/.style={scale=1}]
+%	\node(X1){ego encoding};
+%	\node[below of=X1, node distance=2cm](X2){$\vdots$};
+%	\node[below of=X2, node distance=2cm](X3){vehicle$_{N_v}$ encoding};
+%	
+%	\coordinate[right of= X1, node distance=2cm](X1b){};
+%	
+%	\draw (X1) -- (X1b);
+%	
+%	\node[draw, right of=X1b, node distance=1cm](LK1){$L_{k}$};
+%	\node[draw, below of=LK1, node distance=1cm](LV1){$L_{v}$};
+%	\node[draw, above of=LK1, node distance=1cm](LQ1){$L_{q}$};
+%	
+%	\draw (X1b) -- (LQ1);
+%	\draw (X1b) -- (LK1);
+%	\draw (X1b) -- (LV1);
+%	
+%	
+%	\node[right of=LQ1, node distance=1cm](Q1){$\mathbf{q}_0$};
+%	\node[right of=LK1, node distance=1cm](K1){$\mathbf{k}_0$};
+%	\node[right of=LV1, node distance=1cm](V1){$\mathbf{v}_0$};
+%	
+%	\draw (LQ1) -- (Q1);
+%	\draw (LK1) -- (K1);
+%	\draw (LV1) -- (V1);
+%	
+%	\coordinate[right of= X3, node distance=2cm](X3b){};
+%	
+%	\draw (X3) -- (X3b);
+%	
+%	\node[draw, right of=X3b, node distance=1cm](LK3){$L_{k}$};
+%	\node[draw, below of=LK3, node distance=1cm](LV3){$L_{v}$};
+%	
+%	\draw (X3b) -- (LK3);	
+%	\draw (X3b) -- (LV3);
+%	
+%	\node[right of=LK3, node distance=1cm](K3){$\mathbf{k}_{n}$};
+%	\node[right of=LV3, node distance=1cm](V3){$\mathbf{v}_{n}$};
+%	
+%	\draw (LK3) -- (K3);
+%	\draw (LV3) -- (V3);
+%	
+%	\coordinate[right of=Q1, node distance=0.3cm](TOP){};
+%	\coordinate[right of=V3, node distance=0.3cm](BOT){};
+%	\draw[decorate,decoration={brace}] (TOP) -- node[left=5pt]{} (BOT);
+%	
+%	\node[right of=X2, text width=3cm, node distance=5.5cm](EQ){
+%		\footnotesize \[Q = \left( \begin{matrix}
+%		\mathbf{q}_0
+%		\end{matrix} \right)\]
+%		\\
+%		\footnotesize \[K = \left( \begin{matrix}
+%		\mathbf{k}_0 \\
+%		\vdots \\
+%		\mathbf{k}_{n}
+%		\end{matrix} \right)\]
+%		\\
+%		\footnotesize \[ V = \left( \begin{matrix}
+%		\mathbf{v}_0 \\
+%		\vdots \\
+%		\mathbf{v}_{n}
+%		\end{matrix}\right) \]
+%	};
+%	
+%	\node[draw, right of=X2, node distance=8.3cm](EQ2){
+%		\footnotesize $\sigma\left(\frac{QK^T}{\sqrt{d_k}}\right)V$};
+%	
+%	\coordinate[left of=EQ2, node distance=1.6cm, above=2.2cm](TOP2){};
+%	\coordinate[left of=EQ2, node distance=1.5cm, below=0.0cm](MID2){};
+%	\coordinate[left of=EQ2, node distance=1.6cm, below=2.2cm](BOT2){};
+%	\draw[decorate,decoration={brace}] (TOP2) -- node[left=5pt]{} (BOT2);
+%	\draw (MID2) -- (EQ2);
+%	
+%	\node[right of=EQ2, node distance=2cm](OUT){output};
+%	\draw (EQ2) -- (OUT);
+%	
+%	\draw[draw=black, dashed] (1.75cm, -5.5cm) rectangle (9.5cm,1.5cm);
+%	\end{tikzpicture}
+	\includegraphics[width=\linewidth]{img/ego_attention}
 	\caption{Architecture of an ego-attention head.
 		The blocks $L_{q}$, $L_{k}$, $L_{v}$ are linear layers. The keys $K$ and values $V$ are concatenated from all vehicles, while the query $Q$ is only produced by the ego-vehicle.}
 	\label{fig:ego-attention}
 \end{figure}
-
+% TODO: revoir légende
 
 \section{Experiments}
 \paragraph{Environment}
