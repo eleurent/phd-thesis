@@ -10,14 +10,66 @@
 		\emph{\hspace*{0.5cm}Ralentissez}\\
 	\end{tabular}
 
-	%\href{https://twitter.com/pooredward/status/1273249408231124994}
-	{Vinci Autoroutes}\hspace*{1cm}
+	Vinci Autoroutes\footnote{Writings collected by \href{https://twitter.com/pooredward/status/1273249408231124994}
+		{@pooredward}.}\hspace*{1cm}
 \end{flushright}
 
-% Ne t'attarde pas à l'ornière des résultats
-% René Char
-
-
-\section{Theory, practice, and the challenges of industrialization}
 \section{Conclusion on our contributions}
-\section{Perspectives}
+In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles. With a focus on interactions between drivers.
+
+\subsection{What makes it difficult?}
+% (We start with a case study: breadth and depth.)
+Main challenges we identified, and how we tackled them.
+
+\paragraph{Coupled social dynamics}
+traffic dynamics locally couple trajectories of vehicles. which requires social awareness: This must be accurately represented in the decision algorithms.
+In model-free: attention mechanism filters…
+In model-based: a dynamical system description makes it explicit.
+
+\paragraph{Uncertainty due to human drivers}
+Parametrized behaviours: both continuous and discrete. In model free: uncertainty is implicit, expected reward. But attention is sensitive to missing/resolved information.
+
+\paragraph{Safety}
+Three formalisations of safety:
+1.	As a cost function, additional signal separate of rewards
+2.	As a safe state-action space X, U
+3.	As a worst-case outcome
+
+\paragraph{Trade off between safety and efficiency}
+Safety is always defined with respect to admissible uncertainty. The larger the set of scenarios we are willing to consider, the more conservative we need to be to ensure safety.
+This trade-off is irreducible: consider the following example, you are driving…
+Either you never allow yourself to overtake, or you lose safety. 
+By pushing this reasoning, any kind of interaction is susceptible to lead to accidents, under unlikely events.
+In that sense, \emph{absolute safety is not achievable}. To strike the right level of safety, you need to consider the right level of uncertainty, the right set of outcomes.
+In Chapter 7, adjusting $\delta$ for continuous parameters (control the size of confidence set).
+Adding / Removing (A, phi) hypotheses (e.g. a potential lane change of the front vehicle will prevent/allow the overtake).
+If we are willing to take a model-free approach, the uncertainty comes from the environment, simulated or not. Then, the trade-off between safety and efficiency is controlled by adjusting beta. Like in countries… provides carmakers with…
+
+\paragraph{Sample efficiency?}
+Chap 4: An architecture tailored for the problem. invariant to permutations of the scene descriptions. Inductive bias: out of many vehicles perceived as inputs, only a few are relevant to the decision.
+
+\section{Outstanding issues and perspectives}
+Subjective, personal view on matters.
+We identify several limitations.
+
+\paragraph{From research to industrialisation}
+Combining approaches: Complexity can be overwhelming. Every little aspect can be studied independently, but how to stuff together in one product?
+Limitations of our methods. Model-free architectures: not very convincing, rate of collision still high.
+
+\paragraph{Theoretical guarantees \vs empirical achievements}
+Researchers strive to derive safety guarantees. 
+But what are these guarantee worth when they rely on assumptions that are wrong. 
+A HJI reachability analysis can do nothing against an unexpected event.
+Still, principled ways to derive sound algorithms, whose properties can robustly generalize. Eg estimation and control in aerospace, where the dynamics is not really linear and the noise really gaussian.
+Do you prefer a linear model with guarantees under false assumptions, or a Neural Network with no guarantee but a larger hypothesis class (reduced distance)?
+
+\paragraph{Beyond simulation?}
+How to use both ?
+Simulation to develop a common sense of how the world works, but then transfer to real world data.
+Algorithms specific to simulation: Pure Exploration Setting.
+Offline RL. Safe Policy Improvement in the vicinity of known states.
+
+
+
+
+
