@@ -132,19 +132,42 @@
 % Add `custombib' in the document class option to use this section
 \ifuseCustomBib
 	\usepackage[backend=biber, style=authoryear,
-		sorting=nyt, natbib=true,doi=false,isbn=false,url=false,eprint=false]{biblatex}
+		minbibnames=6,maxbibnames=6, sorting=nyt, natbib=true,
+		doi=false,isbn=false,url=false,eprint=false]{biblatex}
 	\setlength\bibitemsep{0.5\baselineskip}
 
-  \DeclareFieldFormat[article, inbook]{title}{#1} 
-  \renewcommand*{\intitlepunct}{\addspace\nopunct}
-	\renewbibmacro{in:}{%
-		\ifentrytype{article}
-		{}
-		{\printtext{\bibstring{in}\intitlepunct}}}
+% Remove quotation marks around title
+\DeclareFieldFormat[article,inbook,incollection,inproceedings,patent,thesis,unpublished]{citetitle}{#1}
+\DeclareFieldFormat[article,inbook,incollection,inproceedings,patent,thesis,unpublished]{title}{#1} 
+% Remove "In:" for articles.
+\renewcommand*{\intitlepunct}{\addspace\nopunct}
+\renewbibmacro{in:}{%
+	\ifentrytype{article}
+	{}
+	{\printtext{\bibstring{in}\intitlepunct}}}
+
+% Fullcite with complete author list: https://tex.stackexchange.com/a/126245
+\makeatletter
+\DeclareCiteCommand{\fullcite}
+{\defcounter{maxnames}{\blx@maxbibnames}%
+	\usebibmacro{prenote}}
+{\usedriver
+	{\DeclareNameAlias{sortname}{default}}
+	{\thefield{entrytype}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+\DeclareCiteCommand{\footfullcite}[\mkbibfootnote]
+{\defcounter{maxnames}{\blx@maxbibnames}%
+	\usebibmacro{prenote}}
+{\usedriver
+	{\DeclareNameAlias{sortname}{default}}
+	{\thefield{entrytype}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+\makeatother
 
 \fi
 % changes the default name `Bibliography` -> `References'
-
 \DefineBibliographyStrings{english}{%
 	bibliography = {List of References},
 }
