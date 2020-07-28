@@ -175,7 +175,7 @@ The outputs from all heads are finally combined with a linear layer, and the res
 	
 	\draw (DEC1.east) -- (Y1.west);
 	\end{tikzpicture}
-	\caption{Block diagram of our model architecture. It is composed of several linear identical encoders, a stack of ego-attention heads, and a linear decoder.}
+	\caption{Block diagram of our model architecture. It is composed of several identical linear encoders, a stack of ego-attention heads, and a linear decoder.}
 	\label{fig:ego-architecture}	
 \end{figure}
 
@@ -260,8 +260,7 @@ The outputs from all heads are finally combined with a linear layer, and the res
 %	\draw[draw=black, dashed] (1.75cm, -5.5cm) rectangle (9.5cm,1.5cm);
 %	\end{tikzpicture}
 	\includegraphics[width=\linewidth]{img/ego_attention}
-	\caption{Architecture of an ego-attention head.
-		The blocks $L_{q}$, $L_{k}$, $L_{v}$ are linear layers. The keys $K$ and values $V$ are concatenated from all vehicles, while the query $Q$ is only produced by the ego-vehicle.}
+	\caption{Architecture of an ego-attention head. After received the encoded vehicle states, the query $q_0$, keys $k_i$ and values $v_i$ are produced by three linear projections. Note that only the ego-vehicle produces a query $q$, while the keys $K$ and values $V$ are concatenated from all vehicles. Then, the attention matrix is computed by matching keys $K$ to the ego query $q_0$, and the corresponding values are retrieved. The resulting embedding is finally forwarded to a decoder to obtain the $Q$-values as an output.}
 	\label{fig:ego-attention}
 \end{figure}
 % TODO: revoir légende
