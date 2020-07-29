@@ -9,12 +9,12 @@
 	\begin{tabular}{@{}l@{}}
 		\emph{If you can meet with Triumph and Disaster}\\
 		\emph{And treat those two impostors just the same;}\\
-		\hdashline
+		\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\\
 		\emph{If you can make one heap of all your winnings}\\
 		\emph{And risk it on one turn of pitch-and-toss}\\
 	\end{tabular}
 
-	Rudyard Kipling, \href{https://eleurent.github.io/sisyphe/texts/if-.html}{\emph{If--}}.
+	Rudyard Kipling, \href{https://eleurent.github.io/sisyphe/texts/if-.html}{\enquote{If--}}. \emph{Rewards and Fairies}.
 \end{flushright}
 
 %\begin{flushright}
@@ -27,15 +27,12 @@
 %	T. S. Eliot, \href{https://www.poetryfoundation.org/poems/47311/the-waste-land}{\emph{The Waste Land}}.	
 %\end{flushright}
 
-\glsreset{BMDP}
-\glsreset{CMDP}
-
 \abstractStartChapter{}%
   When we drive, we must comply with two contradictory objectives: \textit{efficiency} and \textit{safety}. In this chapter, we strive to reconcile them by formalising a first notion of \textit{risk}. We consider \glspl+{BMDP}, in which risk is implemented as a cost signal constrained to lie below an \emph{adjustable} threshold. The latter provides the system manufacturer with a slider allowing them to adjust in real time the level of risk taken by the vehicle. So far, \glspl{BMDP} could only be solved in the case of known dynamics and finite state spaces, which is not suitable for our application which features continuous kinematic states and unknown human behaviours. This chapter extends the state-of-the-art to continuous spaces and unknown dynamics. %We show that the solution to a \gls{BMDP} is a fixed point of a novel Budgeted Bellman Optimality operator. This observation allows us to introduce a natural extension of Deep Reinforcement Learning algorithms to address large-scale \glspl{BMDP}. 
   Our approach is motivated by the prospect of training a risk-sensitive driving policy for a two-way road, where overtaking a vehicle requires driving on the wrong lane.\footnote{This chapter is based on an article published in the proceedings of the \emph{32nd conference on advances in Neural Information Processing Systems (NeurIPS)} \citep{CarraraLeurent2019}. It is a joint work with Nicolas Carrara, who came up with the algorithm and carried-out the dialogue experiment. I did most of the theoretical analysis, the driving experiment; and we worked together on the exploration procedure and on scaling-up the implementation.}
 \minitocStartChapterNoNewPage{}
 
-\section{Reconciling efficiency and safety}
+\section{Motivation}
 
 As stated in \Cref{chapter:1}, \glsxtrlong{RL} is a general framework for decision-making under uncertainty. Formally, we seek a policy $\policy\in\cM(\cA)^{\cS}$ that maximises in expectation the $\discountfactor$-discounted return of rewards $\return^{\policy} = \sum_{t=0}^\infty \discountfactor^t \reward(s_t, a_t)$.
 

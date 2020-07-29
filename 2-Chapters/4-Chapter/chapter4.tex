@@ -20,12 +20,12 @@
 	\begin{tabular}{@{}l@{}}
 		\emph{O what a strange parcel of creatures are we,}\\
 		\emph{Scarce ever to quarrel, or even agree;}\\
-		\hdashline
+		\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\\
 		\emph{Like social companions we never fall out,}\\
 		\emph{Nor ever care what one another’s about;}\\
 	\end{tabular}
 	
-	Elizabeth Hands, \href{https://eleurent.github.io/sisyphe/texts/unsociable_family.html}{\emph{On An Unsociable Family}}.
+	Elizabeth Hands, \href{https://eleurent.github.io/sisyphe/texts/unsociable_family.html}{\enquote{On An Unsociable Family}}. \emph{The Death of Amnon}.
 \end{flushright}
 
 \abstractStartChapter{}%
@@ -39,13 +39,13 @@ Value-based \glsxtrlong{RL} algorithms such as Q-Learning \citep{Watkins1992} an
 Our contributions are the following: first, we propose an attention-based architecture for decision-making involving social interactions. This architecture allows to satisfy the variable-size and permutation invariance requirements even when using a \emph{list of features} representation. It also naturally accounts for interactions between the ego-vehicle and any other traffic participant.
 Second, we evaluate our model on a challenging intersection-crossing task involving up to 15 vehicles perceived simultaneously. We show that our proposed method provides significant quantitative improvements, and that it enables to capture interaction patterns in a way that is visually interpretable.
 
-\section{Background}
+\subsection{Background}
 
 \label{sec:background}
 
 We start by giving some background on standard model-free learning algorithms --with a focus on value-based methods--, on usual state representations used for behavioural planning, and on attention mechanisms for \glspl{NN}.
 
-\subsection{Value-based deep \glsxtrlong{RL}}
+\subsubsection{Value-based deep \glsxtrlong{RL}}
 
 Recall from \Cref{def:optimality} that $Q^\star$ can be computed from an optimal policy $\optimalpolicy$ since $\Q^\star = \Q^{\optimalpolicy}$. However, the converse that $\optimalpolicy$ can be obtained from knowing $\Q^\star$ is also true since
 \begin{proposition}[Optimality of the greedy policy, \citealp{Bellman1957}]
@@ -75,7 +75,7 @@ Moreover, $\bo$ is a $\discount$-contraction for the $\|\cdot\|_\infty$ norm:
 
 Thus, since $Q^{\star}$ is a fixed-point of a contracting operator, it can be computed by iteratively applying $\bo$ in a fixed-point iteration fashion. The \emph{Q-learning} algorithm \citep{Watkins1992} follows this procedure by applying a sampling version $\bo$ to a batch of collected experience. When dealing with a continuous state space $S$, we need to employ function approximation in order to generalise to nearby states. The  \gls{DQN} algorithm \citep{Mnih2015humanlevel} implements this idea by using a neural network model to represent the action-value function $Q$.
 
-\subsection{Common traffic state representations}
+\subsubsection{Common traffic state representations}
 
 In order to apply a reinforcement learning algorithm such as \gls{DQN} to an autonomous driving problem, a state space $S$ must first be chosen, that is, a representation of the scene. The state should at least contain a description of every nearby vehicle, when social interactions are relevant to the decision. We recall our definition \eqref{eq:state-space} of $\cS$ from \Cref{chapter:3}, in which a vehicle driving on a road is described by it's continuous position, heading and velocity, and the joint state of a road traffic with one ego-vehicle denoted $s_0$ and $N_v$ other vehicles can be described by a list of individual vehicle states:
 \begin{equation*}
@@ -122,7 +122,7 @@ In an occupancy grid, the $f$ features contains presence information (0-1) and a
 This permutation invariance property \eqref{eq:permutation} can also be implemented within the architecture of the policy $\pi$. A general technique to achieve this is to treat each entity similarly in the early stages -- e.g. through weight sharing -- before reducing them with a projection operator that is itself invariant to permutations, for instance a max-pooling as in \citep{Chen2017,Hoel2018} or an average as in \citep{Qi2016}. A particular instance of this idea is attention mechanisms.
 
 
-\subsection{Attention mechanisms} 
+\subsubsection{Attention mechanisms} 
 
 The attention architecture was introduced to enable \glspl*{NN}  to discover interdepen\-dencies within a variable number of inputs.
 It has been used for pedestrian trajectory forecasting in~\citep{Vemula2018} with spatiotemporal graphs and in~\citep{Sadeghian2019CVPR} with spatial and social attention using a generative \glsxtrlong{NN}. In~\citep{Sadeghian2018ECCV}, attention over top-view road scene images for car trajectory forecasting is used. Multi-head attention mechanism has been developed in~\citep{Vaswani2017} for sentence translation. In~\citep{Messaoud2019} a mechanism called non-local multi-head attention is developed. However, this is a spatial attention that does not allow vehicle-to-vehicle attention. In the present chapter, we use a multi-head social attention mechanism to capture vehicle-to-ego dependencies and build varying input size and permutation invariance into the policy model.
