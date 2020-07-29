@@ -14,24 +14,19 @@
 		\emph{\hspace*{0.5cm}Ralentissez}\\
 	\end{tabular}
 
-	Vinci Autoroutes\footnote{Writings collected by \href{https://twitter.com/pooredward/status/1273249408231124994}
+	Vinci Autoroutes\footnote{Writings collected by \href{https://twitter.com/pooredward/status/1273249408231124994}.
 		{@pooredward}.}\hspace*{1cm}
 \end{flushright}
 
 \section{Conclusion on our contributions}
-In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles. With a focus on interactions between drivers.
-
-\subsection{What makes it difficult?}
-% (We start with a case study: breadth and depth.)
-Main challenges we identified, and how we tackled them.
+In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles, with a focus on situations where several drivers are interacting. Following an in-breadth (\Cref{chapter:2}) as well as in-depth (\Cref{chapter:3}) initial investigation, we identified a set of key issues which make this problem challenging. We now recall each of these subjects, and precise how we strived to address them in both the model-free methods presented in \Cref{part:2}, and the model-based methods of \Cref{part:3}.
 
 \paragraph{Coupled social dynamics}
-traffic dynamics locally couple trajectories of vehicles. which requires social awareness: This must be accurately represented in the decision algorithms.
-In model-free: attention mechanism filters…
-In model-based: a dynamical system description makes it explicit.
+In dense traffic, the dynamics of distinct vehicles are locally coupled, due to how drivers react and adapt to their surroundings. Consequently, predicting the course or acting in a driving scene requires a \emph{social awareness} skill: the ability to accurately understand and exploit these couplings. %In particular, the ego-vehicle needs to assess the impact of its own decisions on the future behaviours of nearby drivers. 
+In \Cref{chapter:4}, this skill was implemented through a \emph{social attention} mechanism in the policy architecture, which enables the agent to filter out irrelevant objects from a complex driving scene and retain only those that represent a risk of collision. In \Cref{chapter:5}, this coupling was made even more implicit by describing the motion of a vehicle $i$ through a dynamical model $\dot{x_i} = f_i(x)$ hat accepts the whole traffic state $x$ as an input.
 
 \paragraph{Uncertainty due to human drivers}
-Parametrized behaviours: both continuous and discrete. In model free: uncertainty is implicit, expected reward. But attention is sensitive to missing/resolved information.
+Another key difficulty stems from the uncertainty of human behaviours. The traditional approach in \gls{RL} to account for this uncertainty is to incorporate stochasticity in the system dynamics, as we did in \Cref{chapter:5} where the objectives are formulated in terms of \emph{expected} rewards and costs. Incidentally, we also observed in \Cref{chapter:4} that our attention-based architecture is highly sensitive to ambiguous and disambiguated information, such as vehicles' destinations. In \Cref{chapter:7} however, we adopted another view and assumed that the dynamics were (close to) deterministic, but dependent on some unknown parameters --both continuous and discrete-- that could be estimated along the way.
 
 \paragraph{Safety}
 Three formalisations of safety:
