@@ -14,44 +14,49 @@
 		\emph{\hspace*{0.5cm}Ralentissez}\\
 	\end{tabular}
 
-	Vinci Autoroutes\footnote{Writings collected by \href{https://twitter.com/pooredward/status/1273249408231124994}.
+	Vinci Autoroutes\footnote{Writings collected by \href{https://twitter.com/pooredward/status/1273249408231124994}
 		{@pooredward}.}\hspace*{1cm}
 \end{flushright}
 
 \section{Conclusion on our contributions}
-In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles, with a focus on situations where several drivers are interacting. Following an in-breadth (\Cref{chapter:2}) as well as in-depth (\Cref{chapter:3}) initial investigation, we identified a set of key issues which make this problem challenging. We now recall each of these subjects, and precise how we strived to address them in both the model-free methods presented in \Cref{part:2}, and the model-based methods of \Cref{part:3}.
+In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles, with a focus on situations where several drivers are interacting. Following an in-breadth (\Cref{chapter:2}) as well as in-depth (\Cref{chapter:3}) initial investigation, we identified a set of key issues which make this problem challenging. We now recall each of these subjects, and precise how we strived to address them both in the model-free approach of \Cref{part:2} and the model-based approach of \Cref{part:3}.
 
 \paragraph{Coupled social dynamics}
-In dense traffic, the dynamics of distinct vehicles are locally coupled, due to how drivers react and adapt to their surroundings. Consequently, predicting the course or acting in a driving scene requires a \emph{social awareness} skill: the ability to accurately understand and exploit these couplings. %In particular, the ego-vehicle needs to assess the impact of its own decisions on the future behaviours of nearby drivers. 
+In dense traffic, the dynamics of distinct vehicles are locally coupled, due to how drivers react and adapt to their surroundings. Consequently, predicting the course or acting in a driving scene requires a \emph{social awareness} skill: the ability to accurately understand and exploit these couplings.
 In \Cref{chapter:4}, this skill was implemented through a \emph{social attention} mechanism in the policy architecture, which enables the agent to filter out irrelevant objects from a complex driving scene and retain only those that represent a risk of collision. In \Cref{chapter:5}, this coupling was made even more implicit by describing the motion of a vehicle $i$ through a dynamical model $\dot{x_i} = f_i(x)$ hat accepts the whole traffic state $x$ as an input.
 
 \paragraph{Uncertainty due to human drivers}
-Another key difficulty stems from the uncertainty of human behaviours. The traditional approach in \gls{RL} to account for this uncertainty is to incorporate stochasticity in the system dynamics, as we did in \Cref{chapter:5} where the objectives are formulated in terms of \emph{expected} rewards and costs. Incidentally, we also observed in \Cref{chapter:4} that our attention-based architecture is highly sensitive to ambiguous and disambiguated information, such as vehicles' destinations. In \Cref{chapter:7} however, we adopted another view and assumed that the dynamics were (close to) deterministic, but dependent on some unknown parameters --both continuous and discrete-- that could be estimated along the way.
+Another key difficulty lies in the uncertainty of human behaviours. In \gls{RL}, the traditional approach to account for uncertainty is to incorporate stochasticity in the system dynamics, as we did in \Cref{chapter:5} where the objectives are formulated in terms of \emph{expected} rewards and costs. Incidentally, we also observed in \Cref{chapter:4} that our attention-based architecture is highly sensitive to ambiguous and disambiguated information, such as vehicles' destinations. In \Cref{chapter:7} however, we adopted another view and assumed that the dynamics were (close to) deterministic, but dependent on some unknown parameters --both continuous and discrete-- that could be estimated along the way.
 
 \paragraph{Safety}
-Three formalisations of safety:
-1.	As a cost function, additional signal separate of rewards
-2.	As a safe state-action space X, U
-3.	As a worst-case outcome
+To deal with this uncertainty, three models of safety have been studied. In \Cref{chapter:5}, following the \gls{CMDP} framework, we formalised risk as the expected discounted sum of an additional cost signal $\constraint(s,a)$ --separate from the rewards $\reward(s,a)$-- constrained to remain below a threshold $\budget$. In \Cref{chapter:7}, we introduced a novel interval predictor allowing us to bound the set of reachable trajectories given the current parametric uncertainty over dynamics. This enabled us to cast safety as a robust stabilisation and constraint satisfaction problem, ensuring that the systems stays at all time within a safe space $\safestates\times\safecontrols$. Finally, to go beyond stabilisation problems, we considered a third formalisation of safety as a worst-case outcome, and proposed an algorithm for the minimax control of a generic reward function $\R(s,a)$.
 
-\paragraph{Trade off between safety and efficiency}
-Safety is always defined with respect to admissible uncertainty. The larger the set of scenarios we are willing to consider, the more conservative we need to be to ensure safety.
-This trade-off is irreducible: consider the following example, you are driving…
-Either you never allow yourself to overtake, or you lose safety. 
-By pushing this reasoning, any kind of interaction is susceptible to lead to accidents, under unlikely events.
-In that sense, \emph{absolute safety is not achievable}. To strike the right level of safety, you need to consider the right level of uncertainty, the right set of outcomes.
-In Chapter 7, adjusting $\delta$ for continuous parameters (control the size of confidence set).
-Adding / Removing (A, phi) hypotheses (e.g. a potential lane change of the front vehicle will prevent/allow the overtake).
-If we are willing to take a model-free approach, the uncertainty comes from the environment, simulated or not. Then, the trade-off between safety and efficiency is controlled by adjusting beta. Like in countries… provides carmakers with…
+\paragraph{Trade-off between safety and efficiency}
+As we've just seen, safety is always defined with respect to some \emph{admissible} uncertainty. The larger the set of scenarios one is willing to consider and protect against, the more conservative they need to be to ensure safety. In particular, situations that require interacting with other agents are always susceptible to lead to accidents, when considering unlikely adversarial scenarios. In that sense, \emph{absolute safety is not achievable}, or only at the cost of usability. To strike the right level of safety, we need to consider the right level of uncertainty, the right set of outcomes. In \Cref{chapter:7}, the size of this ambiguity set to protect against can be controlled by adjusting the confidence level $\delta$ for continuous parameters (\eg driving style), and by adding or removing $(A,\phi)$-modelling assumptions from the multi-model extension, for discrete parameters (\eg potential destinations or lanes for a vehicle). In \Cref{chapter:5}, we embrace this trade-off even more explicitly. Rather than trying to adjust the scope and size of the uncertainty at its source, we instead directly control its effects on both the efficiency (rewards) of the policy and its safety (costs), by training a \emph{budgeted} policy $\budgetedpolicy$ that takes as input the desired level of risk $\confidence$.
 
-\paragraph{Sample efficiency?}
-Chap 4: An architecture tailored for the problem. invariant to permutations of the scene descriptions. Inductive bias: out of many vehicles perceived as inputs, only a few are relevant to the decision.
+\paragraph{Sample efficiency}
+As for most reinforcement learning problems, we were concerned by minimising the number of samples required to reach optimality. To that end, we exploited the specificities and structures of the behavioural planning problem in several ways. In \Cref{chapter:4}, we embedded an inductive bias into the policy architecture by enforcing its invariance to permutations of the scene description, and observed that this fosters faster learning. 
+In \Cref{chapter:7}, some structure was similarly imposed, on the dynamics model this time, in the form of a parametrised linear model which allowed to significantly reduce the dimension of the hypothesis space. We were also able to provide a bound on the simple regret relating the agent performance to the number of observed transition samples. In \Cref{chapter:6}, we looked into the sample efficiency of the planning procedure, and specifically tree-based planning algorithms. First, in the case of stochastic dynamics representing human behaviours, we proposed a modification of the \OLOP algorithm that improves its empirical sample complexity by an order on magnitude, while retaining its theoretical guarantees. Second, we showed that merging similar nodes in the lookahead tree enables to decrease the near-optimal branching factor featured in the regret bound of the algorithm. This translated as substantial empirical improvements in simple path planning tasks, where distinct sequences of actions lead to overlapping trajectories.
+
 
 \section{Outstanding issues and perspectives}
-Subjective, personal view on matters.
-We identify several limitations.
+In this section, I will adopt a more personal and subjective standpoint.
+
 
 \paragraph{From research to industrialisation}
+
+First, I will highlight several limitations of our methods.
+
+Chapter 4:
+- Impractical for a real application. Maybe trained in simulation and deployed. But still a low success rate.
+
+Chapter 5:
+- Possible convergence issues
+- Traditional issues of DQN: Unstructured exploration (eps-greedy)
+
+Chapter 
+
+
 Combining approaches: Complexity can be overwhelming. Every little aspect can be studied independently, but how to stuff together in one product?
 Limitations of our methods. Model-free architectures: not very convincing, rate of collision still high.
 
@@ -59,8 +64,12 @@ Limitations of our methods. Model-free architectures: not very convincing, rate 
 Researchers strive to derive safety guarantees. 
 But what are these guarantee worth when they rely on assumptions that are wrong. 
 A HJI reachability analysis can do nothing against an unexpected event.
+
+We managed to obtain some guarantees in Chapter 7, but what are they worth? It seems quite dubious that our linear model can accurately describe the complexity of road situations.
+
 Still, principled ways to derive sound algorithms, whose properties can robustly generalize. Eg estimation and control in aerospace, where the dynamics is not really linear and the noise really gaussian.
 Do you prefer a linear model with guarantees under false assumptions, or a Neural Network with no guarantee but a larger hypothesis class (reduced distance)?
+Even when the guarantees do not hold, the founding principles of an algorithm may lead to designs that robustly exhibit the desired properties.
 
 \paragraph{Beyond simulation?}
 How to use both ?

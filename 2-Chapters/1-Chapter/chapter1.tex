@@ -110,6 +110,7 @@ This allows to define the goal of \glsxtrlong{RL}: finding an \emph{optimal} pol
 	\end{leftbar}
 \end{definition}
 
+\paragraph{Sample efficiency}
 Several performance measures have been introduced to evaluate \gls{RL} algorithms. In this thesis, we consider the goal of finding a near-optimal policy as fast as possible. The \emph{fixed-confidence} setting evaluates the smallest sample complexity, \ie number of interactions, required to find a near-optimal policy $\optimalpolicy$ with high probability. Alternatively, in the \emph{fixed-budget} setting, the \emph{simple regret} $\regret$ of an algorithm measures the \emph{expected} sub-optimality of the recommended policy $\hat{\policy}_n$ after a fixed number $n$ of interactions
 \begin{equation*}
 \gls+{regret}(s) \eqdef \expectedvalue_{\hat{\policy}_n} \left[ V^\star(s) - V^{\hat{\policy}_n}(s) \right].
@@ -120,7 +121,7 @@ Several performance measures have been introduced to evaluate \gls{RL} algorithm
 %\cR_n(s_0, \cA) = \expectedvalue_{\hat{\policy}_t\sim \cA}\left[ \sum_{t=0}^{n-1} V^\star(s_t) - V^{\hat{\policy}_t}(s_t) \right]
 %\end{equation*}
 
-The goal of this thesis is to provide \emph{sample-efficient} algorithms for learning a driving policy. In the particular context of Behavioural Planning for Autonomous Driving, this goal will be articulated around three main questions and challenges.
+The goal of this thesis is to provide \emph{sample-efficient} algorithms for learning a driving policy. In the particular context of Behavioural Planning for Autonomous Driving, this goal will be articulated around a few main questions and challenges.
 
 \paragraph{Model-free \vs model-based}
 
@@ -139,14 +140,18 @@ The question of which approach is appropriate depends on the underlying problem.
 To ensure safety while driving, traditional motion planning techniques rely on conservative independence assumptions on the behaviour of other vehicles. This makes them suffer from an effect colloquially known as the \emph{"freezing robot problem"} \citep{Trautman2010}: due to massive uncertainty, these systems tend to struggle in situations that require interacting --or negotiating-- with other vehicles, such as unprotected left-turns, intersections, or highway merges (see \eg these \href{https://www.youtube.com/watch?v=HjtiiGCe1pE}{two} \href{https://twitter.com/nitguptaa/status/990683818825736192}{videos} where a Waymo car fails to merge). 
 Thus, for an autonomous vehicle to efficiently integrate with the traffic flow, it must anticipate the effect of its own actions on the behaviours of other agents. This skill is known as \emph{socially-aware} decision-making. Unfortunately, interactions between vehicles translate as complex and coupled traffic dynamics where local deviations must be propagated from one vehicle to the next, which can result in a quick and chaotic build-up of uncertainty. We will need to contain this escalation to prevent instability in our predictions.
 
-\paragraph{Safety and efficiency}
+\paragraph{Ensuring safety}
 
-The complexity of the task of driving leads us to consider learning algorithms. However, these methods typically raise a legitimate concern among car manufacturers: how to guarantee the \emph{safety} of such systems, in the presence of uncertainty? In this thesis, we will strive to formalise this concern by formulating different notions of \emph{risk}, as functions of the distribution of outcomes induced by a policy. \emph{Safe} \glsxtrlong{RL} seeks to explicitly estimate and control the level of risk taken by a policy.
-However, protecting against risk often comes at the price of efficiency in achieving a goal. Indeed, the two objectives of driving fast and safely are contradictory. This opposition induces a trade-off that we typically observe with human drivers, especially in situations of negotiations: some people adopt \emph{aggressive} behaviours and try to force their way through traffic, while others act more \emph{defensively}, favouring safety. This ambiguity is difficult to capture manually in an objective function and soon leads to the pitfall of reward engineering. To provide a principled control over this trade-off, the learning algorithms that we consider will be required to respect an \emph{adjustable} level of risk.
+The complexity of the task of driving leads us to consider learning algorithms. However, these methods typically raise a legitimate concern among car manufacturers: how to guarantee the \emph{safety} of such systems, in the presence of uncertainty? In this thesis, we will strive to formalise this concern by formulating different notions of \emph{risk}, as functions of the distribution of outcomes induced by a policy. We will study \emph{Safe} \glsxtrlong{RL} algorithms, that seek to explicitly estimate and control the level of risk taken by a policy.
+
+\paragraph{Safety and efficiency}
+However, protecting against risk often comes at the price of efficiency in achieving a goal.
+Consider for a moment a situation where a vehicle is driving slowly in front of you on the road, and so you decide to overtake them. How do you know, at that very moment, that the driver has seen you and is not going to change lane at the last moment, causing an accident? In fact, you don't, at least not with certainty. In this situation, the only way to guarantee safety is to refrain from overtaking. By pushing this simple argument through to its conclusion, it becomes apparent that the only way to \emph{fully} ensure safety is to stay in the garage.
+You are thus facing an irreducible dilemma: the two objectives of driving fast and safely are contradictory.
+This opposition induces a trade-off that we typically observe with human drivers, especially in situations of negotiations: some people adopt \emph{aggressive} behaviours and try to force their way through traffic, while others act more \emph{defensively}, favouring safety. This ambiguity is difficult to capture manually in an objective function and soon leads to the pitfall of reward engineering. To provide a principled control over this trade-off, the learning algorithms that we consider will be required to respect an \emph{adjustable} level of risk.
 
 \section{Outline and Contributions}
 
-% TODO: referrer la figure
 \begin{figure}[ht]
 	\includegraphics[width=0.9\linewidth]{img/outline}
 	\caption{This thesis is structured around two disjunctions: model-free \vs model-based on the one hand, and sample-efficiency \vs safety on the other hand.}
@@ -157,7 +162,7 @@ However, protecting against risk often comes at the price of efficiency in achie
 The ultimate goal of this thesis could be summarised in the following question: \emph{"how can an algorithm learn to drive and avoid accidents?"}. The first step in such an endeavour must necessarily be to formalise more precisely the meaning of this ill-posed formula, and so we try in \textbf{\Cref{part:1}}.
 It is only natural that we begin this effort by turning to the standard model for sequential decision making: the \glsxtrlong{MDP}. At first glance, this framework shines with its simplicity and elegance, but also its apparent generality and representation power. Yet, as we embark on the ambitious task of casting the blurry problem of autonomous driving into this rigid mould, we highlight in \textbf{\Cref{chapter:2}} how reductive each step of the formalisation is, how approximations and assumptions always hide behind each symbol and each equation. This observation is supported by the numerous variations of the framework developed by the research community, in as many attempts to address these concerns. Such limitations are as varied as partial observability, temporal abstraction, the reward hypothesis, transfer from simulation to real-world and safety; and we relate these research directions to specific works in the autonomous driving literature.
 
-In order to progress, we put aside some of these questions in \textbf{\Cref{chapter:3}} and commit to an (observable) state space, a (hierarchical) action space, a (quasi-linear) system dynamics and a (dense) reward function that we deem suitable for a large class of behavioural planning tasks. This allows us to refocus on two fundamental issues: \textit{sample-efficient} and \textit{safe} \glsxtrlong{RL}. In the sequel, we tackle them through the perspective of the two main approaches to \glsxtrlong{RL} aforementioned: first model-free, and then model-based algorithms.
+In order to progress, we put aside some of these questions in \textbf{\Cref{chapter:3}} and commit to an (observable) state space, a (hierarchical) action space, a (quasi-linear) system dynamics and a (dense) reward function that we deem suitable for a large class of behavioural planning tasks. This allows us to refocus on two fundamental issues: \textit{sample-efficient} and \textit{safe} \glsxtrlong{RL}. In the sequel we tackle them through the perspective of the two main approaches to \glsxtrlong{RL} aforementioned: first model-free, and then model-based algorithms. This organisation is depicted in \Cref{fig:thesis-outline}.
 
 % Part II
 \textbf{\Cref{part:2}} is dedicated to the study of how model-free methods can be applied for efficient and safe \glsxtrlong{AD}. In \textbf{\Cref{chapter:4}}, we question the choice of state representation and model architecture in relation to their associated sample-efficiency. In particular, we identify desirable properties and inductive biases that the policy should enjoy, such as \emph{permutation invariance} with respect to vehicles in the scene. We propose an attention-based architecture that fulfils our criteria, and compare it to standard representations and model architectures that have been used for behavioural planning tasks. 
