@@ -166,25 +166,25 @@
 \newglossaryentry{safestates}{name={\var{\mathbb{X}}},description={constraint set for safe states $x(t)\in\mathbb{X}\subset\mathbb{R}^p$},type=symbols, category=symbol, sort={zctrla}}
 \newcommand{\safestates}{{\gls{safestates}}}
 
-\newglossaryentry{safecontrols}{name={\var{\mathbb{U}}},description={constraint set for safe controls $u(t)\in\gls{safecontrols}\subset\mathbb{R}^q$},type=symbols, category=symbol, sort={zctrlb}}
+\newglossaryentry{safecontrols}{name={\var{\mathbb{U}}},description={constraint set for safe controls $u(t)\in\mathbb{U}\subset\mathbb{R}^q$},type=symbols, category=symbol, sort={zctrlb}}
 \newcommand{\safecontrols}{{\gls{safecontrols}}}
 
-\newglossaryentry{timestep}{name={\var{\mathrm{d} t}},description={time step at which \gls{MPC} controls are applied},type=symbols, category=symbol, sort={zctrlc}}
+\newglossaryentry{timestep}{name={\var{\mathrm{d} t}},description={time step at which MPC controls are applied},type=symbols, category=symbol, sort={zctrlc}}
 \newcommand{\timestep}{\gls{timestep}}
 
 \newglossaryentry{features}{name={\var{\phi}},description={features for a parametrized},type=symbols, category=symbol, sort={zctrld}}
 \newcommand{\features}{\gls{features}}
 
-\newglossaryentry{params}{name={\var{\theta}},description={parameters $\params\in\mathbb{R}^d$ for a model},type=symbols, category=symbol, sort={zctrle}}
+\newglossaryentry{params}{name={\var{\theta}},description={parameters $\theta\in\mathbb{R}^d$ for a model},type=symbols, category=symbol, sort={zctrle}}
 \newcommand{\params}{{\gls{params}}}
 
-\newglossaryentry{structureddynamics}{name={\var{A(\params)}},description={structured state matrix $A(\params)\in\mathbb{R}^{p\times p}$, depending on unknown parameters $\params$},type=symbols, category=symbol, sort={zctrlf}}
+\newglossaryentry{structureddynamics}{name={\var{A(\params)}},description={structured state matrix $A(\theta)\in\mathbb{R}^{p\times p}$, depending on unknown parameters $\theta$},type=symbols, category=symbol, sort={zctrlf}}
 \newcommand{\structureddynamics}{{\gls{structureddynamics}}}
 
 \newglossaryentry{confidence}{name={\var{\delta}},description={confidence level for statistical estimates, in $(0, 1]$},type=symbols, category=symbol, sort={zctrlg}}
 \newcommand{\confidence}{{\gls{confidence}}}
 
-\newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\params$, such that $\mathbb{P}(\params\in\confidenceset) \geq 1-\confidence$.},type=symbols, category=symbol, sort={zctrlh}}
+\newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\theta$, such that $\mathbb{P}(\theta\in\mathcal{C}_{[N],\delta}) \geq 1-\delta$.},type=symbols, category=symbol, sort={zctrlh}}
 \newcommand{\confidenceset}{\gls{confidenceset}}
 
 \newglossaryentry{pessimisticreward}{name={\var{\underline{R}}},description={pessimistic reward function, evaluated on the worst-case reachable states},type=symbols, category=symbol, sort={zctrli}}
