@@ -4,6 +4,7 @@
 \def\toclevel@chapter{-1}
 \makeatother
 
+%TODO: Discussion ?
 \chapter{General Conclusion and Perspectives}
 \label{chapter:conclusion}
 
@@ -35,49 +36,51 @@ To deal with this uncertainty, three models of safety have been studied. In \Cre
 As we've just seen, safety is always defined with respect to some \emph{admissible} uncertainty. The larger the set of scenarios one is willing to consider and protect against, the more conservative they need to be to ensure safety. In particular, situations that require interacting with other agents are always susceptible to lead to accidents, when considering unlikely adversarial scenarios. In that sense, \emph{absolute safety is not achievable}, or only at the cost of usability. To strike the right level of safety, we need to consider the right level of uncertainty, the right set of outcomes. In \Cref{chapter:7}, the size of this ambiguity set to protect against can be controlled by adjusting the confidence level $\delta$ for continuous parameters (\eg driving style), and by adding or removing $(A,\phi)$-modelling assumptions from the multi-model extension, for discrete parameters (\eg potential destinations or lanes for a vehicle). In \Cref{chapter:5}, we embrace this trade-off even more explicitly. Rather than trying to adjust the scope and size of the uncertainty at its source, we instead directly control its effects on both the efficiency (rewards) of the policy and its safety (costs), by training a \emph{budgeted} policy $\budgetedpolicy$ that takes as input the desired level of risk $\confidence$.
 
 \paragraph{Sample efficiency}
-As for most reinforcement learning problems, we were concerned by minimising the number of samples required to reach optimality. To that end, we exploited the specificities and structures of the behavioural planning problem in several ways. In \Cref{chapter:4}, we embedded an inductive bias into the policy architecture by enforcing its invariance to permutations of the scene description, and observed that this fosters faster learning. 
-In \Cref{chapter:7}, some structure was similarly imposed, on the dynamics model this time, in the form of a parametrised linear model which allowed to significantly reduce the dimension of the hypothesis space. We were also able to provide a bound on the simple regret relating the agent performance to the number of observed transition samples. In \Cref{chapter:6}, we looked into the sample efficiency of the planning procedure, and specifically tree-based planning algorithms. First, in the case of stochastic dynamics representing human behaviours, we proposed a modification of the \OLOP algorithm that improves its empirical sample complexity by an order on magnitude, while retaining its theoretical guarantees. Second, we showed that merging similar nodes in the lookahead tree enables to decrease the near-optimal branching factor featured in the regret bound of the algorithm. This translated as substantial empirical improvements in simple path planning tasks, where distinct sequences of actions lead to overlapping trajectories.
+As for most reinforcement learning problems, we were concerned by minimising the number of samples required to reach optimality. To that end, we exploited the specificities and structures of the behavioural planning problem in several ways. In \Cref{chapter:4}, we embedded an inductive bias into the policy architecture by enforcing its invariance to permutations of the scene description, and observed that this fosters faster learning. In \Cref{chapter:7}, some structure was similarly imposed, on the dynamics model this time, in the form of a parametrised linear model which allowed to significantly reduce the dimension of the hypothesis space. We were also able to provide a bound on the simple regret relating the agent performance to the number of observed transition samples. In \Cref{chapter:6}, we looked into the sample efficiency of the planning procedure, and specifically tree-based planning algorithms. First, in the case of stochastic dynamics representing human behaviours, we proposed a modification of the \OLOP algorithm that improves its empirical sample complexity by an order on magnitude, while retaining its theoretical guarantees. Second, we showed that merging similar nodes in the lookahead tree enables to decrease the near-optimal branching factor featured in the regret bound of the algorithm. This translated as substantial empirical improvements in simple path planning tasks, where distinct sequences of actions lead to overlapping trajectories.
 
 
 \section{Outstanding issues and perspectives}
-In this section, I will adopt a more personal and subjective standpoint.
 
+In this section, I will adopt a more personal and subjective standpoint, and discuss which main issues we are facing and how they might be tackled, and in particular the barriers between research and industrialisation.
+Indeed, though we never intended for this thesis to lead directly to products, industrialisation remains the long haul goal that motivates our work, and I must now examine our contributions again in this light.
 
-\paragraph{From research to industrialisation}
+A first and general concern of mine is that, beside the warm comfort of the well-behaved theoretical frameworks in which we place ourselves, the sheer complexity of the real world can be overwhelming. While any single aspect --partial observability, temporal abstraction, non-stationarity, risk aversion, you name it-- can be isolated and studied independently, the question of how to merge all these approaches into one single integrated product seems arduous, if not hopeless. Yet, any candidate algorithm not addressing any of these issues would be unfit.
 
-First, I will highlight several limitations of our methods.
+In the sequel, I will not be so ambitious but reflect instead on a more reasonable question: are the methods that we developed likely to be suitable for a real-world application?
 
-Chapter 4:
-- Impractical for a real application. Maybe trained in simulation and deployed. But still a low success rate.
+\paragraph{Reinforcement Learning in continuous states}
 
-Chapter 5:
-- Possible convergence issues
-- Traditional issues of DQN: Unstructured exploration (eps-greedy)
+Let us start by our work in \Cref{part:2}. Following a model-free perspective in continuous states, we resorted function approximation using neural networks. Unfortunately, Deep Learning interacts with Reinforcement Learning algorithms in ways that are yet to be understood, but already infamous for their brittleness. In \Cref{chapter:4}, even our best policies after training still suffer a prohibitive rate of collisions of \SI{5}{\per}, considerably higher than the required performances. 
+As we discussed, this may be attributed to the reward function that would not penalise collisions enough, but reward engineering is tedious and might in turn lead to over-conservative policies. The budgeted approaches of \Cref{chapter:5} were meant to address this issue, but at the price of an increased complexity, and our negative result of \Cref{thm:contraction} raises concerns over convergence in the general case. 
+Another concern lies in our use of a very naive exploration policy --the $\epsilon$-greedy-- which takes random actions at a fixed frequency, a strategy widely considered as inefficient and damaging, yet which we had no choice but resorting to in the absence of a better solution. Guided exploration strategies tailored for regret minimisation, and especially following the \gls{OFU} principle, have been studied in the context of finite state-action spaces \citep{Auer2009,Azar2017}. 
+These methods typically require the ability of counting the number of state visits, the question of how they can be extended to continuous spaces constitutes a promising research perspective. First steps have recently been made in that direction, by either relying on approximated \emph{pseudo-counts} \citep{Guyon2017}, or by deriving similar regret bounds under linear function approximation \citep{Jin2020}.
 
-Chapter 
+\paragraph{Trial without error?}
 
+Assume, that the research community was able to solve the aforementioned problem and came up with exciting new algorithms for continuous state space with promising regret bounds. There remains an inevitable and fatal limitation: \emph{the foundations of \glsxtrlong{RL} are intrinsically based on trial and error}. Unfortunately, this is not an acceptable paradigm for the development of safety-critical problems such as \glsxtrlong{AD}.
+For reference, when we applied the model-free methods of \Cref{part:2} to very simple tasks, they converged in about 50k interaction samples, which represents about \SI{15}{\hour} of driving. Throughout training, the agents experienced about two thousand collisions. More generally, having vehicles \emph{exploring} on the roads among human drivers is morally inconceivable. Is there any chance at all to come up with learning algorithms that do not require actually causing accidents while training?
 
-Combining approaches: Complexity can be overwhelming. Every little aspect can be studied independently, but how to stuff together in one product?
-Limitations of our methods. Model-free architectures: not very convincing, rate of collision still high.
+\paragraph{Safety guarantees}
 
-\paragraph{Theoretical guarantees \vs empirical achievements}
+There exists a line of work about safe control committed to develop algorithms guaranteed to never reach an unsafe state, or with a provably bounded probability of collisions. What are these guarantees worth?
+
 Researchers strive to derive safety guarantees. 
 But what are these guarantee worth when they rely on assumptions that are wrong. 
 A HJI reachability analysis can do nothing against an unexpected event.
 
 We managed to obtain some guarantees in Chapter 7, but what are they worth? It seems quite dubious that our linear model can accurately describe the complexity of road situations.
 
+Hope: Even when the guarantees do not hold, the founding principles of an algorithm may lead to designs that robustly exhibit the desired properties.
 Still, principled ways to derive sound algorithms, whose properties can robustly generalize. Eg estimation and control in aerospace, where the dynamics is not really linear and the noise really gaussian.
+But having guarantees is an additional constraint, at the expense of performance
 Do you prefer a linear model with guarantees under false assumptions, or a Neural Network with no guarantee but a larger hypothesis class (reduced distance)?
-Even when the guarantees do not hold, the founding principles of an algorithm may lead to designs that robustly exhibit the desired properties.
 
-\paragraph{Beyond simulation?}
-How to use both ?
-Simulation to develop a common sense of how the world works, but then transfer to real world data.
-Algorithms specific to simulation: Pure Exploration Setting.
-Offline RL. Safe Policy Improvement in the vicinity of known states.
+\paragraph{Simulation and beyond?}
+Use simulation -> transfer ? Even if the problem of transfer remains, it is reasonable to assume that learning simulation will 
+Divert our effort towards a different learning objective: regret minimisation does not make much sense in a simulated environment, where rewards are not costly, but samples are.
+Research perspectives on the pure exploration setting
 
-
-
-
-
+How to transfer ? The fine-tuning step still involves experiencing failures.
+Hopefully, reduced number of failures.
+This may be realistic under human supervision, were accidents are replaced by interventions. \citep{Saunders2018,Kendall2019}.
+Another Offline RL, which is promising for industrial settings. Given driving demonstrations, Safe Policy Improvement methods \citep{Laroche2019} could enable to safely adapt the policy in the vicinity of known states. 
