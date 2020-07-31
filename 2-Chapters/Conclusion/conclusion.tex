@@ -22,6 +22,8 @@
 \section{Conclusion on our contributions}
 In this thesis, we proposed a learning-based approach to the problem of behavioural planning for autonomous vehicles, with a focus on situations where several drivers are interacting. Following an in-breadth (\Cref{chapter:2}) as well as in-depth (\Cref{chapter:3}) initial investigation, we identified a set of key issues which make this problem challenging. We now recall each of these subjects, and precise how we strived to address them both in the model-free approach of \Cref{part:2} and the model-based approach of \Cref{part:3}.
 
+%TODO highlight our most significant contributions
+
 \paragraph{Coupled social dynamics}
 In dense traffic, the dynamics of distinct vehicles are locally coupled, due to how drivers react and adapt to their surroundings. Consequently, predicting the course or acting in a driving scene requires a \emph{social awareness} skill: the ability to accurately understand and exploit these couplings.
 In \Cref{chapter:4}, this skill was implemented through a \emph{social attention} mechanism in the policy architecture, which enables the agent to filter out irrelevant objects from a complex driving scene and retain only those that represent a risk of collision. In \Cref{chapter:5}, this coupling was made even more implicit by describing the motion of a vehicle $i$ through a dynamical model $\dot{x_i} = f_i(x)$ hat accepts the whole traffic state $x$ as an input.
@@ -41,11 +43,9 @@ As for most reinforcement learning problems, we were concerned by minimising the
 
 \section{Outstanding issues and perspectives}
 
-In this section, I will adopt a more personal and subjective standpoint, and discuss which main issues we are facing and how they might be tackled, and in particular the barriers between research and industrialisation.
-Indeed, though we never intended for this thesis to lead directly to products, industrialisation remains the long haul goal that motivates our work, and I must now examine our contributions again in this light.
+In this section, I will adopt a more personal and subjective standpoint, and discuss which are the main barriers between research and industrialisation. Indeed, though we never intended for this thesis to lead directly to products, practical applications remains the long haul goal that motivates our work, and I must now examine our contributions again in this light.
 
 A first and general concern of mine is that, beside the warm comfort of the well-behaved theoretical frameworks in which we place ourselves, the sheer complexity of the real world can be overwhelming. While any single aspect --partial observability, temporal abstraction, non-stationarity, risk aversion, you name it-- can be isolated and studied independently, the question of how to merge all these approaches into one single integrated product seems arduous, if not hopeless. Yet, any candidate algorithm not addressing any of these issues would be unfit.
-
 In the sequel, I will not be so ambitious but reflect instead on a more reasonable question: are the methods that we developed likely to be suitable for a real-world application?
 
 \paragraph{Reinforcement Learning in continuous states}
@@ -57,30 +57,19 @@ These methods typically require the ability of counting the number of state visi
 
 \paragraph{Trial without error?}
 
-Assume, that the research community was able to solve the aforementioned problem and came up with exciting new algorithms for continuous state space with promising regret bounds. There remains an inevitable and fatal limitation: \emph{the foundations of \glsxtrlong{RL} are intrinsically based on trial and error}. Unfortunately, this is not an acceptable paradigm for the development of safety-critical problems such as \glsxtrlong{AD}.
-For reference, when we applied the model-free methods of \Cref{part:2} to very simple tasks, they converged in about 50k interaction samples, which represents about \SI{15}{\hour} of driving. Throughout training, the agents experienced about two thousand collisions. More generally, having vehicles \emph{exploring} on the roads among human drivers is morally inconceivable. Is there any chance at all to come up with learning algorithms that do not require actually causing accidents while training?
+% In this thesis, we tried to solve behavioural planning in simulation, as a necessary step to solve it in real world. Thus treated simulation as our target task. 
+Assume for a moment that the research community was able to solve the aforementioned problem and came up with exciting new algorithms for continuous state space with promising regret bounds. There remains an inevitable and fatal limitation: \emph{the foundations of \glsxtrlong{RL} are intrinsically based on trial and error}. Unfortunately, this is not an acceptable paradigm for the development of safety-critical problems such as \glsxtrlong{AD}. For reference, when we applied the model-free methods of \Cref{part:2} to very simple tasks, they converged in about 50k interaction samples, which represents about \SI{15}{\hour} of driving. Throughout training, the agents experienced about two thousand collisions. More generally, having vehicles \emph{exploring} on the roads among human drivers is morally inconceivable. Is there any chance at all to come up with learning algorithms that do not require actually causing accidents while training?
 
 \paragraph{Safety guarantees}
 
-There exists a line of work about safe control committed to develop algorithms guaranteed to never reach an unsafe state, or with a provably bounded probability of collisions. What are these guarantees worth?
+As a first candidate, the line of work of Safe Control is committed to develop algorithms that are guaranteed never to reach an unsafe state, or with a provably bounded probability of failure. 
+Likewise, in \Cref{chapter:7}, we managed to obtain some theoretical guarantees: a robust constraint satisfaction result, and a lower-bound on the worst-case outcome, that increases towards near-optimal performance with the number of samples. However, it is evident that these results are worth as much as their underlying assumptions, which could be: not much. Indeed, it seems very dubious that the complexity of human behaviours can be accurately described by our linear dynamics \Cref{assumpt:structure}, and our own proposed system largely overlooks large parts of the driving task. With \Cref{assumpt:feasible-constr}, the safe region $\safestates$ cannot be chosen freely, but must contain the basin of attraction $\safestates_{f}$ whose size grows with uncertainty. Finally, the assumptions of \Cref{thm:control-error} do not hold even in our simple simulations: the behaviours of observed vehicles are not persistently excited (\ie constantly braking before their leading vehicle and changing lanes). More generally, safety analyses can never protect against unmodeled events: a tree or a package falling down the road. Yet, having to model the world is daunting, especially since theoretical analysis imposes an additional constraint on the modelling effort, often at the expense of empirical performance. This may explain why practical achievements often precede their formal analysis. In the end, do we prefer relying on a simpler model that we can analyse under some assumptions unlikely to hold in practice, or more complex black-box models which tend to perform better on experimental benchmarks? Fortunately, all is not bleak and it has been observed in countless occasions that even when the guarantees do not hold, the founding principles of an algorithm can lead to designs that still exhibit the desired properties, and can robustly generalise. An example is the reliable of control systems in the aerospace industry, which even though aircraft dynamics are not \emph{really} linear and measurement noises are not \emph{really} Gaussian.
 
-Researchers strive to derive safety guarantees. 
-But what are these guarantee worth when they rely on assumptions that are wrong. 
-A HJI reachability analysis can do nothing against an unexpected event.
-
-We managed to obtain some guarantees in Chapter 7, but what are they worth? It seems quite dubious that our linear model can accurately describe the complexity of road situations.
-
-Hope: Even when the guarantees do not hold, the founding principles of an algorithm may lead to designs that robustly exhibit the desired properties.
-Still, principled ways to derive sound algorithms, whose properties can robustly generalize. Eg estimation and control in aerospace, where the dynamics is not really linear and the noise really gaussian.
-But having guarantees is an additional constraint, at the expense of performance
-Do you prefer a linear model with guarantees under false assumptions, or a Neural Network with no guarantee but a larger hypothesis class (reduced distance)?
+% TODO: still, current safety frameworks are not well suited to AD. Stabilisation: meh. Safe states: meh.
+% Perspective: investigate new ones (which ?)
+% But always the same problem: guaranteed protection against rare events = conservativeness.
 
 \paragraph{Simulation and beyond?}
-Use simulation -> transfer ? Even if the problem of transfer remains, it is reasonable to assume that learning simulation will 
-Divert our effort towards a different learning objective: regret minimisation does not make much sense in a simulated environment, where rewards are not costly, but samples are.
-Research perspectives on the pure exploration setting
 
-How to transfer ? The fine-tuning step still involves experiencing failures.
-Hopefully, reduced number of failures.
-This may be realistic under human supervision, were accidents are replaced by interventions. \citep{Saunders2018,Kendall2019}.
-Another Offline RL, which is promising for industrial settings. Given driving demonstrations, Safe Policy Improvement methods \citep{Laroche2019} could enable to safely adapt the policy in the vicinity of known states. 
+Another obvious way to avoid trial-and-error in the real world is to rely on simulation. Of course, the effort of modelling a complex world remains, but dropping the analysability requirement significantly relaxes the constraints on how this description can be expressed. We can safely expect that simulations will continue to play an increasingly significant part in \gls{AD} technologies, for both offline pre-training and online planning. This can be the occasion to divert our research efforts from the traditional regret minimisation objective, which does not make much sense in a simulated environments where rewards are free but samples are costly. In contrast, a promising research direction is the study of the more appropriate Pure Exploration setting, which aims at relating the policy suboptimality to the number of samples. I already took part in collaborations exploring this direction \citep{Jonsson2020planning,Kaufmann2020adaptive,Menard2020Fast} and hope to pursue this path further. 
+Finally, relying on simulation introduces the additional question of how to adapt knowledge from simulation to the real world. A fine-tuning training process in real conditions would involve experiencing real failures again, though hopefully in reduced numbers, which could be realistic under human interventions \citep{Saunders2018,Kendall2019}. Another path of interest to me could be to leverage offline \gls{RL} methods \citep{Thomas2015,Laroche2019}, that could enable to safely improve pre-trained policies around nominal states in a dataset of real driving data.

@@ -2091,3 +2091,20 @@ isbn="978-3-642-36279-8"
 	  url = 	 {http://proceedings.mlr.press/v125/jin20a.html},
 	  abstract = 	 { Modern Reinforcement Learning (RL) is commonly applied to practical problems with an enormous number of states, where \emph{function approximation} must be deployed to approximate either the value function or the policy. The introduction of function approximation raises a fundamental set of challenges involving computational and statistical efficiency, especially given the need to manage the exploration/exploitation tradeoff. As a result, a core RL question remains open: how can we design provably efficient RL algorithms that incorporate function approximation? This question persists even in a basic setting with linear dynamics and linear rewards, for which only linear function approximation is needed. This paper presents the first provable RL algorithm with both polynomial runtime and polynomial sample complexity in this linear setting, without requiring a “simulator” or additional assumptions. Concretely, we prove that an optimistic modification of Least-Squares Value Iteration (LSVI)—a classical algorithm frequently studied in the linear setting—achieves $\tilde{\mathcal{O}}(\sqrt{d^3H^3T})$ regret, where $d$ is the ambient dimension of feature space, $H$ is the length of each episode, and $T$ is the total number of steps. Importantly, such regret is independent of the number of states and actions. }
 }
+
+@InProceedings{Thomas2015,
+  title = 	 {High Confidence Policy Improvement},
+  author = 	 {Philip Thomas and Georgios Theocharous and Mohammad Ghavamzadeh},
+  booktitle = 	 {Proceedings of the 32nd International Conference on Machine Learning},
+  pages = 	 {2380--2388},
+  year = 	 {2015},
+  editor = 	 {Francis Bach and David Blei},
+  volume = 	 {37},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Lille, France},
+  month = 	 {07--09 Jul},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v37/thomas15.pdf},
+  url = 	 {http://proceedings.mlr.press/v37/thomas15.html},
+  abstract = 	 {We present a batch reinforcement learning (RL) algorithm that provides probabilistic guarantees about the quality of each policy that it proposes, and which has no hyper-parameter that requires expert tuning. Specifically, the user may select any performance lower-bound and confidence level and our algorithm will ensure that the probability that it returns a policy with performance below the lower bound is at most the specified confidence level. We then propose an incremental algorithm that executes our policy improvement algorithm repeatedly to generate multiple policy improvements. We show the viability of our approach with a simple 4 x 4 gridworld and the standard mountain car problem, as well as with a digital marketing application that uses real world data.}
+}
