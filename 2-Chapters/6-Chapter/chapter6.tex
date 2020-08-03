@@ -759,7 +759,7 @@ This enables \citet{Hren2008} to define\footnote{We use an iteration of operator
 L_n \eqdef B_n^{d_n}(0), \qquad U_n \eqdef B_n^{d_n}(V_{\max}),
 \end{align}
 where $0$ is the null function.
-The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}.
+The corresponding \OPD algorithm is described in \Cref{alg:opd}.
 
 \begin{algorithm}[!ht]
 	\caption{The \emph{Optimistic Planning of Deterministic Systems} (\OPD) algorithm from \citep{Hren2008}.}
@@ -894,7 +894,7 @@ It is typically small in problems where there is one single optimal trajectory, 
 
 \subsubsection{Motivation for an improved regret bound}
 
-We start by reformulating the sampling rule used for the \texttt{OPD} algorithm. To that end, notice that when some bounds $(L,\,U)$ on the state values $V(s(a))$ are available, they also induce bounds $(\overline{L},\, \overline{U})$ on values $V(a)$ of sequences of actions $a$ of length $h$ defined as
+We start by reformulating the sampling rule used for the \OPD algorithm. To that end, notice that when some bounds $(L,\,U)$ on the state values $V(s(a))$ are available, they also induce bounds $(\overline{L},\, \overline{U})$ on values $V(a)$ of sequences of actions $a$ of length $h$ defined as
 \begin{equation*}
 %\label{eq:sequence_value}
 \underbrace{R(s_1,a) + \discount^{h} L(a)}_{\overline{L}(a)} \leq V(a) \leq \underbrace{R(s_1,a) + \discount^{h} U(a)}_{\overline{U}(a)}.
@@ -912,8 +912,8 @@ a_n \in \argmax_{a\in\ext{\Tau}_n} \overline{L}_n(a)
 \end{equation}
 
 
-As shown in \Cref{fig:bellman}, in a tree the Bellman operator $B_n$ only propagates the information upward, and the leaves cannot be updated. Thus, $U_n = B_n^{d_n}(V_{\max})$ and $V_{\max}$ coincide on $\ext{\Tau}_n$ which means that the sampling rule of \texttt{OPD} can be summarized as using \eqref{eq:sampling_rule} with the trivial upper-bound $U_n = V_{\max}$.
-Likewise, the recommendation rule simply uses \eqref{eq:recommendation_rule} with the trivial lower-bound $L_n = 0$. Thus, \texttt{OPD} amounts to simply using the trivial bound $(0,\, V_{\max})$ on leaf nodes, and does not make use of all the available information in $\Tau_n$ to improve these bounds.
+As shown in \Cref{fig:bellman}, in a tree the Bellman operator $B_n$ only propagates the information upward, and the leaves cannot be updated. Thus, $U_n = B_n^{d_n}(V_{\max})$ and $V_{\max}$ coincide on $\ext{\Tau}_n$ which means that the sampling rule of \OPD can be summarized as using \eqref{eq:sampling_rule} with the trivial upper-bound $U_n = V_{\max}$.
+Likewise, the recommendation rule simply uses \eqref{eq:recommendation_rule} with the trivial lower-bound $L_n = 0$. Thus, \OPD amounts to simply using the trivial bound $(0,\, V_{\max})$ on leaf nodes, and does not make use of all the available information in $\Tau_n$ to improve these bounds.
 
 Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ provided by an oracle: $$0\leq L\leq V\leq U\leq V_{\max}.$$
 
@@ -1041,7 +1041,7 @@ Intuitively, $\kappa_\infty$ should be much lower than $\kappa$ in problems wher
 
 \subsubsection{Illustrative example}
 
-In \Cref{{prop:illustrative-example}, we consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \gamma$, and $ r^- = r^\star - \frac{\gamma}{1-\gamma} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\gamma} - 1\right).$ Note that this choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
+In \Cref{prop:illustrative-example}, we consider a toy MDP $\cM$ shown in \Cref{fig:mdp}. The transitions are described visually while the rewards are defined as follows: let $0\leq r^\star\leq \gamma$, and $ r^- = r^\star - \frac{\gamma}{1-\gamma} S$, $r^+ = r^\star + S$ with $S = r^\star\left(\frac{1}{\gamma} - 1\right).$ Note that this choice ensures that $r^\star, r^-, r^+$ and $S$ are all in $[0, 1]$.
 
 \begin{figure}[htp]
 	\centering
@@ -1500,7 +1500,7 @@ The sampling rule of \GBOPD (line 2 of \GBOPD) can yield an infinite sequence $b
 	\begin{leftbar}[propositionbar]
 	Consider the variant of \GBOPD where we stop the sampling rule when reaching a fixed depth $d^+_n$ chosen polynomial with $n$:
 	\[d^+_n = \ceil{\alpha n^\beta},\; \text{with }\alpha,\beta > 0\]
-	Then, the regret bound of \Cref{thm:regret-gbop} (or that of \Cref{{prop:early-stopping} when using early stopping in the bounds computation) still holds.
+	Then, the regret bound of \Cref{thm:regret-gbop} (or that of \Cref{prop:early-stopping} when using early stopping in the bounds computation) still holds.
 	\end{leftbar}
 \end{proposition}
 
@@ -1708,11 +1708,11 @@ Let $L_2\leq L_1\leq V\leq U_1\leq U_2$, then $\Tau_h^\infty(L_1,U_1) \subset \T
 
 \subsubsection{Proof of \Cref{thm:regret-bound-U}}
 \label{sec:proof-regret-bound-U}
-In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \texttt{OPD}.
+In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \OPD.
 
 \begin{remark}
 \begin{leftbar}[remarkbar]
-It no longer holds that $a_n$ must be of maximal depth $d_n$.  This is due to the fact the exploration bonus $\gamma^h U(a)$ is not depth-wise constant: consider two nodes $a,b$ at the same depth with $R(a) > R(b)$. In \texttt{OPD}, both get the same bonus $\gamma^h/(1-\gamma)$, and the node $a$ is expanded first. But with the local bonus, $b$ could be expanded in priority rather than $a$, if its own bonus is sufficiently higher than that of $a$, precisely if $R(a)+\gamma^h U(a) < R(b)+\gamma^h U(b)$. For instance, $U(a)=0$ when $a$ is known to be a terminal state while $b$ can lead to future rewards. If after expanding and exploring the subtree of $b$ we find out that $V(b) = 0$, we still return the recommendation $a$, which is of non-maximal depth.
+It no longer holds that $a_n$ must be of maximal depth $d_n$.  This is due to the fact the exploration bonus $\gamma^h U(a)$ is not depth-wise constant: consider two nodes $a,b$ at the same depth with $R(a) > R(b)$. In \OPD, both get the same bonus $\gamma^h/(1-\gamma)$, and the node $a$ is expanded first. But with the local bonus, $b$ could be expanded in priority rather than $a$, if its own bonus is sufficiently higher than that of $a$, precisely if $R(a)+\gamma^h U(a) < R(b)+\gamma^h U(b)$. For instance, $U(a)=0$ when $a$ is known to be a terminal state while $b$ can lead to future rewards. If after expanding and exploring the subtree of $b$ we find out that $V(b) = 0$, we still return the recommendation $a$, which is of non-maximal depth.
 \end{leftbar}
 \end{remark}
 
@@ -1756,7 +1756,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 \regret = \cO\left(n^{-\frac{\log 1/\gamma}{\log \kappa(L,U)}}\right);
 \end{align*}
 
-%\subsection{Proof of \Cref{{prop:b-eq-mb}}
+%\subsection{Proof of \Cref{prop:b-eq-mb}}
 
 %\begin{proof}
 %	Let $U$ equivalent to $\cU$, and $a\in T_n$.
@@ -1777,7 +1777,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 %Hence, $\|M_n^+ U_1 - M_n^+ U_2\|_\infty \leq \|U_1 - U_2\|_\infty$
 %\end{proof}
 %
-%\subsection{Proof of \Cref{{prop:pruning}}
+%\subsection{Proof of \Cref{prop:pruning}}
 %
 %\begin{proof}
 %Assume $h(a_2) \geq h(a_1)$.

@@ -1085,7 +1085,7 @@ The requirements imposed on $P,Z_{+},Z_{-}$ in this corollary are
 more restrictive than the conditions of \Cref{thm:ISS_pr},
 but it allows the gains $K_{0},K_{1},K_{2}$ to be efficiently calculated.
 
-Under conditions of \Cref{thm:ISS_pr}, the control \eqref{eq:control_pr} ensures stabilisation of the predictor \eqref{eq:predictor} (\ie \eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in a vicinity $\safestates_{f}$ of the origin. The size of the vicinity is proportional to the system \eqref{eq:dynamics} uncertainty (it can be optimized by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-property}, it implies that the system \eqref{eq:dynamics} also will reach a neighborhood of the origin under the control \eqref{eq:control_pr}. Hence, the posed control problem would be solved provided that \eqref{eq:constraints} holds. In order to ensure the robust constraint satisfaction we consider an \gls{MPC} design in the next section.
+Under conditions of \Cref{thm:ISS_pr}, the control \eqref{eq:control_pr} ensures stabilisation of the predictor \eqref{eq:predictor} (\ie \eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in a vicinity $\safestates_{f}$ of the origin. The size of the vicinity is proportional to the system \eqref{eq:dynamics} uncertainty (it can be optimized by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-property}, it implies that the system \eqref{eq:dynamics} also will reach a neighbourhood of the origin under the control \eqref{eq:control_pr}. Hence, the posed control problem would be solved provided that \eqref{eq:constraints} holds. In order to ensure the robust constraint satisfaction we consider an \gls{MPC} design in the next section.
 
 \subsection{Robust constraint satisfaction}
 \label{sec:stab-robust-control}
@@ -1438,11 +1438,11 @@ We want to adapt our planning algorithm in order to balance these concurrent hyp
 \hlg{\sup_{a\in\cA^\Natural}}\underbrace{\hlr{\min_{m\in[M]}} \sum_{n=N+1}^\infty \discount^n R_n^m}_{V^r(a)}
 \end{equation}
 where $R_n^m$ is the reward obtain by following the action sequence $a$ up to step $n$ under the dynamics $f^m$.
-This objective could be optimised in the same way as in \Cref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \Cref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \texttt{OPD} algorithm in the following way:
+This objective could be optimised in the same way as in \Cref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \Cref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \OPD algorithm in the following way:
 
 \begin{definition}[Robust sequence upper bounds]
 	\begin{leftbar}[defnbar]
-	We replace the upper-bound \eqref{eq:opd} on sequence values in \texttt{OPD} by
+	We replace the upper-bound \eqref{eq:opd} on sequence values in \OPD by
 	\begin{equation}
 	\label{eq:robust-b-values}
 	U_a^r(k)  \eqdef \min_{m\in[M]} \sum_{n=0}^{h-1} \discount^n R_n^m  + \frac{\discount^h}{1-\discount}
@@ -1481,14 +1481,14 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 \begin{theorem}[Robust planning performance]
 	\label{theorem:drop-regret}
 	\begin{leftbar}[theorembar]
-	The robust version of \texttt{OPD} \eqref{eq:robust-b-values} enjoys the same regret bound as \texttt{OPD} in \Cref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
+	The robust version of \OPD \eqref{eq:robust-b-values} enjoys the same regret bound as \OPD in \Cref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
 	\end{leftbar}
 \end{theorem}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-drop-regret}.
 \end{proof}
 
-The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:minimax-obj} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:minimax-regret-bound}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
+The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:minimax-obj} with continuous ambiguity $\params\in\confidenceset$, for which \OPD only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:minimax-regret-bound}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
 \label{sec:interval-experiments}
