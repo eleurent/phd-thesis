@@ -220,7 +220,7 @@ Depending on the assumption we have over the noise $\eta_n$, we can bound this e
 \begin{leftbar}[assumptionbar]
 The noise $\eta(t)$ is bounded in $\|\cdot\|_\infty$.
 	
-More precisely, we assume that there exists known signals $\underline{\omega},\overline{\omega}\in\cL_{\infty}^{n}$ such that $\underline{\omega}(t)\leq \omega(t)\leq\overline{\omega}(t)$ for all $t\geq0$.
+More precisely, we assume that there exists known signals $\underline{\omega},\overline{\omega}\in\cL_{\infty}^{r}$ such that $\underline{\omega}(t)\leq \omega(t)\leq\overline{\omega}(t)$ for all $t\geq0$.
 \end{leftbar}
 \end{assumption}
 
@@ -264,7 +264,7 @@ Under this assumption, we can derive a confidence ellipsoid for $\params$.
 	with
 	\begin{equation}
 	\label{eq:beta_n}
-	\beta_N(\confidence)\eqdef \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+	\beta_N(\confidence)\eqdef \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
 	+ (\lambda d)^{1/2}\|\theta\|_\infty.
 	\end{equation}
 	\end{leftbar}
@@ -377,15 +377,27 @@ In the last lemma, the existence of similarity transformation is proven for an i
 \subsubsection{A motivating example}
 
 Following the result of \Cref{lem:interval}, there is a straightforward solution to the problem:
-%TODO: this should be a proposition
-\begin{align}
-\begin{split}
-\dot{\underline{x}}(t) = {} & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t) +\overline{A}^{-}\overline{x}^{-}(t) + Bu(t)+D^{+}\underline{\omega}(t)-D^{-}\overline{\omega}(t),\label{eq:predictor-naive}\\
-\dot{\overline{x}}(t) =  {} & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t) + Bu(t) +D^{+}\overline{\omega}(t)-D^{-}\underline{\omega}(t), \\
-\text{with }\, & \underline{x}(0)=  \underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0}, 
-\end{split}
-\end{align}
-then it is obvious to verify that the relations \eqref{eq:inclusion-property} are satisfied, but the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{\omega}$ and $\overline{\omega}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
+
+
+\begin{proposition}
+	\label{prop:interval-predictor-naive}
+	\begin{leftbar}[propositionbar]
+		Let \Cref{assumpt:bounded-noise,assumpt:bounded-state} be satisfied for the system \eqref{eq:LPV_syst}, then the interval predictor
+		\begin{align}
+		\label{eq:predictor-naive}
+		\begin{split}
+		\dot{\underline{x}}(t) = {} & \underline{A}^{+}\underline{x}^{+}(t)-\overline{A}^{+}\underline{x}^{-}(t)-\underline{A}^{-}\overline{x}^{+}(t) +\overline{A}^{-}\overline{x}^{-}(t) + Bu(t)+D^{+}\underline{\omega}(t)-D^{-}\overline{\omega}(t),\\
+		\dot{\overline{x}}(t) =  {} & \overline{A}^{+}\overline{x}^{+}(t)-\underline{A}^{+}\overline{x}^{-}(t)-\overline{A}^{-}\underline{x}^{+}(t) +\underline{A}^{-}\underline{x}^{-}(t) + Bu(t) +D^{+}\overline{\omega}(t)-D^{-}\underline{\omega}(t), \\
+		\text{with }\, & \underline{x}(0)=  \underline{x}_{0},\;\overline{x}(0)=\overline{x}_{0}, 
+		\end{split}
+		\end{align}
+		ensures the inclusion property \eqref{eq:inclusion-property}. 
+	\end{leftbar}
+\end{proposition}
+\begin{proof}
+	The relations \eqref{eq:inclusion-property} can easily be obtained by recursively applying \Cref{lem:interval} at each time step.
+\end{proof}
+Unfortunately, the stability analysis of the system \eqref{eq:predictor-naive} is more tricky. Indeed, \eqref{eq:predictor-naive} is a purely nonlinear system (since $\underline{x}^{+}$, $\underline{x}^{-}$, $\overline{x}^{+}$ and $\overline{x}^{-}$ are globally Lipschitz functions of the state $\underline{x}$ and $\overline{x}$), whose robust stability with respect to the bounded external inputs $\underline{\omega}$ and $\overline{\omega}$ can be assessed if a suitable Lyapunov function is found. And it is easy to find an example, where the matrices $\underline{A}$ and $\overline{A}$ are stable, but the system \eqref{eq:predictor-naive} is not:
 \begin{example*}[motivating]
 	\begin{figure}[t]
 		\begin{centering}
@@ -1377,8 +1389,9 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 	\end{leftbar}
 \end{theorem}
 \begin{proof}
-	We provide a proof in \Cref{sec:proof-d-regret}.
+	We provide a proof in \Cref{sec:proof-regret-opd}.
 \end{proof}
+
 Hence, by using enough computational budget $K$ for planning we can get as close as we want to the optimal surrogate value $\hat{V}^r(a^{\star})$, at a polynomial rate. Unfortunately, there exists a gap between $\hat{V}^r$ and the true robust objective $V^r$, which stems from three approximations: (i) the true reachable set was approximated by an enclosing interval in \eqref{eq:inclusion-property}; (ii) the time-invariance of the dynamics uncertainty $\structureddynamics\in\confidenceset$ was handled by the interval predictor \eqref{eq:interval-predictor} as if it were a time-varying uncertainty $A(\theta(t))\in\confidenceset,\forall t$ ; and (iii) the lower-bound $\sum\min\leq \min\sum$ used to define the surrogate objective \eqref{eq:surrogate_objective} is not tight. However, this gap can be bounded with additional assumptions.
 
 \begin{theorem}[Regret bound]
@@ -1399,7 +1412,7 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	\end{enumerate}
 	we can bound the approximation error of \Cref{alg:full}:
 	\begin{equation*}
-	\hat{V}^r(\bu) \leq {V}^r(\bu) \leq V(\bu) \leq \hat{V}^r(\bu) + \Delta_\omega + \cO\left({\log N / N}\right)
+	\hat{V}^r(\bu) \leq {V}^r(\bu) \leq V(\bu) \leq \hat{V}^r(\bu) + \Delta_\omega + \cO\left(\frac{1}{\confidence}\frac{\log N}{N}\right)
 	\end{equation*}
 	with probability at least $1-\confidence$, where $\Delta_\omega$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
 	\end{leftbar}
@@ -1636,7 +1649,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\end{equation*}
 		Then, for any $\confidence>0$, with probability at least $1-\confidence$, for all $n\geq0$,
 		\begin{align*}
-		\| S_n \|_{\overline{G}_n^{-1}} \leq \sqrt{2\ln \left(\frac{\det\left(\overline{G}_n\right)^{1/2}}{\confidence\det(G)^{1/2}}\right)}.
+		\| S_n \|_{\overline{G}_n^{-1}} \leq \sqrt{2\log \left(\frac{\det\left(\overline{G}_n\right)^{1/2}}{\confidence\det(G)^{1/2}}\right)}.
 		\end{align*}
 		\end{leftbar}
 	\end{proposition}
@@ -1684,18 +1697,18 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\begin{lemma}[Theorem 14.7 of \citealp{pena2008self}]
 			\begin{leftbar}[lemmabar]
 			If $Z$ is a random vector and $B$ is a symmetric positive definite matrix such that
-			\[\forall \discount\in\Real^d, \ln \expectedvalue \exp \left(\discount^\transp Z -\frac{1}{2} \discount^\transp B \discount \right)\leq 0,\]
+			\[\forall \discount\in\Real^d, \log \expectedvalue \exp \left(\discount^\transp Z -\frac{1}{2} \discount^\transp B \discount \right)\leq 0,\]
 			then for any positive definite non-random matrix C, it holds
 			\[\expectedvalue\left[ \sqrt{\frac{\det(C)}{\det(B+C)} } \exp\left( \frac{1}{2}\|Z\|^2_{(B+C)^{-1}}\right)\right]\leq 1. \] 
 			In particular, by Markov inequality, for all $\confidence\in(0,1)$, 
-			\[\probability{\|Z\|_{(B+C)^{-1}} \geq \sqrt{2\ln \left(\frac{\det \left((B+C)^{1/2}\right)}{\confidence\det(C)^{1/2}}\right)}}\leq \confidence.\]
+			\[\probability{\|Z\|_{(B+C)^{-1}} \geq \sqrt{2\log \left(\frac{\det \left((B+C)^{1/2}\right)}{\confidence\det(C)^{1/2}}\right)}}\leq \confidence.\]
 			\end{leftbar}
 		\end{lemma}
 		
 		Here, by using $Z = \sum_{s=1}^t\Phi_s\Sigma_p^{-1}\eta_s$, $B=G_t$, $C=G$,
 		
 		\[
-		\probability{\| S_t \|_{(G_t+G)^{-1}} \geq \sqrt{2\ln \left(\frac{\det(G_t+G)^{1/2}}{\confidence\det(G)^{1/2}}\right)}} \leq \confidence
+		\probability{\| S_t \|_{(G_t+G)^{-1}} \geq \sqrt{2\log \left(\frac{\det(G_t+G)^{1/2}}{\confidence\det(G)^{1/2}}\right)}} \leq \confidence
 		\]
 		
 	\end{proof}
@@ -1722,12 +1735,12 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		
 		By applying \Cref{prop:concentration} with $G=\lambda I_d$, we obtain that with probability at least $1-\confidence$,
 		\begin{align*}
-		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
 		+ \lambda\|\theta\|_{G_{N, \lambda}^{-1}}
 		\end{align*}
 		And since $\|\theta\|_{G_{N, \lambda}^{-1}}^2 \leq 1/\lambda_{\min}(G_{N,\lambda})\|\theta\|_2^2 \leq 1/\lambda \|\theta\|_2^2$ and $\|\theta\|_2^2 \leq d\|\theta\|_\infty^2\leq d S^2$,
 		\begin{align*}
-		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+		\| \theta_{N,\lambda}  - \theta\|_{G_{N,\lambda}} &\leq \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
 		+ (\lambda d)^{1/2}S
 		\end{align*}
 	\end{proof}
@@ -1757,7 +1770,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\exists \underline{\phi},\overline{\phi}>0, n_0: \forall n\geq n_0,\nonumber\\ \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
 		\end{align}
 		then,
-		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
+		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{1}{\confidence}\frac{\log N}{N}} \right) \]
 	\end{leftbar}
 	\end{lemma}
 	\begin{proof}
@@ -1770,19 +1783,19 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		and \eqref{eq:beta_n} gives
 		
 		\begin{align*}
-		\beta_N(\confidence) &= \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+		\beta_N(\confidence) &= \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
 		+ (\lambda d)^{1/2}S\\
-		&\leq \sqrt{d\log (N\overline{\phi}^2) / \lambda^{d/2}} + \cO(1)
+		&\leq \sqrt{d\log (N\overline{\phi}^2) / (\delta\lambda^{d/2})} + \cO(1)
 		\end{align*}
 		Thus,
-		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left( \sqrt{\frac{\log N}{N}} \right) \]
+		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left( \sqrt{\frac{1}{\confidence}\frac{\log N}{N}} \right) \]
 		
 		And $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
 		\begin{align*}
 		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
 		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
 		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
-		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{\log N}{N}} \right) 
+		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{1}{\confidence}\frac{\log N}{N}} \right) 
 		\end{align*}
 		
 	\end{proof}
@@ -1799,7 +1812,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\end{bmatrix}< 0,
 		\end{align*}
 		then for all $t> t_N$,
-		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\log N}{N}} \right)\right)C_\omega(t), \]
+		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\log N}{N\confidence}} \right)\right)C_\omega(t), \]
 		where $$C_0 = \sqrt{\frac{2\rho\lambda_{\max}(P)}{\lambda_{\min}(P)\lambda_{\min}(Q_0)}},$$ and $$C_\omega(t) = \sup_{\tau\in[t_N,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2^2.$$
 		\end{leftbar}
 	\end{lemma}
@@ -1864,7 +1877,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		Choose $Q = \frac{1}{2}Q_0-4\alpha I_p$.
 		Assume that $P$ is fixed and satisfies the conditions of the lemma. We have $$\lambda_{\max}(S) \leq \alpha^{-1}\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2.$$
 		
-		Thus, by taking $\alpha = \frac{\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2}{2\lambda_{\min}(Q_0)} = \cO(\log N / N)$, we can obtain that $S \leq \begin{bmatrix}
+		Thus, by taking $\alpha = \frac{\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2}{2\lambda_{\min}(Q_0)} = \cO(\frac{\log N}{N\confidence})$, we can obtain that $S \leq \begin{bmatrix}
 		\frac{1}{2}Q_0 & 0\\0 & 0
 		\end{bmatrix}$. Thus,
 		\[R-S \geq \begin{bmatrix}
@@ -1880,7 +1893,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		Developing at the first order in $\alpha$ gives
 		\begin{align*}
 		\|e(t)\|_2 &\leq C_0\left(1 + \frac{4\alpha}{\lambda_{\min}(Q_0)} + \cO(\alpha_N^2)\right)C_\omega(t)\\
-		&\leq \left(C_0 + \cO(\log N/N)\right)C_\omega(t)
+		&\leq \left(C_0 + \cO\left(\frac{\log N}{N\confidence}\right)\right)C_\omega(t)
 		\end{align*}
 	\end{proof}
 	
