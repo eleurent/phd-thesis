@@ -144,7 +144,7 @@ Yet, many tasks cannot be framed as stabilisation problems (e.g. obstacle avoida
 where $x_n(\bu,\bom)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\bom$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$, and $\R$ is an \emph{arbitrary} bounded reward function. This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[e.g.][]{Kumar2013}.
 
 Unfortunately, minimax problems such as $\eqref{eq:minimax-obj}$ are already notoriously hard when the reward $\R$ has a simple form. Without a restriction on the shape of functions $\R$, solving the optimal -- not to mention the robust -- control objective is intractable and we cannot hope to derive an explicit solution. Thus, in \textbf{\Cref{sec:control}} we propose a robust \gls{MPC} algorithm for solving \eqref{eq:minimax-obj} numerically. Facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms studied in \Cref{chapter:6}.
-However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:minimax-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:control-error}. This is our forth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
+However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:minimax-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:minimax-regret-bound}. This is our forth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
 
 \paragraph{Multi-model extension}
 In \textbf{\Cref{sec:multi-model}}, our fifth contribution extends the proposed framework to consider multiple modelling assumptions, while narrowing uncertainty through data-driven model rejection, and still ensuring safety via robust model-selection during planning.
@@ -168,8 +168,6 @@ Another work of interest is \citep{Rosolia2019} where worst-case generic costs a
 \label{sec:estimation}
 
 The goal of this section is to derive a confidence region \eqref{eq:confidence} for the parameters $\theta$ of the dynamics \eqref{eq:dynamics}.
-
-%TODO: S is a bound on theta
 
 We abuse notations and define a virtual measurement signal, still denoted $y(t)$, that includes additional known terms
 \begin{equation*}
@@ -202,6 +200,9 @@ The solution can be obtained as:
 	\end{align}
 	\end{leftbar}
 \end{proposition}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-regularized_solution}.
+\end{proof}
 
 Substituting $y_n$ into \eqref{eq:vector_rls} yields the regression error
 \begin{align}
@@ -264,10 +265,13 @@ Under this assumption, we can derive a confidence ellipsoid for $\params$.
 	\begin{equation}
 	\label{eq:beta_n}
 	\beta_N(\confidence)\eqdef \sqrt{2\ln \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
-	+ (\lambda d)^{1/2}S.
+	+ (\lambda d)^{1/2}\|\theta\|_\infty.
 	\end{equation}
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-confidence_ellipsoid}.
+\end{proof}
 
 \section{State interval prediction}
 
@@ -450,7 +454,7 @@ Denote
 \]
 then the following interval predictor can be designed:
 \begin{theorem}
-	\label{thm:main}
+	\label{thm:interval-predictor-main}
 	\begin{leftbar}[theorembar]
 	Let \Cref{assumpt:bounded-noise,assumpt:bounded-state,assumpt:polytope,assumpt:metzler} be satisfied for the system \eqref{eq:LPV_syst}, then an interval predictor
 	\begin{align}
@@ -599,7 +603,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 
 \begin{remark}[Asymptotic linearity]
 	\begin{leftbar}[remarkbar]
-	Assume that $-\underline{\omega}=\overline{\omega}=\text{const}\ne0$ and the conditions of \Cref{thm:main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:interval-predictor} takes the form for sufficiently high values of $t\geq0$:
+	Assume that $-\underline{\omega}=\overline{\omega}=\text{const}\ne0$ and the conditions of \Cref{thm:interval-predictor-main} are satisfied, then asymptotically $\underline{x}$ and $\overline{x}$ are negative and positive, respectively. Therefore, the dynamics of \eqref{eq:interval-predictor} takes the form for sufficiently high values of $t\geq0$:
 	\begin{align*}
 		\dot{\underline{x}}(t) & = (A_{0}-\Delta A_{+})\underline{x}(t)-\Delta A_{-}\overline{x}(t) +Bu(t) +D^{+}\underline{\omega}-D^{-}\overline{\omega},\\
 		\dot{\overline{x}}(t) & = (A_{0}+\Delta A_{+})\overline{x}(t)+\Delta A_{-}\underline{x}(t)  +Bu(t) +D^{+}\overline{\omega}-D^{-}\underline{\omega},
@@ -634,7 +638,7 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 		\dot{\underline{x}}(t) = {} & -\overline{\theta}\underline{x}(t) - (\overline{\theta}-\underline{\theta})\underline{x}^{-}(t) + \underline{\omega},\\
 		\dot{\overline{x}}(t) =  {} & -\overline{\theta}\overline{x}(t) + (\overline{\theta}-\underline{\theta})\overline{x}^{+}(t) + \overline{\omega},
 	\end{align*}
-	where $A_{0}=-\overline{\theta}$ is chosen, then $\Delta A_{+}=\overline{\theta}-\underline{\theta}$, $\Delta A_{-}=0$ and all conditions of \Cref{thm:main} are verified. The results of simulation are shown in \Cref{fig:IP_New}. As we can see the new predictor generates very reasonable and bounded estimates. 
+	where $A_{0}=-\overline{\theta}$ is chosen, then $\Delta A_{+}=\overline{\theta}-\underline{\theta}$, $\Delta A_{-}=0$ and all conditions of \Cref{thm:interval-predictor-main} are verified. The results of simulation are shown in \Cref{fig:IP_New}. As we can see the new predictor generates very reasonable and bounded estimates. 
 \end{example*}
 
 
@@ -790,7 +794,7 @@ Here, the dependency in $v_i$ is seen as an uncertain parametric dependency, \ie
 
 \subsubsection{Change of coordinates}
 In both cases, the obtained polytope centre $A_0$ is non-Metzler.
-We use \Cref{lem:l2,lem:l3} to compute a similarity transformation of coordinates. Precisely, we ensure that the polytope is chosen so that its centre $A_0$ is diagonalisable having real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $S$. The transformed system $x'=S^{-1}(x-x_c)$ verifies \Cref{assumpt:polytope} as required to apply the interval predictor of \Cref{thm:main}. Finally, the obtained predictor is transformed back to the original coordinates $x$ by using the interval arithmetic of \Cref{lem:interval}.
+We use \Cref{lem:l2,lem:l3} to compute a similarity transformation of coordinates. Precisely, we ensure that the polytope is chosen so that its centre $A_0$ is diagonalisable having real eigenvalues, and perform an eigendecomposition to compute its change of basis matrix $S$. The transformed system $x'=S^{-1}(x-x_c)$ verifies \Cref{assumpt:polytope} as required to apply the interval predictor of \Cref{thm:interval-predictor-main}. Finally, the obtained predictor is transformed back to the original coordinates $x$ by using the interval arithmetic of \Cref{lem:interval}.
 
 \subsubsection{Results}
 
@@ -830,7 +834,7 @@ We show the resulting intervals in \Cref{fig:highway}. The target vehicle with u
 
 % TODO: say that this predictor is socially aware since prediction of a vehicle i depends on its neighbour vehicles
 
-\subsection*{Conclusion}
+\subsection*{Section conclusion}
 
 The prediction problem for uncertain \gls{LPV} systems is solved by designing an interval predictor, which is described by nonlinear differential equations, and whose stability is evaluated using a new Lyapunov function. The corresponding robust stability conditions are expressed in terms of \glspl{LMI}. An approach is presented to improve the asymptotic accuracy of interval estimation or prediction in \gls{LTI} systems provided that the exogenous inputs have a known spectrum of frequencies. The proficiency of the methods is demonstrated in application to a problem of safe motion planning for a self-driving car.
 
@@ -1316,7 +1320,10 @@ This amounts to changing the reward function, except that the worst case is asse
 	\end{equation*}
 	\end{leftbar}
 \end{proposition}
-A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \textit{``bad event''} (e.g. a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system. 
+A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \textit{``bad event''} (e.g. a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system.
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-lower-bound}.
+\end{proof}
 
 \paragraph{Planning}
 
@@ -1371,11 +1378,13 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 	\]
 	\end{leftbar}
 \end{theorem}
-
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-d-regret}.
+\end{proof}
 Hence, by using enough computational budget $K$ for planning we can get as close as we want to the optimal surrogate value $\hat{V}^r(a^{\star})$, at a polynomial rate. Unfortunately, there exists a gap between $\hat{V}^r$ and the true robust objective $V^r$, which stems from three approximations: (i) the true reachable set was approximated by an enclosing interval in \eqref{eq:inclusion-property}; (ii) the time-invariance of the dynamics uncertainty $\structureddynamics\in\confidenceset$ was handled by the interval predictor \eqref{eq:interval-predictor} as if it were a time-varying uncertainty $A(\theta(t))\in\confidenceset,\forall t$ ; and (iii) the lower-bound $\sum\min\leq \min\sum$ used to define the surrogate objective \eqref{eq:surrogate_objective} is not tight. However, this gap can be bounded with additional assumptions.
 
 \begin{theorem}[Regret bound]
-	\label{thm:control-error}
+	\label{thm:minimax-regret-bound}
 	\begin{leftbar}[theorembar]
 	Under three conditions:
 	\begin{enumerate}
@@ -1397,6 +1406,9 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	with probability at least $1-\confidence$, where $\Delta_\omega$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-minimax-regret-bound}.
+\end{proof}
 
 \section{Multi-model selection}
 \label{sec:multi-model}
@@ -1474,8 +1486,11 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 	The robust version of \texttt{OPD} \eqref{eq:robust-b-values} enjoys the same regret bound as \texttt{OPD} in \Cref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-drop-regret}.
+\end{proof}
 
-The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:minimax-obj} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:control-error}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
+The regret depends on the number $K$ of node expansions, but each expansion now requires $M$ times more simulations than in the single-model setting. The solution of the robust objective \eqref{eq:robust-objective-discrete} with discrete ambiguity $f\in\{f^m\}_{m\in[M]}$ can be recovered exactly, asymptotically when the planning budget $K$ goes to infinity. This contrasts the results obtained in \Cref{sec:control} for the robust objective \eqref{eq:minimax-obj} with continuous ambiguity $\structureddynamics\in\confidenceset$, for which \texttt{OPD} only recovers the surrogate approximation $\hat{V}^r$, as discussed in \Cref{thm:minimax-regret-bound}. Finally, the two approaches of \Cref{sec:control,sec:multi-model} can be merged by using the pessimistic reward \eqref{eq:pessimistic-rewards} in \eqref{eq:robust-b-values}.
 
 \section{Experiments}
 \label{sec:interval-experiments}
@@ -1522,7 +1537,7 @@ Note that the Metzler assumption for $A_0$ is always verified. The reward is non
 	\label{fig:obstacle-env}
 \end{figure}
 
-We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} its performances to that of the nominal agent, i.e. the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \discount^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \Cref{fig:regret}, along with its \SI{95}{\percent} confidence interval. We see that \Cref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \Cref{thm:control-error}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all time. In contrast, the nominal agent has an even smaller regret but collided with obstacles in \SI{4}{\percent} of simulations.
+We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} its performances to that of the nominal agent, i.e. the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \discount^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \Cref{fig:regret}, along with its \SI{95}{\percent} confidence interval. We see that \Cref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \Cref{thm:minimax-regret-bound}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all time. In contrast, the nominal agent has an even smaller regret but collided with obstacles in \SI{4}{\percent} of simulations.
 
 \begin{figure}[tp]
 	\centering
@@ -1589,10 +1604,8 @@ We propose a framework for the robust estimation, prediction and control of a pa
 	
 	\section{Technical details}
 	
-	\subsection{Proofs}
-	\label{sec:proof}
-	
-	\subsubsection{Proof of \Cref{prop:regularized_solution}}
+	\subsection{Proof of \Cref{prop:regularized_solution}}
+	\label{sec:proof-regularized_solution}
 	
 	\begin{proof}
 		We differentiate $J(\theta) = \sum_{n=1}^N \|y_n -\Phi_n\theta\|_{\Sigma_p^{-1}}^2 + \lambda\|\theta\|_{}^2$ as in  \eqref{eq:regression_min} with respect to $\theta$:
@@ -1609,6 +1622,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 	\end{proof}
 	
 	\subsection{Proof of \Cref{thm:confidence_ellipsoid}}
+	\label{sec:proof-confidence_ellipsoid}
 	
 	We start by showing a preliminary proposition:
 	
@@ -1722,7 +1736,7 @@ We propose a framework for the robust estimation, prediction and control of a pa
 	
 	
 	\subsection{Proof of \Cref{prop:lower-bound}}
-	
+	\label{sec:proof-lower-bound}
 	\begin{proof}
 		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \pessimisticreward_n(\bu)$.
 		
@@ -1734,8 +1748,8 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\end{align*}
 	\end{proof}
 	
-	\subsection{Proof of \Cref{thm:control-error}}
-	
+	\subsection{Proof of \Cref{thm:minimax-regret-bound}}
+	\label{sec:proof-minimax-regret-bound}
 	We first bound the model estimation error.
 	\begin{lemma}
 		\begin{leftbar}[lemmabar]
@@ -1892,9 +1906,9 @@ We propose a framework for the robust estimation, prediction and control of a pa
 	
 	
 	\subsection{Proof of \Cref{theorem:drop-regret}}
-	
+	\label{sec:proof-drop-regret}
+		
 	We start by showing the following lemma:
-	
 	
 	\begin{lemma}[Robust values ordering]
 		\label{lemma:uvb}
