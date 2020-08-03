@@ -1,6 +1,11 @@
-% --- French package
-%\usepackage[french,greek]{babel}
+% --- Greek package
+% https://tex.stackexchange.com/a/356627
+% prevent babel to conflict with makeindex for glossaries
+\makeatletter
+\let\save@roman\@roman
 \usepackage[greek,english]{babel}
+\let\@roman\save@roman
+\makeatother
 
 % --- Front page Font
 \newenvironment{frontfont}{\fontfamily{phv}\selectfont}{\par}
