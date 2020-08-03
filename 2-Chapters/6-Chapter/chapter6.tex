@@ -598,7 +598,7 @@ The results of our experiments are shown in \Cref{fig:experiments}. The \OPD alg
 
 \subsection{On a closed-loop algorithm}
 
-We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \MDPGapE, was developed as part of a collaboration \citep{Jonsson2020planning} and analysed in the fixed-confidence setting.
+We briefly mention an extension of \KLOLOP to closed-loop policies, in the setting where the transitions have a finite support of size $B < \infty$. The algorithm, named \gls{MDPGapE}, was developed as part of a collaboration \citep{Jonsson2020planning} and analysed in the fixed-confidence setting.
 
 It relies on estimating confidence sets $\cC_t$ on the probability vector $p(\cdot|s,a)$
 $$\cC_t(s,a) \eqdef \left\{p\in \Sigma_S :  \KL\!\big(\hp_t(\cdot|s,a),p\big) \leq \frac {\beta^p(n_t(s,a), n)} {n_t(s,a)}\right\},$$

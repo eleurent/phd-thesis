@@ -36,7 +36,7 @@ Despite the recent successes of Reinforcement Learning \citep[\eg][]{Mnih2015hum
 
 Since experiencing failures is out of question, the only way to prevent them from the outset is to rely on some sort of prior knowledge. In this chapter, we assume that the system dynamics are \emph{partially known}, in the form of differential equation with unknown parameters and inputs. More precisely,
 
-\begin{assumption}[Structure \textsc{i}]
+\begin{assumption}[Structure \textsc{I}]
 \begin{leftbar}[assumptionbar]
 We consider a dynamical system with state $x\in\Real^p$, acted on by controls $u\in\Real^q$ and perturbations $\omega\in\Real^r$, with dynamics in the form
 \begin{equation*}
@@ -68,7 +68,7 @@ To address this issue, we turn to the framework of \emph{robust} decision-making
 where $\confidence\in(0,1]$ is the confidence level. 
 In order to derive an explicit form for this confidence region $\confidenceset$, additional assumptions need to be taken regarding the relation between the state transition $\dot{x}$ and its parameter $\theta$. Out of the various hypothesis classes that could represent $f_\theta$, we require one that provides confidence regions for regression. Thus, we make a first assumption that $f_\theta$ is linearly dependent on $\theta$, so as to leverage the statistical tools developed for non-asymptotic linear regression.
 
-\begin{assumption}[Structure \textsc{ii}]
+\begin{assumption}[Structure \textsc{II}]
 	\begin{leftbar}[assumptionbar]
 	We assume that $f_\theta$ takes the form
 	\begin{equation*}
@@ -97,7 +97,7 @@ In order to inform the controls, uncertainty about the dynamics $C_{[N],\confide
 \end{equation}
 Yet, in order to obtain an closed-form for $[\ux(t),\ox(t)]$, we need to know how the uncertainty over $x(t)$ can affect that of the next state $x(t+dt)$, which requires further specifying the shape of the features $\phi$ and $\psi$. Again, we make an assumption that $\phi$ and $\psi$ are linearly dependent on the states $x(t)$, controls $u(t)$ and perturbations $\omega(t)$, so as to draw on the theory of interval observers for linear systems. Thus, in this chapter we will consider a dynamical system in the following form.
 
-\begin{assumption}[Structure \textsc{iii}]
+\begin{assumption}[Structure \textsc{III}]
 	\label{assumpt:structure}
 	\begin{leftbar}[assumptionbar]
 		There exists a known feature tensor $\features\in \Real^{d \times p \times p}$ such that for all $\theta\in\Theta$,
