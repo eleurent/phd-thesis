@@ -1074,8 +1074,7 @@ The approach developed in \Cref{sec:gbopd,sec:gbop-analysis} consists in using s
 
 \paragraph{Confidence intervals for rewards.}
 
-% TODO: say that rewards can be stochastic
-When the reward kernel $P\left(r \condbar s,a\right)$ is stochastic, deviation inequalities can be used to design a confidence interval $[\ell_t(s,a), u_t(s,a)]$ over its expected value $\expectedvalue\left[r | s,a\right]$. For instance, the Chernoff-Hoeffding deviation inequality was used to design confidence intervals in \citep{Kocsis2006,Bubeck2010,Kaufmann2017}.
+When the reward kernel $P\left(r \condbar s,a\right)$ is stochastic\footnote{We assumed known deterministic rewards until now, since it is typically chosen by the autonomous vehicle designer.}, deviation inequalities can be used to design a confidence interval $[\ell_t(s,a), u_t(s,a)]$ over its expected value $\expectedvalue\left[r | s,a\right]$. For instance, the Chernoff-Hoeffding deviation inequality was used to design confidence intervals in \citep{Kocsis2006,Bubeck2010,Kaufmann2017}.
 In our recent works \citep{Leurent2020practical, Jonsson2020planning}, the tighter Kullback-Leibler confidence interval is preferred:
 \begin{align*}
 u_t(s,a) &\eqdef \max \left\{v : \kl\!\big(\hat{r}_t(s,a),v\big) \leq \frac {\beta^r(n_t(s,a), n)} {n_t(s,a)} \right\},\\

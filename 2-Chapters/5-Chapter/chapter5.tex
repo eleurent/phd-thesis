@@ -197,7 +197,7 @@ We now come to the definition of budgeted optimality. We want an optimal budgete
 
 In contrast to \glspl{MDP} for which there always exists a deterministic optimal policy, in a \gls{CMDP}, and \textit{a fortiori} in a \gls{BMDP}, this is generally not the case. 
 To illustrate this fact, let us consider the trivial \gls{BMDP} on the left of \Cref{fig:stochasticneeded}.
-In this example we have $\return^{\policy}=10\pi_1$ and $\constraintreturn^{\policy}=\pi_1$. The \idx{deterministic policy} consisting in always picking the safe action is feasible for any $\budget\geq 0$. But if $\budget=1/2$, the most rewarding feasible policy is to randomly pick the safe and risky actions with equal probabilities.
+In this example we have $\return^{\policy}=10\pi_1$ and $\constraintreturn[^{\policy}]=\pi_1$. The \idx{deterministic policy} consisting in always picking the safe action is feasible for any $\budget\geq 0$. But if $\budget=1/2$, the most rewarding feasible policy is to randomly pick the safe and risky actions with equal probabilities.
 If we attempt to cast this \gls{BMDP} into an \gls{MDP} by replacing the costs by negative rewards, the corresponding greedy policy will be deterministic\index{deterministic policy}, hence sub-optimal.
 
 
@@ -597,8 +597,6 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 \subsection{Proof of \Cref{thm:bellman-optimality}}
 \label{sec:proof-bell-optim}
-
-% TODO: \Qr[^\star] must be replaced by \Qr[^{\star}], same for Qc
 
 \begin{proof}
     Let $\os, \oa \in \ocA\times\ocS$. For this proof, we consider potentially non-stationary policies $\budgetedpolicy=(\rho, \budgetedpolicy')$, with $\rho\in\cM(\ocA)$, $\budgetedpolicy'\in\cM(\ocA)^\Natural$. The results will apply to the particular case of stationary optimal policies, when they exist.
