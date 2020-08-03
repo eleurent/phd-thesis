@@ -534,15 +534,14 @@ By choosing \diff{$\delta_m = M^{-2}$ and $f(m) = 2 \log M + 2 \log\log M$}, the
 \subsection{Experiments}
 \label{sec:planning-experiments}
 
-We have performed some numerical experiments to evaluate and compare the following planning algorithms\footnote[1]{The source code is available at \url{https://eleurent.github.io/kl-olop/}}:
+We have performed some numerical experiments to evaluate and compare the following planning algorithms\footnote[1]{The source code is available at \href{https://eleurent.github.io/kl-olop/}{https://eleurent.github.io/kl-olop/}.}:
 \begin{itemize}
 	\item \texttt{Random}: returns a random action, we use it as a minimal performance baseline.
 	\item \OPD: the \emph{Optimistic Planning for Deterministic systems} from \citep{Hren2008}, used as a baseline of optimal performance. This planner is only suited for deterministic environments, and exploits this property to obtain faster rates. However, it is expected to fail in stochastic environments.
-	\item \OLOP: as described in \Cref{sec:kl-olop-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in \Cref{sec:kl-olop-time}, otherwise the exponential running-time would have been prohibitive.}
-	\item \KLOLOP: as described in \Cref{sec:kl-olop-kl-olop}.\footnotemark[2]
+	\item \OLOP: as described in \Cref{sec:kl-olop}.\footnote[2]{Note that we use the lazy version of $\OLOP$ and $\KLOLOP$ presented in \Cref{sec:kl-olop-time}, otherwise the exponential running-time would have been prohibitive.}
+	\item \KLOLOP: as described in \Cref{sec:kl-olop}.\footnotemark[2]
 	\item \KLOLOP(1): an aggressive version of \KLOLOP where we used $f_1(m) = \log M$ instead of $f_2(m)$. This threshold function makes the upper bounds even tighter, at the cost of an increased probability of violation. Hence, we expect this solution to be more efficient in close-to-deterministic environments. However, since we have no theoretical guarantee concerning its regret as we do with $\KLOLOP$, it might not be conservative enough and converge too early to a suboptimal sequence, especially in highly stochastic environments.
 \end{itemize}
-%TODO: probleme de reference des sous-sections dans le itemize.
 
 They are evaluated on the following tasks, using a discount factor of $\discount=0.8$:
 \begin{itemize}
