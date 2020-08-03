@@ -320,6 +320,9 @@ and the random variable
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide the proof in \Cref{sec:proof-lem-expected-regret}.
+\end{proof}
 
 
 The rest of the proof is devoted to the analysis of the term $\expectedvalue \sum_{a\in \mathcal{J}_h} N_a(m)$. The next lemma describes under which circumstances a suboptimal sequence of actions in $\mathcal{J}_h$ can be selected.
@@ -484,6 +487,9 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{equation}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide the proof in \Cref{sec:proof-size_Ph}.
+\end{proof}
 
 \begin{lemma}
 	\label{lemma:expected-P-size}
@@ -495,6 +501,9 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide the proof in \Cref{sec:proof-expected_P_size}.
+\end{proof}
 
 \begin{lemma}
 	\label{lemma:expected-plays-count}
@@ -505,6 +514,9 @@ The rest of the proof is devoted to the analysis of the term $\expectedvalue \su
 	\end{equation*}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide the proof in \Cref{sec:proof-expected-plays-count}.
+\end{proof}
 
 Thus by combining \Cref{lemma:expected-regret,lemma:expected-plays-count} we obtain
 \begin{equation*}
@@ -653,7 +665,8 @@ A popular approach is to follow the principle of \glsxtrfull{OFU} \citep[see][]{
 
 \begin{definition}[Value bounds]
 	\begin{leftbar}[defnbar]
-	{\textbf{On trees.}} We denote by $L:\Tau_n \rightarrow \Real$ and  $U:\Tau_n \rightarrow \Real$ a lower-bound and upper-bound for the state value $V$ defined on the tree $\Tau_n$, such that
+	\leavevmode\newline
+	\indent {\textbf{On trees.}} We denote by $L:\Tau_n \rightarrow \Real$ and  $U:\Tau_n \rightarrow \Real$ a lower-bound and upper-bound for the state value $V$ defined on the tree $\Tau_n$, such that
 	\begin{equation*}
 	\forall a\in\Tau_n, \qquad L(a) \leq V(s(a)) \leq U(a).
 	\end{equation*}
@@ -673,13 +686,14 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 \begin{definition}[Bellman optimality operator]
 	\begin{leftbar}[defnbar]
 	\label{def:bellman}
-	{\textbf{On trees.}} We define the Bellman optimality operator $B_n$ on the tree $\Tau_n$ as
+	\leavevmode\newline
+	\indent {\textbf{On trees.}} We define the Bellman optimality operator $B_n$ on the tree $\Tau_n$ as
 	\begin{equation}
 	\label{eq:bellman-tree}
 	B_n(f)(a) \eqdef \begin{cases}
 	\max_{b\in \cA} R(s(a), b) + \discount f({ab})
-	& \text{if $a\in\inte{\Tau}_n$.} \\
-	f(a) & \text{if $a\in\ext{\Tau}_n$;}
+	& \text{if $a\in\inte{\Tau}_n$;} \\
+	f(a) & \text{if $a\in\ext{\Tau}_n$.}
 	\end{cases}
 	\end{equation}
 	
@@ -688,8 +702,8 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 	\label{eq:bellman-graph}
 	\cB_n(f)(s) \eqdef \begin{cases}
 	\max_{b\in \cA} R(s, b) + \discount f(P(s,b))
-	& \text{if $s\in\inte{\cG}_n$.} \\
-	f(s) & \text{if $s\in\ext{\cG}_n$;}
+	& \text{if $s\in\inte{\cG}_n$;} \\
+	f(s) & \text{if $s\in\ext{\cG}_n$.}
 	\end{cases}
 	\end{equation}
 	The updates of both Bellman operators are depicted in \Cref{fig:bellman}.
@@ -719,7 +733,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 	A pair of bounds ($L$, $U$) or $(\cL, \cU)$ is \emph{monotonic} if they are respectively non-decreasing and non-increasing along transitions:
 	\begin{align*}
 	\forall a\in{\Tau}_n, \quad & L(a) \leq B_n(L)(a), & U(a) & \geq B_n(U)(a)\\
-	\forall (s)\in\inte{\cG}_n, \quad &\; \cL(s) \leq \cB_n(\cL)(s),&   \cU(s) & \geq \cB_n(\cU)(s)
+	\forall s\in\inte{\cG}_n, \quad &\; \cL(s) \leq \cB_n(\cL)(s),&   \cU(s) & \geq \cB_n(\cU)(s)
 	\end{align*}
 	\end{leftbar}
 \end{definition}
@@ -727,6 +741,7 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 \begin{lemma}[Properties of $B_n$]
 	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-tree}
+	\leavevmode\newline
 	\begin{enumerate}[label=(\roman*)]
 		\item $B_n$ preserves monotonicity and tightens monotonic bounds: $$
 		\text{if } L\leq V\leq U \text{, then } L \leq B_n(L) \leq V \leq B_n(U) \leq U;
@@ -735,6 +750,9 @@ $0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. Bu
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-properties-b-tree}.
+\end{proof}
 This enables \citet{Hren2008} to define\footnote{We use an iteration of operators while a recursive definition was used originally.} non-trivial valid bounds on $V$:
 \begin{align}
 \label{eq:opd-bounds}
@@ -769,6 +787,7 @@ The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}.
 \begin{lemma}[Properties of $\cB_n$]
 	\begin{leftbar}[lemmabar]
 	\label{lem:properties-b-graph}
+	\leavevmode\newline
 	\begin{enumerate}[label=(\roman*)]
 		\item $\cB_n$ preserves monotonicity and tightens monotonic bounds: $$
 		\text{if } \cL\leq V\leq \cU \text{, then } \cL \leq \cB_n(\cL) \leq V \leq \cB_n(\cU) \leq \cU;
@@ -777,6 +796,9 @@ The corresponding \texttt{OPD} algorithm is described in \Cref{alg:opd}.
 	\end{enumerate}
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-properties-b-graph}.
+\end{proof}
 This motivates us to propose \Cref{alg:gbop-d}, following the approach of \Cref{alg:opd} adapted to a graph structure.
 
 \begin{algorithm}[!ht]
@@ -823,6 +845,7 @@ Comparing \OPD and \GBOPD directly is difficult since they do not involve the sa
 First, we recall the analysis of \citet{Hren2008} and introduce some notations.
 
 \begin{lemma}[Sequence values]
+	\label{lem:sequence-values}
 	\begin{leftbar}[defnbar]
 	The value of a finite \textbf{sequence} of actions $a\in \cA^h$, defined in \Cref{def:sequence-values}, verifies
 	\begin{equation*}
@@ -832,6 +855,9 @@ First, we recall the analysis of \citet{Hren2008} and introduce some notations.
 	where $G(s, a) = \sum_{t=0}^{h-1} \discount^t r_t$ is the return obtained by executing the sequence of actions $a$ starting from the state $s$.
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-sequence-values}.
+\end{proof}
 
 This enables to define a measure of the difficulty of a planning problem.
 
@@ -858,6 +884,9 @@ This problem-dependent measure $\hlrb{\kappa}$ is the branching factor of the su
 where $f_n = \tilde{\cO}(n^{-\alpha})$ means that for any $\alpha'<\alpha$, $f_n = \cO(n^{-\alpha'})$, for all $\alpha\in \Real_+ \cup \{+\infty\}$.
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-regret-opd}.
+\end{proof}
 
 The near-optimal branching factor $\hlrb{\kappa}$ is related \citep{Bubeck2010} to the near-optimality dimension studied in the online optimisation literature \citep[see e.g.][]{Bubeck2009,Munos2011}.
 It is typically small in problems where there is one single optimal trajectory, of which any deviation can be quickly dismissed as suboptimal. Conversely, $\kappa$ is large when many sub-optimal trajectories cannot be distinguished easily based on their values, which requires the exploration of a large part of the tree $T$ of branching factor $K$. 
@@ -909,6 +938,9 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	In particular, $\hlbb{\kappa(L,U)} \leq \hlrb{\kappa}$.
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-shrink}.
+\end{proof}
 
 \begin{theorem}
 	\begin{leftbar}[theorembar]
@@ -919,7 +951,9 @@ Let us now assume for the moment that we had access to tighter bounds $(L,\,U)$ 
 	\end{equation*}
 	\end{leftbar}
 \end{theorem}
-
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-regret-bound-U}.
+\end{proof}
 
 This theorem states that we can potentially improve the performance of the planning algorithm if we manage to find bounds $(L,\, U)$ that are tighter than the trivial ones at the leaves $\ext{\Tau_n}$, which may be possible if we have already seen the states corresponding to this leaves, but it does not explain how to obtain such bounds. In the next subsection, we describe a method to build a sequence of increasingly tight bounds $(L_n,\, U_n)$, at each planning iteration $n$. The corresponding regret bound, our main result, is stated in \Cref{thm:regret-gbop}.
 
@@ -969,7 +1003,9 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 	In particular, if the sampling rule samples an infinite sequence $a\in \cA^\infty$, it is an optimal sequence, and we write that \eqref{alg:gbop-d} also holds for $a$ with $h=\infty$.
 	\end{leftbar}
 \end{lemma}
-
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-expansion-bound}.
+\end{proof}
 
 \begin{lemma}[Recommendation]
 	\begin{leftbar}[lemmabar]
@@ -977,6 +1013,9 @@ The sampling and recommendation rules of \GBOPD also amount to running those of 
 	The action $a_n$ recommended by \GBOPD has a simple regret $\regret \leq \frac{\discount^{d_n}}{1-\discount}$, where $d_n\in\Real\cup\{\infty\}$ is the maximal depth of expanded nodes in $T(\cG_n)$.
 	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-recommendation-bound}.
+\end{proof}
 Note that even though $T(\cG_n)$ can be infinite, there is only one node $b_t$ that is selected for expansion at each iteration $t\leq n$.
 
 \subsubsection{Regret guarantee}
@@ -994,6 +1033,9 @@ We can consider the sequence $\kappa_n = \kappa(L_n, U_n)$. It is non-increasing
 	\end{align*}
 	\end{leftbar}
 \end{theorem}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-regret-gbop}.
+\end{proof}
 
 Intuitively, $\kappa_\infty$ should be much lower than $\kappa$ in problems where trajectories overlap a lot. For instance, it will be the case for problems where two actions cancel each-other out (e.g. moving left or right), or are commutative (e.g. placing pawns on a board game). However, this is merely an intuition. We now show that there exist problem instances in which $\hlgb{\kappa_\infty} < \hlrb{\kappa}$, which is a legitimate concern since their non-existence would make \Cref{thm:regret-gbop} trivial.
 
@@ -1019,6 +1061,9 @@ In Proposition \ref{prop:illustrative-example}, we consider a toy MDP $\cM$ show
 	% \end{enumerate}
 	\end{leftbar}
 \end{proposition}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-illustrative-example}.
+\end{proof}
 This result confirms that \Cref{thm:regret-gbop} is non-trivial since we exhibit a problem for which $\hlgb{\kappa_\infty} < \hlrb{\kappa}$ (when $K\geq 3$), and legitimates our attempt to improve planning performances by merging the tree into a graph.
 
 
@@ -1502,6 +1547,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \label{sec:kl-olop-proofs}
 
 \subsubsection{Proof of \Cref{lemma:expected-regret}}
+\label{sec:proof-lem-expected-regret}
 \begin{proof}
 	The proof is identical to that of Lemma 4 in \citep{Bubeck2010}.
 	
@@ -1522,6 +1568,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \end{proof}
 
 \subsubsection{Proof of \Cref{lemma:size_Ph}}
+\label{sec:proof-size_Ph}
 \begin{proof}
 	The event $\tau^a_{h,h'}=1$ implies $a^{m+1}\in a A^*$ and \eqref{eq:sampled-enough}. This implies by \Cref{lemma:sub-optimal-pull} that either \eqref{eq:cond-ukl}, \eqref{eq:cond-lkl} or \eqref{eq:cond-dkl} is satisfied. Now by \Cref{lemma:ci-length} this implies that either \eqref{eq:cond-ukl} is true or \eqref{eq:cond-lkl} is true or \eqref{eq:sampled-enough-h} is false. We now prove that if \eqref{eq:P-min-size} is not satisfied then \eqref{eq:sampled-enough} is true, which clearly ends the proof.
 	This follows from: For any $0 \leq t \leq h'$:
@@ -1535,7 +1582,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \end{proof}
 
 \subsubsection{Proof of \Cref{lemma:expected-P-size}}
-
+\label{sec:proof-expected_P_size}
 \begin{proof}
 	The proof is identical to that of Lemma 9 in \citep{Bubeck2010}.
 	
@@ -1586,7 +1633,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \end{proof}
 
 \subsubsection{Proof of \Cref{lemma:expected-plays-count}}
-
+\label{sec:proof-expected-plays-count}
 \begin{proof}
 	The proof is identical to that of Lemma 10 in \citep{Bubeck2010}:
 	\begin{align*}
@@ -1604,6 +1651,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \label{sec:gbop-proofs}
 
 \subsubsection{Proof of Lemma \ref{lem:properties-b-tree}}
+\label{sec:proof-properties-b-tree}
 \begin{proof}
 The tightening property is directly obtained by definition of monotonicity.
 Let us show the preservation of monotonicity. Let $U$ a monotonic upper-bound, $a\in \cA^h$. Then, for any $b\in \cA$:
@@ -1621,12 +1669,20 @@ The finite time convergence can be obtained by recursion from the leaves to the 
 \end{proof}
 
 \subsubsection{Proof of \Cref{lem:properties-b-graph}}
+\label{sec:proof-properties-b-graph}
 \begin{proof}
 The proof of tightening and monotonicity preservation is the same as that of Lemma \ref{lem:properties-b-tree}.
 The contraction property is standard for the Bellman Operator, see e.g. Puterman M., Markov Decision Processes: Discrete Stochastic Dynamic Programming (2005).
 \end{proof}
 
+\subsubsection{Proof of \Cref{lem:sequence-values}}
+\label{sec:proof-sequence-values}
+\begin{proof}
+	%TODO: todo
+\end{proof}
+
 \subsubsection{Proof of \Cref{thm:regret-opd}}
+\label{sec:proof-regret-opd}
 We recall the main steps of the proof of \citet{Hren2008}.\\
 
 \begin{enumerate}
@@ -1645,12 +1701,13 @@ We recall the main steps of the proof of \citet{Hren2008}.\\
 \end{enumerate}
 
 \subsubsection{Proof of \Cref{lem:shrink}}
-
+\label{sec:proof-shrink}
 \begin{proof}
 Let $L_2\leq L_1\leq V\leq U_1\leq U_2$, then $\Tau_h^\infty(L_1,U_1) \subset \Tau_h^\infty(L_2,U_2),$ which implies $$|\Tau_h^\infty(L_1,U_1)|^{1/h} \leq |\Tau_h^\infty(L_2,U_2)|^{1/h}$$ and the claimed result in the limit $h\rightarrow\infty$.
 \end{proof}
 
 \subsubsection{Proof of \Cref{thm:regret-bound-U}}
+\label{sec:proof-regret-bound-U}
 In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \texttt{OPD}.
 
 \begin{remark}
@@ -1733,8 +1790,8 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 %\end{proof}
 
 \subsubsection{Proof of \Cref{lem:equivalence}}
-\begin{proof}
-	
+\label{sec:proof-equivalence}
+\begin{proof}	
 We first show that if $U$ is equivalent to $\cU$, meaning that for any sequence $a\in T(\cG_n)$ we have $U(a) = \cU(s(a))$, then $B_n(U)$ is equivalent to $\cB_n(\cU)$.
 
 By definition of $T(\cG_n)$, any sequence of action $a\in T(\cG_n)$ corresponds to a path $s_1, a_1,\dots,$ $s_{h}, a_{h}, s_{h+1}$ in $\cG_n$. If $a\in\ext{T(\cG_n)}$, then necessarily $s(a)\in\ext{\cG_n}$, and both are unchanged by $B_n$ and $\cB_n$ respectively. Conversely, if $a\in\inte{T}(\cG_n)$, then $s(a)\in\inte{\cG_n}$ by construction. Thus, 
@@ -1749,7 +1806,7 @@ By induction, for any $k>0$ $B_n^k(U)$ is equivalent to $\cB_n^k(\cU)$, and at t
 \end{proof}
 
 \subsubsection{Proof of \Cref{lem:expansion-bound}}
-
+\label{sec:proof-expansion-bound}
 We start by showing a preliminary lemma.
 \begin{lemma}[Bounds of sequence values]
 	\begin{leftbar}[lemmabar]
@@ -1767,13 +1824,14 @@ Which enables us to proceed to the proof of Lemma \ref{lem:expansion-bound}.
 \end{proof}
 
 \subsubsection{Proof of \Cref{lem:recommendation-bound}}
+\label{sec:proof-recommendation-bound}
 \begin{proof}
 	Let $i$ an expanded node of maximal depth $d_n\in\Real\cup\{\infty\}$, and consider the recommended node $a_n$ at time $n$, of depth $d\in\Real\cup\{\infty\}$. In particular, $\overline{L}_n(a_n) \geq \overline{L}_n(i)$, and since $(\overline{L}_t)_t$ is non-decreasing we also have $\overline{L}_n(i) \geq \overline{L}_t(i)$. At the time $t$ when $i$ is expanded, we have $\overline{U}_t(a_n) \leq \overline{U}_t(i)$, and since $(\overline{U}_t)_t$ is non-increasing we also have $\overline{U}_n(a_n) \leq \overline{U}_t(a_n)$. We can conclude with Lemma \ref{lem:expansion-bound} applied to $a_n$: $\regret \leq V^\star - V(a_n) \leq  \gamma^d(U(a_n)-L(a_n) = \overline{U}_n(a_n) - \overline{L}_n(a_n)  \leq \overline{U}_t(a_n) - \overline{L}_n(i) \leq \overline{U}_t(i) - \overline{L}_t(i) = \gamma^{d_n}(U_t(i) - L_t(i)$, which yields the claimed bound since $U(i) - L(i) \leq V_{\max}-0$.
 \end{proof}
 
 
 \subsubsection{Proof of \Cref{thm:regret-gbop}}
-
+\label{sec:proof-regret-gbop}
 \begin{proof}
 Let $\kappa'>\kappa_\infty$. Since $\kappa(L_n,U_n)\rightarrow\kappa_\infty$, there exists $n_0\in\Natural$ such that for all $n\geq n_0$, $\kappa(L_n,U_n) \leq \kappa'$.
 By Lemma \ref{lem:expansion-bound}, at each iteration $n$ the expanded node must belong to $\Tau^\infty(L_n,U_n)$.
@@ -1787,7 +1845,7 @@ Moreover, given a history of observed transitions up to iteration $n$, the bound
 \end{proof}
 
 \subsubsection{Proof of \Cref{prop:illustrative-example}}
-
+\label{sec:proof-illustrative-example}
 The \Cref{fig:mdp-tree} shows the planning tree corresponding to the MDP $\cM$. Whenever the action $a_1$ is taken \hlg{(in green)} the resulting subtree is represented by a leaf node $s^\star$ of value $V^\star = \frac{r^\star}{1-\gamma}$. When, in contrast, we take a sequence of actions among $a_2\dots a_K$ \hlo{(in orange)}, we stay in the state $s^+$ and denote $V_h$ the corresponding value at depth $h$.
 
 \begin{figure}
