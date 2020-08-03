@@ -451,7 +451,6 @@ We will additionally assume the following:
 \end{assumption}
 Therefore, it is assumed that the matrix $\structureddynamics$ for any $\theta\in\Theta$ can be embedded in a polytope defined by $M$ known vertices $\Delta A_{i}$ with the given centre $A_{0}$. 
 
-% TODO: choix des noms pour regions de confiance. C_n,delta pour le polytope ?
 To connect this assumption to the results obtained from model estimation in previous section, we can enclose the confidence ellipsoid $\confidenceset$ on $\theta$ obtained from $\eqref{eq:confidence-ellipsoid}$ at time $t=t_N$ into a polytope $\cP$ on $\structureddynamics$. For simplicity, we present here a simple but coarse strategy: bound the ellipsoid by its enclosing sphere, and then the sphere by its enclosing hypercube. We obtain
 \begin{align}
 \label{eq:polytope}
@@ -859,9 +858,7 @@ We use \Cref{lem:l2,lem:l3} to compute a similarity transformation of coordinate
 \end{figure}
 
 
-We show the resulting intervals in \Cref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In \Cref{sub:hw-a}, we observe that the direct predictor \eqref{eq:predictor-naive} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In prior work \citep{Leurent2018approximate}, we had to circumvent this issue by subdividing $\Theta$ and $[\underline{x}, \overline{x}]$ to reduce the initial overestimations and merely delay the divergence \citep{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in \Cref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in \Cref{sub:hw-c}, we start seeing the  effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Our framework is quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in \Cref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
-
-% TODO: say that this predictor is socially aware since prediction of a vehicle i depends on its neighbour vehicles
+We show the resulting intervals in \Cref{fig:highway}. The target vehicle with uncertain behaviour is in blue, while the ego-vehicle is in green. Its trajectory interval is computed over a duration of two seconds and represented by an area filled with a colour gradient representing time. The ground-truth trajectory is shown in blue. In \Cref{sub:hw-a}, we observe that the direct predictor \eqref{eq:predictor-naive} is unstable and quickly diverges to cover the whole road, thus hindering any sensible decision-making. In prior work \citep{Leurent2018approximate}, we had to circumvent this issue by subdividing $\Theta$ and $[\underline{x}, \overline{x}]$ to reduce the initial overestimations and merely delay the divergence \citep{Adrot2003}, at the price of a heavy computational load. In stark contrast, we see in \Cref{sub:hw-b} that the novel predictor \eqref{eq:interval-predictor} is very stable even over long horizons, which allows the ego-vehicle to plan an overtaking maneuver. Until then, there was little uncertainty in the predicted trajectory for the target vehicle was isolated, but as the ego-vehicle cuts into its lane in \Cref{sub:hw-c}, we start seeing the effects of uncertain interactions between the two vehicles, in both longitudinal and lateral directions. Note that this formulation naturally exhibits socially aware predictions, and accounts for these interactions. Our framework is also quite flexible in representing different assumptions on the admissible behaviours. For instance, we show in \Cref{sub:hw-d} a simulation in which we model a right-hand traffic where drivers are expected to keep to the rightmost lane. In such a situation, it is reasonable to assume that in the absence of any obstacle in front, a vehicle driving on the middle lane will either stay there or return to the right lane, but has no incentive to change to the left-lane. This simple assumption on $L_i$ can easily be incorporated in the interval predictor, and enables the emergence of a realistic behaviour when running the robust decision-making procedure: the ego-vehicle cannot pass another vehicle by its right side, and can only overtake it by its left side. These behaviours displaying safe reasoning under uncertainty are showcased in the attached videos.
 
 \subsection*{Section conclusion}
 
@@ -2052,13 +2049,13 @@ We propose a framework for the robust estimation, prediction and control of a pa
 		\begin{leftbar}[lemmabar]
 		We can enclose the confidence ellipsoid obtained in $\eqref{eq:confidence-ellipsoid}$ within a polytope
 		\begin{equation}
-		\cP_\confidence = \left\{ A_{1}+\sum_{i=1}^{2^d}\lambda_{i}\Delta A_{i}: \lambda\in[0, 1]^{2^d},  \sum_{i=1}^{2^d}\lambda_{i}=1\right\}.
+		\cP = \left\{ A_{0}+\sum_{i=1}^{2^d}\lambda_{i}\Delta A_{i}: \lambda\in[0, 1]^{2^d},  \sum_{i=1}^{2^d}\lambda_{i}=1\right\}.
 		\end{equation}
 		with 
 		\begin{align*}
 		&h_k \text{ is the }k^\text{th}\text{ element of }\{-1,1\}^d\text{ for } k\in[2^d],\\
 		&G_{N,\lambda} = PDP^{-1}, \quad \Delta\theta_k = \beta_{N}(\confidence)^{1/2} P^{-1}D^{-1/2} h_k, \\
-		&A_0 = A + \theta_{N,\lambda}^\transp\Phi, \quad \Delta A_k = \Delta\theta_k^\transp\Phi.
+		&A_0 = A + \theta_{N,\lambda}^\transp\phi, \quad \Delta A_k = \Delta\theta_k^\transp\phi.
 		\end{align*}
 		This conversion is illustrated in \Cref{fig:ellipsoid_to_polytope}.
 		\end{leftbar}
