@@ -261,10 +261,9 @@ The outputs from all heads are finally combined with a linear layer, and the res
 %	\draw[draw=black, dashed] (1.75cm, -5.5cm) rectangle (9.5cm,1.5cm);
 %	\end{tikzpicture}
 	\includegraphics[width=\linewidth]{img/ego_attention}
-	\caption{Architecture of an ego-attention head. After received the encoded vehicle states, the query $q_0$, keys $k_i$ and values $v_i$ are produced by three linear projections. Note that only the ego-vehicle produces a query $q$, while the keys $K$ and values $V$ are concatenated from all vehicles. Then, the attention matrix is computed by matching keys $K$ to the ego query $q_0$, and the corresponding values are retrieved. The resulting embedding is finally forwarded to a decoder to obtain the $Q$-values as an output.}
+	\caption{Architecture of an ego-attention head. After received the encoded vehicle states, the ego-query $q$, all keys $k$ and all values $v$ are produced by three linear projections. Then, the attention matrix is computed by matching the keys $K$ to the ego query $q_0$, and the corresponding values $V$ are retrieved. The resulting embedding is finally forwarded to a decoder to obtain the predicted $Q$-values as an output.}
 	\label{fig:ego-attention}
 \end{figure}
-% TODO: revoir légende
 
 \section{Experiments}
 \paragraph{Environment}
@@ -295,9 +294,9 @@ We evaluate three different agents, whose characteristics are summarised in \Cre
 			Input sizes & [15, 7] & [32, 32, 7] & [~$\boldsymbol{\cdot}$~, 7] \\
 			Layers sizes & [128, 128] &  \makecell[tc]{Convolutional layers: 3 \\ Kernel Size: 2 \\
 				Stride: 2 \\ Head: [20]} & \makecell[tl]{Encoder: [64, 64] \\Attention: 2 heads\\\phantom{Attention: }$d_k=32$ \\ Decoder: [64, 64]} \\
-			Number of parameters & 3.0e4 & 3.2e4 & 3.4e4 \\
-			Variable input size & No & No &  {Yes}  \\
-			Permutation invariant & No & {Yes} &  {Yes} \\
+			Number of parameters & \num{3.0e4} & \num{3.2e4} & \num{3.4e4} \\
+			Variable input size & No & No &  \hlg{Yes}  \\
+			Permutation invariant & No & \hlg{Yes} &  \hlg{Yes} \\
 			\bottomrule
 		\end{tabular}
 	\end{threeparttable}
