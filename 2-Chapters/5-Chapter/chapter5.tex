@@ -281,7 +281,7 @@ Unfortunately, as $\abo^{\star}$ is not a contraction, we can guarantee neither 
 \begin{theorem}[Contractivity of $\cT$ on smooth $Q$-functions]
 	\begin{leftbar}[theorembar]
 	\label{thm:contractivity-smooth}
-	The operator $\abo^{\star}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that "$\Qr$ is Lipschitz with respect to $\Qc$":
+	The operator $\abo^{\star}$ is a contraction when restricted to the subset $\cL_{\discountfactor}$ of $\oQ$-functions such that \enquote{$\Qr$ is Lipschitz with respect to $\Qc$}:
 	\begin{equation}
 	\cL_\discount = \left\{\begin{array}{cc}
 	\oQ\in(\Real^2)^{\ocS\ocA}\text{ s.t. }\exists L<\frac{1}{\discount}-1: \forall \os\in\ocS,\oa_1,\oa_2\in\ocA,   \\
@@ -539,7 +539,7 @@ When the budget is low, the corresponding optimal budgeted policy $\budgetedpoli
 \end{figure}
 
 In a second experiment displayed in \Cref{sec:brl-results}, we compare the performance of \FTQl to that of \BFTQ in the dialogue and autonomous driving tasks. 
-For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since e.g. $\expectedvalue[\constraintreturn|\budget=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\abo}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $\oQ_\params$ instead of $\oQ$.
+For each algorithm, we plot the reward-cost trade-off curve. In both cases, \BFTQ performs almost as well as \FTQl despite only requiring a single model. All budgets are well-respected on \text{slot-filling}, but on \text{highway-env} we can observe an underestimation of $Q_c$, since \eg $\expectedvalue[\constraintreturn|\budget=0] \simeq 0.1 $. This underestimation can be a consequence of two approximations: the use of the sampling operator $\hat{\abo}$ instead of the true population operator $\cT$, and the use of the neural network function approximation $\oQ_\params$ instead of $\oQ$.
 Still, \BFTQ provides a better control on the expected cost of the policy, than \FTQl. In addition, \BFTQ behaves more consistently than \FTQl overall, as shown by its lower extra-seed variance.
 Qualitatively, the budgeted agents display a variety of behaviours, shown in several animations\footnote{\href{https://budgeted-rl.github.io/\#driving-styles}{https://budgeted-rl.github.io/\#driving-styles}}. When $\budget = 1$, the ego-vehicle drives in a very aggressive style: it immediately switches to the opposite lane and drives as fast as possible to pass slower vehicles, swiftly changing lanes to avoid incoming traffic. On the contrary when $\budget = 0$, the ego-vehicle is conservative: it stays on its lane and drives at a low velocity. With intermediate budgets such as $\budget = 0.2$, the agent sometimes decides to overtake its front vehicle but promptly steers back to its original lane afterwards.
 
@@ -550,7 +550,7 @@ Qualitatively, the budgeted agents display a variety of behaviours, shown in sev
 Algorithms have been proposed for \glspl{CMDP}, which are less flexible sub-problems of the more general \gls{BMDP}. When the environment parameters ($\Ps$, $\R$, $\constraint$) are known but not tractable, solutions relying on function approximation~\citep{Undurti2011} or approximate linear programming~\citep{Poupart2015} have been proposed. For unknown environments, Online algorithms \citep{Geibel2005, Abe2010,Achiam2017,Chow2018} and a batch algorithm \citep{Thomas2015, Ghavamzadeh2016, Laroche2019,Le2019} can solve large unknown \glspl{CMDP}. Nevertheless, these approaches are limited in that the constraints thresholds are fixed prior to training and cannot be updated in real-time at policy execution to select the desired level of risk.
 
 \paragraph{Budgeted Markov Decision Processes algorithms}
-To our knowledge, there were only two ways of solving a \gls{BMDP}. The first one is to approximate it with a finite set of \glspl{CMDP} (e.g. see our \FTQl baseline). As explained on \Cref{fig:Lagrangian}, the optimal \idx{deterministic policy} can be obtained by a line-search on the Lagrange multiplier values $\lambda$. Then, according to \citet[Theorem 4.4]{Beutler1985}, the optimal policy is a randomised mixture of two deterministic policies\index{deterministic policy}: the safest \idx{deterministic policy} that violates the constraint $\policy_{\lambda-}$ and the riskier of the feasible ones $\policy_{\lambda+}$. So \gls{FTQ} can be easily adapted for continuous states \gls{CMDP} and \gls{BMDP} through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our solution not only requires one single model but also avoids any supplementary interaction.
+To our knowledge, there were only two ways of solving a \gls{BMDP}. The first one is to approximate it with a finite set of \glspl{CMDP} (\eg see our \FTQl baseline). As explained on \Cref{fig:Lagrangian}, the optimal \idx{deterministic policy} can be obtained by a line-search on the Lagrange multiplier values $\lambda$. Then, according to \citet[Theorem 4.4]{Beutler1985}, the optimal policy is a randomised mixture of two deterministic policies\index{deterministic policy}: the safest \idx{deterministic policy} that violates the constraint $\policy_{\lambda-}$ and the riskier of the feasible ones $\policy_{\lambda+}$. So \gls{FTQ} can be easily adapted for continuous states \gls{CMDP} and \gls{BMDP} through this methodology, but given the high variance it requires a lot of simulations to get a proper estimate of the calibration curve. Our solution not only requires one single model but also avoids any supplementary interaction.
 
 The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \gls{DP} algorithm proposed by \citet{Boutilier_Lu:uai16}. However, their work was established for finite state spaces only, and their solution relies heavily on this property. For instance, they enumerate and sort the next states $s'\in\cS$ by their expected value-by-cost, which could not be performed in a continuous state space $\cS$. Moreover, they rely on the knowledge of the model ($\Ps$, $\R$, $\constraint$), and do not address the question of learning from interaction data.
 
@@ -846,7 +846,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
     As a conclusion, $\abo^{\star}$ is a $\discountfactor(L+1)$-contraction on $\cL_{\discountfactor}$.
 \end{proof}
 
-%\subsection{Lemma \ref{lemma:concavity}}
+%\subsection{\Cref{lemma:concavity}}
 
 %\begin{proof}. Let $s,s'\in\cS, a\in\cA$.
 %We first prove those results for $V_r^{\star}(s', \cdot)$
@@ -859,7 +859,7 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 %\textbf{Concave}
 
-%By contradiction: assume that $V_r^{\star}(s', \cdot)$ is not concave, i.e. there exist $\beta^1 < \beta^2\in \cB$ and $p\in(0, 1)$ such that $\beta^3 = (1-p)\beta^1 + p\beta^2$ verifies: $V_r^{\star}(s', \beta^3) < (1-p)V_r^{\star}(s', \beta^1) + pV_r^{\star}(s',\beta^2)$. By definition of $V^{\star}$, there must be $\pi_1,\pi_2\in\Pi^{\star}$ such that $V^{\star}(s', \beta^1) = V^{\pi_1}(s', \beta^1)$ and $V^{\star}(s', \beta^2) = V^{\pi_2}(s', \beta^2)$. 
+%By contradiction: assume that $V_r^{\star}(s', \cdot)$ is not concave, \ie there exist $\beta^1 < \beta^2\in \cB$ and $p\in(0, 1)$ such that $\beta^3 = (1-p)\beta^1 + p\beta^2$ verifies: $V_r^{\star}(s', \beta^3) < (1-p)V_r^{\star}(s', \beta^1) + pV_r^{\star}(s',\beta^2)$. By definition of $V^{\star}$, there must be $\pi_1,\pi_2\in\Pi^{\star}$ such that $V^{\star}(s', \beta^1) = V^{\pi_1}(s', \beta^1)$ and $V^{\star}(s', \beta^2) = V^{\pi_2}(s', \beta^2)$. 
 
 %Define $\pi = (1-p)(\pi_1(\cdot, \beta^1), \pi_1) + p(\pi_2(\cdot, \beta^2), \pi_2)$. By linearity of $V^\pi$ with respect to $\pi$, we have that $V_c^\pi(s', \beta^3) = (1-p)V_c^{\pi_1}(s', \beta^1) + pV_c^{\pi_2}(s', \beta^2) \leq (1-p)\beta^1 + p\beta^2 = \beta^3$ since $\pi_1, \pi_2\in\Pi^{\star}(s')\subset\Pi_a(s')$, so $\pi$ respects the budget $\beta^3$. Moreover, we also have $V_r^\pi(s', \beta^3) = (1-p)V_r^{\pi_1}(s', \beta^1) + pV_r^{\pi_2}(s', \beta^2) > V_r^{\star}(s', \beta^3)$, which contradicts the definition of $V_r^{\star}$.
 
@@ -868,10 +868,10 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 
 %\end{proof}
 
-%\subsection{Lemma \ref{lemma:tau_concavity}}
+%\subsection{\Cref{lemma:tau_concavity}}
 
 
-%\subsection{Lemma \ref{lemma:pi_hull}}
+%\subsection{\Cref{lemma:pi_hull}}
 
 %\td
 
@@ -975,7 +975,7 @@ Let $\os=(s,\budget)\in\ocS$ and $\oQ\in(\Real^2)^{\ocS\ocA}$. We recall the def
 
 
 %\begin{proof}
-%First, a straightforward proof by induction shows that for all $k\in\Natural$, $Q_k$ computed at iteration $k$ of either Algorithm \ref{alg:bvi} or Algorithm \ref{alg:bftq} is concave non-decreasing with respect to $\beta_a$: the initialisation is trivial from $Q_0 = 0$, and the heredity stems from Lemma \ref{lemma:tau_concavity}.
+%First, a straightforward proof by induction shows that for all $k\in\Natural$, $Q_k$ computed at iteration $k$ of either \Cref{alg:bvi} or \Cref{alg:bftq} is concave non-decreasing with respect to $\beta_a$: the initialisation is trivial from $Q_0 = 0$, and the heredity stems from \Cref{lemma:tau_concavity}.
 %\end{proof}
 
 
