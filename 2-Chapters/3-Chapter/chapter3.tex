@@ -18,12 +18,12 @@
 
 
 \abstractStartChapter{}%
-Having discussed at length the range of \glsxtrlong[hyper=false]{AD} modelling perspectives in \Cref{chapter:2}, we now formalize the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \glsxtrlong{MDP}, by specifying each element of a $(\cS, \cA, \Ps, \R, \discount)$ tuple suitable for a set of tactical decision-making tasks.
+Having discussed at length the range of \glsxtrlong[hyper=false]{AD} modelling perspectives in \Cref{chapter:2}, we now formalise the specific problem that we are going to consider in this thesis. This chapter attempts to cast Behavioural Planning as a \glsxtrlong{MDP}, by specifying each element of a $(\cS, \cA, \Ps, \R, \discount)$ tuple suitable for a set of tactical decision-making tasks.
 \minitocStartChapter{}
 
 \section{Perceived states}
 
-As discussed in \Cref{sec:nuts-and-bolts,sec:partial-observability}, information about the world is typically obtained from noisy sensory measurements. The Perception module is responsible for recognizing and tracking the signal from the noise, so as to provide a high-level probabilistic description of the scene. In particular, 
+As discussed in \Cref{sec:nuts-and-bolts,sec:partial-observability}, information about the world is typically obtained from noisy sensory measurements. The Perception module is responsible for recognising and tracking the signal from the noise, so as to provide a high-level probabilistic description of the scene. In particular, 
 \begin{enumerate}[label=(\roman*)]
 	\item a \emph{Mapping} layer reconstructs the geometry of the road network and its associated signage, including stop signs and traffic lights;
 	\item a \emph{Localisation} layer recovers the position, velocity and heading of the ego-vehicle;
@@ -31,7 +31,7 @@ As discussed in \Cref{sec:nuts-and-bolts,sec:partial-observability}, information
 \end{enumerate}
 
 Since we focus on the Decision module, we will take a simplifying assumption and ignore all aspects related to Perception.
-Namely, we take the liberty of assuming to a noise-free access to every feature of the driving scene that we will deem relevant.
+Namely, we take the liberty of assuming noise-free access to every feature of the driving scene that we will deem relevant.
 
 \paragraph{Vehicles}
 
@@ -68,13 +68,13 @@ We also assume knowledge of the road network, comprising:
 	(tangent to the curve) where $s\in[0, l_L]$ is the curvilinear abscissa and $l_L$ is the length of the lane $L$.
 \end{enumerate}
 
-However, we do not include these information as part of the state but rather of the system dynamics, described later. Consequently, model-free algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, model-based algorithms can leverage road information in their dynamics models and thus generalize to unseen scenes.
+However, we do not include this information as part of the state but rather of the system dynamics, described later. Consequently, model-free algorithms will learn policies tailored for the particular scene seen during training, and will not be able to adapt to different scenes, unless the state space is augmented to include road features. Conversely, model-based algorithms can leverage road information in their dynamics models and thus generalise to unseen scenes.
 
 \section{Behavioural decisions}
 
 We follow the hierarchical architecture of the Decision module discussed in \Cref{sec:nuts-and-bolts,sec:temporal-abstraction}. Since we focus on Behavioural Planning specifically, we assume the availability\footnote{These two modules are described as part of the dynamics.} of
 \begin{enumerate}[label=(\roman*)]
-	\item a Route Planning layer, that automatically selects the next road segment to be followed at each intersection, \eg the proper exit on a highway, or the right direction at an intersection;
+	\item a Route Planning layer, that automatically selects the next road segment to follow at each intersection, \eg the proper exit on a highway, or the right direction at an intersection;
 	\item a Motion Planning and Control layer, that controls the vehicle by way of low-level throttle and steering actuators to reach any desired position and speed in the selected road segment. 
 \end{enumerate}
 
@@ -88,7 +88,7 @@ Thus, the purpose of the Behavioural Planning layer is to specify short-term ins
 \end{array}\right\}
 \end{equation}
 
-Meta-actions are rather slow to affect the state of the vehicle, and are thus executed at a low frequency of $\SI{1}{\hertz}$. We will consider a behavioural planning horizon of a dozen seconds (enough to \eg take/give way to a vehicle and merge in traffic), which corresponds to a dozen of decision points. We describe next how these meta-actions influence the evolution of the state $s\in\cS$.
+Meta-actions are rather slow to affect the state of the vehicle and are thus executed at a low frequency of $\SI{1}{\hertz}$. We will consider a behavioural planning horizon of a dozen seconds (enough to \eg take/give way to a vehicle and merge in traffic), which corresponds to a dozen of decision points. We describe next how these meta-actions influence the evolution of the state $s\in\cS$.
 
 \section{Traffic dynamics}
 
@@ -127,7 +127,7 @@ where $v_r\in\Real$ is the reference speed, incremented by $\pm \SI[per-mode=sym
 
 \subsection{Behavioural models}
 
-Other simulated vehicles follow simple and behavioural models from the traffic simulation literature, that dictate how they accelerate and steer on the road.
+Other simulated vehicles follow simple behavioural models from the traffic simulation literature, that dictate how they accelerate and steer on the road.
 
 \paragraph{Longitudinal behaviour}
 
@@ -162,9 +162,9 @@ A lane change decision modifies the target lane $L_i$ followed by vehicle $i$ on
 
 \subsection{Route planning}
 
-So far, we explained how both the ego-vehicle ($i=0$) and the other simulated vehicles ($i\in[1, N_v]$) behave on a multi-lanes road segment, through their Behavioural and Control layers. The Route Planning layer is finally responsible for selecting the sequence of road segments leading to a destination, sampled randomly at initialisation. To that end, the Route Planning performs a Breadth First Search in the graph description of the road network mentioned above, and returns a shortest path of road segments from initial position to destination.
+So far, we explained how both the ego-vehicle ($i=0$) and the other simulated vehicles ($i\in[1, N_v]$) behave on a multi-lanes road segment, through their Behavioural and Control layers. The Route Planning layer is finally responsible for selecting the sequence of road segments leading to a destination, sampled randomly at initialisation. To that end, the Route Planning performs a Breadth-First Search in the graph description of the road network mentioned above, and returns a shortest path of road segments from the initial position to the destination.
 
-In the end, we make the decision of framing the state space $\cS$ as fully observable but subjected to uncertain transition dynamics $\Ps\parentheses{s' \mid s, a}$, which are parametrised by several unobserved variables including the destinations of agents in the scenes and the parameters of their Behavioural and Control layers.
+In the end, we frame the state space $\cS$ as fully observable but subjected to uncertain transition dynamics $\Ps\parentheses{s' \mid s, a}$, which are parametrised by several unobserved variables including the destinations of agents in the scenes and the parameters of their Behavioural and Control layers.
 
 \section{Rewards}
 
@@ -176,7 +176,7 @@ Thus, we focus on only two features: a vehicle should
 	\item avoid collisions.
 \end{enumerate*}
 
-Since the \gls{MDP} formalism requires rewards to be bounded, by convention we normalize them in the $[0, 1]$ range.
+Since the \gls{MDP} formalism requires rewards to be bounded, by convention we normalise them in the $[0, 1]$ range.
 Note that we forbid negative rewards, since they may incentivise the agent to prefer terminating an episode early (by causing a collision) rather than risking suffering a negative return if no satisfying trajectory can be found.
 
 Thus, unless otherwise stated, the reward function $\R$ is chosen as follows:
@@ -190,9 +190,9 @@ Thus, unless otherwise stated, the reward function $\R$ is chosen as follows:
 \end{cases}
 \end{equation}
 
-A more realistic reward function may include comfort terms, such as penalizing high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
+A more realistic reward function may include comfort terms, such as penalising high acceleration or jerk, and lane changes manoeuvres, but we do not consider them for simplicity.
 
-This reward function is \emph{dense}\footnote{Rewards are said to be \emph{dense} when they are a rich signal obtained at (nearly) every step of decisions, which helps quickly shaping the behaviour and guiding exploration. In contrast, \emph{sparse} rewards are obtained for only a few goal states which are seldom reached (\eg only at the exit of a maze, or the end of a board game), which makes exploration much harder and requires assigning \emph{credit} to the action(s) responsible for a win/loss}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it its discontinuous at collision states.
+This reward function is \emph{dense}\footnote{Rewards are said to be \emph{dense} when they are a rich signal obtained at (nearly) every step of decisions, which helps quickly shaping the behaviour and guiding exploration. In contrast, \emph{sparse} rewards are obtained for only a few goal states which are seldom reached (\eg only at the exit of a maze, or the end of a board game), which makes exploration much harder and requires assigning \emph{credit} to the action(s) responsible for a win/loss}, since the maximum reward can easily be obtained from any state by accelerating, which should guide exploration to efficient driving styles. However, it is also \emph{non-convex}, since \eg the collision penalty is incurred at the locations of any two obstacles but not in-between. It is even \emph{non-smooth}, given that it is discontinuous at collision states.
 
 \section{Implementation}
 
@@ -209,6 +209,4 @@ This reward function is \emph{dense}\footnote{Rewards are said to be \emph{dense
 	\label{fig:highway-env-status}
 \end{figure}
 
-I created the \href{https://github.com/eleurent/highway-env}{\textsc{highway-env}} environment, a minimalist driving simulator tailored for behavioural planning tasks following the \gls{MDP} formalization presented in this chapter. It is written in Python and published online under an open-source license \citep{highway-env}. An extensive documentation is also available, along with instructions to reproduce every numerical experiments presented throughout this manuscript. We discuss at length the features and architecture of this software in \Cref{chapter:a}. We mention that in addition to our own works, several students and researchers already make use of this environment, as shown in \Cref{fig:highway-env-status}.
-
-% TODO: dire que les implémentations des agents sont dans rl-agents ?
+I created the \href{https://github.com/eleurent/highway-env}{\textsc{highway-env}} environment, a minimalist driving simulator tailored for behavioural planning tasks following the \gls{MDP} formalisation presented in this chapter. It is written in Python and published online under an open-source license \citep{highway-env}. An extensive \href{https://highway-env.readthedocs.io/en/latest/}{documentation} is also available. We discuss at length the features and architecture of this software in \Cref{chapter:a}. We mention that in addition to our own works, several students and researchers already make use of this environment, as shown in \Cref{fig:highway-env-status}. The source code for the agents, allowing to reproduce every numerical experiment presented throughout this manuscript, is also available in the \href{https://github.com/eleurent/rl-agents}{\textsc{rl-agents}} repository.
