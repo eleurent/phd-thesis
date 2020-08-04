@@ -16,7 +16,7 @@ append transition $(s, \beta, a, \beta_a, R, C, s')$ to batch $\mathcal{D}$\;
 step episode budget $\beta \leftarrow \beta_a$
 }
 }
-$\pi_\text{greedy}(\cdot\sim; ~Q^{\star}) \leftarrow\texttt{BFTQ}(\cD)$
+$\pi_\text{greedy}(\cdot;\; Q^{\star}) \leftarrow\texttt{BFTQ}(\cD)$
 }
 \Return{the batch of transitions $\cD$}
 \caption{Risk-sensitive exploration}

@@ -266,6 +266,9 @@ The outputs from all heads are finally combined with a linear layer, and the res
 \end{figure}
 
 \section{Experiments}
+
+Videos and source code of the experiments below are available\footnote{\href{https://eleurent.github.io/social-attention/}{https://eleurent.github.io/social-attention/}}.
+
 \paragraph{Environment}
 
 In this experiment, we use the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} presented in \Cref{chapter:a}. We consider a task where vehicle-to-vehicle interaction plays a significant part: crossing a four-way intersection.
@@ -334,7 +337,7 @@ In stark contrast, the \EgoAtt policy quickly learns both when it must slow down
 
 \paragraph{Attention interpretation}
 
-In any given state, the attention matrix can be visualised in the following way: we connect the ego-vehicle to every vehicle by a line of width proportional to the corresponding attention weight. Since the architecture can contain several ego-attention heads, we use different colours to distinguish them. In our experiments, two attention heads were used and will be represented in green and blue. We observe in \Cref{fig:heads} that they specialised to focus on different areas: the green head is only watching the vehicles coming from the left, while the blue head restricts itself to vehicles in the front and right directions. However, we notice that both heads exhibit a common behaviour: they direct their attention to incoming vehicles that are likely to collide with the ego-vehicle, depending on their current position, heading, velocity, and ignore those that are too far or in a conflict-less situation. In particular, the attention tends to increase when vehicles get closer, as shown in \Cref{fig:distance}; also available in video \footnote{\href{https://eleurent.github.io/social-attention/assets/2\_distance.mp4}{https://eleurent.github.io/social-attention/assets/2\_distance.mp4}}. It can also be very sensitive to small variations in the traffic state, as reflected in \Cref{fig:sensitivity}. A full episode showcasing interactions with several vehicles is shown in \Cref{fig:episode}; a video is also available\footnote{\href{https://eleurent.github.io/social-attention/assets/1\_episode.mp4}{https://eleurent.github.io/social-attention/assets/1\_episode.mp4}}.
+In any given state, the attention matrix can be visualised in the following way: we connect the ego-vehicle to every vehicle by a line of width proportional to the corresponding attention weight. Since the architecture can contain several ego-attention heads, we use different colours to distinguish them. In our experiments, two attention heads were used and will be represented in \hlg{green} and \hlb{blue}. We observe in \Cref{fig:heads} that they specialised to focus on different areas: the green head is only watching the vehicles coming from the left, while the blue head restricts itself to vehicles in the front and right directions. However, we notice that both heads exhibit a common behaviour: they direct their attention to incoming vehicles that are likely to collide with the ego-vehicle, depending on their current position, heading, velocity, and ignore those that are too far or in a conflict-less situation. In particular, the attention tends to increase when vehicles get closer, as shown in \Cref{fig:distance}. It can also be very sensitive to small variations in the traffic state, as reflected in \Cref{fig:sensitivity}. A full episode showcasing interactions with several vehicles is shown in \Cref{fig:episode}.
 
 
 \begin{figure}[tp]

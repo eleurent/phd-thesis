@@ -1639,7 +1639,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 	\sum_{a \in \mathcal{J}_{h}} T_{a}(M) = {} & \sum_{a \in \mathcal{J}_{h} \backslash \mathcal{P}_{h, h-1}^{\emptyset}} T_{a}(M)+\sum_{h^{\prime}=1}^{h-1} \sum_{a \in \mathcal{P}_{h, h^{\prime}}^{\emptyset} \setminus \mathcal{P}_{h, h^{\prime}-1}^{\emptyset}} T_{a}(M)+\sum_{a \in \mathcal{P}_{h, 0}^{\emptyset}} T_{a}(M)\\
 	\leq {} & 2f(m)(h+1)^{2} \gamma^{2(h-2-h)}\left|\mathcal{J}_{h}\right| \\
 	 &+ \sum_{h^{\prime}=1}^{h-1} 2f(m)(h+1)^{2} \gamma^{2\left(h^{\prime}-2-h\right)} \log M\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\\
-	= {} &\tilde{O}\left(\left(\kappa^{\prime}\right)^{h}+\gamma^{-2 h} \sum_{h^{\prime}=1}^{h-1} \gamma^{2 h^{\prime}}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\right)
+	= {} &\tilde{\cO}\left(\left(\kappa^{\prime}\right)^{h}+\gamma^{-2 h} \sum_{h^{\prime}=1}^{h-1} \gamma^{2 h^{\prime}}\left|\mathcal{P}_{h, h^{\prime}}^{\emptyset}\right|+M\left|\mathcal{P}_{h, 0}^{\emptyset}\right|\right)
 	\end{align*}
 	Taking the expectation and applying the bound of \Cref{lemma:expected-P-size} give the claimed bound.
 	
@@ -1677,7 +1677,13 @@ The contraction property is standard for the Bellman Operator, see \eg Puterman 
 \subsubsection{Proof of \Cref{lem:sequence-values}}
 \label{sec:proof-sequence-values}
 \begin{proof}
-	%TODO: todo
+By definition, for $a\in\cA^h$,
+\begin{align*}
+V(a) &= \sup_{b\in a\cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}) \\
+     &= \sum_{t=1}^h \discount^t\mu(a_{1:t})  \sup_{b\in a\cA^\infty} \sum_{t=h+1}^\infty \discount^t\mu(b_{1:t}) \\
+     &= G(s_1,a) \discount^h \sup_{b\in \cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}\text{ starting from $s(a)$}) \\
+     &= G(s_1,a) \discount^h V(s(a))
+\end{align*}
 \end{proof}
 
 \subsubsection{Proof of \Cref{thm:regret-opd}}
