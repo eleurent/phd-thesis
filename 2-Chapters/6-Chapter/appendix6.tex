@@ -4,360 +4,8 @@
 \chapter{Complements on \Cref{chapter:6}}
 
 \paragraph{Outline}
-We look into the time and memory complexity and propose efficient implementations of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, and of \GBOPD and \GBOP in \Cref{sec:gbop-implementation}. We provide proofs for every claimed result about \KLOLOP in \Cref{sec:kl-olop-proofs}, and about \GBOP in \Cref{sec:gbop-proofs}.
-
-\section{Time and memory complexities}
-
-\subsection{\KLOLOP}
-\label{sec:kl-olop-time}
-
-After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
-
-The \Cref{alg:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
-Hence, its time and memory complexities $C(\KLOLOP)$ are 
-\begin{equation*}
-C(\KLOLOP) = \cO(M|\Tau|) = \cO(MK^L).
-\end{equation*}
-
-The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
-
-We propose in \Cref{alg:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in \Cref{fig:tree}, while preserving the inner workings of the original algorithm.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{img/tree_svg-tex}
-	\caption{A representation of the tree $\Tau_m^+$, with $K = 2$ actions and after episode $m = 2$, when two sequences have been sampled. They are represented with solid lines and dots \textbullet, and they constitute the explored subtree $\Tau_m$. When extending $\Tau_m$ with the missing children of each node, represented with dashed lines and diamonds $\diamond$, we obtain the full extended subtree $\Tau_m^+$. The set of its leaves is denoted $\LL_m^+$ and shown as a dotted set.}
-	\label{fig:tree}
-\end{figure}
-
-\begin{algorithm}[tp]
-	\DontPrintSemicolon
-	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\discount) \leq n$\;
-	Let $L = \log M / (2 \log 1/\discount)$\;
-	Let $\Tau_0^+ = \LL_0^+ = \{\emptyset\}$\;
-	\For{each episode $m = 1, \cdots, M$}{
-		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau_{m-1}^+$\;
-		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in \LL_{m-1}^+$\;
-		Sample a sequence with highest B-value: $a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)$\;
-		Choose an arbitrary continuation $a^m \in \cA\cA^{L-|a|}$\tcp*{\eg uniformly}
-		Let $\Tau_m^+ = \Tau_{m-1}^+$ and $\LL_m^+ = \LL_{m-1}^+$\;
-		\For{$t=1, \cdots, L$}{
-			\If{$a^m_{1:t} \not \in \Tau_{m}^+$}{
-				Add $a^m_{1:t-1}A$ to $\Tau_{m}^+$ and $\LL_{m}^+$\;
-				Remove $a^m_{1:t-1}$ from $\LL_{m}^+$
-			}
-		}
-	}
-	\Return the most played sequence $a(n) \in \argmax_{a\in \LL_m^+} N_a(m)$
-	\caption{Lazy Open Loop Optimistic Planning}
-	\label{alg:lazy-kl-olop}
-\end{algorithm}
-
-
-\begin{proposition}[Time and memory complexity]
-	\begin{leftbar}[propositionbar]
-		\Cref{alg:lazy-kl-olop} has time and memory complexities of
-		\begin{equation*}
-		C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
-		\end{equation*}
-		
-		The corresponding complexity gain compared to the original \Cref{alg:kl-olop} is: 
-		\begin{equation*}
-		\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
-		\end{equation*}
-		which highlights that only a subtree corresponding to the sample budget $n$ is processed instead of the search whole tree $\Tau$.
-	\end{leftbar}
-\end{proposition}
-\begin{proof}
-	At episode $m = 1, \cdots, M$, we compute and store in memory the reward upper-bounds and U-values of all nodes in the subtree $\Tau_m^+$. Moreover, the tree $\Tau_m^+$ is constructed iteratively by adding K nodes at most L times at each episode from 0 to $m$. Hence, $|\Tau_m^+| = O(mKL)$.
-	This yields directly $C(\texttt{Lazy KL-OLOP}) = \sum_{m=1}^M O(mKL) = O(M^2KL)$.
-\end{proof}
-
-\begin{proposition}[Consistency]
-	\label{prop:consistency}
-	\begin{leftbar}[propositionbar]
-		The set of sequences returned by \Cref{alg:lazy-kl-olop} is the same as the one returned by \Cref{alg:kl-olop}.
-		In particular, \Cref{alg:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret-kl-olop}.
-	\end{leftbar}
-\end{proposition}
-
-\begin{proof}
-	To prove consistency of \Cref{alg:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in \Cref{alg:lazy-kl-olop}.
-	Namely, 
-	
-	\begin{equation*}
-	\left\{ b\in \cA \cA^{L-|a|} : a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)\right\} = \argmax_{a\in \cA^L} B_a(m-1)
-	\end{equation*}
-	
-	To that end, we first introduce some useful notations:
-	
-	\begin{paragraph}{Definition}
-		\begin{leftbar}[defnbar]
-		% We remind that $\Tau$ refers to the whole search tree $\Tau = \sum_{h=0}^L \cA^h$.
-		Let $\Tau_m$ be the set of visited nodes after episode $m$:
-		\begin{equation*}
-		\Tau_m \eqdef \left\{a\in \cA^*: N_a(m) > 0\right\}
-		\end{equation*}
-		
-		We also define its extension $\Tau_m^+$ of visited nodes and their children:
-		\begin{equation*}
-		\Tau_m^+ \eqdef \Tau_m + \Tau_m A
-		\end{equation*}
-		
-		Now for $a\in \cA^*$, $\pi_m(a)$ (resp. $\pi_m^+(a)$) refers to its longest prefix within $\Tau_m$ (resp. $\Tau_m^+$):
-		\begin{align*}
-		\pi_m(a) &\eqdef \argmax_{b\in\Tau_m} \{|b|: a\in b \cA^* \} \\
-		\pi_m^+(a) &\eqdef \argmax_{b\in\Tau_m^+} \{|b|: a\in b \cA^* \}
-		\end{align*}
-		
-		Finally, $\LL_m$ and $\LL_m^+$ are the image of $\cA^L$ by $\pi_m$ and $\pi_m^+$, respectively.
-		\begin{align*}
-		\LL_m &\eqdef \pi_m(\cA^L) \\
-		\LL_m^+ &\eqdef \pi_m^+(\cA^L) \}
-		\end{align*}
-		\end{leftbar}
-	\end{paragraph}
-	
-	\begin{remark}[About children extensions]
-		\begin{leftbar}[remarkbar]
-		We could frame \Cref{alg:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
-		\end{leftbar}
-	\end{remark}
-	
-	\begin{lemma}[Sets construction]
-		\begin{leftbar}[lemmabar]
-		$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{alg:lazy-kl-olop}.
-		\end{leftbar}
-	\end{lemma}
-	\begin{proof}
-		Note that for each episode $1 \leq m \leq M - 1$, we have:
-		\begin{equation}
-		\label{eq:tau_mp1}
-		\Tau_{m+1} = \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t}
-		\end{equation}
-		Indeed, the nodes visited at least once at time $m+1$ where either already visited once at time $m$ (\eg in $\Tau_{m}$) or have been visited for the first time during episode $m+1$, which means they are a prefix of $a^{m+1}$. The reverse is clearly true as well.
-		
-		This enables to write:
-		\begin{align*}
-		\Tau_{m+1}^+ &= \Tau_{m+1} + \Tau_{m+1}A & \text{by definition}\\
-		&= \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t} + (\Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t})A & \text{by \eqref{eq:tau_mp1}} & \\
-		&= (\Tau_{m} + \Tau_{m}A) + \sum_{t=0}^L a^{m+1}_{1:t} + \sum_{t=0}^L a^{m+1}_{1:t}A & \\
-		&= \Tau_{m}^+ + a^{m+1}_{1:0} + \sum_{t=0}^L a^{m+1}_{1:t}A &\text{ as } \sum_{t=1}^L a^{m+1}_{1:t} \subset \sum_{t=0}^L a^{m+1}_{1:t}A\\
-		&=  \Tau_{m}^+ + \sum_{t=0}^L a^{m+1}_{1:t}A  &\text{ as }a^{m+1}_{1:0}=\emptyset \in \Tau_{0} \subset \Tau_{m} \subset \Tau_m^+
-		\end{align*}
-		This recursion is the one implemented in \Cref{alg:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
-		
-		Finally, we highlight that $\LL_m^+ = \pi^+(\cA^L)$ is the set of leaves of $\Tau_{m}^+$.
-		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
-		
-		Thus, when updating $\Tau_{m-1}^+$, the set of its leaves is updated accordingly: when the children of a leaf $a^m_{1:t-1}$ are added to $\Tau_m^+$, they become new leaves in place of their parent. Hence, they are added to $\LL_m^+$ while $a^m_{1:t-1}$ is removed from it.
-		% 
-	\end{proof}
-	
-	\begin{lemma}[U-values conservation]
-		\begin{leftbar}[lemmabar]
-		\label{lemma:value-conservation}
-		For all $a \in \cA^*$,
-		\begin{equation*}
-		U_a(m) = U_{\pi_m(a)}(m) = U_{\pi_m^+(a)}(m)
-		\end{equation*}
-		\end{leftbar}
-	\end{lemma}
-	\begin{proof}
-		Let $a \in \cA^*$, denote $h=|a|$ and $h'=|\pi_m(a)|$.
-		
-		By definition of $\pi_m(a)$, $0 \leq h' \leq h$, and
-		\begin{itemize}
-			\item for $1\leq t \leq h'$, we have $a_{1:t} = {\pi_m(a)}_{1:t}$ ;
-			\item for $h'+1\leq t \leq h$, we have $a_{1:t} \not \in \Tau_m$, hence $T_{a_{1:t}}(m) = 0$ and $U^{\mu}_{a_{1:t}}(m) = 1$.
-		\end{itemize}
-		Then,
-		\begin{align*}
-		U_a(m) &= \sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma} \\
-		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{a_{1:t}}(m) + \sum_{t=h'+1}^h \gamma^t \underbrace{U^{\mu}_{a_{1:t}}(m)}_1 + \frac{\gamma^{h+1}}{1-\gamma} \\
-		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m(a)}_{1:t}}(m) + \frac{\gamma^{h'+1}}{1-\gamma} \\
-		&= U_{\pi_m(a)}(m)
-		\end{align*}
-		
-		Now, consider $\pi_m^+(a) \in \Tau_m^+$.
-		By definition, it belongs either to $\Tau_m$ or $\Tau_m A$.
-		\begin{itemize}
-			\item If $\pi_m^+(a) \in \Tau_m$, then $\pi_m^+(a) = \pi_m(a)$ and $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$.
-			\item Else, $\pi_m^+(a) \in \Tau_m A$ and $p(\pi_m^+(a)) = \pi_m(a)$.
-			
-			As $\pi_m^+(a) \not \in \Tau_m$, we have $T_{\pi_m^+(a)}(m) = 0$ and $U^{\mu}_{\pi_m^+(a)}(m) = 1$.
-			This yields:
-			
-			\begin{equation*}
-			U_{\pi_m^+(a)}(m) = \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m^+(a)}_{1:t}}(m) + \gamma^{h'+1} \underbrace{U^{\mu}_{{\pi_m^+(a)}}(m)}_1 + \frac{\gamma^{h'+2}}{1-\gamma} = U_{\pi_m(a)}(m)
-			\end{equation*}
-			
-		\end{itemize}
-		We showed that $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$, which concludes the proof.
-		% 
-	\end{proof}
-	
-	\begin{lemma}[Inverse projection]
-		\begin{leftbar}[lemmabar]
-		\label{lemma:inverse-proj}
-		For all $a\in \LL_m^+$ of length $h\leq L$,
-		\begin{equation*}
-		{\pi_m^+}^{-1}(a) = a \cA^{L-h}
-		\end{equation*}
-		
-		This allows to easily pick a sequence inside ${\pi_m^+}^{-1}(a)$: just continue the sequence $a$ with a default action of $A$ (\eg the first) until it reaches length $L$.
-		\end{leftbar}
-	\end{lemma}
-	\begin{proof}
-		Let $a\in \LL_m^+$. 
-		
-		By definition of $\pi_m^+$, any sequence in ${\pi_m^+}^{-1}(a)$ is a suffix of $a$ of length $L$, so we clearly have the direct inclusion ${\pi_m^+}^{-1}(a) \subset a \cA^{L-h}$.
-		
-		Now for the other side: let $b\in \cA \cA^{L-h}$, \ie $a=b_{1:h}$. We need to show that $\pi_m^+(b) = a$.
-		As $a\in \LL_m^+$, there exists $c\in \cA^L$ such that $\pi_m^+(c) = a$.
-		\begin{itemize}
-			\item If h = L, then $b=a$, so $b \in \LL_m^+ \subset \Tau_m^+$, and hence $\pi_m^+(b)=b=a$.
-			\item If h < L, we can show by contradiction that $a \not \in \Tau_m$. Indeed, if $a \in \Tau_m$, then $c_{1:h+1}$ is the child of a node of $\Tau_m$ and hence belongs to $\Tau_m^+$. But then, $c_{1:h+1}$ is a prefix of $c$ in $\Tau_m^+$ with greater length than $a$, which contradicts the definition of $a = \pi_m^+(c)$.
-			
-			Now, because $a \not \in \Tau_m$, it is also true for all suffixes of $a$, and in particular for $b_{1:t}$ with $h \leq t \leq L$. Indeed, we have $a^s_{1:t} = b_{1:t} \implies a^s_{1:h} = b_{1:h} = a$, so:
-			\begin{equation*}
-			T_{b_{1:t}}(m) = \sum_{s=1}^m \mathbbm{1}\{a^s_{1:t} = b_{1:t}\} \leq \sum_{s=1}^m \mathbbm{1}\{a^s_{1:h} = a\} = N_a(m) = 0
-			\end{equation*}
-			Hence, $b_{1:t} \not \in \Tau_m$ for all $h \leq t \leq L$, so in particular $b_{1:t} \not \in \Tau_m^+$ for all $h+1 \leq t \leq L$. Since $b_{1:h} = a \in \Tau_m^+$, $a$ is indeed the longest prefix of $b$ in $\Tau_m^+$, that is: $\pi_m^+(b) = a$.
-		\end{itemize}
-		We have shown the other side of the inclusion: $a \cA^{L-h} \subset {\pi_m^+}^{-1}(a)$, which entails that the two sets are in fact equal.
-		% 
-	\end{proof}
-	
-	We can now conclude our proof of \Cref{prop:consistency}: at episode $m$, \KLOLOP samples a sequence of action $a^m$ within the set $\argmax_{a\in \cA^L} U_a(m)$. 
-	However, we have:
-	
-	\begin{align*}
-	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by \Cref{lemma:value-conservation}} \\
-	&= {\pi_m^+}^{-1}\left(\argmax_{a\in {\pi_m^+}(\cA^L)} U_{a}(m)\right) & \\
-	&= \left\{b\in{\pi_m^+}^{-1}(a) : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \\
-	&= \left\{b\in \cA \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by \Cref{lemma:inverse-proj}} 
-	\end{align*}
-	
-	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{alg:lazy-kl-olop} could have been sampled by \Cref{alg:kl-olop} as well.
-	
-	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
-	% 
-\end{proof}
-
-\subsection{\GBOP}
-\label{sec:gbop-implementation}
-
-In this section, we provide more details about the implementation of \GBOPD and \GBOP. First, we discuss how two procedures can be approximated so that they terminate in finite time, and study the impact of this approximation on the regret guarantees. Second, we propose a lazy implementation of the bounds computation through $\cB_n^\infty$ that only considers a subset of nodes to update.
-
-\subsubsection{Termination}
-
-\paragraph{Bounds computation}
-
-The bounds computation step $\cB_n^\infty$ (line 1 of \GBOPD) can converge in infinite time whenever $\cG_n$ contains a loop, as shown in \Cref{fig:simple_loop}. We consider the effect of stopping early after a fixed number of iterations $k(\varepsilon,\gamma)$.
-
-\begin{figure}[th]
-	\centering
-	\includegraphics[trim=2.5cm 1cm 9cm 2cm, clip, width=0.1\linewidth]{img/gbop/loop.pdf}\\
-	\begin{tabular}{lccccc}
-		\toprule
-		$k$ & $0$ & $1$ & $\cdots$ & $k$ \\
-		\midrule
-		$\cU = \cB^k(V_{\max})(s)$ & $V_{\max}$ & $\frac{1}{2} + \gamma V_{\max}$ && $\frac{1}{2}(1-\gamma^k)V_{\max} + \gamma^k V_{\max}$\\
-		$\cL = \cB^k(0)(s)$ & $0$ & $\frac{1}{2}$ && $\frac{1}{2}(1-\gamma^k)V_{\max}$\\
-		\bottomrule
-	\end{tabular}
-	\caption{\textbf{Top}: a simple looping MDP with $|S|=|A|=1$ after having observed a single transition ($n=1$). \textbf{Bottom}: the sequence of bounds $\cB_1^k(0)$ and $\cB_1^k(V_{\max})$. They converge geometrically to their limit $\cU_1 = \cL_1 = V = \frac{1}{2}V_{\max}$, thus in infinite time.}
-	\label{fig:simple_loop}
-\end{figure}
-
-\begin{proposition}[Time complexity of bounds computation]
-	\begin{leftbar}[propositionbar]
-	An $\varepsilon$-approximation of $(\cL_n, \cU_n)$ can be computed by applying $\cB_n$ for a finite number $k(\epsilon,\gamma)$ of iterations, with $$k(\epsilon,\gamma) = \log_\gamma\frac{1}{\varepsilon(1-\gamma)}.$$ 
-	\end{leftbar}
-\end{proposition}
-\begin{proof}
-	$\cB_n$ is a $\gamma$-contraction by \Cref{lem:properties-b-graph}, and $\cU_n$ (resp $\cL_n$) is at a distance (in $\|\dot\|_\infty$) at most $V_{\max}$ of the initial value bound $V_{\max}$ (resp $0$). Thus, the $k^{\text{th}}$ application of $\cB_n$ decreases this error by a factor $\gamma^k$, which gives the result.
-	\end{proof}
-
-The impact of using an $\varepsilon$-approximation of $(\cL_n, \cU_n)$ during planning is the following:
-\begin{proposition}[Effect of early stopping]
-	\begin{leftbar}[propositionbar]
-	\label{prop:early-stopping}
-	Denote the approximate bounds $(\hat{\cL}_n, \hat{\cU}_n)$ obtained by applying $\cB_n^{k(\varepsilon,\gamma)}$ instead of $\cB_n^\infty$, and likewise $(\hat{L}_n, \hat{U}_n)$ in their tree version obtained by applying $B_n^{k(\varepsilon,\gamma)}$ instead of $B_n^\infty$.
-	Then, running \GBOPD with $\hat{\cL}_n, \hat{\cU}_n$ gives the following regret:
-	\begin{align*}
-	\regret = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlob{\log \hat{\kappa}_\infty}}\right),
-	\end{align*}
-	with $$\hlgb{{\kappa}_\infty} \leq \hlob{\hat{\kappa}_\infty \eqdef \lim_{n\rightarrow\infty} \kappa(\hat{L}_n, \hat{U}_n)} \leq \hlrb{\kappa}.$$
-	Moreover, the approximation gap $\hlgb{\kappa_\infty} - \hlob{\hat{\kappa}_\infty}$ is non-increasing with respect to $\varepsilon$.
-	\end{leftbar}
-\end{proposition}
-It is difficult to control more explicitly the gap between $\hlgb{\kappa_\infty}$ and $\hlob{\hat{\kappa}_\infty}$, which might be discontinuous with $\varepsilon$.
-
-\begin{proof}
-	Note that $\hat{L}_n$ and $\hat{U}_n$ are valid monotonic bounds on $V$, verifying
-	\[0\leq \hat{L}_n\leq {L}_n \leq V \leq {U}_n\leq \hat{U}_n \leq V_{\max}.\]
-	Thus, \Cref{lem:bounds} holds with the difference that we only have an inequality $$\overline{U_n}(a) \geq \max_{a'\in a \cA^\infty} \overline{U}(a')$$ rather than an equality, by monotonicity but non-invariance by $B_n$. However, this was the actual inequality used in \Cref{lem:expansion-bound}, which still holds by replacing $L_n,U_n$ by their approximation $\hat{L}_n,\hat{U}_n$. Likewise, \Cref{lem:recommendation-bound} holds. The proof of \Cref{thm:regret-gbop}, can be written with the modification that expanded nodes belong to $T_h^\infty(\hat{L}_n, \hat{U}_n))$, which gives the claimed bound.
-	
-	As $\varepsilon$ decreases, $k(\epsilon,\gamma)$ increases, which means by \Cref{lem:properties-b-tree} that $(\hat{\cL}_n, \hat{\cU}_n)$ get tighter and $\hlob{\hat{\kappa}_\infty}$ shrinks by \Cref{lem:shrink}. It reaches its minimum $\hlgb{\kappa_\infty}$ when $\varepsilon=0$.
-	\end{proof}
-
-Thus, we observe that there is a \emph{tradeoff} between the time complexity $k(\varepsilon)$ and the sample complexity $\hlob{\hat{\kappa}_\infty}$: decreasing one increases the other.
-
-Note that \OPD uses $d_n$ iterations of $B_n$, which corresponds to a tuning of $\varepsilon$ with $n$: $\varepsilon_n = \frac{\gamma^{d_n}}{1-\gamma} = \cO(n^{-\frac{\log 1/\gamma}{\log \kappa}})$. 
-
-
-\paragraph{Sampling rule}
-
-The sampling rule of \GBOPD (line 2 of \GBOPD) can yield an infinite sequence $b_n$. We propose to stop the sampling after a fixed depth $d^+_n$.
-
-\begin{proposition}[Time complexity of sampling]
-	\begin{leftbar}[propositionbar]
-	Consider the variant of \GBOPD where we stop the sampling rule when reaching a fixed depth $d^+_n$ chosen polynomial with $n$:
-	\[d^+_n = \ceil{\alpha n^\beta},\; \text{with }\alpha,\beta > 0\]
-	Then, the regret bound of \Cref{thm:regret-gbop} (or that of \Cref{prop:early-stopping} when using early stopping in the bounds computation) still holds.
-	\end{leftbar}
-\end{proposition}
-
-Note that this is not too constraining compared to \OPD, for which the sampling rule complexity $d_n$ is upper-bounded by $n$. Hence, by choosing $\alpha=\beta=1$, \GBOPD preserve the same complexity as \OPD in the worst case.
-
-\begin{proof}
-	Let $\kappa'>\hlgb{{\kappa}_\infty}$ (or $\kappa'>\hlob{\hat{\kappa}_\infty}$ under approximate bounds). In the proof of \Cref{thm:regret-gbop}, it is shown that the maximum depth $d_n$ of an expanded node is at least $d^-_n \eqdef \log_{\kappa'}\frac{n-C_0}{C_1'}$, which allows to conclude with \Cref{lem:recommendation-bound} that $\regret = \cO(\gamma^{d_n}) = \cO(\gamma^{d^-_n})$. By choosing $d^+_n$ polynomial, we have that $d^+_n$ is greater than $d^-_n$ for $n$ sufficiently high. Thus, by stopping the sampling after reaching a depth $d^+_n$, we have that $\regret \leq \gamma^{\min\{d_n, d^+_n\}} / (1-\gamma) = \cO(\gamma^{d^-_n}) = \cO(n^{\frac{-\log 1/\gamma}{\log \kappa'}})$
-	\end{proof}
-
-\subsubsection{Efficient implementation of $\cB_n^\infty$}
-
-The bounds $\cL_n$ and $\cU_n$ are computed by fixed-point iteration of $\cB_n$ from the trivial bounds $(0,V_{\max})$. The naive implementation of $\cB_n$ requires to iterate over the whole set of state-action pairs in $\cG_n$. 
-Two ideas can be used to increase the efficiency of both steps:
-\begin{enumerate}[label=(\roman*)]
-	\item Instead of starting the iteration with the trivial bounds, the previous estimate $\cL_{n-1}, \cU_{n-1}$ can be used instead at iteration $n$. Since these bounds are closer to their limit ($0\leq \cL_{n-1}\leq \cL_n$ and $\cU_n\leq \cU_{n-1} \leq V_{\max}$), the fixed-point iteration will converge quicker.
-	\item In particular, since $\cL_{n-1}$ and $\cU_{n-1}$ are invariant by $\cB_n$, the the only nodes modified by a supplementary application of $\cB_n$ are the parents of only updated node: the expanded state $s_n$. Once its value is updated by $\cB_n$, the same reasoning can be applied for the next iteration of $\cB_n$: only its predecessors can be updated. Thus, we can keep track of a set $q$ of states that can be updated, for every application of $\cB_n$.
-\end{enumerate}
-These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|\cB_n^{k+1} - \cB_n^k\| \leq \frac{1-\gamma}{\gamma}\varepsilon$ is used to detect that the limit $\cB_n^\infty$ is approximated with accuracy $\varepsilon$, and stems from $\cB_n$ being a $\gamma$-contraction:
-\begin{proof}
-	$\|\cB_n^k - \cB_n^\infty\| \leq \gamma\| \cB_n^{k+1} - \cB_n^\infty\| \leq \gamma \|\cB_n^{k+1} - \cB_n^{k}\| + \gamma \|\cB_n^{k} - \cB_n^\infty\|$, with $\| \cB_n^{k+1} - \cB_n^{k}\| \leq \frac{1-\gamma}{\gamma}\varepsilon$, thus $\|\cB_n^{k} - \cB_n^\infty\| \leq \varepsilon$.
-	\end{proof}
-
-\begin{algorithm}
-	\caption{A queue-based implementation of $\cB_n^\infty$.}
-	\label{alg:queue-b-inf}
-	\KwIn{Initial bound $\cU_{n-1}$, expanded node $s_n$, accuracy $\varepsilon$}
-	\KwOut{An $\varepsilon$-approximation of $\cU_{n}$}
-	\DontPrintSemicolon
-	$\cU_n \gets \cU_{n-1}$\;
-	$q\gets [s_n]$\;
-	\While{$q$ is not empty}{
-		$s'\gets$ Pop the first node from the queue $q$\;
-		$\cU' \gets \cB_n(\cU_n)(s')$\Comment*[r]{Node backup}
-		\If(\Comment*[f]{Stopping rule}){$\cU' - \cU_n > \frac{1-\gamma}{\gamma}\varepsilon$}{
-			Push the predecessors $s$ of $s'$ to the queue $q$ \Comment*[r]{Propagation rule}
-		}
-		$\cU_n(s') \gets \cU'$\;
-	}
-	\Return $\cU_n$\;
-\end{algorithm}
-
+We provide proofs for every claimed result in \Cref{sec:kl-olop-proofs}.
+We look into the time and memory complexity and propose efficient implementations of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, and of \GBOPD and \GBOP in \Cref{sec:gbop-implementation}.
 
 \section{Proofs}
 \label{sec:kl-olop-proofs}
@@ -694,3 +342,356 @@ Any such sequence of actions yields the sequence of rewards $r^-, r^+, \dots,r^+
 We can directly conclude that $\kappa \geq \limsup{|\{a_2,\dots,a_K\}^h|^{1/h}} = K-1$.
 
 Now, consider the nodes expanded by \GBOPD. The first expansion is that of the root, which discovers $s^\star$ and $s^+$. In the absence of information on these two state, the bound $V_{\max}$ is used and the first action $a_1$ gets a higher $\overline{U}$ that any other action $a_2,\dots,a_K$ since $r^\star \geq r^-$. Hence, at the second iteration, the node $a_1$ gets expanded. At this point, the self-loop of the state $s^\star$ is discovered, which means that form now on the bounds verify $L_n(a_1) = V^\star = U_n(a_1)$ for $n\geq2$, which means that $L_n(a_1\cA^*)-U_n(a_1\cA^*) = 0$. The nodes $a_2,\dots,a_K$ can be expanded at most once before the entire \gls{MDP} is discovered and $L_n=V=U_n$ over the entire tree, which means that $\Tau_n^\infty$ is the set of optimal nodes, \ie the nodes in the only optimal sequence $a_1^\star$. Hence, $\kappa_\infty = 1.$ 
+
+\section{Time and memory complexities}
+
+\subsection{\KLOLOP}
+\label{sec:kl-olop-time}
+
+After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
+
+The \Cref{alg:kl-olop} requires, at each episode, to compute and store in memory of the reward upper-bounds and U-values of all nodes in the tree $\Tau = \sum_{h=0}^L \cA^h$.
+Hence, its time and memory complexities $C(\KLOLOP)$ are 
+\begin{equation*}
+C(\KLOLOP) = \cO(M|\Tau|) = \cO(MK^L).
+\end{equation*}
+
+The curse of dimensionality brought by the branching factor $K$ and horizon $L$ makes it intractable in practice to actually run \KLOLOP in its original form even for small problems. However, most of this computation and memory usage is wasted, as with reasonable sample budgets $n$ the vast majority of the tree $\Tau$ will not be actually explored and hence does not hold any valuable information.
+
+We propose in \Cref{alg:lazy-kl-olop} a lazy version of \KLOLOP which only stores and processes the explored subtree, as shown in \Cref{fig:tree}, while preserving the inner workings of the original algorithm.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/tree_svg-tex}
+	\caption{A representation of the tree $\Tau_m^+$, with $K = 2$ actions and after episode $m = 2$, when two sequences have been sampled. They are represented with solid lines and dots \textbullet, and they constitute the explored subtree $\Tau_m$. When extending $\Tau_m$ with the missing children of each node, represented with dashed lines and diamonds $\diamond$, we obtain the full extended subtree $\Tau_m^+$. The set of its leaves is denoted $\LL_m^+$ and shown as a dotted set.}
+	\label{fig:tree}
+\end{figure}
+
+\begin{algorithm}[tp]
+	\DontPrintSemicolon
+	Let $M$ be the largest integer such that $M \log M/(2 \log 1/\discount) \leq n$\;
+	Let $L = \log M / (2 \log 1/\discount)$\;
+	Let $\Tau_0^+ = \LL_0^+ = \{\emptyset\}$\;
+	\For{each episode $m = 1, \cdots, M$}{
+		Compute $U_a(m-1)$ from \eqref{eq:Ua} for all $a\in\Tau_{m-1}^+$\;
+		Compute $B_a(m-1)$ from \eqref{eq:Ba} for all $a\in \LL_{m-1}^+$\;
+		Sample a sequence with highest B-value: $a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)$\;
+		Choose an arbitrary continuation $a^m \in \cA\cA^{L-|a|}$\tcp*{\eg uniformly}
+		Let $\Tau_m^+ = \Tau_{m-1}^+$ and $\LL_m^+ = \LL_{m-1}^+$\;
+		\For{$t=1, \cdots, L$}{
+			\If{$a^m_{1:t} \not \in \Tau_{m}^+$}{
+				Add $a^m_{1:t-1}A$ to $\Tau_{m}^+$ and $\LL_{m}^+$\;
+				Remove $a^m_{1:t-1}$ from $\LL_{m}^+$
+			}
+		}
+	}
+	\Return the most played sequence $a(n) \in \argmax_{a\in \LL_m^+} N_a(m)$
+	\caption{Lazy Open Loop Optimistic Planning}
+	\label{alg:lazy-kl-olop}
+\end{algorithm}
+
+
+\begin{proposition}[Time and memory complexity]
+	\begin{leftbar}[propositionbar]
+		\Cref{alg:lazy-kl-olop} has time and memory complexities of
+		\begin{equation*}
+		C(\texttt{Lazy KL-OLOP}) = O(KLM^2)
+		\end{equation*}
+		
+		The corresponding complexity gain compared to the original \Cref{alg:kl-olop} is: 
+		\begin{equation*}
+		\frac{C(\texttt{Lazy KL-OLOP})}{C(\KLOLOP)} = \frac{n}{K^{L-1}}
+		\end{equation*}
+		which highlights that only a subtree corresponding to the sample budget $n$ is processed instead of the search whole tree $\Tau$.
+	\end{leftbar}
+\end{proposition}
+\begin{proof}
+	At episode $m = 1, \cdots, M$, we compute and store in memory the reward upper-bounds and U-values of all nodes in the subtree $\Tau_m^+$. Moreover, the tree $\Tau_m^+$ is constructed iteratively by adding K nodes at most L times at each episode from 0 to $m$. Hence, $|\Tau_m^+| = O(mKL)$.
+	This yields directly $C(\texttt{Lazy KL-OLOP}) = \sum_{m=1}^M O(mKL) = O(M^2KL)$.
+\end{proof}
+
+\begin{proposition}[Consistency]
+	\label{prop:consistency}
+	\begin{leftbar}[propositionbar]
+		The set of sequences returned by \Cref{alg:lazy-kl-olop} is the same as the one returned by \Cref{alg:kl-olop}.
+		In particular, \Cref{alg:lazy-kl-olop} enjoys the same regret bounds as in \Cref{thm:regret-kl-olop}.
+	\end{leftbar}
+\end{proposition}
+
+\begin{proof}
+	To prove consistency of \Cref{alg:lazy-kl-olop}, we need to show that the sequences of actions $a^m$ sampled at every episode are chosen arbitrarily from the same sets as in \Cref{alg:lazy-kl-olop}.
+	Namely, 
+	
+	\begin{equation*}
+	\left\{ b\in \cA \cA^{L-|a|} : a \in \argmax_{a\in \LL_{m-1}^+} B_a(m-1)\right\} = \argmax_{a\in \cA^L} B_a(m-1)
+	\end{equation*}
+	
+	To that end, we first introduce some useful notations:
+	
+	\begin{paragraph}{Definition}
+		\begin{leftbar}[defnbar]
+			% We remind that $\Tau$ refers to the whole search tree $\Tau = \sum_{h=0}^L \cA^h$.
+			Let $\Tau_m$ be the set of visited nodes after episode $m$:
+			\begin{equation*}
+			\Tau_m \eqdef \left\{a\in \cA^*: N_a(m) > 0\right\}
+			\end{equation*}
+			
+			We also define its extension $\Tau_m^+$ of visited nodes and their children:
+			\begin{equation*}
+			\Tau_m^+ \eqdef \Tau_m + \Tau_m A
+			\end{equation*}
+			
+			Now for $a\in \cA^*$, $\pi_m(a)$ (resp. $\pi_m^+(a)$) refers to its longest prefix within $\Tau_m$ (resp. $\Tau_m^+$):
+			\begin{align*}
+			\pi_m(a) &\eqdef \argmax_{b\in\Tau_m} \{|b|: a\in b \cA^* \} \\
+			\pi_m^+(a) &\eqdef \argmax_{b\in\Tau_m^+} \{|b|: a\in b \cA^* \}
+			\end{align*}
+			
+			Finally, $\LL_m$ and $\LL_m^+$ are the image of $\cA^L$ by $\pi_m$ and $\pi_m^+$, respectively.
+			\begin{align*}
+			\LL_m &\eqdef \pi_m(\cA^L) \\
+			\LL_m^+ &\eqdef \pi_m^+(\cA^L) \}
+			\end{align*}
+		\end{leftbar}
+	\end{paragraph}
+	
+	\begin{remark}[About children extensions]
+		\begin{leftbar}[remarkbar]
+			We could frame \Cref{alg:lazy-kl-olop} in terms of $\Tau_m$ and $\LL_m$, for which mathematical proofs are more straight-forward. However, the iterative construction of $\LL_m$ is tricky and it would require inverting $\pi_m$ on $\LL_m$ which is non-trivial. On the contrary, introducing their extensions  $\Tau_m^+$ and $\LL_m^+$ slightly complicates the proof, but greatly simplifies the construction of $\LL_m^+$ and the computation of ${\pi_m^+}^{-1}$ on $\LL_m^+$, which is why we use these sets in practice.
+		\end{leftbar}
+	\end{remark}
+	
+	\begin{lemma}[Sets construction]
+		\begin{leftbar}[lemmabar]
+			$\Tau_m^+$ and $\LL_m^+$ are indeed the sets computed in \Cref{alg:lazy-kl-olop}.
+		\end{leftbar}
+	\end{lemma}
+	\begin{proof}
+		Note that for each episode $1 \leq m \leq M - 1$, we have:
+		\begin{equation}
+		\label{eq:tau_mp1}
+		\Tau_{m+1} = \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t}
+		\end{equation}
+		Indeed, the nodes visited at least once at time $m+1$ where either already visited once at time $m$ (\eg in $\Tau_{m}$) or have been visited for the first time during episode $m+1$, which means they are a prefix of $a^{m+1}$. The reverse is clearly true as well.
+		
+		This enables to write:
+		\begin{align*}
+		\Tau_{m+1}^+ &= \Tau_{m+1} + \Tau_{m+1}A & \text{by definition}\\
+		&= \Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t} + (\Tau_{m} + \sum_{t=0}^L a^{m+1}_{1:t})A & \text{by \eqref{eq:tau_mp1}} & \\
+		&= (\Tau_{m} + \Tau_{m}A) + \sum_{t=0}^L a^{m+1}_{1:t} + \sum_{t=0}^L a^{m+1}_{1:t}A & \\
+		&= \Tau_{m}^+ + a^{m+1}_{1:0} + \sum_{t=0}^L a^{m+1}_{1:t}A &\text{ as } \sum_{t=1}^L a^{m+1}_{1:t} \subset \sum_{t=0}^L a^{m+1}_{1:t}A\\
+		&=  \Tau_{m}^+ + \sum_{t=0}^L a^{m+1}_{1:t}A  &\text{ as }a^{m+1}_{1:0}=\emptyset \in \Tau_{0} \subset \Tau_{m} \subset \Tau_m^+
+		\end{align*}
+		This recursion is the one implemented in \Cref{alg:lazy-kl-olop}: at each episode $m$, we add to $\Tau_{m}^+$ the children of the nodes along the sampled action sequence $a^{m}$.
+		
+		Finally, we highlight that $\LL_m^+ = \pi^+(\cA^L)$ is the set of leaves of $\Tau_{m}^+$.
+		Indeed, nodes of $\LL_m^+$ belong to $\Tau_{m}^+$, but they cannot have a child in $\Tau_{m}^+$ as it would contradict the definition of $\LL_m^+$. Conversely, any leaf $a$ of $\Tau_{m}^+$ can be continued arbitrarily to a sequence $b$ of $\cA^L$, which  $a = \pi_m^+(b) \in \pi^+(\cA^L) = \LL_m^+$.
+		
+		Thus, when updating $\Tau_{m-1}^+$, the set of its leaves is updated accordingly: when the children of a leaf $a^m_{1:t-1}$ are added to $\Tau_m^+$, they become new leaves in place of their parent. Hence, they are added to $\LL_m^+$ while $a^m_{1:t-1}$ is removed from it.
+		% 
+	\end{proof}
+	
+	\begin{lemma}[U-values conservation]
+		\begin{leftbar}[lemmabar]
+			\label{lemma:value-conservation}
+			For all $a \in \cA^*$,
+			\begin{equation*}
+			U_a(m) = U_{\pi_m(a)}(m) = U_{\pi_m^+(a)}(m)
+			\end{equation*}
+		\end{leftbar}
+	\end{lemma}
+	\begin{proof}
+		Let $a \in \cA^*$, denote $h=|a|$ and $h'=|\pi_m(a)|$.
+		
+		By definition of $\pi_m(a)$, $0 \leq h' \leq h$, and
+		\begin{itemize}
+			\item for $1\leq t \leq h'$, we have $a_{1:t} = {\pi_m(a)}_{1:t}$ ;
+			\item for $h'+1\leq t \leq h$, we have $a_{1:t} \not \in \Tau_m$, hence $T_{a_{1:t}}(m) = 0$ and $U^{\mu}_{a_{1:t}}(m) = 1$.
+		\end{itemize}
+		Then,
+		\begin{align*}
+		U_a(m) &= \sum_{t=1}^h \gamma^t U^{\mu}_{a_{1:t}}(m) + \frac{\gamma^{h+1}}{1-\gamma} \\
+		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{a_{1:t}}(m) + \sum_{t=h'+1}^h \gamma^t \underbrace{U^{\mu}_{a_{1:t}}(m)}_1 + \frac{\gamma^{h+1}}{1-\gamma} \\
+		&= \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m(a)}_{1:t}}(m) + \frac{\gamma^{h'+1}}{1-\gamma} \\
+		&= U_{\pi_m(a)}(m)
+		\end{align*}
+		
+		Now, consider $\pi_m^+(a) \in \Tau_m^+$.
+		By definition, it belongs either to $\Tau_m$ or $\Tau_m A$.
+		\begin{itemize}
+			\item If $\pi_m^+(a) \in \Tau_m$, then $\pi_m^+(a) = \pi_m(a)$ and $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$.
+			\item Else, $\pi_m^+(a) \in \Tau_m A$ and $p(\pi_m^+(a)) = \pi_m(a)$.
+			
+			As $\pi_m^+(a) \not \in \Tau_m$, we have $T_{\pi_m^+(a)}(m) = 0$ and $U^{\mu}_{\pi_m^+(a)}(m) = 1$.
+			This yields:
+			
+			\begin{equation*}
+			U_{\pi_m^+(a)}(m) = \sum_{t=1}^{h'} \gamma^t U^{\mu}_{{\pi_m^+(a)}_{1:t}}(m) + \gamma^{h'+1} \underbrace{U^{\mu}_{{\pi_m^+(a)}}(m)}_1 + \frac{\gamma^{h'+2}}{1-\gamma} = U_{\pi_m(a)}(m)
+			\end{equation*}
+			
+		\end{itemize}
+		We showed that $U_{\pi_m^+(a)}(m) = U_{\pi_m(a)}(m)$, which concludes the proof.
+		% 
+	\end{proof}
+	
+	\begin{lemma}[Inverse projection]
+		\begin{leftbar}[lemmabar]
+			\label{lemma:inverse-proj}
+			For all $a\in \LL_m^+$ of length $h\leq L$,
+			\begin{equation*}
+			{\pi_m^+}^{-1}(a) = a \cA^{L-h}
+			\end{equation*}
+			
+			This allows to easily pick a sequence inside ${\pi_m^+}^{-1}(a)$: just continue the sequence $a$ with a default action of $A$ (\eg the first) until it reaches length $L$.
+		\end{leftbar}
+	\end{lemma}
+	\begin{proof}
+		Let $a\in \LL_m^+$. 
+		
+		By definition of $\pi_m^+$, any sequence in ${\pi_m^+}^{-1}(a)$ is a suffix of $a$ of length $L$, so we clearly have the direct inclusion ${\pi_m^+}^{-1}(a) \subset a \cA^{L-h}$.
+		
+		Now for the other side: let $b\in \cA \cA^{L-h}$, \ie $a=b_{1:h}$. We need to show that $\pi_m^+(b) = a$.
+		As $a\in \LL_m^+$, there exists $c\in \cA^L$ such that $\pi_m^+(c) = a$.
+		\begin{itemize}
+			\item If h = L, then $b=a$, so $b \in \LL_m^+ \subset \Tau_m^+$, and hence $\pi_m^+(b)=b=a$.
+			\item If h < L, we can show by contradiction that $a \not \in \Tau_m$. Indeed, if $a \in \Tau_m$, then $c_{1:h+1}$ is the child of a node of $\Tau_m$ and hence belongs to $\Tau_m^+$. But then, $c_{1:h+1}$ is a prefix of $c$ in $\Tau_m^+$ with greater length than $a$, which contradicts the definition of $a = \pi_m^+(c)$.
+			
+			Now, because $a \not \in \Tau_m$, it is also true for all suffixes of $a$, and in particular for $b_{1:t}$ with $h \leq t \leq L$. Indeed, we have $a^s_{1:t} = b_{1:t} \implies a^s_{1:h} = b_{1:h} = a$, so:
+			\begin{equation*}
+			T_{b_{1:t}}(m) = \sum_{s=1}^m \mathbbm{1}\{a^s_{1:t} = b_{1:t}\} \leq \sum_{s=1}^m \mathbbm{1}\{a^s_{1:h} = a\} = N_a(m) = 0
+			\end{equation*}
+			Hence, $b_{1:t} \not \in \Tau_m$ for all $h \leq t \leq L$, so in particular $b_{1:t} \not \in \Tau_m^+$ for all $h+1 \leq t \leq L$. Since $b_{1:h} = a \in \Tau_m^+$, $a$ is indeed the longest prefix of $b$ in $\Tau_m^+$, that is: $\pi_m^+(b) = a$.
+		\end{itemize}
+		We have shown the other side of the inclusion: $a \cA^{L-h} \subset {\pi_m^+}^{-1}(a)$, which entails that the two sets are in fact equal.
+		% 
+	\end{proof}
+	
+	We can now conclude our proof of \Cref{prop:consistency}: at episode $m$, \KLOLOP samples a sequence of action $a^m$ within the set $\argmax_{a\in \cA^L} U_a(m)$. 
+	However, we have:
+	
+	\begin{align*}
+	\argmax_{c\in \cA^L} U_c(m) &= \argmax_{c\in \cA^L} U_{\pi_m^+(c)}(m) & \text{by \Cref{lemma:value-conservation}} \\
+	&= {\pi_m^+}^{-1}\left(\argmax_{a\in {\pi_m^+}(\cA^L)} U_{a}(m)\right) & \\
+	&= \left\{b\in{\pi_m^+}^{-1}(a) : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \\
+	&= \left\{b\in \cA \cA^{L-|a|} : a\in \argmax_{a\in \LL_m^+} U_{a}(m)\right\} & \text{by \Cref{lemma:inverse-proj}} 
+	\end{align*}
+	
+	Thus, at each episode the sequence of actions $a^m$ sampled by \Cref{alg:lazy-kl-olop} could have been sampled by \Cref{alg:kl-olop} as well.
+	
+	In particular, if the arbitrary rule used to pick a sequence from a set is the same for the two algorithms, then the sampled sequences $a^m$ will be identical, will have the same visit count $T_{a^m}(m)$, and in the end the returned action $a(n)$ will be the same.
+	% 
+\end{proof}
+
+\subsection{\GBOP}
+\label{sec:gbop-implementation}
+
+In this section, we provide more details about the implementation of \GBOPD and \GBOP. First, we discuss how two procedures can be approximated so that they terminate in finite time, and study the impact of this approximation on the regret guarantees. Second, we propose a lazy implementation of the bounds computation through $\cB_n^\infty$ that only considers a subset of nodes to update.
+
+\subsubsection{Termination}
+
+\paragraph{Bounds computation}
+
+The bounds computation step $\cB_n^\infty$ (line 1 of \GBOPD) can converge in infinite time whenever $\cG_n$ contains a loop, as shown in \Cref{fig:simple_loop}. We consider the effect of stopping early after a fixed number of iterations $k(\varepsilon,\gamma)$.
+
+\begin{figure}[th]
+	\centering
+	\includegraphics[trim=2.5cm 1cm 9cm 2cm, clip, width=0.1\linewidth]{img/gbop/loop.pdf}\\
+	\begin{tabular}{lccccc}
+		\toprule
+		$k$ & $0$ & $1$ & $\cdots$ & $k$ \\
+		\midrule
+		$\cU = \cB^k(V_{\max})(s)$ & $V_{\max}$ & $\frac{1}{2} + \gamma V_{\max}$ && $\frac{1}{2}(1-\gamma^k)V_{\max} + \gamma^k V_{\max}$\\
+		$\cL = \cB^k(0)(s)$ & $0$ & $\frac{1}{2}$ && $\frac{1}{2}(1-\gamma^k)V_{\max}$\\
+		\bottomrule
+	\end{tabular}
+	\caption{\textbf{Top}: a simple looping MDP with $|S|=|A|=1$ after having observed a single transition ($n=1$). \textbf{Bottom}: the sequence of bounds $\cB_1^k(0)$ and $\cB_1^k(V_{\max})$. They converge geometrically to their limit $\cU_1 = \cL_1 = V = \frac{1}{2}V_{\max}$, thus in infinite time.}
+	\label{fig:simple_loop}
+\end{figure}
+
+\begin{proposition}[Time complexity of bounds computation]
+	\begin{leftbar}[propositionbar]
+		An $\varepsilon$-approximation of $(\cL_n, \cU_n)$ can be computed by applying $\cB_n$ for a finite number $k(\epsilon,\gamma)$ of iterations, with $$k(\epsilon,\gamma) = \log_\gamma\frac{1}{\varepsilon(1-\gamma)}.$$ 
+	\end{leftbar}
+\end{proposition}
+\begin{proof}
+	$\cB_n$ is a $\gamma$-contraction by \Cref{lem:properties-b-graph}, and $\cU_n$ (resp $\cL_n$) is at a distance (in $\|\dot\|_\infty$) at most $V_{\max}$ of the initial value bound $V_{\max}$ (resp $0$). Thus, the $k^{\text{th}}$ application of $\cB_n$ decreases this error by a factor $\gamma^k$, which gives the result.
+\end{proof}
+
+The impact of using an $\varepsilon$-approximation of $(\cL_n, \cU_n)$ during planning is the following:
+\begin{proposition}[Effect of early stopping]
+	\begin{leftbar}[propositionbar]
+		\label{prop:early-stopping}
+		Denote the approximate bounds $(\hat{\cL}_n, \hat{\cU}_n)$ obtained by applying $\cB_n^{k(\varepsilon,\gamma)}$ instead of $\cB_n^\infty$, and likewise $(\hat{L}_n, \hat{U}_n)$ in their tree version obtained by applying $B_n^{k(\varepsilon,\gamma)}$ instead of $B_n^\infty$.
+		Then, running \GBOPD with $\hat{\cL}_n, \hat{\cU}_n$ gives the following regret:
+		\begin{align*}
+		\regret = \tilde{\cO}\left(n^{-\log \frac{1}{\gamma}/\hlob{\log \hat{\kappa}_\infty}}\right),
+		\end{align*}
+		with $$\hlgb{{\kappa}_\infty} \leq \hlob{\hat{\kappa}_\infty \eqdef \lim_{n\rightarrow\infty} \kappa(\hat{L}_n, \hat{U}_n)} \leq \hlrb{\kappa}.$$
+		Moreover, the approximation gap $\hlgb{\kappa_\infty} - \hlob{\hat{\kappa}_\infty}$ is non-increasing with respect to $\varepsilon$.
+	\end{leftbar}
+\end{proposition}
+It is difficult to control more explicitly the gap between $\hlgb{\kappa_\infty}$ and $\hlob{\hat{\kappa}_\infty}$, which might be discontinuous with $\varepsilon$.
+
+\begin{proof}
+	Note that $\hat{L}_n$ and $\hat{U}_n$ are valid monotonic bounds on $V$, verifying
+	\[0\leq \hat{L}_n\leq {L}_n \leq V \leq {U}_n\leq \hat{U}_n \leq V_{\max}.\]
+	Thus, \Cref{lem:bounds} holds with the difference that we only have an inequality $$\overline{U_n}(a) \geq \max_{a'\in a \cA^\infty} \overline{U}(a')$$ rather than an equality, by monotonicity but non-invariance by $B_n$. However, this was the actual inequality used in \Cref{lem:expansion-bound}, which still holds by replacing $L_n,U_n$ by their approximation $\hat{L}_n,\hat{U}_n$. Likewise, \Cref{lem:recommendation-bound} holds. The proof of \Cref{thm:regret-gbop}, can be written with the modification that expanded nodes belong to $T_h^\infty(\hat{L}_n, \hat{U}_n))$, which gives the claimed bound.
+	
+	As $\varepsilon$ decreases, $k(\epsilon,\gamma)$ increases, which means by \Cref{lem:properties-b-tree} that $(\hat{\cL}_n, \hat{\cU}_n)$ get tighter and $\hlob{\hat{\kappa}_\infty}$ shrinks by \Cref{lem:shrink}. It reaches its minimum $\hlgb{\kappa_\infty}$ when $\varepsilon=0$.
+\end{proof}
+
+Thus, we observe that there is a \emph{tradeoff} between the time complexity $k(\varepsilon)$ and the sample complexity $\hlob{\hat{\kappa}_\infty}$: decreasing one increases the other.
+
+Note that \OPD uses $d_n$ iterations of $B_n$, which corresponds to a tuning of $\varepsilon$ with $n$: $\varepsilon_n = \frac{\gamma^{d_n}}{1-\gamma} = \cO(n^{-\frac{\log 1/\gamma}{\log \kappa}})$. 
+
+
+\paragraph{Sampling rule}
+
+The sampling rule of \GBOPD (line 2 of \GBOPD) can yield an infinite sequence $b_n$. We propose to stop the sampling after a fixed depth $d^+_n$.
+
+\begin{proposition}[Time complexity of sampling]
+	\begin{leftbar}[propositionbar]
+		Consider the variant of \GBOPD where we stop the sampling rule when reaching a fixed depth $d^+_n$ chosen polynomial with $n$:
+		\[d^+_n = \ceil{\alpha n^\beta},\; \text{with }\alpha,\beta > 0\]
+		Then, the regret bound of \Cref{thm:regret-gbop} (or that of \Cref{prop:early-stopping} when using early stopping in the bounds computation) still holds.
+	\end{leftbar}
+\end{proposition}
+
+Note that this is not too constraining compared to \OPD, for which the sampling rule complexity $d_n$ is upper-bounded by $n$. Hence, by choosing $\alpha=\beta=1$, \GBOPD preserve the same complexity as \OPD in the worst case.
+
+\begin{proof}
+	Let $\kappa'>\hlgb{{\kappa}_\infty}$ (or $\kappa'>\hlob{\hat{\kappa}_\infty}$ under approximate bounds). In the proof of \Cref{thm:regret-gbop}, it is shown that the maximum depth $d_n$ of an expanded node is at least $d^-_n \eqdef \log_{\kappa'}\frac{n-C_0}{C_1'}$, which allows to conclude with \Cref{lem:recommendation-bound} that $\regret = \cO(\gamma^{d_n}) = \cO(\gamma^{d^-_n})$. By choosing $d^+_n$ polynomial, we have that $d^+_n$ is greater than $d^-_n$ for $n$ sufficiently high. Thus, by stopping the sampling after reaching a depth $d^+_n$, we have that $\regret \leq \gamma^{\min\{d_n, d^+_n\}} / (1-\gamma) = \cO(\gamma^{d^-_n}) = \cO(n^{\frac{-\log 1/\gamma}{\log \kappa'}})$
+\end{proof}
+
+\subsubsection{Efficient implementation of $\cB_n^\infty$}
+
+The bounds $\cL_n$ and $\cU_n$ are computed by fixed-point iteration of $\cB_n$ from the trivial bounds $(0,V_{\max})$. The naive implementation of $\cB_n$ requires to iterate over the whole set of state-action pairs in $\cG_n$. 
+Two ideas can be used to increase the efficiency of both steps:
+\begin{enumerate}[label=(\roman*)]
+	\item Instead of starting the iteration with the trivial bounds, the previous estimate $\cL_{n-1}, \cU_{n-1}$ can be used instead at iteration $n$. Since these bounds are closer to their limit ($0\leq \cL_{n-1}\leq \cL_n$ and $\cU_n\leq \cU_{n-1} \leq V_{\max}$), the fixed-point iteration will converge quicker.
+	\item In particular, since $\cL_{n-1}$ and $\cU_{n-1}$ are invariant by $\cB_n$, the the only nodes modified by a supplementary application of $\cB_n$ are the parents of only updated node: the expanded state $s_n$. Once its value is updated by $\cB_n$, the same reasoning can be applied for the next iteration of $\cB_n$: only its predecessors can be updated. Thus, we can keep track of a set $q$ of states that can be updated, for every application of $\cB_n$.
+\end{enumerate}
+These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|\cB_n^{k+1} - \cB_n^k\| \leq \frac{1-\gamma}{\gamma}\varepsilon$ is used to detect that the limit $\cB_n^\infty$ is approximated with accuracy $\varepsilon$, and stems from $\cB_n$ being a $\gamma$-contraction:
+\begin{proof}
+	$\|\cB_n^k - \cB_n^\infty\| \leq \gamma\| \cB_n^{k+1} - \cB_n^\infty\| \leq \gamma \|\cB_n^{k+1} - \cB_n^{k}\| + \gamma \|\cB_n^{k} - \cB_n^\infty\|$, with $\| \cB_n^{k+1} - \cB_n^{k}\| \leq \frac{1-\gamma}{\gamma}\varepsilon$, thus $\|\cB_n^{k} - \cB_n^\infty\| \leq \varepsilon$.
+\end{proof}
+
+\begin{algorithm}
+	\caption{A queue-based implementation of $\cB_n^\infty$.}
+	\label{alg:queue-b-inf}
+	\KwIn{Initial bound $\cU_{n-1}$, expanded node $s_n$, accuracy $\varepsilon$}
+	\KwOut{An $\varepsilon$-approximation of $\cU_{n}$}
+	\DontPrintSemicolon
+	$\cU_n \gets \cU_{n-1}$\;
+	$q\gets [s_n]$\;
+	\While{$q$ is not empty}{
+		$s'\gets$ Pop the first node from the queue $q$\;
+		$\cU' \gets \cB_n(\cU_n)(s')$\Comment*[r]{Node backup}
+		\If(\Comment*[f]{Stopping rule}){$\cU' - \cU_n > \frac{1-\gamma}{\gamma}\varepsilon$}{
+			Push the predecessors $s$ of $s'$ to the queue $q$ \Comment*[r]{Propagation rule}
+		}
+		$\cU_n(s') \gets \cU'$\;
+	}
+	\Return $\cU_n$\;
+\end{algorithm}
+
