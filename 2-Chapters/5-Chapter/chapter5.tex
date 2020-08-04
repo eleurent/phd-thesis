@@ -559,11 +559,11 @@ The only other existing \gls{BMDP} algorithm, and closest work to ours, is the \
 \label{sec:conclusion}
 \glsxtrlongpl{BMDP} are a principled framework for safe decision making under uncertainty, which could be beneficial to the diffusion of Reinforcement Learning in industrial applications. They formulate risk as an expected cumulative cost, which can be estimated and controlled in a model-free fashion. However, \glspl{BMDP} could so far only be solved in finite state spaces which limits their interest for \glsxtrlong{AD} applications that require dealing with continuous variables such as vehicle positions. We extend their scope to continuous states by introducing of a novel \glsxtrlong{DP} operator, that we build upon to propose a \glsxtrlong{RL} algorithm. In order to scale to large problems, we provide an efficient implementation that exploits the structure of the value function and leverages tools from Deep Distributed \glsxtrlong{RL}. We show that on two simulated tasks our solution performs similarly to a baseline Lagrangian relaxation method while only requiring a single model to train, and relying on an interpretable risk budget $\budget$ instead of the tedious tuning of the penalty $\lambda$.
 
-
-\clearpage
-\begin{subappendices}
-\input{2-Chapters/5-Chapter/appendix5}
-\end{subappendices}
+%
+%\clearpage
+%\begin{subappendices}
+%\input{2-Chapters/5-Chapter/appendix5}
+%\end{subappendices}
 
 
 \chapter*{Part Conclusion\\ {\LARGE Review of our Requirements}}

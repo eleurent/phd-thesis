@@ -1,5 +1,8 @@
+%!TEX root = ../../PhD_thesis__Edouard_Leurent.tex
+\graphicspath{{2-Chapters/7-Chapter/}}
 	
-	\section{Technical details}
+\chapter{Complements on \Cref{chapter:7}}
+	\section{Proofs}
 	
 	\subsection{Proof of \Cref{prop:regularized_solution}}
 	\label{sec:proof-regularized_solution}
@@ -22,6 +25,7 @@
 	\label{sec:proof-confidence_ellipsoid}
 	
 	We start by showing a preliminary proposition:
+	\newpage
 	
 	\begin{proposition}[Matrix version of Theorem 1 of \citealp{Abbasi2011}]
 		\label{prop:concentration}
@@ -29,7 +33,8 @@
 		Let $\{F_n\}_{n=0}$ be a filtration.
 		Let $\{\eta_n\}_{n=1}^\infty$ be a $\Real^p$-valued stochastic process such that $\eta_n$ is $F_n$-measurable and $\expectedvalue\left[\eta_n\condbar F_{n-1}\right]$ is $\Sigma_p$-sub-Gaussian.
 		
-		Let $\{\Phi_n\}_{n=1}^\infty$ be an $\Real^{p\times d}$-valued stochastic process such that $\Phi_n$ is $F_n$-measurable. Assume that $G$ is a $d\times d$ positive definite matrix. For any $n\geq 0$, define
+		Let $\{\Phi_n\}_{n=1}^\infty$ be an $\Real^{p\times d}$-valued stochastic process such that $\Phi_n$ is $F_n$-measurable. Assume that $G$ is a $d\times d$ positive definite matrix.
+		For any $n\geq 0$, define
 		\begin{equation*}
 		\overline{G}_n = G + \sum_{s=1}^n \Phi_s^\transp \Sigma_p^{-1} \Phi_s \in \Real^{d\times d} \quad S_n = \sum_{s=1}^n \Phi_s^\transp\Sigma_p^{-1}\eta_s \in \Real^{d}.
 		\end{equation*}
@@ -395,7 +400,7 @@
 		\end{itemize}
 	\end{proof}
 	
-%	\section{Description of attached files}
+%	\subsection{Description of attached files}
 %	\label{sec:attachments}
 %	
 %	\paragraph{Videos}
@@ -419,7 +424,7 @@
 %%	\end{lstlisting}
 %	
 	
-	\subsection{A tighter conversion from ellipsoid to polytope}
+	\section{A tighter enclosing polytope}
 	\label{sec:tight-polytope}
 	
 	\begin{figure}[ht]
@@ -460,7 +465,7 @@
 
 	
 %		
-%	\section{Experimental setting}
+%	\subsection{Experimental setting}
 %	\label{sec:experimental-setting}
 %	
 %	In both experiments, we used $\discount=0.9$,  $\confidence=0.9$ and a planning budget $K=100$. The perturbations were sampled uniformly in $[-0.1, 0.1]^r$ while the measurements are Gaussian with covariance $\Sigma_r = 0.1 I_s$. 

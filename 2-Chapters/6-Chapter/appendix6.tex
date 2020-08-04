@@ -1,11 +1,14 @@
+%!TEX root = ../../PhD_thesis__Edouard_Leurent.tex
 \graphicspath{{2-Chapters/6-Chapter/}}
 
-\section{Technical details}
+\chapter{Complements on \Cref{chapter:6}}
 
 \paragraph{Outline}
 We look into the time and memory complexity and propose efficient implementations of \OLOP and \KLOLOP in \Cref{sec:kl-olop-time}, and of \GBOPD and \GBOP in \Cref{sec:gbop-implementation}. We provide proofs for every claimed result about \KLOLOP in \Cref{sec:kl-olop-proofs}, and about \GBOP in \Cref{sec:gbop-proofs}.
 
-\subsection{Time and memory complexity of \KLOLOP}
+\section{Time and memory complexities}
+
+\subsection{\KLOLOP}
 \label{sec:kl-olop-time}
 
 After having considered the sample efficiency of \OLOP and \KLOLOP in \Cref{thm:regret-kl-olop}, we now study their time and memory complexities. We will only mention the case of \KLOLOP for ease of presentation, but all results easily extend to \OLOP.
@@ -242,7 +245,7 @@ We propose in \Cref{alg:lazy-kl-olop} a lazy version of \KLOLOP which only store
 	% 
 \end{proof}
 
-\subsection{Time and memory complexity of \GBOP}
+\subsection{\GBOP}
 \label{sec:gbop-implementation}
 
 In this section, we provide more details about the implementation of \GBOPD and \GBOP. First, we discuss how two procedures can be approximated so that they terminate in finite time, and study the impact of this approximation on the regret guarantees. Second, we propose a lazy implementation of the bounds computation through $\cB_n^\infty$ that only considers a subset of nodes to update.
@@ -356,10 +359,10 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \end{algorithm}
 
 
-\subsection{Proofs of \KLOLOP results}
+\section{Proofs}
 \label{sec:kl-olop-proofs}
 
-\subsubsection{Proof of \Cref{lemma:expected-regret}}
+\subsection{Proof of \Cref{lemma:expected-regret}}
 \label{sec:proof-lem-expected-regret}
 \begin{proof}
 	The proof is identical to that of Lemma 4 in \citep{Bubeck2010}.
@@ -380,7 +383,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 	
 \end{proof}
 
-\subsubsection{Proof of \Cref{lemma:size_Ph}}
+\subsection{Proof of \Cref{lemma:size_Ph}}
 \label{sec:proof-size_Ph}
 \begin{proof}
 	The event $\tau^a_{h,h'}=1$ implies $a^{m+1}\in a A^*$ and \eqref{eq:sampled-enough}. This implies by \Cref{lemma:sub-optimal-pull} that either \eqref{eq:cond-ukl}, \eqref{eq:cond-lkl} or \eqref{eq:cond-dkl} is satisfied. Now by \Cref{lemma:ci-length} this implies that either \eqref{eq:cond-ukl} is true or \eqref{eq:cond-lkl} is true or \eqref{eq:sampled-enough-h} is false. We now prove that if \eqref{eq:P-min-size} is not satisfied then \eqref{eq:sampled-enough} is true, which clearly ends the proof.
@@ -394,7 +397,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 	%\
 \end{proof}
 
-\subsubsection{Proof of \Cref{lemma:expected-P-size}}
+\subsection{Proof of \Cref{lemma:expected-P-size}}
 \label{sec:proof-expected_P_size}
 \begin{proof}
 	The proof is identical to that of Lemma 9 in \citep{Bubeck2010}.
@@ -445,7 +448,7 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 	
 \end{proof}
 
-\subsubsection{Proof of \Cref{lemma:expected-plays-count}}
+\subsection{Proof of \Cref{lemma:expected-plays-count}}
 \label{sec:proof-expected-plays-count}
 \begin{proof}
 	The proof is identical to that of Lemma 10 in \citep{Bubeck2010}:
@@ -460,10 +463,10 @@ These idea are formalised in \Cref{alg:queue-b-inf}. Note that the criterion $\|
 \end{proof}
 
 
-\subsection{Proof of \GBOP results}
-\label{sec:gbop-proofs}
+%\section{Proof of \GBOP results}
+%\label{sec:gbop-proofs}
 
-\subsubsection{Proof of \Cref{lem:properties-b-tree}}
+\subsection{Proof of \Cref{lem:properties-b-tree}}
 \label{sec:proof-properties-b-tree}
 \begin{proof}
 The tightening property is directly obtained by definition of monotonicity.
@@ -481,14 +484,14 @@ The same can be obtained for a lower-bound $L$.
 The finite time convergence can be obtained by recursion from the leaves to the root, by noticing that if the value of a set of siblings $aA$ is invariant by $B$, then the value of their parent $a$ is invariant by $B^2$.
 \end{proof}
 
-\subsubsection{Proof of \Cref{lem:properties-b-graph}}
+\subsection{Proof of \Cref{lem:properties-b-graph}}
 \label{sec:proof-properties-b-graph}
 \begin{proof}
 The proof of tightening and monotonicity preservation is the same as that of \Cref{lem:properties-b-tree}.
 The contraction property is standard for the Bellman Operator, see \eg Puterman M., Markov Decision Processes: Discrete Stochastic Dynamic Programming (2005).
 \end{proof}
 
-\subsubsection{Proof of \Cref{lem:sequence-values}}
+\subsection{Proof of \Cref{lem:sequence-values}}
 \label{sec:proof-sequence-values}
 \begin{proof}
 By definition, for $a\in\cA^h$,
@@ -500,7 +503,7 @@ V(a) &= \sup_{b\in a\cA^\infty} \sum_{t=1}^\infty \discount^t\mu(b_{1:t}) \\
 \end{align*}
 \end{proof}
 
-\subsubsection{Proof of \Cref{thm:regret-opd}}
+\subsection{Proof of \Cref{thm:regret-opd}}
 \label{sec:proof-regret-opd}
 We recall the main steps of the proof of \citet{Hren2008}.\\
 
@@ -519,13 +522,13 @@ We recall the main steps of the proof of \citet{Hren2008}.\\
 	\end{cases}$
 \end{enumerate}
 
-\subsubsection{Proof of \Cref{lem:shrink}}
+\subsection{Proof of \Cref{lem:shrink}}
 \label{sec:proof-shrink}
 \begin{proof}
 Let $L_2\leq L_1\leq V\leq U_1\leq U_2$, then $\Tau_h^\infty(L_1,U_1) \subset \Tau_h^\infty(L_2,U_2),$ which implies $$|\Tau_h^\infty(L_1,U_1)|^{1/h} \leq |\Tau_h^\infty(L_2,U_2)|^{1/h}$$ and the claimed result in the limit $h\rightarrow\infty$.
 \end{proof}
 
-\subsubsection{Proof of \Cref{thm:regret-bound-U}}
+\subsection{Proof of \Cref{thm:regret-bound-U}}
 \label{sec:proof-regret-bound-U}
 In this proof, we temporarily assume that $U=B(U)$ and $L=B(L)$. We follow the same steps as in the proof of the regret of \OPD.
 
@@ -575,7 +578,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 \regret = \cO\left(n^{-\frac{\log 1/\gamma}{\log \kappa(L,U)}}\right);
 \end{align*}
 
-%\subsection{Proof of \Cref{prop:b-eq-mb}}
+%\section{Proof of \Cref{prop:b-eq-mb}}
 
 %\begin{proof}
 %	Let $U$ equivalent to $\cU$, and $a\in T_n$.
@@ -583,7 +586,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 %	If $a\in\inte{T_n}$, then necessarily $s(a)\in\int{\cG_n}$. There exist a'
 %\end{proof}
 
-%\subsection{Proof of \Cref{lem:properties-mb}}
+%\section{Proof of \Cref{lem:properties-mb}}
 %\begin{proof}
 %Let $U_1, U_2\in \Real^\Tau_n, a\in\Tau_n$,
 %\begin{align*}
@@ -596,7 +599,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 %Hence, $\|M_n^+ U_1 - M_n^+ U_2\|_\infty \leq \|U_1 - U_2\|_\infty$
 %\end{proof}
 %
-%\subsection{Proof of \Cref{prop:pruning}}
+%\section{Proof of \Cref{prop:pruning}}
 %
 %\begin{proof}
 %Assume $h(a_2) \geq h(a_1)$.
@@ -608,7 +611,7 @@ Note that if $L,\,U$ are monotonic bounds that do not verify $L = B(L)$ and $U=B
 %Hence, if this last term is negative, then $V(a_1) - V(a_2)$ is as well.
 %\end{proof}
 
-\subsubsection{Proof of \Cref{lem:equivalence}}
+\subsection{Proof of \Cref{lem:equivalence}}
 \label{sec:proof-equivalence}
 \begin{proof}	
 We first show that if $U$ is equivalent to $\cU$, meaning that for any sequence $a\in T(\cG_n)$ we have $U(a) = \cU(s(a))$, then $B_n(U)$ is equivalent to $\cB_n(\cU)$.
@@ -624,7 +627,7 @@ B_n(U)(a) &= \max_{b\in \cA} r(s(a), b) + \gamma U({ab}) &\\
 By induction, for any $k>0$ $B_n^k(U)$ is equivalent to $\cB_n^k(\cU)$, and at the limit $k\rightarrow\infty$ it comes that $U_n$ is equivalent to $\cU_n$. The same result can be shown similarly for $L_n$ and $\cL_n$.
 \end{proof}
 
-\subsubsection{Proof of \Cref{lem:expansion-bound}}
+\subsection{Proof of \Cref{lem:expansion-bound}}
 \label{sec:proof-expansion-bound}
 We start by showing a preliminary lemma.
 \begin{lemma}[Bounds of sequence values]
@@ -642,14 +645,14 @@ Which enables us to proceed to the proof of \Cref{lem:expansion-bound}.
 	Let $t$ be the time of expansion of $a$, it holds that $\overline{U}_t(b) \leq \overline{U}_t(a)$ for all $b\in T(\cG_n)$. In particular for $b$ in a branch starting by an optimal action $a^\star$ $\overline{U}_t(a) \geq \max_{b\in a^\star A^*}  \overline{U}_t(b) = \overline{U}_t(a^\star)$. Thus, $V(a^\star)-V(a) \leq \overline{U}_t(a^\star) - \overline{L}_t(a) \leq \overline{U}_t(a) - \overline{L}_t(a) = \gamma^h(U_t(a)-L_t(a))$.
 \end{proof}
 
-\subsubsection{Proof of \Cref{lem:recommendation-bound}}
+\subsection{Proof of \Cref{lem:recommendation-bound}}
 \label{sec:proof-recommendation-bound}
 \begin{proof}
 	Let $i$ an expanded node of maximal depth $d_n\in\Real\cup\{\infty\}$, and consider the recommended node $a_n$ at time $n$, of depth $d\in\Real\cup\{\infty\}$. In particular, $\overline{L}_n(a_n) \geq \overline{L}_n(i)$, and since $(\overline{L}_t)_t$ is non-decreasing we also have $\overline{L}_n(i) \geq \overline{L}_t(i)$. At the time $t$ when $i$ is expanded, we have $\overline{U}_t(a_n) \leq \overline{U}_t(i)$, and since $(\overline{U}_t)_t$ is non-increasing we also have $\overline{U}_n(a_n) \leq \overline{U}_t(a_n)$. We can conclude with \Cref{lem:expansion-bound} applied to $a_n$: $\regret \leq V^\star - V(a_n) \leq  \gamma^d(U(a_n)-L(a_n) = \overline{U}_n(a_n) - \overline{L}_n(a_n)  \leq \overline{U}_t(a_n) - \overline{L}_n(i) \leq \overline{U}_t(i) - \overline{L}_t(i) = \gamma^{d_n}(U_t(i) - L_t(i)$, which yields the claimed bound since $U(i) - L(i) \leq V_{\max}-0$.
 \end{proof}
 
 
-\subsubsection{Proof of \Cref{thm:regret-gbop}}
+\subsection{Proof of \Cref{thm:regret-gbop}}
 \label{sec:proof-regret-gbop}
 \begin{proof}
 Let $\kappa'>\kappa_\infty$. Since $\kappa(L_n,U_n)\rightarrow\kappa_\infty$, there exists $n_0\in\Natural$ such that for all $n\geq n_0$, $\kappa(L_n,U_n) \leq \kappa'$.
@@ -663,7 +666,7 @@ And since $\regret \leq \frac{\gamma^{d_n}}{1-\gamma}$ by \Cref{lem:recommendati
 Moreover, given a history of observed transitions up to iteration $n$, the bounds $U_n, L_n$ obtained from \eqref{eq:gbop-t-bounds} on the unrolled tree $T(\cG_n)$ are tighter than those of \eqref{eq:opd-bounds} since $T_n\subset T(\cG_n)$, which implies by \Cref{lem:shrink} that $\kappa(L_n, U_n) \leq \kappa$. We obtain $\kappa_\infty \leq \kappa$ at the limit. 
 \end{proof}
 
-\subsubsection{Proof of \Cref{prop:illustrative-example}}
+\subsection{Proof of \Cref{prop:illustrative-example}}
 \label{sec:proof-illustrative-example}
 The \Cref{fig:mdp-tree} shows the planning tree corresponding to the MDP $\cM$. Whenever the action $a_1$ is taken \hlg{(in green)} the resulting subtree is represented by a leaf node $s^\star$ of value $V^\star = \frac{r^\star}{1-\gamma}$. When, in contrast, we take a sequence of actions among $a_2\dots a_K$ \hlo{(in orange)}, we stay in the state $s^+$ and denote $V_h$ the corresponding value at depth $h$.
 
