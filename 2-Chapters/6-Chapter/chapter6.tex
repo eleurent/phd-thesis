@@ -984,8 +984,13 @@ L_n = B_n^{\infty}(0), \qquad U_n = B_n^{\infty}(V_{\max}).
 This definition is equivalent to that of \GBOPD in the sense that
 \begin{lemma}[Bound equivalence]
 	\label{lem:equivalence}
+	\begin{leftbar}[lemmabar]
 	For any sequence of action $a\in T(\cG_n)$, we have $L_n(a) = \cL_n(s(a))$ and $U_n(a) = \cU_n(s(a))$.	
+	\end{leftbar}
 \end{lemma}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-equivalence}.
+\end{proof}
 
 In $T(\cG_n)$, the unrolling mechanics behave as if any leaf $a$ sharing the same state $s(a)$ as an internal node $a'$ was automatically expanded, and thus had its bound $L_n(a), U_n(a)$ tightened by the Bellman backup $B_n$ to a sub-interval of the trivial bounds $(0, V_{\max})$ that are used in \OPD.
 
