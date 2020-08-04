@@ -9,4 +9,68 @@ In this chapter\dots
 \minitocStartChapter{}
 
 \section{General presentation}
-\section{Use in academia, education and industry}
+
+
+\section{Outreach}
+\label{sec:outreach}
+In this section, we document the dissemination of the library among several communities.
+
+\subsection{Academia}
+
+We highlight that several researchers have reported using \highwayenv in their publications and submissions:
+\begin{itemize}
+	\item \fullcite{Li2019}
+	\item \fullcite{Yang2020}
+	\item \fullcite{n2020smart}
+	\item \fullcite{Xu2020taskagnostic}
+	\item \fullcite{ma2020dsac}
+	\item \fullcite{mei2020prioritized}
+\end{itemize}
+
+\leavevmode\newline
+Additionally, we use it in most of our own publications:
+\begin{itemize}
+	\item \fullcite{Leurent2018approximate}
+	\item \fullcite{Leurent2019interval}
+	\item \fullcite{Leurent2019social}
+	\item \fullcite{CarraraLeurent2019}
+	\item \fullcite{Leurent2020practical}
+	\item \fullcite{Leurent2020robust}
+	\item \fullcite{Leurent2020beyond}
+\end{itemize}
+
+%Mohammad Hussein Tavakoli Bina, Department of Electrical Engineering, Amirkabir University of Technology, see \href{https://github.com/mhtb32/tl-env}{tl-env}
+\leavevmode\newline
+\noindent Finally, the \textsc{highway-env} library is featured in the documentation and examples of two of the most famous libraries in the \gls{RL} ecosystem:
+\begin{itemize}
+\item \href{https://github.com/openai/gym}{OpenAI Gym}, a standard interface for comparing \gls{RL} algorithms. \textsc{highway-env} is mentioned in the \href{https://github.com/openai/gym/blob/master/docs/environments.md#highway-env-tactical-decision-making-for-autonomous-driving}{list of environments}.
+\item \href{https://github.com/hill-a/stable-baselines}{Stable Baselines}, a set of improved implementations of \gls{RL} algorithms based on OpenAI Baselines. \textsc{highway-env} is used as an  \href{https://stable-baselines.readthedocs.io/en/master/guide/examples.html#hindsight-experience-replay-her}{Example} in the documentation.
+\end{itemize}
+
+\subsection{Education}
+
+Since the publication of \highwayenv, many masters students have contacted me throughout the years, and reported using the simulator for their final project of in various courses, occasionally upon suggestion by their professor. %Ayaz Samadli
+I did not keep track of all these exchanges, but as a trace of this activity, see:
+\begin{itemize}
+	\item the \href{https://github.com/eleurent/highway-env/issues?q=is\%3Aissue}{list of issues} opened in \textsc{highway-env}.
+	\item the \href{https://github.com/eleurent/rl-agents/issues?q=is\%3Aissue}{list of issues} opened in \textsc{rl-agents}.
+\end{itemize} 
+
+\subsection{Industry}
+
+Several engineers, mainly from the Automotive industry, have demonstrated interest in \textsc{highway-env}, either by reaching out to me directly or by developing their own project on top of the library. To name a few,
+
+\begin{itemize}
+    \item \href{https://www.linkedin.com/in/simon-chauvin/}{Simon Chauvin}, Machine Learning Engineer at Autonomous Driving at \href{https://www.esrlabs.com/}{ESR Labs AG}, who contacted me to reproduce my results.
+	\item \href{https://www.linkedin.com/in/huberclement}{Clément Huber}, Product Owner in the Path Planning team at \href{https://navya.tech/fr/}{NAVYA Group}, and \href{https://www.linkedin.com/in/lucas-boyer}{Lucas Boyer}, intern in that team, contacted me on several occasions to discuss the \href{https://github.com/lucasBOYER/highway-env}{internship} of Lucas based on \textsc{highway-env} and \textsc{openai/baselines}.
+	\item \href{https://www.linkedin.com/in/munirjojoverge}{Munir Jojo-Verge}, Motion Planning and Decision Making Manager at \href{https://canvas.technology/}{Amazon Robotics}, who wrote to me regarding his extension of \textsc{highway-env} to continuous actions, see \href{https://github.com/munirjojoverge/rl_AD_urban_baselines}{his fork} which lead to the addition of the \texttt{parking-v0} environment.
+	\item \href{https://www.linkedin.com/in/deepdrive}{Craig Quiter}, Founder of \href{https://deepdrive.voyage.auto/}{Deepdrive} at \href{https://voyage.auto/}{Voyage}, who mentioned that \href{https://medium.com/@crizcraig/smooth-operator-92c6c14862fb}{his recent work} was inspired by \textsc{highway-env} and with whom I had the pleasure to discuss.
+	\item \href{https://www.linkedin.com/in/pinaki-gupta/}{Pinaki Gupta}, Behaviour Planning architect at \href{https://lucidmotors.com/}{Lucid Motors}, see \href{https://github.com/pinakigupta/BehaviorRL}{his fork} that features variants of the \texttt{two-way-v0} and \texttt{parking-v0} environments augmented with additional vehicles and multiple goals.
+	\item \href{https://www.linkedin.com/in/guillaumealleon}{Guillaume Alleon}, Head of AI research at \href{https://www.airbus.com/}{Airbus}, see \href{https://github.com/galleon/highway-env}{his fork}.
+    \item \href{https://ru.linkedin.com/in/boris-yangel-83194729}{Boris Yangel}, Principal Software Engineer at \href{https://yandex.com/}{Yandex}, see \href{https://github.com/hr0nix/trackdays/blob/master/setup.py}{his project}.
+\end{itemize}
+
+
+ 
+
+
