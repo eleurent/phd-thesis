@@ -202,13 +202,17 @@
 \newglossaryentry{confidenceset}{name={\var{\mathcal{C}_{[N],\delta}}},description={high-confidence set for the estimation of $\theta$, such that $\mathbb{P}(\theta\in\mathcal{C}_{[N],\delta}) \geq 1-\delta$.},type=symbols, category=symbol, sort={zctrlh}}
 \newcommand{\confidenceset}{\gls{confidenceset}}
 
-\newglossaryentry{pessimisticreward}{name={\var{\underline{R}}},description={pessimistic reward function, evaluated on the worst-case reachable states},type=symbols, category=symbol, sort={zctrli}}
+\newglossaryentry{lse}{name={\var{\theta_{N,\lambda}}},description={regularised least-square estimate of $\theta$, with $N$ samples and penalty $\lambda$.},type=symbols, category=symbol, sort={zctrli}}
+
+\newglossaryentry{gramian}{name={\var{G_{N,\lambda}}},description={Gramian matrix for the regularised least-square estimation of $\theta$, with $N$ samples and penalty $\lambda$.},type=symbols, category=symbol, sort={zctrli}}
+
+\newglossaryentry{pessimisticreward}{name={\var{\underline{R}}},description={pessimistic reward function, evaluated on the worst-case reachable states},type=symbols, category=symbol, sort={zctrlj}}
 \newcommand{\pessimisticreward}{\gls{pessimisticreward}}
 
-\newglossaryentry{Tt}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol, sort={zctrlj}}
-\newcommand{\T}{\gls{Tt}}
+\newglossaryentry{samples}{name={\var{N}},description={number of transition samples},type=symbols, category=symbol, sort={zctrlk}}
+\newcommand{\samples}{\gls{samples}}
 
-\newglossaryentry{maxit}{name={\var{K}},description={number of planning iterations},type=symbols, category=symbol, sort={zctrlk}}
+\newglossaryentry{maxit}{name={\var{K}},description={number of planning iterations},type=symbols, category=symbol, sort={zctrll}}
 \newcommand{\maxiteration}{\gls{maxit}}
 
 \newglossaryentry{underx}{name={$\underline{x}(t)$}, text={\var{\underline{x}}},description={lower-bound of the state interval $\underline{x}(t)\leq x(t),\;\forall t$},type=symbols, category=symbol, sort={zctrlhb}}

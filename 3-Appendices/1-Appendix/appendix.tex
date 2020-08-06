@@ -19,11 +19,11 @@ When I started my Ph.D., there existed more ambitious open-source simulators tha
 \paragraph{Usage}
 We show below a basic use of \textsc{highway-env}, with a code snipped showing the interaction between the environment, which generates observations and rewards, and the agent which provides actions according to its policy.
 
-\begin{lstlisting}[language=Python,frame=single,caption={Create, step and render the \texttt{highway-v0} environment},captionpos=b]
+\begin{lstlisting}[language=Python,frame=single,caption={Create, step and render the \texttt{highway-v0} environment.},captionpos=b]
 import gym
 import highway_env
 
-env = gym.make("highway-v0")
+env = gym.make('highway-v0')
 
 done = False
 while not done:
