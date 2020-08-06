@@ -1244,6 +1244,14 @@ experiments.
 
 \subsection{Numerical experiment}
 
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/lane-keeping.png}
+	\caption{\textbf{Top}: the model estimation showing the confidence region $\confidenceset$ from \eqref{eq:predictor} at different times $t_N$. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in green, and $\xi(t)$ as an area with a color gradient.}
+	\label{fig:lane-keeping}
+\end{figure}
+
 We tackle the problem of the robust adaptive lateral control of an autonomous vehicle for a lane-keeping application, implemented in \highwayenv. In contrast with \Cref{chapter:3} where we adopted a kinematic standpoint and simply assumed that the vehicle acceleration could be controlled directly, we dive deeper into a dynamical description subjected to \emph{unknown} tire friction forces. We still represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$, and additionally denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in \citep[, Chapter 3.2]{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
 Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with
 % \begin{align*}
@@ -1287,13 +1295,6 @@ B =
 \]
 
 \noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\safestates = \pm[3, 2, 6, 6]^\transp$ and $\safecontrols=\pm[10]$.
-
-\begin{figure}[th]
-	\centering
-	\includegraphics[width=0.9\linewidth]{img/lane-keeping.png}
-	\caption{\textbf{Top}: the model estimation showing the confidence region $\confidenceset$ from \eqref{eq:predictor} at different times $t_N$. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in green, and $\xi(t)$ as an area with a color gradient.}
-	\label{fig:lane-keeping}
-\end{figure}
 
 The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\confidenceset$ from \eqref{eq:confidence-ellipsoid} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assumpt:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based \gls{MPC} scheme \citep{HomemDeMello2014} to solve \eqref{eq:OCP} and bring $\xi(t)$ into $X_f$ in $T=\SI{3}{\second}$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_n$ (red) to $t=t_n+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation\footnote{A video is available at \href{https://youtu.be/axurBzHRLGY}{https://youtu.be/axurBzHRLGY}}.
 
