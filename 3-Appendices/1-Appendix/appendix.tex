@@ -51,11 +51,11 @@ To this day, \textsc{highway-env} comes with six different scenes, configured wi
 \end{table}
 
 \begin{itemize}
-	\item \textbf{Highway.} The vehicle is driving on a highway populated with other drivers. The goal is to drive as fast as possible while avoiding collisions with other vehicles, through a discrete meta-action space of maneuvers.
+	\item \textbf{Highway.} The vehicle is driving on a highway populated with other drivers. The goal is to drive as fast as possible while avoiding collisions with other vehicles, through a discrete meta-action space of manoeuvres.
 	\item \textbf{Merge.} The task is similar to \texttt{highway-v0}, but a vehicle is incoming from an access ramp and must be able to merge successfully in traffic. To that end, the ego-vehicle must change lane or adapt its velocity so that the merging vehicle has sufficient space. This task is inspired by a practical use case for \gls{ADAS} systems at Renault.
 	\item \textbf{Roundabout.} The vehicle must cross a roundabout as fast as possible while avoiding collisions. It requires reasoning about the uncertain destinations of other vehicles.
 	\item \textbf{Intersection.} This environment is similar to roundabout, but with an increased density of vehicles and types of conflicts. Only the throttle is controlled, and the steering is performed automatically to track the ego-vehicle destination.
-	\item \textbf{Parking.} A goal-conditioned continuous control environment: the desired parking spot location is part of the observation, and the ego-vehicle must plan cusp-shaped maneuvers to reach it with the proper heading.
+	\item \textbf{Parking.} A goal-conditioned continuous control environment: the desired parking spot location is part of the observation, and the ego-vehicle must plan cusp-shaped manoeuvres to reach it with the proper heading.
 	\item \textbf{Two-way.} This environment is similar to highway, except that the ego-vehicle can change to a lane facing the opposite direction, with incoming vehicles. This enables to highlight an efficiency-safety trade-off for risk-sensitive decision-making.
 \end{itemize}
 
