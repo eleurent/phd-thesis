@@ -11,6 +11,8 @@
 
 \textsc{highway-env} is a collection of environments for behavioural planning tasks in autonomous driving.
 
+Each environment specifies a full \gls{MDP} to describe a particular decision-making problem that an autonomous vehicle may face.
+
 \paragraph{Origins}
 When I started my Ph.D., there existed more ambitious open-source simulators that relied on heavy physics engines and 3D graphics, such as TORCS \citep{Wymann15torcs:the}, Airsim \citep{shah2017airsim} and CARLA \citep{Dosovitskiy2017}. However, those were better suited for low-level sensing and control, \eg training of visuomotor policies in a single-agent setting. On the other hand of the spectrum, SUMO \citep{SUMO2018} was rather meant for high-scale traffic optimisation and lacked details and flexibility on local dynamics. In contrast, I needed a simulator focused on high-level decisions and vehicle-to-vehicle interactions. Consequently, I launched \textsc{highway-env} with the intent of having a minimalist simulator, implemented fully in Python for fast prototyping and easy interfacing with \gls{RL} libraries.
 
@@ -62,7 +64,7 @@ To this day, \textsc{highway-env} comes with six different scenes, configured wi
 Several parts of the environment can be configured.
 
 \begin{itemize}
-	\item \textbf{Observations.} Several types of observations are available, such as the \emph{list of features} and \emph{occupancy} grid described in \Cref{chapter:4}. Other types include RGB images, time-to-collision maps, and goal locations.
+	\item \textbf{Observations.} Several types of observations are available, such as the \emph{list of features} and \emph{occupancy grid} described in \Cref{chapter:4}. Other types include RGB images, time-to-collision maps, and goal locations.
 	\item \textbf{Actions.} In addition to the discrete meta-action space $\cA$ described in \Cref{chapter:3}, a continuous space $\cA=\Real^2$ for throttle and steering can also be selected.
 	\item \textbf{Dynamics.} Other vehicles can follow the \gls{IDM} and \gls{MOBIL} behavioural models as described in  \Cref{chapter:3} or its linearised version of \Cref{sec:prediction}. The ego-vehicle can be controlled with either the Kinematic Bicycle Model as in \Cref{chapter:3} or the Dynamic Bicycle Model as in  \Cref{sec:robust-stabilisation}.
 	\item \textbf{Rewards.} The rewards and penalties associated with speed or collisions are configurable.
