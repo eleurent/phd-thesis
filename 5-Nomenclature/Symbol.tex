@@ -4,14 +4,12 @@
 \definecolor{symbolcolor}{rgb}{0.5,0.,0}
 \newcommand{\var}[1]{\ensuremath{#1}}
 
-% TODO: Aliases, to be removed
+% Aliases
 \newcommand{\idx}[1]{#1\index{#1}}
 \newcommand{\discountfactor}{\discount}
 \newcommand{\augmentedreward}{\oR}
 \newcommand{\reward}{\R}
 \newcommand{\transition}{\Ps}
-
-% TODO: more symbols, KL, tree-based planning
 
 % --- Mathematical notations: key A
 
@@ -94,8 +92,12 @@
 \newglossaryentry{bo}{name={\var{\mathcal{T}}},description={Bellman operator (${}^\star$ for optimality, ${}^\pi$ for evaluation)},type=symbols, category=symbol, sort={bmdpk}}
 \newcommand{\bo}{\gls{bo}}
 
-\newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm},type=symbols, category=symbol, sort={bmdpl}}
+\newglossaryentry{regret}{name={\var{r_n}},description={simple regret of an algorithm after $n$ samples},type=symbols, category=symbol, sort={bmdpl}}
 \newcommand{\regret}{\gls{regret}}
+
+\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol, sort={bmdpm}}
+\newcommand{\cD}{\gls{cD}}
+
 
 % --- Budgeted RL: key E BRL
 
@@ -153,12 +155,25 @@
 \newglossaryentry{Qr}{name={\var{Q_r}},description={reward Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\Qr}{\gls{Qr}}
 
-\newglossaryentry{Qc}{name={\var{Q_c}},description={Cost Q-function},type=symbols, category=symbol, sort={ebrlo}}
+\newglossaryentry{Qc}{name={\var{Q_c}},description={cost Q-function},type=symbols, category=symbol, sort={ebrlo}}
 \newcommand{\Qc}{\gls{Qc}}
 
 \newglossaryentry{abo}{name={\var{\overline{\mathcal{T}}}},description={augmented Bellman operator (${}^\star$ for optimality, ${}^\pi$ for evaluation)},type=symbols, category=symbol, sort={ebrlp}}
 \newcommand{\abo}{{\gls{abo}}}
 
+
+
+% Tree-based Planning: Key = T TREE
+\newglossaryentry{alphabet}{name={\var{\cA^{\ast}}},description={set of a finite words $a$, representing sequences of actions $(a_1, \dots, a_h) \in \cA^h$, for $h\in\mathbb{N}$},type=symbols, category=symbol, sort={ttreea}}
+\newglossaryentry{infalphabet}{name={\var{\cA^\infty}},description={the set of infinite sequences of actions $(a_1,\dots)$},type=symbols, category=symbol, sort={ttreea}}
+\newglossaryentry{prefix}{name={\var{a_{1:t}}},description={the prefix $(a_1,\dots,a_t) \in \cA^t$ of length $t \leq h$ of a word $a\in\cA^h$},type=symbols, category=symbol, sort={ttreeb}}
+\newglossaryentry{concat}{name={\var{ab\in \cA^{\ast}}},description={the concatenation of two finite sequences $a\in \cA^{\ast}$ and $b\in \cA^{\ast}$},type=symbols, category=symbol, sort={ttreeb}}
+\newglossaryentry{suffixes}{name={\var{a\cA^{\ast},\,a\cA^{\infty}}},description={the set of finite and infinite suffixes of $a$, respectively: $a \cA^{\ast} = \{c\in\mathcal{A}^{\star}: \exists b\in \cA^{\ast}$ such that $c=ab\}$ and $a\cA^\infty$ defined likewise},type=symbols, category=symbol, sort={ttreeb}}
+\newglossaryentry{emptyseq}{name={\var{\emptyset}},description={the empty sequence of actions},type=symbols, category=symbol, sort={ttreeb}}
+\newglossaryentry{tree}{name={\var{\mathcal{T}}},description={the look-ahead tree},type=symbols, category=symbol, sort={ttreec}}
+\newglossaryentry{sequencereward}{name={\var{\nu(a),\,\mu(a)}},description={the distribution and mean of the reward obtained at the last step after executing a sequence of actions $a\in\cA^\ast$},type=symbols, category=symbol, sort={ttreed}}
+\newglossaryentry{bounds}{name={\var{U_a, L_a}},description={upper and lower bounds on the value $V(a)$ of a sequence of actions $a\in\cA^\ast$},type=symbols, category=symbol, sort={ttreee}}
+\newglossaryentry{branchingfactor}{name={\var{\kappa}},description={effective branching factor of a planning tree $\Tau$, in $[1,K]$},type=symbols, category=symbol, sort={ttreee}}
 
 
 % --- Linear Systems: Key = Z CTRL
@@ -201,9 +216,4 @@
 
 \newglossaryentry{overx}{name={$\underline{x}(t)$}, text={\var{\overline{x}}},description={upper-bound of the state interval $\overline{x}(t)\geq x(t),\;\forall t$},type=symbols, category=symbol, sort={zctrlhb}}
 \newcommand{\ox}{\gls{overx}}
-
-% --- Others, unsorted
-
-\newglossaryentry{cD}{name={\var{\mathcal{D}}},description={dataset},type=symbols, category=symbol}
-\newcommand{\cD}{\gls{cD}}
 
