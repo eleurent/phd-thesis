@@ -1294,9 +1294,9 @@ B =
 \end{bmatrix}.
 \]
 
-\noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\safestates = \pm[3, 2, 6, 6]^\transp$ and $\safecontrols=\pm[10]$.
+\noindent Instead of simply stabilising the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane centre. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\safestates = \pm[3, 2, 6, 6]^\transp$ and $\safecontrols=\pm[10]$.
 
-The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\confidenceset$ from \eqref{eq:confidence-ellipsoid} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assumpt:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based \gls{MPC} scheme \citep{HomemDeMello2014} to solve \eqref{eq:OCP} and bring $\xi(t)$ into $X_f$ in $T=\SI{3}{\second}$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_n$ (red) to $t=t_n+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation\footnote{A video is available at \href{https://youtu.be/axurBzHRLGY}{https://youtu.be/axurBzHRLGY}}.
+The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\confidenceset$ from \eqref{eq:confidence-ellipsoid} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assumpt:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the \gls{LMI} of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based \gls{MPC} scheme \citep{HomemDeMello2014} to solve \eqref{eq:OCP} and bring $\xi(t)$ into $X_f$ in $T=\SI{3}{\second}$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a colour gradient from $t=t_n$ (red) to $t=t_n+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation\footnote{A video is available at \href{https://youtu.be/axurBzHRLGY}{https://youtu.be/axurBzHRLGY}}.
 
 \FloatBarrier
 \section{Minimax control with generic costs}
@@ -1401,28 +1401,44 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 \begin{theorem}[Regret bound]
 	\label{thm:minimax-regret-bound}
 	\begin{leftbar}[theorembar]
-	Under three conditions:
+	Under two conditions:
 	\begin{enumerate}
-		\item a Lipschitz regularity assumption for the reward $R$;
-		\item a persistent excitation (PE) assumption:
-		\begin{align*}
-		\exists \underline{\phi},\overline{\phi}>0: \forall n\geq n_0,\quad \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2;
-		\end{align*}
+		\item a Lipschitz regularity assumption for the reward $R$:
 		\item a stability condition: there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
 		$$\begin{bmatrix}
 		A_0^\transp P + P A_0^\transp + Q_0 & P|D|  \\
 		|D|^\transp P & -\rho I_r \\
 		\end{bmatrix}< 0;$$
 	\end{enumerate}
-	we can bound the approximation error of \Cref{alg:full}:
+	we can bound the suboptimality of \Cref{alg:full} with planning budget $K$ as:
 	\begin{equation*}
-	\hat{V}^r(\bu) \leq {V}^r(\bu) \leq V(\bu) \leq \hat{V}^r(\bu) + \Delta_\omega + \cO\left(\frac{1}{\confidence}\frac{\log N}{N}\right)
+	\hat{V}^r(a_K) \leq {V}^r(a^\star) \leq V(a^\star) \leq \hat{V}^r(a_K) + \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gls{gramian})}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\discountfactor}{\log \kappa}}\right)}_{\text{planning error}}}
 	\end{equation*}
-	with probability at least $1-\confidence$, where $\Delta_\omega$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
+	with probability at least $1-\confidence$, where $\hlr{\Delta_\omega}$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
 	\end{leftbar}
 \end{theorem}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-minimax-regret-bound}.
+\end{proof}
+
+This bound contains an input-dependent estimation error term, which can be further bounded under an additional assumption that the features are sufficiently excited. 
+
+\begin{corollary}[Persistent excitation]
+	\label{cor:pe}
+	\begin{leftbar}[corollarybar]
+	Under an additional persistent excitation (PE) assumption
+	\begin{align*}
+	\exists \underline{\phi},\overline{\phi}>0: \forall n\geq n_0,\quad \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
+	\end{align*}
+	the result of \Cref{thm:minimax-regret-bound} takes the more explicit form:
+	\begin{equation*}
+	\hat{V}^r(a_K) \leq {V}^r(a^\star) \leq V(a^\star) \leq \hat{V}^r(a_K) + \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\log\left(N^{d/2}/\confidence\right)}{N}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\discountfactor}{\log \kappa}}\right)}_{\text{planning error}}}
+	\end{equation*}
+	which ensures asymptotic near-optimality when $N\to\infty$ and $K\to\infty$.
+	\end{leftbar}
+\end{corollary}
+\begin{proof}
+	We provide a proof in \Cref{sec:proof-pe}.
 \end{proof}
 
 \section{Multi-model selection}

@@ -154,39 +154,25 @@
 	\label{sec:proof-minimax-regret-bound}
 	We first bound the model estimation error.
 	\begin{lemma}
-		\begin{leftbar}[lemmabar]
-		If the features $\Phi_n$ are persistently exciting:
-		\begin{align}
-		\label{eq:excitation}
-		\exists \underline{\phi},\overline{\phi}>0, n_0: \forall n\geq n_0,\nonumber\\ \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
-		\end{align}
-		then,
-		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{1}{\confidence}\frac{\log N}{N}} \right) \]
+	\label{lem:dynamics-est-bound}
+	\begin{leftbar}[lemmabar]
+		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left(\sqrt{ {\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}}\right) \]
 	\end{leftbar}
 	\end{lemma}
 	\begin{proof}
-		By \eqref{eq:g_n_lambda} and \eqref{eq:excitation}, we have $$\lambda_{\min}(G_{[N],\lambda,i,j}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
-		
-		Hence, by \eqref{eq:confidence-ellipsoid} we have 
+		We have 
 		\begin{align*}
-		\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}} \geq (\sqrt{N}\underline{\phi} + \cO(1))\|\theta - \theta_{[N],\lambda}\|_{2}
+		\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}}^2 \geq \lambda_{\min}(\gramian)\|\theta - \theta_{[N],\lambda}\|_{2}^2
 		\end{align*}
-		and \eqref{eq:beta_n} gives
+		And \eqref{eq:confidence-ellipsoid} gives
+		\[\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}}^2 = \cO(\beta_N(\delta)^2) \]
 		
-		\begin{align*}
-		\beta_N(\confidence) &= \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
-		+ (\lambda d)^{1/2}S\\
-		&\leq \sqrt{d\log (N\overline{\phi}^2) / (\delta\lambda^{d/2})} + \cO(1)
-		\end{align*}
-		Thus,
-		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left( \sqrt{\frac{1}{\confidence}\frac{\log N}{N}} \right) \]
-		
-		And $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
+		Moreover, $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
 		\begin{align*}
 		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
 		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
 		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
-		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{1}{\confidence}\frac{\log N}{N}} \right) 
+		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right) 
 		\end{align*}
 		
 	\end{proof}
@@ -203,7 +189,7 @@
 		\end{bmatrix}< 0,
 		\end{align*}
 		then for all $t> t_N$,
-		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\log N}{N\confidence}} \right)\right)C_\omega(t), \]
+		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}} \right)\right)C_\omega(t), \]
 		where $$C_0 = \sqrt{\frac{2\rho\lambda_{\max}(P)}{\lambda_{\min}(P)\lambda_{\min}(Q_0)}},$$ and $$C_\omega(t) = \sup_{\tau\in[t_N,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2^2.$$
 		\end{leftbar}
 	\end{lemma}
@@ -268,7 +254,7 @@
 		Choose $Q = \frac{1}{2}Q_0-4\alpha I_p$.
 		Assume that $P$ is fixed and satisfies the conditions of the lemma. We have $$\lambda_{\max}(S) \leq \alpha^{-1}\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2.$$
 		
-		Thus, by taking $\alpha = \frac{\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2}{2\lambda_{\min}(Q_0)} = \cO(\frac{\log N}{N\confidence})$, we can obtain that $S \leq \begin{bmatrix}
+		Thus, by taking $\alpha = \frac{\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2}{2\lambda_{\min}(Q_0)} = \cO({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}})$, we can obtain that $S \leq \begin{bmatrix}
 		\frac{1}{2}Q_0 & 0\\0 & 0
 		\end{bmatrix}$. Thus,
 		\[R-S \geq \begin{bmatrix}
@@ -283,8 +269,8 @@
 		\end{align*}
 		Developing at the first order in $\alpha$ gives
 		\begin{align*}
-		\|e(t)\|_2 &\leq C_0\left(1 + \frac{4\alpha}{\lambda_{\min}(Q_0)} + \cO(\alpha_N^2)\right)C_\omega(t)\\
-		&\leq \left(C_0 + \cO\left(\frac{\log N}{N\confidence}\right)\right)C_\omega(t)
+		\|e(t)\|_2 &\leq C_0\left(1 + \frac{4\alpha}{\lambda_{\min}(Q_0)} + \cO(\alpha^2)\right)C_\omega(t)\\
+		&\leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right)\right)C_\omega(t)
 		\end{align*}
 	\end{proof}
 	
@@ -298,12 +284,55 @@
 		\begin{align*}
 		V(\bu) - \hat{V}^r(\bu) &\leq \sum_{n=N+1}^\infty \discount^n \underset{{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}}{(\max - \min)} R(x)\\
 		&\leq \sum_{n=N+1}^\infty \discount^n L \left\|\underline{x}_n(\bu) - \overline{x}_n(\bu)\right\|_2\\
-		&\leq L(C_0 + \cO\left({\log N / N}\right)) \sum_{n>N} \discount^n C_{\omega}(t_n)\\
-		&= \Delta_\omega + \cO\left({\log N / N}\right)
+		&\leq L(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right) \sum_{n>N} \discount^n C_{\omega}(t_n)\\
+		&= \Delta_\omega + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right)
 		\end{align*}
 		with $\Delta_\omega = L C_0\sum_{n>N} \discount^n C_{\omega}(t_n)$.
 		
 		Note that $\Delta_\omega$ is finite, since $C_{\omega}(t_n)$ is in the order of $\underline{\omega}(t_n)$, $\overline{\omega}(t_n)$, and these are either bounded in the case of \Cref{assumpt:bounded-noise}, or in the case of \Cref{assumpt:gaussian-noise} in the order of $\sqrt{2\log n / \confidence_n}$, with $\confidence_n = \confidence/(n(n+1))$, which is dominated by $\discount^n$.
+	\end{proof}
+	
+	\subsection{Proof of \Cref{cor:pe}}
+	\label{sec:proof-pe}
+	
+	The proof is identical to that of \Cref{thm:minimax-regret-bound}, with the exception that the \Cref{lem:dynamics-est-bound} is replaced by the following lemma:
+	
+	\begin{lemma}
+		\begin{leftbar}[lemmabar]
+			If the features $\Phi_n$ are persistently exciting:
+			\begin{align}
+			\label{eq:excitation}
+			\exists \underline{\phi},\overline{\phi}>0, n_0: \forall n\geq n_0,\nonumber\\ \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
+			\end{align}
+			then,
+			\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log (N^{d/2}/\delta)}{N}} \right) \]
+		\end{leftbar}
+	\end{lemma}
+	\begin{proof}
+		By \eqref{eq:g_n_lambda} and \eqref{eq:excitation}, we have $$\lambda_{\min}(G_{[N],\lambda}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
+		
+		Hence, by \eqref{eq:confidence-ellipsoid} we have 
+		\begin{align*}
+		\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}} \geq (\sqrt{N}\underline{\phi} + \cO(1))\|\theta - \theta_{[N],\lambda}\|_{2}
+		\end{align*}
+		and \eqref{eq:beta_n} gives
+		
+		\begin{align*}
+		\beta_N(\confidence) &= \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+		+ (\lambda d)^{1/2}S\\
+		&\leq \sqrt{\log \left(N^{d/2}\overline{\phi}^d / (\delta\lambda^{d/2})\right)} + \cO(1)
+		\end{align*}
+		Thus,
+		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left(\sqrt{\frac{\log (N^{d/2}/\delta)}{N}} \right) \]
+		
+		And $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
+		\begin{align*}
+		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
+		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
+		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
+		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( \frac{\log (N^{d/2}/\delta)}{N} \right) 
+		\end{align*}
+		
 	\end{proof}
 	
 	
