@@ -10,13 +10,20 @@
 Dans cette thèse de doctorat, nous ...
 
 % ----------------------------------------------------------------------------
-\hr{}
+%\hr{}
+\newpage
 
 % \newpage
 % ----------------------------------------------------------------------------
 \begin{center}
 	\textbf{{\LARGE Abstract}}
 \end{center}
-In this PhD thesis, we...
+This dissertation aims to enable autonomous vehicles
+to act \emph{safely}, despite sharing the road with human drivers whose behaviours are uncertain. For that purpose, we need to resort to robust decision-making: always consider the worst-case outcome. Informed by online observations of the environment and partial knowledge of the dynamics, we explicitly model this uncertainty by constructing high-confidence regions containing the system dynamics. We introduce novel algorithmic tools to propagate these regions through time and derive confidence intervals bounding the set of possible joint trajectories for nearby traffic. This enables us to make cautious decisions through a minimax objective, thus guaranteeing that the best result achieved during planning is achievable by the underlying system. Tractable optimisation is ensured by leveraging sample-efficient tree-based planning algorithms, and we show in an end-to-end analysis that overall sub-optimality is bounded.
+
+Unfortunately, this worst-case approach tends to produce overly conservative behaviours: imagine you wish to overtake a vehicle, what proof do you have that they will not change lane at the very last moment, causing an accident? Such reasoning makes it difficult for robots to drive amidst other drivers, merge into a highway, or cross an intersection --an issue colloquially known as the \emph{\enquote{freezing robot problem}}.
+More precisely, the presence of uncertainty induces a trade-off between two contradictory objectives: safety and \emph{efficiency} of driving. How to arbitrate this conflict?
+First, have every interest in trying to reduce uncertainty as much as possible. To that end, we propose an attention-based neural network architecture that better accounts for interactions between traffic participants to improve predictions. Then, in order explicitly account for this trade-off, we draw on constrained decision-making. In place of a unique driving policy, we learn a whole range of behaviours conditioned on the desired level of risk, that can be adjusted in real time.
+
 
 \end{abstract}
