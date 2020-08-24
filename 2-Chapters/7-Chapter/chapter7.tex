@@ -262,11 +262,11 @@ There may be cases where \Cref{assumpt:bounded-noise} does not hold. For instanc
 \end{assumption}
 For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with covariance matrices $\Sigma_r$ and $\Sigma_s$, with $\Sigma_p \eqdef C\Sigma_r C^\transp + D\Sigma_s D^\transp$. Note that \Cref{assumpt:bounded-noise} implies that $\eta$ is sub-Gaussian with covariance proxy $\Sigma_p=\|\eta\|_\infty I_p$.
 
-\begin{remark}
-	\begin{leftbar}[remarkbar]
-		The robust objective \eqref{eq:minimax-obj} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\confidence_n$. By choosing $\confidence_n = \frac{\confidence}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\confidence$.
-	\end{leftbar}
-\end{remark}
+%\begin{remark}
+%	\begin{leftbar}[remarkbar]
+%		The robust objective \eqref{eq:minimax-obj} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\confidence_n$. By choosing $\confidence_n = \frac{\confidence}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\confidence$.
+%	\end{leftbar}
+%\end{remark}
 
 Under this assumption, we can derive a confidence ellipsoid for $\params$.
 
