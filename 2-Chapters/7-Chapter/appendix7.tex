@@ -289,52 +289,26 @@
 		\end{align*}
 		with $\Delta_\omega = L C_0\sum_{n>N} \discount^n C_{\omega}(t_n)$.
 		
-		Note that $\Delta_\omega$ is finite, since $C_{\omega}(t_n)$ is in the order of $\underline{\omega}(t_n)$, $\overline{\omega}(t_n)$, and these are either bounded in the case of \Cref{assumpt:bounded-noise}, or in the case of \Cref{assumpt:gaussian-noise} in the order of $\sqrt{2\log n / \confidence_n}$, with $\confidence_n = \confidence/(n(n+1))$, which is dominated by $\discount^n$.
+		Note that $\Delta_\omega$ is finite only if $C_{\omega}(t_n)$ (in the order of $\overline{\omega}(t_n) - \underline{\omega}(t_n)$) is dominated by $\gamma^n$.
 	\end{proof}
 	
 	\subsection{Proof of \Cref{cor:pe}}
 	\label{sec:proof-pe}
 	
-	The proof is identical to that of \Cref{thm:minimax-regret-bound}, with the exception that the \Cref{lem:dynamics-est-bound} is replaced by the following lemma:
-	
-	\begin{lemma}
-		\begin{leftbar}[lemmabar]
-			If the features $\Phi_n$ are persistently exciting:
-			\begin{align}
-			\label{eq:excitation}
-			\exists \underline{\phi},\overline{\phi}>0, n_0: \forall n\geq n_0,\nonumber\\ \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
-			\end{align}
-			then,
-			\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left( \sqrt{\frac{\log (N^{d/2}/\delta)}{N}} \right) \]
-		\end{leftbar}
-	\end{lemma}
 	\begin{proof}
-		By \eqref{eq:g_n_lambda} and \eqref{eq:excitation}, we have $$\lambda_{\min}(G_{[N],\lambda}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
+		By \eqref{eq:vector_rls} and \eqref{eq:pe}, we have $$\lambda_{\min}(G_{[N],\lambda}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
 		
-		Hence, by \eqref{eq:confidence-ellipsoid} we have 
+		and by \eqref{eq:confidence-ellipsoid},
 		\begin{align*}
-		\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}} \geq (\sqrt{N}\underline{\phi} + \cO(1))\|\theta - \theta_{[N],\lambda}\|_{2}
-		\end{align*}
-		and \eqref{eq:beta_n} gives
-		
-		\begin{align*}
-		\beta_N(\confidence) &= \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\confidence\det(\lambda I_d)^{1/2}}\right)}
+		\beta_N(\delta) &= \sqrt{2\log \left(\frac{\det(G_{N,\lambda})^{1/2}}{\delta\det(\lambda I_d)^{1/2}}\right)}
 		+ (\lambda d)^{1/2}S\\
 		&\leq \sqrt{\log \left(N^{d/2}\overline{\phi}^d / (\delta\lambda^{d/2})\right)} + \cO(1)
 		\end{align*}
 		Thus,
-		\[\|\theta - \theta_{[N],\lambda}\|_{2} = \cO\left(\sqrt{\frac{\log (N^{d/2}/\delta)}{N}} \right) \]
-		
-		And $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
-		\begin{align*}
-		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
-		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
-		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
-		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( \frac{\log (N^{d/2}/\delta)}{N} \right) 
-		\end{align*}
-		
+		\[
+		\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{[N],\lambda})} = \cO\left(\frac{\log (N^{d/2}/\delta)}{N} \right)
+		\]
 	\end{proof}
-	
 	
 	\subsection{Proof of \Cref{theorem:drop-regret}}
 	\label{sec:proof-drop-regret}

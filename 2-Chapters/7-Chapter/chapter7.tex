@@ -499,7 +499,7 @@ then the following interval predictor can be designed:
 	P+\min\{Z_{+},Z_{-}\}>0,\;\Upsilon\preceq0,\;\Gamma>0,\\
 	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
 	\end{gather*}
-	where{
+	where\\[1cm] % FIXME for page break only
 		\begin{gather*}
 		\Upsilon=\left[\begin{array}{cccc}
 		\Upsilon_{11} & \Upsilon_{12} & \Upsilon_{13} & P\\
@@ -521,7 +521,7 @@ then the following interval predictor can be designed:
 		-\Delta A_{-} & 0
 		\end{array}\right],
 		\end{gather*}
-	}then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{\omega}$, $\overline{\omega}$.
+	then the predictor \eqref{eq:interval-predictor} is input-to-state stable with respect to the inputs $\underline{\omega}$, $\overline{\omega}$.
 \end{leftbar}
 \end{theorem}
 Note the requirement that the matrix $P$ has to be diagonal is not restrictive, since for a Metzler matrix $\mathcal{A}$, its stability is equivalent to existence of a diagonal solution $P$ of the Lyapunov equation $\mathcal{A}^{\top}P+P\mathcal{A}\prec0$ \citep{FarinaRinaldi2000}.
@@ -1403,7 +1403,7 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	\begin{leftbar}[theorembar]
 	Under two conditions:
 	\begin{enumerate}
-		\item a Lipschitz regularity assumption for the reward $R$:
+		\item a Lipschitz regularity assumption for the reward function $R$;
 		\item a stability condition: there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
 		$$\begin{bmatrix}
 		A_0^\transp P + P A_0^\transp + Q_0 & P|D|  \\
@@ -1411,8 +1411,10 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 		\end{bmatrix}< 0;$$
 	\end{enumerate}
 	we can bound the suboptimality of \Cref{alg:full} with planning budget $K$ as:
+	\\[2cm] %FIXME only for the page break
 	\begin{equation*}
-	\hat{V}^r(a_K) \leq {V}^r(a^\star) \leq V(a^\star) \leq \hat{V}^r(a_K) + \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gls{gramian})}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\discountfactor}{\log \kappa}}\right)}_{\text{planning error}}}
+	V(a^\star) - \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} - \hlb{\underbrace{\cO\left(\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}\right)}_{\text{estimation error}}} - \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
+	\leq \hat{V}^r(a_K) \leq {V}^r(a^\star)
 	\end{equation*}
 	with probability at least $1-\confidence$, where $\hlr{\Delta_\omega}$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
 	\end{leftbar}
@@ -1427,12 +1429,14 @@ This bound contains an input-dependent estimation error term, which can be furth
 	\label{cor:pe}
 	\begin{leftbar}[corollarybar]
 	Under an additional persistent excitation (PE) assumption
-	\begin{align*}
+	\begin{align}
+	\label{eq:pe}
 	\exists \underline{\phi},\overline{\phi}>0: \forall n\geq n_0,\quad \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
-	\end{align*}
+	\end{align}
 	the result of \Cref{thm:minimax-regret-bound} takes the more explicit form:
 	\begin{equation*}
-	\hat{V}^r(a_K) \leq {V}^r(a^\star) \leq V(a^\star) \leq \hat{V}^r(a_K) + \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\log\left(N^{d/2}/\confidence\right)}{N}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\discountfactor}{\log \kappa}}\right)}_{\text{planning error}}}
+	V(a^\star) - \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} - \hlb{\underbrace{\cO\left(\frac{\log\left(N^{d/2}/\delta\right)}{N}\right)}_{\text{estimation error}}} - \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
+	\leq \hat{V}^r(a_K) \leq {V}^r(a^\star)
 	\end{equation*}
 	which ensures asymptotic near-optimality when $N\to\infty$ and $K\to\infty$.
 	\end{leftbar}
