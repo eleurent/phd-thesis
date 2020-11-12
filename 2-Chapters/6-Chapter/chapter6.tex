@@ -681,7 +681,7 @@ A popular approach is to follow the principle of \glsxtrfull{OFU} \citep[see][]{
 Following the \gls{OFU} principle, at iteration $n$ we must leverage available information to design an upper-bound $U_n$ (or $\cU_n$) on $V$ as tight as possible. Then, in order to select a promising external node to expand, the sampling rule starts from the root (or source) and follows the optimistic strategy of always selecting the action which maximises $U_n$ (or $\cU_n$), until reaching an optimistic leaf (or sink) to expand. This strategy was used in \citep[\eg][]{Kocsis2006, Hren2008, Bubeck2010, Busoniu2012optimistic}.
 
 For instance, since we assume that the rewards are bounded in [0, 1], trivial bounds on $V(s)$ are
-$0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. However, these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. Still, they can be used as a valid starting point. Every observed transition stored can then be used to tightened these bounds, by resorting to the Bellman optimality operator.
+$0 \leq V(s) \leq V_{\max} \eqdef \sum_t \discount^t 1 ={1}/({1-\discount})$. However, these trivial bounds are the same for every node, which makes them non-informative, and do not make use of the observed information. Still, they can be used as a valid starting point. Every observed transition stored can then be used to tighten these bounds, by resorting to the Bellman optimality operator.
 
 \begin{definition}[Bellman optimality operator]
 	\begin{leftbar}[defnbar]
