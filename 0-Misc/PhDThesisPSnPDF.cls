@@ -1077,8 +1077,8 @@ wish to left align your text}
 \newenvironment{acknowledgements}{
 \cleardoublepage
 \setsinglecolumn
-% \chapter*{\centering \Large Remerciements}
-\chapter*{\centering \Large Acknowledgements}
+ \chapter*{\centering \Large Remerciements}
+%\chapter*{\centering \Large Acknowledgements}
 \thispagestyle{empty}
 }
 
