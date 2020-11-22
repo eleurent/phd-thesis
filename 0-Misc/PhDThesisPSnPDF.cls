@@ -130,6 +130,9 @@ by Krishna Kumar (v\fileversion)]
     \fi
   \fi
 }
+%FIXME: force use custom bib
+\useCustomBibtrue
+\setBibtrue
 
 % ************************* Header / Footer Styling ****************************
 \newif\ifPHD@textJustify\PHD@textJustifytrue % Set Justification true
