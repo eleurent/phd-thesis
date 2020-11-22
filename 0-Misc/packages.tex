@@ -137,7 +137,7 @@
 
 % --- Bibliography
 % Add `custombib' in the document class option to use this section
-\ifuseCustomBib
+
 	\usepackage[backend=biber, style=authoryear,
 		minbibnames=6,maxbibnames=6, sorting=nyt, natbib=true,
 		doi=false,isbn=false,url=false,eprint=false]{biblatex}
@@ -173,7 +173,7 @@
 {\usebibmacro{postnote}}
 \makeatother
 
-\fi
+
 % changes the default name `Bibliography` -> `References'
 \DefineBibliographyStrings{english}{%
 	bibliography = {List of References},
