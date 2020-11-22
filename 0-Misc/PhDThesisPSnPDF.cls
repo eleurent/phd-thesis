@@ -483,25 +483,34 @@ supported!}
 
 
 % ******************************* Bibliography *********************************
+\typeout{bibliodebug: start}
 \ifPHD@authoryear
+  \typeout{bibliodebug: authoryear}
   \ifPHD@biblatex
+    \typeout{bibliodebug: biblatex}
     \RequirePackage[backend=biber, style=authoryear, citestyle=alphabetic,
       sorting=nty, natbib=true]{biblatex}
     \setBiBLaTeXtrue
   \else
+    \typeout{bibliodebug: nobiblatex}
     \RequirePackage[round, sort, numbers, authoryear]{natbib} %author year
   \fi
 \else
   \ifPHD@numbered
+    \typeout{bibliodebug: numbered}
     \ifPHD@biblatex
+      \typeout{bibliodebug: biblatex}
       \RequirePackage[backend=biber, style=numeric-comp,
         citestyle=numeric, sorting=none, natbib=true]{biblatex}
       \setBiBLaTeXtrue
     \else
+      \typeout{bibliodebug: nobiblatex}
       \RequirePackage[numbers,compress]{natbib} % numbered citation
     \fi
   \else
+    \typeout{bibliodebug: not authoryear nor numbered}
     \ifuseCustomBib
+      \typeout{bibliodebug: custom}
        \AtBeginDocument{
           \@ifpackageloaded{natbib}{}{
             \@ifpackageloaded{biblatex}{}{
@@ -513,11 +522,14 @@ supported!}
           }
         }
     \else                                            % set default to numbered
+      \typeout{bibliodebug: not custom}
       \ifPHD@biblatex
+      \typeout{bibliodebug: biblatex}
         \RequirePackage[backend=biber, style=numeric-comp,
           citestyle=numeric, sorting=none, natbib=true]{biblatex}
         \setBiBLaTeXfalse
       \else
+      \typeout{bibliodebug: nobiblatex}
         \RequirePackage[numbers,compress]{natbib}
       \fi % default
       \setBibfalse
