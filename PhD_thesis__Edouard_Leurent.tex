@@ -1,7 +1,7 @@
 % *******************************************************************************
 % ***               Edouard Leurent's "PhD Thesis" main file                    ***
 % ***     Source code on: https://github.com/eleurent/phd-thesis/               ***
-% ***     Original template: https://github.com/eleurent/phd-thesis-template     ***
+% ***     Original template: https://github.com/Naereen/phd-thesis/             ***
 % *******************************************************************************
 
 % Class (remove "print" for digital version, remove "draft" for final version)
@@ -20,9 +20,6 @@
 \advisor{Denis Efimov \& Yann Blanco}
 \keywords{%
 	}
-
-% FIXME compile with pdfx to have a PDF/A file
-% \usepackage[a-1b]{pdfx}  % https://www.ctan.org/pkg/pdfx, PDF/A1-b for archiving
 
 % --- Draft Mode
 \SetDraftVersion{final}
@@ -52,11 +49,11 @@
 	\tableofcontents
 
 	% *************************** Nomenclature ***************************
-	%	\begin{spacing}{0.93}
 	\glsaddallunused
 	\printglossary[type=main, title={List of Acronyms}]
 	\mtcfixglossary[chapter]
-	
+
+	% These group names only apply to symbols, and must be defined after acronyms are printed
 	\newcommand*{\Agroupname}{Mathematical notations}
 	\newcommand*{\Bgroupname}{Markov Decision Processes}
 	\newcommand*{\Egroupname}{Budgeted Reinforcement Learning}
@@ -64,7 +61,6 @@
 	\newcommand*{\Zgroupname}{Linear Systems}
 	\printglossary[type=symbols, title={List of Symbols}]
 	\mtcfixglossary[chapter]
-	%	\end{spacing}
 
 	% *************** Chapters ****************
 	\mainmatter
@@ -76,12 +72,8 @@
 
 	\newpage
 
-%	\begin{small}   % XXX
-
-	% \input{4-Listofpublications/Listofpublications}
 	% **************** Listes *****************
-%	\begin{spacing}{1.00}%
-	{% group, to change the \cleardoublepage
+	{
 		% FIXME force to not have a blank (even numbered) page between lists
 		% https://tex.stackexchange.com/questions/69184/remove-blank-page-between-list-of-figures-and-list-of-tables#69218
 		\let\cleardoublepage\clearpage%
@@ -94,33 +86,13 @@
 		\listoftables
 		\mtcaddchapter
 	}
-%	\end{spacing}
 
 	% *************** Bibliography ****************
 	\begin{spacing}{0.93}
-%		\bibliographystyle{apalike}
-%		\bibliographystyle{apacite}
-%		\bibliographystyle{alpha}
-%		\bibliographystyle{plainnat}
 		\cleardoublepage
-		% \nocite{*}
-%		\bibliography{all-phd-thesis,chapter4,chapter5,chapter6,chapter7,chapter7_2,contributions}
-
 		\printbibliography[heading=bibintoc]
 		\adjustmtc
-
-%		\vfill{}
-%		\hr{}		
-%		\begin{small}
-%			\begin{quote}
-%				\emph{Visite aussi beaucoup de villes égyptiennes,}\\
-%				\emph{et n’aie de cesse de t’instruire auprès de ceux qui savent.}\\
-%				Konstantinos Kavafis, \emph{Ithaki}.
-%			\end{quote}
-%		\end{small}
 	\end{spacing}
-
-%	\end{small}
 
 	\backmatter
 	\cleartoleftpage
