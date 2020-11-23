@@ -18,8 +18,12 @@ jobs:
           root_file: PhD_thesis__Edouard_Leurent.tex
           args: -pdf -file-line-error -interaction=nonstopmode -shell-escape
           extra_system_packages: "py-pygments"
-      - name: Upload as an artifact
-        uses: actions/upload-artifact@v1
+        continue-on-error: true
+      - name: Upload log as an artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: PhD_thesis__Edouard_Leurent
+          path: PhD_thesis__Edouard_Leurent.log
+      - name: Upload pdf as an artifact
+        uses: actions/upload-artifact@v2
+        with:
           path: PhD_thesis__Edouard_Leurent.pdf
