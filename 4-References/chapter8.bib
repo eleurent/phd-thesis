@@ -1,0 +1,87 @@
+
+@inproceedings{Saunders2018,
+	author = {Saunders, William and Sastry, Girish and Stuhlm\"{u}ller, Andreas and Evans, Owain},
+	title = {Trial without Error: Towards Safe Reinforcement Learning via Human Intervention},
+	year = {2018},
+	publisher = {International Foundation for Autonomous Agents and Multiagent Systems},
+	address = {Richland, SC},
+	booktitle = {Proceedings of the 17th International Conference on Autonomous Agents and MultiAgent Systems},
+	pages = {2067–2069},
+	numpages = {3},
+	month = jul,
+	keywords = {human-in-the-loop planning/learning, reinforcement learning, deep learning, safe exploration},
+	location = {Stockholm, Sweden},
+	series = {AAMAS ’18}
+}
+
+@article{Kendall2019,
+	title={Learning to Drive in a Day},
+	journal={2019 International Conference on Robotics and Automation (ICRA)},
+	publisher={IEEE},
+	author={Kendall, Alex and Hawke, Jeffrey and Janz, David and Mazur, Przemyslaw and Reda, Daniele and Allen, John-Mark and Lam, Vinh-Dieu and Bewley, Alex and Shah, Amar},
+	year={2019},
+	month=May,
+    pages={8248-8254},
+    address={Montreal, QC, Canada}
+}
+
+
+@InProceedings{Azar2017,
+  title = 	 {Minimax Regret Bounds for Reinforcement Learning},
+  author = 	 {Mohammad Gheshlaghi Azar and Ian Osband and R{\'e}mi Munos},
+  booktitle = 	 {Proceedings of the 34th International Conference on Machine Learning},
+  pages = 	 {263--272},
+  year = 	 {2017},
+  editor = 	 {Doina Precup and Yee Whye Teh},
+  volume = 	 {70},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {International Convention Centre, Sydney, Australia},
+  month = 	 Aug,
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v70/azar17a/azar17a.pdf},
+  url = 	 {http://proceedings.mlr.press/v70/azar17a.html},
+  abstract = 	 {We consider the problem of provably optimal exploration in reinforcement learning for finite horizon MDPs. We show that an optimistic modification to value iteration achieves a regret bound of $\tilde {O}( \sqrt{HSAT} + H^2S^2A+H\sqrt{T})$ where $H$ is the time horizon, $S$ the number of states, $A$ the number of actions and $T$ the number of time-steps. This result improves over the best previous known bound $\tilde {O}(HS \sqrt{AT})$ achieved by the UCRL2 algorithm. The key significance of our new results is that when $T\geq H^3S^3A$ and $SA\geq H$, it leads to a regret of $\tilde{O}(\sqrt{HSAT})$ that matches the established lower bound of $\Omega(\sqrt{HSAT})$ up to a logarithmic factor. Our analysis contain two key insights. We use careful application of concentration inequalities to the optimal value function as a whole, rather than to the transitions probabilities (to improve scaling in $S$), and we define Bernstein-based “exploration bonuses” that use the empirical variance of the estimated values at the next states (to improve scaling in $H$).}
+}
+
+@incollection{Auer2009,
+	title = {Near-optimal Regret Bounds for Reinforcement Learning},
+	author = {Peter Auer and Thomas Jaksch and Ortner, Ronald},
+	booktitle = {Advances in Neural Information Processing Systems 21},
+	editor = {D. Koller and D. Schuurmans and Y. Bengio and L. Bottou},
+	pages = {89--96},
+	year = {2009},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/3401-near-optimal-regret-bounds-for-reinforcement-learning.pdf},
+	address = {Vancouver, B.C., Canada},
+	month=dec
+}
+
+@incollection{Guyon2017,
+	title = {\#Exploration: A Study of Count-Based Exploration for Deep Reinforcement Learning},
+	author = {Tang, Haoran and Houthooft, Rein and Foote, Davis and Stooke, Adam and Xi Chen, OpenAI and Duan, Yan and Schulman, John and DeTurck, Filip and Abbeel, Pieter},
+	booktitle = {Advances in Neural Information Processing Systems 30},
+	editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+	pages = {2753--2762},
+	year = {2017},
+	publisher = {Curran Associates, Inc.},
+	url = {http://papers.nips.cc/paper/6868-exploration-a-study-of-count-based-exploration-for-deep-reinforcement-learning.pdf},
+	month=dec,
+	address={Long Beach, CA, USA}
+}
+
+@InProceedings{Jin2020,
+	  title = 	 {Provably efficient reinforcement learning with linear function approximation},
+	  author = 	 {Jin, Chi and Yang, Zhuoran and Wang, Zhaoran and Jordan, Michael I},
+	  booktitle = 	 {Proceedings of Thirty Third Conference on Learning Theory},
+	  pages = 	 {2137--2143},
+	  year = 	 {2020},
+	  editor = 	 {Abernethy, Jacob and Agarwal, Shivani},
+	  volume = 	 {125},
+	  series = 	 {Proceedings of Machine Learning Research},
+	  address = 	 {Online},
+	  month = 	 Jul,
+	  publisher = 	 {PMLR},
+	  pdf = 	 {http://proceedings.mlr.press/v125/jin20a/jin20a.pdf},
+	  url = 	 {http://proceedings.mlr.press/v125/jin20a.html},
+	  abstract = 	 { Modern Reinforcement Learning (RL) is commonly applied to practical problems with an enormous number of states, where \emph{function approximation} must be deployed to approximate either the value function or the policy. The introduction of function approximation raises a fundamental set of challenges involving computational and statistical efficiency, especially given the need to manage the exploration/exploitation tradeoff. As a result, a core RL question remains open: how can we design provably efficient RL algorithms that incorporate function approximation? This question persists even in a basic setting with linear dynamics and linear rewards, for which only linear function approximation is needed. This paper presents the first provable RL algorithm with both polynomial runtime and polynomial sample complexity in this linear setting, without requiring a “simulator” or additional assumptions. Concretely, we prove that an optimistic modification of Least-Squares Value Iteration (LSVI)—a classical algorithm frequently studied in the linear setting—achieves $\tilde{\mathcal{O}}(\sqrt{d^3H^3T})$ regret, where $d$ is the ambient dimension of feature space, $H$ is the length of each episode, and $T$ is the total number of steps. Importantly, such regret is independent of the number of states and actions. }
+}
