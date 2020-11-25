@@ -9,5 +9,5 @@ I recommend using [latexmk](https://www.ctan.org/pkg/latexmk/) to build this pro
 
 ```latexmk -pdf PhD_thesis__Edouard_Leurent.tex```
 
-LaTeX editors such as [Texstudio](https://www.texstudio.org/) can be configured to latexmk as the default compiler.
-It is also used in the [latex-action](https://github.com/xu-cheng/latex-action) of the automatic [build workflow](/.github/workflows/main.yml).
+It is used _e.g._ in the [latex-action](https://github.com/xu-cheng/latex-action) of the automatic [build workflow](/.github/workflows/main.yml).
+LaTeX editors such as [Texstudio](https://www.texstudio.org/) can be configured to use latexmk as the default compiler.
