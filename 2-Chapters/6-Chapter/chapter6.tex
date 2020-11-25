@@ -638,7 +638,7 @@ In this section, we compare two data structures for planning in an MDP: tree and
 	\includegraphics[trim={1.8cm 2.2cm 1.9cm 2.7cm}, clip,width=0.46\linewidth]{img/gbop/tree_1}
 	\hfill
 	\includegraphics[trim={1.8cm 1.2cm 1.9cm 0.8cm}, clip,width=0.46\linewidth]{img/gbop/graph_1}
-	\caption{Illustration of the tree $\Tau_n$ (left) and the graph $\cG_n$ (right) built from the same observed transitions. The root of the tree corresponds to the central graph node. In the tree, two nodes with the same colour and shape (not black round) lead to the same state.}
+	\caption{Black arrows depict how the Bellman backup operators $B_n$ (left) and $\cB_n$ (right) propagate value estimates from successor nodes to their parents. Information travels freely in a graph, but only upwards in a tree.}
 	\label{fig:structures}
 \end{figure}
 
@@ -1104,7 +1104,7 @@ for all $s\in\inte{\cG_n}$, where the maximum and minimum over these Kullback-Le
 
 \paragraph{Structure of the planning algorithm}
 
-In the deterministic setting, once a transition has been observed, it is known with certainty and does not need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting, the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt an episodic standpoint where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[\eg][]{Kearns02SS,Kocsis2006,Bubeck2010,Feldman14BRUE,Leurent2020practical,Jonsson2020planning}. We also follow this scheme in our proposed \Cref{alg:gbop}.
+In the deterministic setting, once a transition has been observed, it is known with certainty and does not need to be sampled ever again, which is why only external nodes $\ext{\cG_n}$ are sampled in \GBOPD. Conversely, in the stochastic setting, the expected reward and transition probabilities must be estimated from samples, which implies that internal nodes $\inte{\cG_n}$ must be sampled as well. Then, it is common to adopt an episodic standpoint where we sample trajectories of a fixed horizon $H$, tuned depending on the budget $n$. This is the case in  \citep[\eg][]{Kearns02SS,Kocsis2006,Bubeck2010,Feldman14BRUE,Leurent2020practical,Jonsson2020planning}. We also follow this scheme in our proposed \Cref{alg:gbop} algorithm.
 
 \begin{algorithm}[ht]
 	\caption{\emph{Graph-Based Optimistic Planning} (\GBOP) algorithm.}

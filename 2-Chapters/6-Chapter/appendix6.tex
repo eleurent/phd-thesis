@@ -640,9 +640,26 @@ It is difficult to control more explicitly the gap between $\hlgb{\kappa_\infty}
 	As $\varepsilon$ decreases, $k(\epsilon,\gamma)$ increases, which means by \Cref{lem:properties-b-tree} that $(\hat{\cL}_n, \hat{\cU}_n)$ get tighter and $\hlob{\hat{\kappa}_\infty}$ shrinks by \Cref{lem:shrink}. It reaches its minimum $\hlgb{\kappa_\infty}$ when $\varepsilon=0$.
 \end{proof}
 
-Thus, we observe that there is a \emph{tradeoff} between the time complexity $k(\varepsilon)$ and the sample complexity $\hlob{\hat{\kappa}_\infty}$: decreasing one increases the other.
+Thus, we observe that there is a \emph{tradeoff} between the time complexity $k(\varepsilon)$ and the sample complexity $\hlob{\hat{\kappa}_\infty}$: decreasing one increases the other. We illustrate this trade-off empirically in \Cref{fig:approximation}.
 
 Note that \OPD uses $d_n$ iterations of $B_n$, which corresponds to a tuning of $\varepsilon$ with $n$: $\varepsilon_n = \frac{\gamma^{d_n}}{1-\gamma} = \cO(n^{-\frac{\log 1/\gamma}{\log \kappa}})$. 
+
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/updates_GBOP-D_1e-2}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/updates_GBOP-D_1e0}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/updates_GBOP-D_1e1}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/updates_GBOP-D_1e2}\\
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/occupations_GBOP-D_1e-2}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/occupations_GBOP-D_1e0}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/occupations_GBOP-D_1e1}
+		\includegraphics[trim={1.8cm 0.4cm 1.8cm 0.4cm}, clip, width=0.24\linewidth]{img/gbop/epsilon/occupations_GBOP-D_1e2}
+	\end{center}
+	\caption{\textbf{Top row}: Map showing the number of updates triggered by $\cB$ at each expanded state for various values of $\varepsilon$. \textbf{Bottom row}: Map showing the corresponding state occupations. The rightmost column corresponds to $\epsilon \geq V_{\max} = 20$, \emph{i.e.} every approximation stops after a single iteration.}
+	\label{fig:approximation}
+\end{figure}
 
 
 \paragraph{Sampling rule}
