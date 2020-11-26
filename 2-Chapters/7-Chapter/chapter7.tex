@@ -156,9 +156,9 @@ In \textbf{\Cref{sec:robust-stabilisation}}, we introduce a Dual-\gls{MPC} schem
 Yet, many tasks cannot be framed as stabilisation problems (\eg obstacle avoidance). To achieve more flexible goals, these tasks can be better formulated with the \emph{minimax control objective} \citep{Bental2009,Bertsimas2011,Gorissen2015}, that we consider as a second application. This objective aims to maximise the worst-case return $V^r$ with respect to the confidence region $\confidenceset$ and admissible perturbations
 \begin{equation}
 \label{eq:minimax-obj}
-\hlg{\sup_{\bu\in{(\Real^q)}^\Natural}} \underbrace{\hlr{\inf_{\substack{\theta \in \confidenceset \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right]}_{{V^r(\bu)}},
+\hlg{\sup_{\bu\in{(\Real^q)}^\Natural}} \underbrace{\hlr{\inf_{\substack{\theta \in \confidenceset \\ \omega\in[\underline{\omega},\overline{\omega}]^\Natural}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\omega))\right]}_{{V^r(\bu)}},
 \end{equation}
-where $x_n(\bu,\bom)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\bom$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$, and $\R$ is an \emph{arbitrary} bounded reward function. This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[\eg][]{Kumar2013}.
+where $x_n(\bu,\omega)$ is the state reached at step $n$ under controls $\bu$ and perturbations $\omega$ within the given admissible bounds $[\underline\omega(t),\overline\omega(t)]$, and $\R$ is an \emph{arbitrary} bounded reward function. This choice of rich reward space is crucial to have sufficient flexibility to model non-convex and non-smooth functions that naturally arise in many practical problems involving combinatorial optimisation, branching decisions, etc., while quadratic costs are mostly suited for tracking a fixed reference trajectory \citep[\eg][]{Kumar2013}.
 
 Unfortunately, minimax problems such as $\eqref{eq:minimax-obj}$ are already notoriously hard when the reward $\R$ has a simple form. Without a restriction on the shape of functions $\R$, solving the optimal -- not to mention the robust -- control objective is intractable and we cannot hope to derive an explicit solution. Thus, in \textbf{\Cref{sec:control}} we propose a robust \gls{MPC} algorithm for solving \eqref{eq:minimax-obj} numerically. Facing a sequential decision problem with continuous states, we turn to the literature of tree-based planning algorithms studied in \Cref{chapter:6}.
 However, these techniques are designed for a single known generative model rather than a confidence region for the system dynamics. We adapt them to the robust objective \eqref{eq:minimax-obj} by approximating it with a tractable surrogate $\hat{V}^r$ that exploits the interval predictions $[\ux(t), \ox(t)]$ to define a pessimistic reward $\underline{R}$. In our main result, we show that the best surrogate performance achieved during planning is guaranteed to be attained on the true system, and provide an upper bound for the approximation gap and simple regret of our framework in \Cref{thm:minimax-regret-bound}. This is our fourth contribution and the first result of this kind for minimax control with generic costs to the best of our knowledge. 
@@ -227,48 +227,22 @@ Substituting $y_n$ into \eqref{eq:vector_rls} yields the regression error
 \end{align}
 
 
-Depending on the assumption we have over the noise $\eta_n$, we can bound this error in different ways.
+To bound this error, we need the noise $\eta_n$ to concentrate. We assume that
 
-
-\subsection{Bounded noise}
-
-\begin{assumption}[Bounded noise]
-\label{assumpt:bounded-noise}
-\begin{leftbar}[assumptionbar]
-The noise $\eta(t)$ is bounded in $\|\cdot\|_\infty$.
-	
-More precisely, we assume that there exists known signals $\underline{\omega},\overline{\omega}\in\cL_{\infty}^{r}$ such that $\underline{\omega}(t)\leq \omega(t)\leq\overline{\omega}(t)$ for all $t\geq0$.
-\end{leftbar}
+\begin{assumption}[Bounded disturbance]
+	\label{assumpt:bounded-noise}
+	At each time $t\geq0$, the disturbance $\omega(t)$ is enclosed by \emph{known} signals $\underline{\omega}(t) \leq \omega(t) \leq \overline{\omega}(t)$, whose amplitude verifies $\sum_{n=0}^\infty \gamma^n C_\omega(t_n) < \infty$, where $$C_\omega(t) \eqdef \sup_{\tau\in[0,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2.$$
 \end{assumption}
 
-This is a deterministic assumption, then by Hölder inequality a confidence region $\cC_{[N],0}$ can be derived based on a $L_1$-ball estimate of $\theta$ at time $N$, \ie a polytope with $2d$ vertices
-\begin{equation}
-\label{eq:bounded-noise-polytope}
-\|\theta_{N,\lambda}\! -\! \theta\|_1\! \leq \! \|G_{N, \lambda}^{-1}\!\sum_{n=1}^N \!\Phi_n^\transp\! \Sigma_p^{-1}\!\|_1\|\eta\|_\infty\! +\!\lambda\|G_{N, \lambda}^{-1}\!\|_1S
-\end{equation}
-
-\subsection{Sub-Gaussian noise}
-
-There may be cases where \Cref{assumpt:bounded-noise} does not hold. For instance, when the noise $\eta$ is Gaussian, then $\|\eta\|_\infty=+\infty$ which makes \eqref{eq:bounded-noise-polytope} uninformative. Then, another probabilistic assumption can be made.
-
-\begin{assumption}[Sub-Gaussian Noise]
+\begin{assumption}[Sub-Gaussian observations]
 	\label{assumpt:gaussian-noise}
-	\begin{leftbar}[assumptionbar]
-	At each time $t\geq0$ the noise $\eta(t)$ is an independent sub-Gaussian noise with covariance proxy $\Sigma_p \in \Real^{p\times p}$:
-	\begin{equation*}
-	\forall u\in\Real^p,\, \expectedvalue \left[ \exp{\left( u^\transp \eta(t)\right)}\right] \leq \exp{\left( \frac{1}{2} u^\transp \Sigma_p u\right)}.
-	\end{equation*}
-	\end{leftbar}
+	At each time $t\geq0$, the combined noise $\eta(t)$ is an independent sub-Gaussian noise with covariance proxy $\Sigma_p \in \Real^{p\times p}$:
+	$$
+	\forall u\in\Real^p,\; \expectedvalue \left[ \exp{\left( u^\transp \eta(t)\right)}\right] \leq \exp{\left( \frac{1}{2} u^\transp \Sigma_p u\right)}.
+	$$
 \end{assumption}
-For instance, it is the case when $\nu$ and $\omega$ are Gaussian noises with covariance matrices $\Sigma_r$ and $\Sigma_s$, with $\Sigma_p \eqdef C\Sigma_r C^\transp + D\Sigma_s D^\transp$. Note that \Cref{assumpt:bounded-noise} implies that $\eta$ is sub-Gaussian with covariance proxy $\Sigma_p=\|\eta\|_\infty I_p$.
 
-%\begin{remark}
-%	\begin{leftbar}[remarkbar]
-%		The robust objective \eqref{eq:minimax-obj} involves bounds $\underline{\omega}(t)\leq \omega(t) \leq \overline{\omega}(t)$ over the possible perturbations we want to protect against. In the unbounded sub-Gaussian noise setting of \Cref{assumpt:gaussian-noise}, we can use the same formulation by deriving local high-confidence bounds that each holds with confidence $\confidence_n$. By choosing $\confidence_n = \frac{\confidence}{n(n+1)}$, the event $\{\forall n, \underline{\omega}(t_n) \leq \omega(t_n) \leq \overline{\omega}(t_n)\}$ holds with probability $1-\confidence$.
-%	\end{leftbar}
-%\end{remark}
-
-Under this assumption, we can derive a confidence ellipsoid for $\params$.
+Under these assumptions, we can derive a confidence ellipsoid for $\params$.
 
 \begin{theorem}[Confidence ellipsoid, a matricial version of \citealp{Abbasi2011}]
 	\label{thm:confidence_ellipsoid}
@@ -454,16 +428,18 @@ Therefore, it is assumed that the matrix $\structureddynamics$ for any $\theta\i
 To connect this assumption to the results obtained from model estimation in previous section, we can enclose the confidence ellipsoid $\confidenceset$ on $\theta$ obtained from $\eqref{eq:confidence-ellipsoid}$ at time $t=t_N$ into a polytope $\cP$ on $\structureddynamics$. For simplicity, we present here a simple but coarse strategy: bound the ellipsoid by its enclosing sphere, and then the sphere by its enclosing hypercube. We obtain
 \begin{align}
 \label{eq:polytope}
-&\cP = \left\{ A_{0}+\sum_{i=1}^{M}\lambda_{i}\Delta A_{i}: \lambda\geq 0,  \sum_{i=1}^{M}\lambda_{i}=1\right\},
+&\cP = \left\{ A_{N}+\sum_{i=1}^{M}\lambda_{i}\Delta A_{N,i}: \lambda\geq 0,  \sum_{i=1}^{M}\lambda_{i}=1\right\},
 \end{align}
 where 
 \begin{alignat*}{4}
-&A_{0}&&=A + \theta_{N,\lambda}^\transp\phi, & \hspace{4em}
+&A_{N}&&=A + \theta_{N,\lambda}^\transp\phi, & \hspace{4em}
 &M &&= 2^d\\
-&\Delta A_{i}&&= \sqrt{\frac{\beta_N(\confidence)}{\lambda_{\max}(G_{N,\lambda})}}{h_i}^\top\phi,& 
+&\Delta A_{N,i}&&= \sqrt{\frac{\beta_N(\confidence)}{\lambda_{\max}(G_{N,\lambda})}}{h_i}^\top\phi,& 
 &h_i&&\in\{-1,1\}^d.
 \end{alignat*}
 Another strategy presented in \Cref{sec:tight-polytope} produces a much tighter polytope, at the price of an increased computational cost required by the diagonalisation of $G_{N,\lambda}$.
+
+In the rest of this section, we will temporarily consider that $N$ is fixed and consider the interval prediction problem for $t\geq t_N$. For simplicity of notations, we will keep denoting $A_N$ and $\Delta A_{N,i}$ as $A_0$ and $\delta A_i$, and $t_N = 0$.
 
 For the given centre $A_0$ to admit useful properties of nonnegative systems, we will further require that it is Metzler. More precisely, according to the results of \Cref{lem:l2,lem:l3}, this can be imposed by applying a properly designed similarity transformation, which maps a matrix (interval of matrices) to a Metzler one. Design of such a transformation is not considered in this chapter, and we will just suppose the following:
 \begin{assumption}
@@ -1306,7 +1282,7 @@ As we discussed in \Cref{sec:robust-motivation}, the ability to stabilise a syst
 
 Therefore, in this section and as a second application of the tools introduced in \Cref{sec:estimation,sec:prediction}, we tackle the arguably more expressive objective of minimax control \eqref{eq:minimax-obj} of an arbitrary bounded reward function $\reward:\Real^p\to[0, 1]$, recalled here:
 \begin{equation}
-\hlg{\sup_{bu\in{(\Real^q)}^\Natural}} \hlr{\inf_{\substack{\theta \in \confidenceset \\ \bom\in[\underline{\bom},\overline{\bom}]^\Natural}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\bom))\right]. \tag{\ref{eq:minimax-obj}}
+\hlg{\sup_{bu\in{(\Real^q)}^\Natural}} \hlr{\inf_{\substack{\theta \in \confidenceset \\ \omega\in[\underline{\omega},\overline{\omega}]^\Real}}} \left[\sum_{n=N+1}^\infty \gamma^n R(x_n(\bu,\omega))\right]. \tag{\ref{eq:minimax-obj}}
 \end{equation}
 
 \paragraph{Evaluation} In order to evaluate this robust objective $V^r$, we approximate it thanks to the interval prediction $[\ux(t), \ox(t)]$ of \Cref{sec:prediction}.
@@ -1325,19 +1301,20 @@ Therefore, in this section and as a second application of the tools introduced i
 
 This amounts to changing the reward function, except that the worst case is assessed over the whole past trajectory, which makes this pessimistic reward $\pessimisticreward_n$ \emph{not Markovian}.
 
-\begin{proposition}[Lower bound]
+\begin{theorem}[Lower bound]
 	\label{prop:lower-bound}
-	\begin{leftbar}[propositionbar]
+	\begin{leftbar}[theorembar]
 	The surrogate objective  \eqref{eq:surrogate_objective} is a lower bound of the true objective  \eqref{eq:minimax-obj}: 
 	\begin{equation*}
 	\hat{V}^r(\bu) \leq V^r(\bu)
 	\end{equation*}
 	\end{leftbar}
-\end{proposition}
-A direct consequence is that since all our approximations are conservative, if we manage to find a control sequence such that no \emph{\enquote{bad event}} (\eg a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system.
+\end{theorem}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-lower-bound}.
 \end{proof}
+A direct consequence of \Cref{prop:lower-bound} is that since all our approximations are conservative, if we manage to find a control sequence such that no \emph{\enquote{bad event}} (\eg a collision) happens according to the surrogate objective $\hat{V}^r$, then we are guaranteed that they will not happen either when the controls are executed on the true system.
+
 
 \paragraph{Planning}
 
@@ -1363,7 +1340,7 @@ To optimise $\hat{V}^r$ \eqref{eq:surrogate_objective}, we cannot use Dynamic Pr
 Though there exist works addressing continuous action spaces \citep{Busoniu2018,Weinstein2012}, we resort to a first approximation and discretise the continuous decision space $\Real^q$ by adopting a hierarchical control architecture: at each time, the agent can select a high-level \emph{action} $a$ from a finite space $\cA$. Each action $a\in\cA$ corresponds to the selection of a low-level controller $\pi_a$, that we take affine: $u(t) = \pi_a(x(t)) \eqdef -K_a x(t) + u_a.$ For instance, a tracking a subgoal $x_g$ can be achieved with $\pi_g = K(x_g - x)$. This discretisation induces a suboptimality, but it can be mitigated by diversifying the controller basis.
 The robust objective \eqref{eq:minimax-obj} becomes
 \[\sup_{\ba\in{\cA}^\Natural} V^r(\ba),\]
-where $x_n(\ba, \bom)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
+where $x_n(\ba, \omega)$ stems from \eqref{eq:dynamics} with $u_n = \pi_{a_n}(x_n)$.
 
 This enables us to consider the \OPD algorithm \citep{Hren2008} tailored for the case when the relationship between actions and rewards is deterministic. Indeed, the stochasticity of perturbations and measurements is encased in $\hat{V}^r$: given the observations up to time $N$, both the predictor dynamics \eqref{eq:interval-predictor} and the pessimistic rewards \eqref{eq:pessimistic-rewards} are deterministic.
 
@@ -1376,9 +1353,9 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 
 \Cref{alg:full} shows the full integration of the three procedures of estimation, prediction and control. 
 
-\begin{theorem}[Planning performance of \citealp{Hren2008}]
+\begin{lemma}[Planning performance of \citealp{Hren2008}]
 	\label{theorem:opd-regret}
-	\begin{leftbar}[theorembar]
+	\begin{leftbar}[lemmabar]
 	The simple regret of the \OPD algorithm \eqref{eq:opd} applied to the surrogate objective \eqref{eq:surrogate_objective} after $K$ planning iterations is
 	\begin{align*}
 	\text{if } \kappa>1,\quad& 
@@ -1391,7 +1368,7 @@ where $\cL_k$ is the set of leaves of $\cT_k$, $h(a)$ is the length of the seque
 	\kappa = \limsup_{h\rightarrow\infty} \left|\left\{a\in A^h: \hat{V}^r(a)\geq \hat{V}^r(a^{\star}) - \frac{\discount^{h+1}}{1-\discount}\right\}\right|^{1/h}.
 	\]
 	\end{leftbar}
-\end{theorem}
+\end{lemma}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-regret-opd}.
 \end{proof}
@@ -1404,28 +1381,26 @@ Hence, by using enough computational budget $K$ for planning we can get as close
 	Under two conditions:
 	\begin{enumerate}
 		\item a Lipschitz regularity assumption for the reward function $R$;
-		\item a stability condition: there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
-		$$\begin{bmatrix}
-		A_0^\transp P + P A_0^\transp + Q_0 & P|D|  \\
+		\item a stability condition: there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$, and $N_0\in\Natural$ such that
+		$$\forall N>N_0,\quad \begin{bmatrix}
+		A_N^\transp P + P A_N + Q_0 & P|D|  \\
 		|D|^\transp P & -\rho I_r \\
 		\end{bmatrix}< 0;$$
 	\end{enumerate}
 	we can bound the suboptimality of \Cref{alg:full} with planning budget $K$ as:
-	\\[2cm] %FIXME only for the page break
 	\begin{equation*}
-	V(a^\star) - \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} - \hlb{\underbrace{\cO\left(\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}\right)}_{\text{estimation error}}} - \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
-	\leq \hat{V}^r(a_K) \leq {V}^r(a^\star)
+	V(a^\star) - \hat{V}^r(a_K) \leq \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
 	\end{equation*}
-	with probability at least $1-\confidence$, where $\hlr{\Delta_\omega}$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous perturbations $\omega(t)$.
+	with probability at least $1-\confidence$, where $V(a)$ is the optimal expected return when executing an action $a\in\cA$, $a_\star$ is an optimal action, and $\hlr{\Delta_\omega}$ is a constant which corresponds to an irreducible suboptimality suffered from being robust to instantaneous disturbances $\omega(t)$.
 	\end{leftbar}
 \end{theorem}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-minimax-regret-bound}.
 \end{proof}
 
-This bound contains an input-dependent estimation error term, which can be further bounded under an additional assumption that the features are sufficiently excited. 
+It is difficult to check the validity of the stability condition 2. since it applies to matrices $A_N$ produced by the algorithm rather than to the system parameters. A stronger but easier to check condition is that the polytope \eqref{eq:polytope} at some iteration becomes included in a set where this property is uniformly satisfied. For instance, if the features are sufficiently excited, the estimation converges to a neighbourhood of the true dynamics $A(\theta)$. This also allows to further bound the input-dependent \hlb{estimation error} term.
 
-\begin{corollary}[Persistent excitation]
+\begin{corollary}[Asymptotic near-optimality]
 	\label{cor:pe}
 	\begin{leftbar}[corollarybar]
 	Under an additional persistent excitation (PE) assumption
@@ -1433,10 +1408,14 @@ This bound contains an input-dependent estimation error term, which can be furth
 	\label{eq:pe}
 	\exists \underline{\phi},\overline{\phi}>0: \forall n\geq n_0,\quad \underline{\phi}^2 \leq \lambda_{\min}(\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}) \leq \overline{\phi}^2,
 	\end{align}
-	the result of \Cref{thm:minimax-regret-bound} takes the more explicit form:
+	the stability condition 2. of \Cref{thm:minimax-regret-bound} can be relaxed to apply to the true system: there exist $P,Q_0,\rho$ such that
+	$$\begin{bmatrix}
+	A(\theta)^\transp P + P A(\theta) + Q_0 & P|D|  \\
+	|D|^\transp P & -\rho I_r \\
+	\end{bmatrix}< 0;$$
+	and the regret bound in \Cref{thm:minimax-regret-bound} takes the more explicit form:
 	\begin{equation*}
-	V(a^\star) - \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} - \hlb{\underbrace{\cO\left(\frac{\log\left(N^{d/2}/\delta\right)}{N}\right)}_{\text{estimation error}}} - \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
-	\leq \hat{V}^r(a_K) \leq {V}^r(a^\star)
+	V(a_\star) - \hat{V}^r(a_K) \leq \hlr{\underbrace{\Delta_\omega}_{\substack{\text{robustness to}\\ \text{perturbations}}}} + \hlb{\underbrace{\cO\left(\frac{\log\left(N^{d/2}/\delta\right)}{N}\right)}_{\text{estimation error}}} + \hlg{\underbrace{\cO\left(K^{-\frac{\log 1/\gamma}{\log \kappa}}\right)}_{\text{planning error}}} 
 	\end{equation*}
 	which ensures asymptotic near-optimality when $N\to\infty$ and $K\to\infty$.
 	\end{leftbar}
@@ -1477,7 +1456,7 @@ We want to adapt our planning algorithm in order to balance these concurrent hyp
 where $R_n^m$ is the reward obtained by following the action sequence $a$ up to step $n$ under the dynamics $f^m$.
 This objective could be optimised in the same way as in \Cref{sec:control}, but this would result in a coarse and lossy approximation. Instead, we exploit the finite uncertainty structure of \Cref{assumpt:multi-model-ambiguity} to asymptotically recover the true $V^r$ by modifying the \OPD algorithm in the following way:
 
-\begin{definition}[Robust sequence upper bounds]
+\begin{definition}[Robust UCB]
 	\begin{leftbar}[defnbar]
 	We replace the upper-bound \eqref{eq:opd} on sequence values in \OPD by
 	\begin{equation}
@@ -1515,12 +1494,12 @@ We analyse the sample complexity of the corresponding robust planning algorithm.
 	\label{fig:drop}
 \end{figure}
 
-\begin{theorem}[Robust planning performance]
+\begin{proposition}[Robust planning performance]
 	\label{theorem:drop-regret}
 	\begin{leftbar}[theorembar]
 	The robust version of \OPD \eqref{eq:robust-b-values} enjoys the same regret bound as \OPD in \Cref{theorem:opd-regret}, with respect to the multi-model objective \eqref{eq:robust-objective-discrete}.
 	\end{leftbar}
-\end{theorem}
+\end{proposition}
 \begin{proof}
 	We provide a proof in \Cref{sec:proof-drop-regret}.
 \end{proof}
@@ -1561,7 +1540,7 @@ We first consider a simple illustrative example, shown in \Cref{fig:prediction}:
 \end{bmatrix}
 \end{equation*}
 
-Note that the \Cref{assumpt:metzler} for $A_0$ is always verified. The reward is non-smooth and encodes the task of navigating to reach a goal state $x_g$ while avoiding collisions with obstacles: $\R(x) = \delta(x)/(1 + \|x - x_g\|_2)$  where $\delta(x)$ is $0$ whenever $x$ collides with an obstacle, $1$ otherwise. The actions $\cA$ are constant controls in the up, down, left and right directions. The environment is illustrated in \Cref{fig:obstacle-env}.
+Note that the \Cref{assumpt:metzler} for $A_N$ is always verified. The reward is non-smooth and encodes the task of navigating to reach a goal state $x_g$ while avoiding collisions with obstacles: $\R(x) = \delta(x)/(1 + \|x - x_g\|_2)$  where $\delta(x)$ is $0$ whenever $x$ collides with an obstacle, $1$ otherwise. The actions $\cA$ are constant controls in the up, down, left and right directions. The environment is illustrated in \Cref{fig:obstacle-env}.
 
 \begin{figure}[ht]
 	\centering
@@ -1570,30 +1549,34 @@ Note that the \Cref{assumpt:metzler} for $A_0$ is always verified. The reward is
 	\label{fig:obstacle-env}
 \end{figure}
 
-We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} its performances to that of the nominal agent, \ie the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{[N],\lambda}$. We observe that though the robust agent performs worse than the nominal agent on average, it manages to ensure safety and attains a better worst-case performance, as intended. We also study the evolution of the simple regret $V(x_n) - J_n(x_n)$ with respect to the number of samples $N$, where $J_n(x_n) = \sum_{i > n} \discount^i R_i$ is the empirical return at state $x_n$ in a trajectory $x_0, R_0, x_1, R_1, \dots$, while $V(x_n)$ is the optimal value that the agent would get by acting optimally from $x_n$ with knowledge of the dynamics. The mean regret is shown in \Cref{fig:regret}, along with its \SI{95}{\percent} confidence interval. We see that \Cref{alg:full} has a regret $\hat{V}^r - V$ decreasing at least polynomially with $N$, as expected from \Cref{thm:minimax-regret-bound}. This shows that the agent gets more aggressive when it is more confident, as desired, while ensuring safety at all times. In contrast, the nominal agent has an even smaller regret but collided with obstacles in \SI{4}{\percent} of simulations\footnote{A video is available at \href{https://youtu.be/OY0yN3CuHFs}{https://youtu.be/OY0yN3CuHFs}. It compares trajectories of the oracle planner, nominal planner, and \Cref{alg:full}. The oracle planner has access to the true dynamics and follows aggressive trajectories that nearly saturate the collision constraints. The nominal planner trusts the estimated dynamics, which leads to collisions. In contrast, the \Cref{alg:full} produces more conservative trajectories. We show the confidence ellipsoid over $\theta = (\theta_x,\theta_y)$ in the right panel.}.
+For the reasons mentioned above, no robust baseline applies to our setting. We compare \Cref{alg:full} to the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{N,\lambda}$, and thus enjoys the same prior knowledge of dynamics structure and reward. This highlights the benefits of the robust formulation solely rather than stemming from algorithm design.
+We show in \Cref{tab:obstacle} the results of 100 simulations of a single episode: the robust agent performs worse than the nominal agent on average, but manages to ensure safety while the nominal agent collides with obstacles in \SI{4}{\percent} of simulations\footnote{A video is available at \href{https://youtu.be/OY0yN3CuHFs}{https://youtu.be/OY0yN3CuHFs}}. We also compare to a standard model-free approach, DQN, which does not benefit from the prior knowledge on the system dynamics, and is instead trained over multiple episodes. The reported performance is that of the final policy obtained after training for 3000 episodes, during which $897\pm64$ collisions occurred ($29.9\pm2.1$\%).
+We study the evolution of the suboptimality $V(x_N) - \sum_{n>N}\gamma^{n-N}R(x_n)$ with respect to the number of samples $N$, by comparing the empirical returns from a state $x_N$ to the value $V(x_N)$ that the agent would get by acting optimally from $x_N$ with knowledge of the dynamics. Although the assumptions of \Cref{thm:minimax-regret-bound} are not satisfied (e.g. non-smooth reward), the mean suboptimality of the robust agent, shown in \Cref{fig:regret}, still decreases polynomially with $N$: \Cref{alg:full} gets \emph{more efficient} as it is \emph{more confident} while \emph{ensuring safety} at all times. In comparison, the nominal agent enjoys a smaller suboptimality on average, but higher in the worst-case. 
 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/regret.pdf}
-	\caption{The mean regret along with its $95\%$ confidence interval with respect to $N$, for the robust and nominal agents.}
+	\caption{The mean (solid), $95\%$ confidence interval for the mean (shaded) and maximum (dashed) simple regret with respect to $N$.}
 	\label{fig:regret}
 \end{figure}
 
 \begin{table}[tbp]
-	\caption{Performances on the obstacle avoidance task}
+	\caption{Performances on the obstacle task. We give the frequency of collision, minimum and average return achieved on a single episode, repeated with 100 random seeds. The robust agent performs worse than the nominal agent on average, but manages to ensure safety and attains a better worst-case performance.}
 	\label{tab:obstacle}
 	\centering
 	\begin{tabular}{lccc}
 		\toprule
-		Agent &
+		Performance &
 		failures &
-		min return &
-		mean return $\pm$ std  \\
+		min &
+		avg $\pm$ std  \\
 		\midrule
 		Oracle & 0\% & {11.6} & {$14.2 \pm 1.3$} \\
 		\midrule
 		{Nominal} & {4\%} & {2.8} & \textbf{$\mathbf{13.8} \pm 2.0$} \\
 		\Cref{alg:full} & \textbf{0\%} & \textbf{10.4} & {$13.0 \pm 1.5$} \\
+		\midrule
+		DQN (trained) & 6\% & 1.7 & $12.3\pm2.5$ \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -1601,7 +1584,8 @@ We run \Cref{alg:full} for 100 simulations, and compare in \Cref{tab:obstacle} i
 \paragraph{Behavioural planning for an autonomous vehicle}
 We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $x_0\in\Real^4$ is approaching an intersection among ${N_v}$ other vehicles with states $x_i\in\Real^4$, resulting in a joint traffic state $x = [x_0, \dots,x_{N_v}]^\top\in\Real^{4{N_v}+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5{N_v}}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16{N_v}^2}$.
 %This allows to scale to larger systems: in our experiments, we used a state space of dimension $44$ ($V=10$) where \eg \citep{Dean2018,abeille18a} reported numerical experiments with states of dimensions 3 and 4, respectively.
-The system dynamics $f$, which describes the couplings and interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. We compare \Cref{alg:full} to a nominal agent planning with the estimated parameter $\theta_{[N],\lambda}$, with two different modelling assumptions: we assume that Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks a model with minimal prediction error. Their performances are compared in \Cref{tab:driving}. Again, the robust approach is less efficient on average than planning with a nominal model, but it does better in terms of worst-case performance and manages to avoid collisions, contrary to the nominal baselines that suffer from model bias \footnote{A video is available at \href{https://youtu.be/0z65DCE1XWM}{https://youtu.be/0z65DCE1XWM}, comparing oracle and robust planners. We show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles.}.
+The system dynamics $f$, which describes the interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. In \Cref{tab:driving}, we compare \Cref{alg:full} to a nominal agent planning with two different modelling assumptions: Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks the model with minimal prediction error. We show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles\footnote{A video is available at \href{https://youtu.be/0z65DCE1XWM}{https://youtu.be/0z65DCE1XWM}}. Again we also compare to a DQN baseline trained over 3000 episodes, causing $1058\pm113$ collisions while training ($35\pm4\%$). As before, the robust agent has a higher worst-case performance and avoids collisions at all times, at the price of a decreased average performance.
+
 
 \begin{figure}[t]
 	\centering
@@ -1610,21 +1594,23 @@ The system dynamics $f$, which describes the couplings and interactions between 
 \end{figure}
 
 \begin{table}[t]
-	\caption{Performances on the driving task}
+	\caption{Performances on the driving task. We make the same observations as in \Cref{tab:obstacle}.}
 	\label{tab:driving}
 	\centering
 	\begin{tabular}{lccc}
 		\toprule
-		Agent &
+		Performance &
 		failures &
-		min return &
-		mean return $\pm$ std  \\
+		min &
+		avg $\pm$ std  \\
 		\midrule
 		Oracle & 0\% & {6.9} & $7.4 \pm 0.5$ \\
 		\midrule
 		{Nominal 1} & 4\% & {5.2} & $\mathbf{7.3} \pm 1.5$ \\
-		{Nominal 2} & 33\% & {3.5} & $6.4 \pm 0.26$ \\
-		\Cref{alg:full} & \textbf{0\%} & \textbf{6.8} & $7.1 \pm 0.29$ \\
+		{Nominal 2} & 33\% & {3.5} & $6.4 \pm 0.3$ \\
+		\Cref{alg:full} & \textbf{0\%} & \textbf{6.8} & $7.1 \pm 0.3$ \\
+		\midrule
+		DQN (trained) & 3\% & 5.4 & $6.3\pm0.6$ \\
 		\bottomrule
 	\end{tabular}
 \end{table}

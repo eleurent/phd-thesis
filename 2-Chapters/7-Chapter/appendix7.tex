@@ -140,11 +140,11 @@
 	\subsection{Proof of \Cref{prop:lower-bound}}
 	\label{sec:proof-lower-bound}
 	\begin{proof}
-		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \pessimisticreward_n(\bu)$.
+		The predictor designed in \Cref{sec:prediction} verifies the inclusion property \eqref{eq:inclusion-property}. Thus, for sequence of controls $\bu$, any dynamics $\structureddynamics\in C_{[N],\confidence}$, and perturbations $\underline{\omega} \leq \omega \leq \overline{\omega}$, the corresponding state at time $t_n$ is bounded by $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \geq \min_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x) = \pessimisticreward_n(\bu)$.
 		
-		Thus, by taking the min over $C_{[N],\confidence}$ and $[\underline{\bom}, \overline{\bom}]$, we also have for any sequence of controls $\bu$,
+		Thus, by taking the min over $C_{[N],\confidence}$ and $[\underline{\omega}, \overline{\omega}]$, we also have for any sequence of controls $\bu$,
 		\begin{align*}
-		V^r(\bu) &= \min_{\substack{\structureddynamics\in C_{[N],\confidence}\\ \underline{\bom} \leq \bom \leq \overline{\bom}}} \sum_{n=N+1}^\infty \discount^n R(x_n)\\
+		V^r(\bu) &= \min_{\substack{\structureddynamics\in C_{[N],\confidence}\\ \underline{\omega} \leq \omega \leq \overline{\omega}}} \sum_{n=N+1}^\infty \discount^n R(x_n)\\
 		&\geq \sum_{n=N+1}^\infty \discount^n \pessimisticreward_n(\bu)\\
 		&= \hat{V}^r(\bu)
 		\end{align*}
@@ -156,25 +156,25 @@
 	\begin{lemma}
 	\label{lem:dynamics-est-bound}
 	\begin{leftbar}[lemmabar]
-		\[\|\structureddynamics - A(\theta_{[N],\lambda})\|_2 = \cO\left(\sqrt{ {\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}}\right) \]
+		\[\|A(\theta) - A(\theta_{N,\lambda})\|_F = \cO\left(\sqrt{ {\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}}}\right) \]
 	\end{leftbar}
 	\end{lemma}
 	\begin{proof}
-		We have 
-		\begin{align*}
-		\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}}^2 \geq \lambda_{\min}(\gramian)\|\theta - \theta_{[N],\lambda}\|_{2}^2
-		\end{align*}
-		And \eqref{eq:confidence-ellipsoid} gives
-		\[\|\theta - \theta_{[N],\lambda}\|_{G_{[N],\lambda}}^2 = \cO(\beta_N(\delta)^2) \]
-		
-		Moreover, $\structureddynamics$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
-		\begin{align*}
-		((\structureddynamics&-A(\theta_{[N],\lambda}))^\transp (\structureddynamics - A(\theta_{[N],\lambda})))_{i,j}\\
-		%&= (\phi_i(\theta-\theta_{[N],\lambda}))^\transp \phi_j(\theta-\theta_{[N],\lambda}) \\
-		&= (\theta-\theta_{[N],\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{[N],\lambda}) \\
-		&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{[N],\lambda}\|_{2}^2 = \cO\left( {\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right) 
-		\end{align*}
-		
+	We have 
+	\begin{align*}
+	\|\theta - \theta_{N,\lambda}\|_{G_{N,\lambda}}^2 \geq \lambda_{\min}(G_{N,\lambda})\|\theta - \theta_{N,\lambda}\|_{2}^2
+	\end{align*}
+	And \eqref{eq:confidence-ellipsoid} gives
+	\[\|\theta - \theta_{N,\lambda}\|_{G_{N,\lambda}}^2 = \cO(\beta_N(\delta)^2) \]
+	
+	Moreover, $A(\theta)$ belongs to a linear image of this $L^2$-ball. By writing a the $j^{th}$ column of a matrix $M$ as $M_j$, and its coefficient $i,j$ as $M_{i,j}$,
+	\begin{align*}
+	((A(\theta)-A(\theta_{N,\lambda}))^\transp (A(\theta) - A(\theta_{N,\lambda})))_{i,j}
+	&= (\theta-\theta_{N,\lambda})^\transp\phi_{i}^{\transp}\phi_j(\theta-\theta_{N,\lambda}) \\
+	&\leq \lambda_{\max}(\phi_{i}^{\transp}\phi_j) \|\theta - \theta_{N,\lambda}\|_{2}^2
+	\end{align*}
+	
+	Thus, $\|A(\theta) - A(\theta_{N,\lambda})\|_F^2 = \Tr{\left[(A(\theta)-A(\theta_{N,\lambda}))^\transp (A(\theta) - A(\theta_{N,\lambda}))\right]} = \cO\left( {\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}}\right)$
 	\end{proof}
 	
 	Then, we propagate this estimation error through the state prediction.
@@ -184,19 +184,19 @@
 		If there exist $P>0,Q_0\in\Real^{p\times p}$, $\rho>0$ such that
 		\begin{align*}
 		\begin{bmatrix}
-		A_0^\transp P + P A_0^\transp + Q_0 & P|D|  \\
+		A_N^\transp P + P A_N + Q_0 & P|D|  \\
 		|D|^\transp P & -\rho I_r \\
 		\end{bmatrix}< 0,
 		\end{align*}
 		then for all $t> t_N$,
-		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}} \right)\right)C_\omega(t), \]
-		where $$C_0 = \sqrt{\frac{2\rho\lambda_{\max}(P)}{\lambda_{\min}(P)\lambda_{\min}(Q_0)}},$$ and $$C_\omega(t) = \sup_{\tau\in[t_N,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2^2.$$
+		\[\|\ox(t) - \ux(t)\| \leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)}{\sqrt{\lambda_{\min}(G_{N,\lambda})}}} \right)\right)C_\omega(t), \]
+		where $$C_0 = \sqrt{\frac{2\rho\lambda_{\max}(P)}{\lambda_{\min}(P)\lambda_{\min}(Q_0)}},$$ and $$C_\omega(t) = \sup_{\tau\in[0,t]} \|\overline{\omega}(\tau) - \underline{\omega}(\tau)\|_2.$$
 		\end{leftbar}
 	\end{lemma}
 	\begin{proof}
 		Let $e = \ox - \ux$. \eqref{eq:interval-predictor} gives the dynamics
 		\begin{align*}
-		\dot{e} = A_0e + |\Delta A|(\ox^+ + \ux^-) + |D|(\overline{\omega} - \underline{\omega})
+		\dot{e} = A_Ne + |\Delta A|(\ox^+ + \ux^-) + |D|(\overline{\omega} - \underline{\omega})
 		\end{align*}
 		where recall that $|M| = M^+ + M^-$ for any matrix $M\in\Real^{p\times p}$.
 		
@@ -207,7 +207,7 @@
 		\begin{align*}
 		\dot{V} ={}& X^\transp
 		\begin{bmatrix}
-		A_0^\transp P + P A_0^\transp + Q & P|D| & P|\Delta A| \\
+		A_N^\transp P + P A_N + Q & P|D| & P|\Delta A| \\
 		|D|^\transp P & -\rho I_r & 0\\
 		|\Delta A|^\transp P & 0 & -\alpha I_p
 		\end{bmatrix}
@@ -224,7 +224,7 @@
 		\underbrace{
 			\left[
 			\begin{array}{cc|c}
-			A_0^\transp P + P A_0^\transp + Q + 4\alpha I_p & P|D| & P|\Delta A| \\
+			A_N^\transp P + P A_N + Q + 4\alpha I_p & P|D| & P|\Delta A| \\
 			|D|^\transp P & -\rho I_r & 0\\
 			\hline
 			|\Delta A|^\transp P & 0 & -\alpha I_p
@@ -241,62 +241,67 @@
 		with $\mu = \frac{\lambda_{\min}(Q)}{\lambda_{\max}(P)}$. Since $V(t_N) = 0$, this further implies that for all $t>t_N$, 
 		\begin{equation}
 		\label{eq:lyap-bound}
-		V(t) \leq \frac{\rho}{\mu} C_\omega(t)
+		V(t) \leq \frac{\rho}{\mu} C_\omega^2(t)
 		\end{equation}
 		
 		We now examine the condition $\Upsilon \leq 0$.
 		We resort to its Schur complement: given $\alpha > 0$, $\Upsilon \leq 0$ if and only if $R \geq S$, where $S= \alpha^{-1}\begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}^\transp \begin{bmatrix}|\Delta A|^\transp P & 0\end{bmatrix}$ and $R$ is the top-left block of $-\Upsilon$:
 		\[R = \begin{bmatrix}
-		-A_0^\transp P - P A_0^\transp - Q - 4\alpha I_p & -P|D|\\
+		-A_N^\transp P - P A_N - Q - 4\alpha I_p & -P|D|\\
 		-|D|^\transp P & \rho I_r\\
 		\end{bmatrix}\]
 		
 		Choose $Q = \frac{1}{2}Q_0-4\alpha I_p$.
-		Assume that $P$ is fixed and satisfies the conditions of the lemma. We have $$\lambda_{\max}(S) \leq \alpha^{-1}\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2.$$
+		Assume that $P$ is fixed and satisfies the conditions of the lemma. We have 
+		\begin{align*}
+		\lambda_{\max}(S) &\leq \alpha^{-1}\lambda_{\max}(P)^2\lambda_{\max}(|\Delta A|^\top |\Delta A|)\\
+		&\leq\alpha^{-1}\lambda_{\max}(P)^2\|\Delta A\|_F^2
+		\end{align*}
 		
-		Thus, by taking $\alpha = \frac{\lambda_{\max}(|\Delta A|)^2\lambda_{\max}(P)^2}{2\lambda_{\min}(Q_0)} = \cO({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}})$, we can obtain that $S \leq \begin{bmatrix}
+		
+		Thus, by taking $\alpha = \frac{2\lambda_{\max}(P)^2\|\Delta A\|_F^2}{\lambda_{\min}(Q_0)} = \cO({\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}})$, we can obtain that $S \leq \begin{bmatrix}
 		\frac{1}{2}Q_0 & 0\\0 & 0
 		\end{bmatrix}$. Thus,
 		\[R-S \geq \begin{bmatrix}
-		-A_0^\transp P - P A_0^\transp - Q_0 & -P|D|\\
+		-A_N^\transp P - P A_N - Q_0 & -P|D|\\
 		-|D|^\transp P & \rho I_r\\
 		\end{bmatrix} > 0 \]
 		as it is assumed in the conditions of the lemma. Hence, under such a choice of $\alpha$ and $Q$, we recover $\Upsilon\leq 0$. \eqref{eq:lyap-bound} follows with $\mu = \frac{\lambda_{\min}(Q)}{\lambda_{\max}(P)} = \frac{\frac{1}{2}\lambda_{\min}(Q_0) - 4\alpha}{\lambda_{\max}(P)}$.
 		Finally, we obtain
 		\begin{align*}
 		\|e(t)\|_2^2 &\leq \lambda_{\min}(P)^{-1} V(t)\\
-		& \leq \frac{2\rho\lambda_{\max}(P)/\lambda_{\min}(P)}{\lambda_{\min}(Q_0) - 8\alpha} C_\omega(t)\\
+		& \leq \frac{2\rho\lambda_{\max}(P)/\lambda_{\min}(P)}{\lambda_{\min}(Q_0) - 8\alpha} C_\omega^2(t)\\
 		\end{align*}
 		Developing at the first order in $\alpha$ gives
 		\begin{align*}
 		\|e(t)\|_2 &\leq C_0\left(1 + \frac{4\alpha}{\lambda_{\min}(Q_0)} + \cO(\alpha^2)\right)C_\omega(t)\\
-		&\leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right)\right)C_\omega(t)
+		&\leq \left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}}\right)\right)C_\omega(t)
 		\end{align*}
 	\end{proof}
 	
 	
 	Finally, we propagate the state prediction error bound to the pessimistic rewards and surrogate objective to get our final result.
 	\begin{proof}
-		For any sequence of controls $\bu$, dynamical parameters $\theta\in \confidenceset$ and perturbations $\underline{\bom} \leq \bom \leq \overline{\bom}$, we clearly have 
-		\[V(\bu)^r \leq V(\bu) = \expectedvalue_{\bom}\sum_n \discount^n \R(x_n)\]
+		For any sequence of controls $\bu$, dynamical parameters $\theta\in C_{N,\delta}$ and disturbances $\underline{\omega} \leq \omega \leq \overline{\omega}$, we clearly have 
+		\[V(\bu)^r \leq V(\bu) = \expectedvalue_{\omega}\sum_n \gamma^n R(x_n)\]
 		
 		Moreover, by the inclusion property \eqref{eq:inclusion-property}, we have that $\underline{x}_n \leq x_n \leq \overline{x}_n$, which implies that $R(x_n) \leq \max_{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}  R(x)$. Assuming $R$ is $L$-lipschitz,
 		\begin{align*}
-		V(\bu) - \hat{V}^r(\bu) &\leq \sum_{n=N+1}^\infty \discount^n \underset{{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}}{(\max - \min)} R(x)\\
-		&\leq \sum_{n=N+1}^\infty \discount^n L \left\|\underline{x}_n(\bu) - \overline{x}_n(\bu)\right\|_2\\
-		&\leq L(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right) \sum_{n>N} \discount^n C_{\omega}(t_n)\\
-		&= \Delta_\omega + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(\gramian)}}\right)
+		V(\bu) - \hat{V}^r(\bu) &\leq \sum_{n=N+1}^\infty \gamma^n \underset{{x\in[\underline{x}_n(\bu), \overline{x}_n(\bu)]}}{(\max - \min)} R(x)\\
+		&\leq \sum_{n=N+1}^\infty \gamma^n L \left\|\underline{x}_n(\bu) - \overline{x}_n(\bu)\right\|_2\\
+		&\leq L\left(C_0 + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}}\right)\right) \sum_{n>N} \gamma^n C_{\omega}(t_n)\\
+		&= \Delta_\omega + \cO\left({\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})}}\right)
 		\end{align*}
-		with $\Delta_\omega = L C_0\sum_{n>N} \discount^n C_{\omega}(t_n)$.
+		with $\Delta_\omega = L C_0\sum_{n>N} \gamma^n C_{\omega}(t_n)$, which is finite by \Cref{assumpt:bounded-noise}.
 		
-		Note that $\Delta_\omega$ is finite only if $C_{\omega}(t_n)$ (in the order of $\overline{\omega}(t_n) - \underline{\omega}(t_n)$) is dominated by $\gamma^n$.
+		Finally, we use the result of \Cref{theorem:opd-regret} to account for planning with a finite budget, and relate $\hat{V}^r(a^\star)$ to $\hat{V}^r(a_K)$.
 	\end{proof}
 	
 	\subsection{Proof of \Cref{cor:pe}}
 	\label{sec:proof-pe}
 	
 	\begin{proof}
-		By \eqref{eq:vector_rls} and \eqref{eq:pe}, we have $$\lambda_{\min}(G_{[N],\lambda}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
+		By \eqref{eq:vector_rls} and \eqref{eq:pe}, we have $$\lambda_{\min}(G_{N,\lambda}) \geq (N-n_0)\underline{\phi}^2 + \sum_{n<n_0}\Phi_{n}^\transp\Sigma_{p}^{-1}\Phi_{n}$$
 		
 		and by \eqref{eq:confidence-ellipsoid},
 		\begin{align*}
@@ -306,8 +311,21 @@
 		\end{align*}
 		Thus,
 		\[
-		\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{[N],\lambda})} = \cO\left(\frac{\log (N^{d/2}/\delta)}{N} \right)
+		\frac{\beta_N(\delta)^2}{\lambda_{\min}(G_{N,\lambda})} = \cO\left(\frac{\log (N^{d/2}/\delta)}{N} \right)
 		\]
+		
+		\paragraph{Stability condition 2.}
+		
+		By \Cref{lem:dynamics-est-bound} and the above, the sequence $(A_N)_{N}$ converges to $A(\theta)$ in Frobenius norm. Thus, 
+		$$M_n \eqdef \begin{bmatrix}
+		A_N^\transp P + P A_N + Q_0 & P|D|  \\
+		|D|^\transp P & -\rho I_r \\
+		\end{bmatrix}\text{ also converges to } M\eqdef\begin{bmatrix}
+		A(\theta)^\transp P + P A(\theta) + Q_0 & P|D|  \\
+		|D|^\transp P & -\rho I_r \\
+		\end{bmatrix},$$ which is assumed to be negative definite.
+		
+		Moreover, the two functions that map a matrix to its characteristic polynomial and a polynomial to its roots, are both continuous. Thus, by continuity, the largest eigenvalue of $M_n$ converges to that of $M$, which is strictly negative. Hence, there exists some $N_0\in\Natural$ such that for all $N>N_0$, $M_N$ is negative definite, as required in the condition 2. of \Cref{thm:minimax-regret-bound}.
 	\end{proof}
 	
 	\subsection{Proof of \Cref{theorem:drop-regret}}
