@@ -313,6 +313,7 @@ We first give some background on interval arithmetic and nonnegative systems, be
 \subsubsection{Interval arithmetic}
 
 \begin{lemma}[\citealp{Efimov2012}]
+	\begin{leftbar}[lemmabar]
 	\label{lem:interval}
 	Let $x\in\mathbb{R}^{n}$ be a vector variable, $\ux\le x\le\ox$ for some $\ux,\ox\in\mathbb{R}^{n}$. 
 	
@@ -326,6 +327,7 @@ We first give some background on interval arithmetic and nonnegative systems, be
 	\underline{A}^{+}\ux^{+}-\overline{A}^{+}\ux^{-}-\underline{A}^{-}\ox^{+}+\overline{A}^{-}\ox^{-}\leq Ax\label{eq:Interval2}
 	\leq\overline{A}^{+}\ox^{+}-\underline{A}^{+}\ox^{-}-\overline{A}^{-}\ux^{+}+\underline{A}^{-}\ux^{-}. 
 	\end{gather}
+	\end{leftbar}
 \end{lemma}
 Furthermore, if $-\overline{A}=\underline{A}\le0\le\overline{A}$, then the inequality \eqref{eq:Interval2} can be simplified: $$-\overline{A}(\ox^{+}+\ux^{-})\leq Ax\leq\overline{A}(\ox^{+}+\ux^{-}).$$
 
@@ -448,7 +450,7 @@ For the given centre $A_0$ to admit useful properties of nonnegative systems, we
 	There exists a nonsingular matrix $Z\in\Real^{p\times p}$ such that $Z^{-1}A_{0}Z$ is Metzler.
 	\end{leftbar}
 \end{assumption}
-In practice, this assumption is often verified. It is for instance the case whenever $A_{0}$ is diagonalizable, or a method from \cite{Efimov2013} computes a similarity transformation $Z$ when the system is observable with respect to a scalar output. To simplify the notation, we further assume that $Z=I_{p}$ so that the system \eqref{eq:LPV_syst} has already been put in the right form:
+In practice, this assumption is often verified. It is for instance the case whenever $A_{0}$ is diagonalizable, or a method from \citep{Efimov2013} computes a similarity transformation $Z$ when the system is observable with respect to a scalar output. To simplify the notation, we further assume that $Z=I_{p}$ so that the system \eqref{eq:LPV_syst} has already been put in the right form:
 \[
 \dot{x}(t)=[A_{0}+\sum_{i=1}^{M}\lambda_{i}(\theta(t))\Delta A_{i}]x(t)+Bu(t) + D\omega(t).
 \]
@@ -475,7 +477,7 @@ then the following interval predictor can be designed:
 	P+\min\{Z_{+},Z_{-}\}>0,\;\Upsilon\preceq0,\;\Gamma>0,\\
 	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
 	\end{gather*}
-	where\\[1cm] % FIXME for page break only
+	where
 		\begin{gather*}
 		\Upsilon=\left[\begin{array}{cccc}
 		\Upsilon_{11} & \Upsilon_{12} & \Upsilon_{13} & P\\
@@ -530,66 +532,67 @@ Note the requirement that the matrix $P$ has to be diagonal is not restrictive, 
 	
 	Second, let us consider the stability of \eqref{eq:interval-predictor}, and for this purpose define the extended state vector as $X=[\ux^{\top}\;\;\ox^{\top}]^{\top}$, whose dynamics admit the differential equation
 	\[
-	\dot{X}(t)=\mathcal{A}X(t)+R_{+}X^{+}(t)-R_{-}X^{-}(t)+\confidence(t),
+	\dot{X}(t)=\mathcal{A}X(t)+R_{+}X^{+}(t)-R_{-}X^{-}(t)+\delta(t),
 	\]
 	where
 	\begin{gather*}
-	\confidence(t)=\left[\begin{array}{cc}
+	\delta(t)=\left[\begin{array}{cc}
 	-D^{-} & D^{+}\\
 	D^{+} & -D^{-}
 	\end{array}\right]\left[\begin{array}{c}
 	\overline{\omega}(t)\\
 	\underline{\omega}(t)
-	\end{array}\right]
+	\end{array}\right].
 	\end{gather*}
 	is a bounded input vector, whose norm is proportional to $\underline{\omega}$,
 	$\overline{\omega}$. Consider a candidate Lyapunov function
-	\begin{gather*}
-	V(X)=X^{\top}PX+X{}^{\top}Z_{+}X^{+}-X^{\top}Z_{-}X^{-}\\
-	=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}X_{k}X_{k}^{+}-(Z_{-})_{k,k}X_{k}X_{k}^{-}\\
-	=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}|X_{k}|X_{k}^{+}+(Z_{-})_{k,k}|X_{k}|X_{k}^{-},
-	\end{gather*}
+	\begin{align*}
+	V(X)&=X^{\top}PX+X{}^{\top}Z_{+}X^{+}-X^{\top}Z_{-}X^{-}\\
+	&=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}X_{k}X_{k}^{+}-(Z_{-})_{k,k}X_{k}X_{k}^{-}\\
+	&=\sum_{k=1}^{2n}P_{k,k}X_{k}^{2}+(Z_{+})_{k,k}|X_{k}|X_{k}^{+}+(Z_{-})_{k,k}|X_{k}|X_{k}^{-},
+	\end{align*}
 	which is positive definite provided that
 	\[
 	P+\min\{Z_{+},Z_{-}\}>0,
 	\]
 	and whose derivative for the system dynamics takes the form
-	\begin{gather*}
-	\dot{V}=2\dot{X}^{\top}PX+2\dot{X}^{\top}Z_{+}X^{+}-2\dot{X}^{\top}Z_{-}X^{-}\\
-	=\left[\begin{array}{c}
+	\begin{align*}
+	\dot{V}={}&2\dot{X}^{\top}PX+2\dot{X}^{\top}Z_{+}X^{+}-2\dot{X}^{\top}Z_{-}X^{-}\\
+	={}&\left[\begin{array}{c}
 	X\\
 	X^{+}\\
 	-X^{-}\\
-	\confidence
+	\delta
 	\end{array}\right]^{\top}\Upsilon\left[\begin{array}{c}
 	X\\
 	X^{+}\\
 	-X^{-}\\
-	\confidence
+	\delta
 	\end{array}\right]-X^{\top}QX-(X^{+})^{\top}Q_{+}X^{+}\\
-	-(X^{-})^{\top}Q_{-}X^{-}-2(X^{+})^{\top}\Psi X^{-}-2(X^{+})^{\top}\Psi_{+}X\\
-	-2(-X^{-})^{\top}\Psi_{-}X+\confidence^{\top}\Gamma\confidence.
-	\end{gather*}
+	&-(X^{-})^{\top}Q_{-}X^{-}-2(X^{+})^{\top}\Psi X^{-}-2(X^{+})^{\top}\Psi_{+}X\\
+	&-2(-X^{-})^{\top}\Psi_{-}X+\delta^{\top}\Gamma\delta.
+	\end{align*}
 	Note that
-	\begin{gather*}
-	(X^{+})^{\top}\Psi X^{-}=0,\\
-	(X^{+})^{\top}\Psi_{+}X\geq0,\;(-X^{-})^{\top}\Psi_{-}X\geq0
-	\end{gather*}
+	\begin{align*}
+	(X^{+})^{\top}\Psi X^{-}&=0,\\
+	(X^{+})^{\top}\Psi_{+}X&\geq0,\\
+	(-X^{-})^{\top}\Psi_{-}X&\geq0
+	\end{align*}
 	for any diagonal matrix $\Psi$ and
 	\[
 	\Psi_{+}\geq0,\;\Psi_{-}\geq0.
 	\]
 	Hence, if $\Upsilon\preceq0$, as it is assumed in the theorem, we obtain that
-	\begin{eqnarray*}
-		\dot{V} & \leq & -X^{\top}QX-(X^{+})^{\top}Q_{+}X^{+}-(X^{-})^{\top}Q_{-}X^{-}\\
-		&  & -2(X^{+})^{\top}\Psi_{+}X-2(-X^{-})^{\top}\Psi_{-}X+\confidence^{\top}\Gamma\confidence\\
-		& \leq & -X^{\top}\Omega X+\confidence^{\top}\Gamma\confidence,
-	\end{eqnarray*}
+	\begin{align*}
+		\dot{V} \leq {} & -X^{\top}QX-(X^{+})^{\top}Q_{+}X^{+}-(X^{-})^{\top}Q_{-}X^{-}\\
+		& -2(X^{+})^{\top}\Psi_{+}X-2(-X^{-})^{\top}\Psi_{-}X+\delta^{\top}\Gamma\delta\\
+		 \leq {} & -X^{\top}\Omega X+\delta^{\top}\Gamma\delta,
+	\end{align*}
 	where
 	\[
 	\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
 	\]
-	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \citep{Khalil2002} with respect to the input $\confidence$ (or, by its definition, with respect to $(\underline{\omega},\overline{\omega})$).
+	is a diagonal matrix. The substantiated properties of $V$ and its derivative imply that \eqref{eq:interval-predictor} is input-to-state stable \citep{Khalil2002} with respect to the input $\delta$ (or, by its definition, with respect to $(\underline{\omega},\overline{\omega})$).
 \end{proof}
 \begin{remark}[Global constraints]
 	\begin{leftbar}[remarkbar]
@@ -857,12 +860,12 @@ where $[\ux_{0},\ox_{0}]\subset\safestates\subset\Real^{p}$ and $\safecontrols\s
 Note that both interval predictors, \eqref{eq:predictor-naive} and
 \eqref{eq:interval-predictor}, admit a representation in the form
 \begin{equation}
-\dot{\xi}(t)=\cA_{0}\xi(t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\confidence(t),\label{eq:predictor}
+\dot{\xi}(t)=\cA_{0}\xi(t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\delta(t),\label{eq:predictor}
 \end{equation}
 where $\xi(t)=[\ux^{\top}(t)\;\ox^{\top}(t)]^{\top}\in\Real^{2p}$
 is the extended state vector of the predictors,
 \[
-\confidence(t)=\left[\begin{array}{cc}
+\delta(t)=\left[\begin{array}{cc}
 D^{+} & -D^{-}\\
 -D^{-} & D^{+}
 \end{array}\right]\left[\begin{array}{c}
@@ -904,21 +907,21 @@ Due to the inclusion property \eqref{eq:inclusion-property}, the boundedness of 
 implies the same property of $x(t)$. Therefore, in order to regulate
 \eqref{eq:dynamics} it is required to design a state feedback $u(t)$
 minimizing the asymptotic amplitude of the state $\xi(t)$ for given
-input $\confidence(t)$ \citep{Efimov_tac2013}. In other words, it is necessary
+input $\delta(t)$ \citep{Efimov_tac2013}. In other words, it is necessary
 to design a control $u(t)$ that input-to-state stabilises \eqref{eq:predictor}.
 It is proposed to look for such a control in the form
 \begin{equation}
-u(t)=K_{0}\xi(t)+K_{1}\xi^{+}(t)+K_{2}\xi^{-}(t)+S\confidence(t),\label{eq:control_pr}
+u(t)=K_{0}\xi(t)+K_{1}\xi^{+}(t)+K_{2}\xi^{-}(t)+S\delta(t),\label{eq:control_pr}
 \end{equation}
 where $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$ and $S\in\Real^{q\times2p}$
 are the gains to be designed (\eqref{eq:control_pr} contains a nonlinear
 feedback). The selection of $S$ is simple, it has to minimise the
 norm of $\cB S+I_{2p}$, and it can be made independently of $K_{0},K_{1},K_{2}$.
-Therefore, denoting $\tilde{\confidence}(t)=(\cB S+I_{2p})\confidence(t)$ the
+Therefore, denoting $\tilde{\delta}(t)=(\cB S+I_{2p})\delta(t)$ the
 closed-loop system \eqref{eq:predictor}, \eqref{eq:control_pr} takes
 the form:
 \begin{equation}
-\dot{\xi}(t)=\cD_{0}\xi(t)+\cD_{1}\xi^{+}(t)+\cD_{2}\xi^{-}(t)+\tilde{\confidence}(t),\label{eq:closed-loop_pr}
+\dot{\xi}(t)=\cD_{0}\xi(t)+\cD_{1}\xi^{+}(t)+\cD_{2}\xi^{-}(t)+\tilde{\delta}(t),\label{eq:closed-loop_pr}
 \end{equation}
 where $\cD_{i}=\cA_{i}+\cB K_{i}$ for $i\in[3]$, and the restrictions,
 which the gains $K_{0},K_{1},K_{2}$ have to respect, are given below:
@@ -954,45 +957,46 @@ existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P
 \citep{FarinaRinaldi2000}.
 \begin{proof}
 	Consider a candidate Lyapunov function
-	\begin{gather*}
-	V(\xi)=\xi^{\top}P\xi+\xi{}^{\top}Z_{+}\xi^{+}-\xi^{\top}Z_{-}\xi^{-}\\
-	=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
-	=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}|\xi_{k}|\xi_{k}^{+}+(Z_{-})_{k,k}|\xi_{k}|\xi_{k}^{-},
-	\end{gather*}
+	\begin{align*}
+	V(\xi)&=\xi^{\top}P\xi+\xi{}^{\top}Z_{+}\xi^{+}-\xi^{\top}Z_{-}\xi^{-}\\
+	&=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
+	&=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}|\xi_{k}|\xi_{k}^{+}+(Z_{-})_{k,k}|\xi_{k}|\xi_{k}^{-},
+	\end{align*}
 	which is positive definite provided that
 	\[
 	P+\min\{Z_{+},Z_{-}\}>0
 	\]
 	since all terms in $V$ are quadratic-like, and whose derivative for
 	the system \eqref{eq:closed-loop_pr} dynamics takes the form
-	\begin{gather*}
-	\dot{V}=2\dot{\xi}^{\top}P\xi+2\dot{\xi}^{\top}Z_{+}\xi^{+}-2\dot{\xi}^{\top}Z_{-}\xi^{-}\\
-	=\left[\begin{array}{c}
+	\begin{align*}
+	\dot{V}={}&2\dot{\xi}^{\top}P\xi+2\dot{\xi}^{\top}Z_{+}\xi^{+}-2\dot{\xi}^{\top}Z_{-}\xi^{-}\\
+	={}&\left[\begin{array}{c}
 	\xi\\
 	\xi^{+}\\
 	\xi^{-}\\
-	\tilde{\confidence}
+	\tilde{\delta}
 	\end{array}\right]^{\top}\Upsilon\left[\begin{array}{c}
 	\xi\\
 	\xi^{+}\\
 	\xi^{-}\\
-	\tilde{\confidence}
+	\tilde{\delta}
 	\end{array}\right]-\xi^{\top}Q\xi-(\xi^{+})^{\top}Q_{+}\xi^{+}\\
-	-(\xi^{-})^{\top}Q_{-}\xi^{-}-2(\xi^{+})^{\top}\Psi\xi^{-}-2(\xi^{+})^{\top}\Psi_{+}\xi\\
-	-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\confidence}^{\top}\Gamma\tilde{\confidence}.
-	\end{gather*}
+	&-(\xi^{-})^{\top}Q_{-}\xi^{-}-2(\xi^{+})^{\top}\Psi\xi^{-}-2(\xi^{+})^{\top}\Psi_{+}\xi\\
+	&-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}.
+	\end{align*}
 	Note that
-	\begin{gather*}
-	(\xi^{+})^{\top}\Psi\xi^{-}=0,\\
-	(\xi^{+})^{\top}\Psi_{+}\xi\geq0,\;(-\xi^{-})^{\top}\Psi_{-}\xi\geq0
-	\end{gather*}
+	\begin{align*}
+	(\xi^{+})^{\top}\Psi\xi^{-}&=0,\\
+	(\xi^{+})^{\top}\Psi_{+}\xi&\geq0,\\
+	(-\xi^{-})^{\top}\Psi_{-}\xi&\geq0
+	\end{align*}
 	for any diagonal matrix $\Psi$ and $\Psi_{+}\geq0$, $\Psi_{-}\geq0$.
 	Hence, if $\Upsilon\preceq0$, as it is assumed in the theorem, we
 	obtain that
 	\begin{align*}
 		\dot{V}  \leq {} & -\xi^{\top}Q\xi-(\xi^{+})^{\top}Q_{+}\xi^{+}-(\xi^{-})^{\top}Q_{-}\xi^{-}\\
-		 & -2(\xi^{+})^{\top}\Psi_{+}\xi-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\confidence}^{\top}\Gamma\tilde{\confidence}\\
-		 \leq {} & -\xi^{\top}\Omega\xi+\tilde{\confidence}^{\top}\Gamma\tilde{\confidence},
+		 & -2(\xi^{+})^{\top}\Psi_{+}\xi-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}\\
+		 \leq {} & -\xi^{\top}\Omega\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta},
 	\end{align*}
 	where
 	\[
@@ -1001,7 +1005,7 @@ existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P
 	is a diagonal matrix. The substantiated properties of $V$ and its
 	derivative imply that \eqref{eq:closed-loop_pr} is input-to-state
 	stable \citep{Sontag:01:Springer,Dashkovskiy:11:AiT} with respect
-	to the input $\tilde{\confidence}$ (or, by its definition, with respect
+	to the input $\tilde{\delta}$ (or, by its definition, with respect
 	to $(\underline{\omega},\overline{\omega})$).
 \end{proof}
 Following the proof of \Cref{thm:ISS_pr}, for all $\xi\in\Real^{2p}$,
@@ -1010,16 +1014,16 @@ Following the proof of \Cref{thm:ISS_pr}, for all $\xi\in\Real^{2p}$,
 \]
 then
 \[
-\dot{V}\leq-\alpha V+\tilde{\confidence}^{\top}\Gamma\tilde{\confidence}
+\dot{V}\leq-\alpha V+\tilde{\delta}^{\top}\Gamma\tilde{\delta}
 \]
-for all $\xi,\tilde{\confidence}\in\Real^{2p}$, where
+for all $\xi,\tilde{\delta}\in\Real^{2p}$, where
 \[
 \alpha=\min_{i\in[2p]}\lambda_{i}\left(\Omega(P+Z_{+}^{+}+Z_{-}^{+})^{-1}\right),
 \]
-and we can define the set (recall that the signal $\tilde{\confidence}(t)$
+and we can define the set (recall that the signal $\tilde{\delta}(t)$
 is known for all $t\geq0$)
 \begin{equation}
-\safestates_{f}=\{\xi\in\Real^{2p}:V(\xi)\leq\alpha^{-1}\sup_{t\geq0}|\tilde{\confidence}^{\top}(t)\Gamma\tilde{\confidence}(t)|\},\label{eq:X_f}
+\safestates_{f}=\{\xi\in\Real^{2p}:V(\xi)\leq\alpha^{-1}\sup_{t\geq0}|\tilde{\delta}^{\top}(t)\Gamma\tilde{\delta}(t)|\},\label{eq:X_f}
 \end{equation}
 as the set that asymptotically attracts all trajectories in \eqref{eq:closed-loop_pr}.
 
@@ -1104,7 +1108,7 @@ formulation). We need the following hypothesis in this section:
 	\]
 	where the corresponding set $\safestates_{f}$ is given in \eqref{eq:X_f}, and
 	\[
-	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\safecontrols
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\safecontrols
 	\]
 	for any $\xi\in\safestates_{f}$ and $t\geq0$.
 	\end{leftbar}
@@ -1207,7 +1211,7 @@ The main result of the section is as follows:
 	$
 	and
 	$
-	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\confidence(t)\in\safecontrols
+	K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\safecontrols
 	$
 	for any $\xi\in\safestates_{f}$ and $t\geq0$, as in \Cref{assumpt:feasible-constr},
 	then the new set $\safestates_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
@@ -1550,7 +1554,7 @@ Note that the \Cref{assumpt:metzler} for $A_N$ is always verified. The reward is
 \end{figure}
 
 For the reasons mentioned above, no robust baseline applies to our setting. We compare \Cref{alg:full} to the non-robust adaptive control approach that plans with the estimated dynamics $\theta_{N,\lambda}$, and thus enjoys the same prior knowledge of dynamics structure and reward. This highlights the benefits of the robust formulation solely rather than stemming from algorithm design.
-We show in \Cref{tab:obstacle} the results of 100 simulations of a single episode: the robust agent performs worse than the nominal agent on average, but manages to ensure safety while the nominal agent collides with obstacles in \SI{4}{\percent} of simulations\footnote{A video is available at \href{https://youtu.be/OY0yN3CuHFs}{https://youtu.be/OY0yN3CuHFs}}. We also compare to a standard model-free approach, DQN, which does not benefit from the prior knowledge on the system dynamics, and is instead trained over multiple episodes. The reported performance is that of the final policy obtained after training for 3000 episodes, during which $897\pm64$ collisions occurred ($29.9\pm2.1$\%).
+We show in \Cref{tab:obstacle} the results of 100 simulations of a single episode: the robust agent performs worse than the nominal agent on average, but manages to ensure safety while the nominal agent collides with obstacles in \SI{4}{\percent} of simulations\footnote{A video is available at \href{https://youtu.be/jr2yi6Lf0bM}{https://youtu.be/jr2yi6Lf0bM}}. We also compare to a standard model-free approach, \gls+{DQN}, which does not benefit from the prior knowledge of the system dynamics, and is instead trained over multiple episodes. The reported performance is that of the final policy obtained after training for 3000 episodes, during which $897\pm64$ collisions occurred ($29.9\pm2.1$\%).
 We study the evolution of the suboptimality $V(x_N) - \sum_{n>N}\gamma^{n-N}R(x_n)$ with respect to the number of samples $N$, by comparing the empirical returns from a state $x_N$ to the value $V(x_N)$ that the agent would get by acting optimally from $x_N$ with knowledge of the dynamics. Although the assumptions of \Cref{thm:minimax-regret-bound} are not satisfied (e.g. non-smooth reward), the mean suboptimality of the robust agent, shown in \Cref{fig:regret}, still decreases polynomially with $N$: \Cref{alg:full} gets \emph{more efficient} as it is \emph{more confident} while \emph{ensuring safety} at all times. In comparison, the nominal agent enjoys a smaller suboptimality on average, but higher in the worst-case. 
 
 \begin{figure}[tp]
@@ -1576,15 +1580,15 @@ We study the evolution of the suboptimality $V(x_N) - \sum_{n>N}\gamma^{n-N}R(x_
 		{Nominal} & {4\%} & {2.8} & \textbf{$\mathbf{13.8} \pm 2.0$} \\
 		\Cref{alg:full} & \textbf{0\%} & \textbf{10.4} & {$13.0 \pm 1.5$} \\
 		\midrule
-		DQN (trained) & 6\% & 1.7 & $12.3\pm2.5$ \\
+		\gls{DQN} (trained) & 6\% & 1.7 & $12.3\pm2.5$ \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
 \paragraph{Behavioural planning for an autonomous vehicle}
-We consider the \href{https://github.com/eleurent/highway-env}{highway-env} environment \citep{highway-env} for simulated driving decision problems. An autonomous vehicle with state $x_0\in\Real^4$ is approaching an intersection among ${N_v}$ other vehicles with states $x_i\in\Real^4$, resulting in a joint traffic state $x = [x_0, \dots,x_{N_v}]^\top\in\Real^{4{N_v}+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5{N_v}}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16{N_v}^2}$.
+We consider the \highwayenv environment for simulated driving decision problems. An autonomous vehicle with state $x_0\in\Real^4$ is approaching an intersection among ${N_v}$ other vehicles with states $x_i\in\Real^4$, resulting in a joint traffic state $x = [x_0, \dots,x_{N_v}]^\top\in\Real^{4{N_v}+4}$. These vehicles follow parametrized behaviours $\dot{\chi}_i=f_i(x,\theta_i)$ with unknown parameters $\theta_i\in\Real^5$. We appreciate a first advantage of the structure imposed in \Cref{assumpt:structure}: the uncertainty space of $\theta$ is $\Real^{5{N_v}}$. In comparison, the traditional LQ setting where the whole state matrix $A$ is estimated would have resulted in a much larger parameter space $\theta\in\Real^{16{N_v}^2}$.
 %This allows to scale to larger systems: in our experiments, we used a state space of dimension $44$ ($V=10$) where \eg \citep{Dean2018,abeille18a} reported numerical experiments with states of dimensions 3 and 4, respectively.
-The system dynamics $f$, which describes the interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. In \Cref{tab:driving}, we compare \Cref{alg:full} to a nominal agent planning with two different modelling assumptions: Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks the model with minimal prediction error. We show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles\footnote{A video is available at \href{https://youtu.be/0z65DCE1XWM}{https://youtu.be/0z65DCE1XWM}}. Again we also compare to a DQN baseline trained over 3000 episodes, causing $1058\pm113$ collisions while training ($35\pm4\%$). As before, the robust agent has a higher worst-case performance and avoids collisions at all times, at the price of a decreased average performance.
+The system dynamics $f$, which describes the interactions between vehicles, can only be expressed in the form of \Cref{assumpt:structure} given the knowledge of the desired route for each vehicle, with features $\phi$ expressing deviations to the centerline of the followed lane. Since these intentions are unknown to the agent, we adopt the multi-model perspective of \Cref{sec:multi-model} and consider one model per possible route for every observed vehicle before an intersection. In \Cref{tab:driving}, we compare \Cref{alg:full} to a nominal agent planning with two different modelling assumptions: Nominal 1 has access to the true followed route for each vehicle, while Nominal 2 does not and picks the model with minimal prediction error. We show the multi-model rejection and robust selection procedure through the display of several trajectory hulls for all possible destinations of the observed vehicles\footnote{A video is available at \href{https://youtu.be/DhoJAmJDau4}{https://youtu.be/DhoJAmJDau4}}. Again we also compare to a \gls{DQN} baseline trained over 3000 episodes, causing $1058\pm113$ collisions while training ($35\pm4\%$). As before, the robust agent has a higher worst-case performance and avoids collisions at all times, at the price of a decreased average performance.
 
 
 \begin{figure}[t]
@@ -1610,7 +1614,7 @@ The system dynamics $f$, which describes the interactions between vehicles, can 
 		{Nominal 2} & 33\% & {3.5} & $6.4 \pm 0.3$ \\
 		\Cref{alg:full} & \textbf{0\%} & \textbf{6.8} & $7.1 \pm 0.3$ \\
 		\midrule
-		DQN (trained) & 3\% & 5.4 & $6.3\pm0.6$ \\
+		\gls{DQN} (trained) & 3\% & 5.4 & $6.3\pm0.6$ \\
 		\bottomrule
 	\end{tabular}
 \end{table}

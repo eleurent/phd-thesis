@@ -265,7 +265,6 @@
 \definecolor{lightlightgray}{rgb}{0.97,0.97,0.97}  % Define a new color rgb(247, 247, 247)
 % use it inside a theorem/lemma/... with thereombar/lemmabar/... color
 
-% FIXME mettre la barre à gauche pour les pages paires et à droites pour les pages impaires ?
 \renewenvironment{leftbar}[1][black]{%
     \def\FrameCommand{%
         {\color{#1}\vrule width 0.75pt}%
@@ -336,19 +335,6 @@
 \definecolor{examplebar}{rgb}{0,0,0}            % Define a new color rgb(0,0,0)
 \definecolor{proofbar}{rgb}{0,70,0}             % Define a new color rgb(0,70,0)
 \definecolor{tablebar}{rgb}{147,0,255}          % Define a new color rgb(147,0,255)
-% ----------------------------------------------------------------------
-
-% FIXME just remove the small...small if I want normalsize proofs
-\newenvironment{smallproof}{%
-    % \begin{small}%
-    \begin{proof}%
-    % \leftskip=0.25cm\rightskip=0.25cm%  Cf. https://tex.stackexchange.com/a/62056/97964
-}{%
-    \end{proof}%
-    % \end{small}%
-}
-
-
 
 % ----------------------------------------------------------------------
 \makeatletter
