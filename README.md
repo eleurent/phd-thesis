@@ -1,13 +1,12 @@
 # phd-thesis
 ![Build LaTeX](https://github.com/eleurent/phd-thesis/workflows/Build%20LaTeX/badge.svg)
 
-This repository hold the source code of my PhD Thesis, entitled
+This repository hold the LaTeX code of my PhD Thesis, entitled
 
 <p align="center"><em>Safe and Efficient Reinforcement Learning for Behavioural Planning in Autonomous Driving</em>.</p>
 
-The pdf  is available at the following links:
-* Default version :construction: for display on a screen :computer:;
-* Print version :construction: for printing on paper :book:.
+* Read the [**pdf** file](https://tel.archives-ouvertes.fr/tel-03035705) (for display on a screen :computer:);
+* or the [print version](http://www.edouardleurent.com/pdf/phd-thesis-print.pdf) (for printing on paper :book:).
 
 ## Defense
 
