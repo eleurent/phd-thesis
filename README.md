@@ -1,12 +1,96 @@
-# phd-thesis
-![Build LaTeX](https://github.com/eleurent/phd-thesis/workflows/Build%20LaTeX/badge.svg)
+# Safe and Efficient Reinforcement Learning for Behavioural Planning in Autonomous Driving
 
-This repository hold the LaTeX code of my PhD Thesis, entitled
+<table>
+<tr>
+<td>
+<img alt="Social Attention" src="https://raw.githubusercontent.com/eleurent/phd-thesis/master/2-Chapters/4-Chapter/img/head_specialization.png">
+</td>
+<td>
+<img alt="Risk Awareness" src="https://raw.githubusercontent.com/eleurent/phd-thesis/master/2-Chapters/5-Chapter/img/two-way-square.png">
+</td>
+<td>
+<img alt="Robust Control" src="https://raw.githubusercontent.com/eleurent/phd-thesis/master/2-Chapters/7-Chapter/img/highway-small.png">
+</td>
+</tr>
+</table>
 
-<p align="center"><em>Safe and Efficient Reinforcement Learning for Behavioural Planning in Autonomous Driving</em>.</p>
+This repository holds the LaTeX code of my PhD Thesis.
 
 * Read the [**pdf** file](https://tel.archives-ouvertes.fr/tel-03035705) (for display on a screen :computer:);
 * or the [print version](http://www.edouardleurent.com/pdf/phd-thesis-print.pdf) (for printing on paper :book:).
+
+![Build LaTeX](https://github.com/eleurent/phd-thesis/workflows/Build%20LaTeX/badge.svg)
+
+
+# Publications in this thesis
+
+<table>
+<tr>
+<td>
+<strong>Robust-Adaptive Control of Linear Systems: beyond Quadratic Costs</strong><br>
+Edouard Leurent, Denis Efimov, and Odalric-Ambrym Maillard<br>
+NeurIPS 2020<br>
+<a href="https://arxiv.org/abs/2002.10816"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://eleurent.github.io/robust-beyond-quadratic/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Monte-Carlo Graph Search: the Value of Merging Similar States</strong><br>
+Edouard Leurent and Odalric-Ambrym Maillard<br>
+ACML 2020<br>
+<a href="http://proceedings.mlr.press/v129/leurent20a.html"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://eleurent.github.io/monte-carlo-graph-search/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems</strong><br>
+Edouard Leurent, Denis Efimov, and Odlaric-Ambrym Maillard<br>
+CDC 2020<br>
+<a href="https://arxiv.org/abs/2007.10401"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://github.com/eleurent/rl-agents"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Budgeted Reinforcement Learning in Continuous State Space</strong><br>
+Nicolas Carrara,* Edouard Leurent,* Romain Laroche, Tanguy Urvoy, Odalric-Ambrym Maillard, and Olivier Pietquin<br>
+NeurIPS 2019<br>
+<a href="https://proceedings.neurips.cc/paper/2019/hash/4fe5149039b52765bde64beb9f674940-Abstract.html"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://budgeted-rl.github.io/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Social Attention for Autonomous Decision-Making in Dense Traffic</strong><br>
+Edouard Leurent and Jean Mercat<br>
+ML4AD Workshop at NeurIPS 2019<br>
+<a href="https://arxiv.org/abs/1911.12250"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://eleurent.github.io/social-attention/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Interval Prediction for Continuous-Time Systems with Parametric Uncertainties</strong><br>
+Edouard Leurent, Denis Efimov, Tarek Raïssi, and Wilfrid Perruquetti<br>
+CDC 2019<br>
+<a href="https://arxiv.org/abs/1904.04727"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://eleurent.github.io/interval-prediction/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+<tr>
+<td>
+<strong>Practical Open-Loop Optimistic Planning</strong><br>
+Edouard Leurent and Odalric-Ambrym Maillard<br>
+ECML-PKDD 2019<br>
+<a href="https://arxiv.org/abs/1904.04700"><img alt="Paper" src="https://img.shields.io/badge/-Paper-gray"></a>
+<a href="https://eleurent.github.io/kl-olop/"><img alt="Code" src="https://img.shields.io/badge/-Code-gray" ></a>
+</td>
+</tr>
+</table>
+* Equal contribution.
+
 
 ## Defense
 
